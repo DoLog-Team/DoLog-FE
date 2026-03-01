@@ -1,0 +1,32 @@
+name: "🐛 Bug Report"
+description: 발견된 버그를 보고합니다.
+title: "[fix] "
+assignees: []
+
+body:
+  - type: textarea
+    id: bug_description
+    attributes:
+      label: "## 버그 설명"
+      description: "어떤 버그인지 간결하게 설명해주세요."
+      placeholder: "예: 메인 페이지에서 로고 이미지가 깨져서 보입니다."
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: "## 📸 스크린샷 (선택)"
+      description: "여기에 이미지를 드래그해서 넣어주세요."
+      placeholder: "버그 현상을 확인할 수 있는 스크린샷이나 영상을 첨부해 주세요."
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: "## 🛠 참고할만한 자료 (선택)"
+      description: "관련 문서, 스크린샷, 또는 예시 등이 있다면 여기에 첨부해주세요."
+      placeholder: "에러 로그, 관련 링크 등을 입력해 주세요."
+    validations:
+      required: false

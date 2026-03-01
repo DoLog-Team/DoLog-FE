@@ -1,7 +1,6 @@
 name: "🚀 Feature Request"
 description: 새로운 기능 개발을 위한 이슈를 생성합니다.
 title: "[feat] "
-labels: ["feat"]
 assignees: []
 
 body:
