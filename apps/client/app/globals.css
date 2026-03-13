@@ -1,26 +1,103 @@
 @import "tailwindcss";
 
+@import "../../../packages/components/src/theme.css";
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../../../packages/components/src/fonts/PretendardVariable.woff2")
+    format("woff2-variations");
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --mono-white: #ffffff;
+  --mono-050: #f7f7f8;
+  --mono-100: #ecedee;
+  --mono-200: #d2d3d5;
+  --mono-300: #b5b7ba;
+  --mono-400: #909398;
+  --mono-500: #7b7e84;
+  --mono-600: #606266;
+  --mono-700: #4d4e51;
+  --mono-800: #2f3032;
+  --mono-900: #1b1c1d;
+  --mono-950: #0f0f10;
+  --mono-black: #070707;
+
+  --color-text-strong: var(--mono-black);
+  --color-text-light: var(--mono-800);
+  --color-text-lighter: var(--mono-600);
+  --color-text-lightest: var(--mono-400);
+  --color-text-disable: var(--mono-200);
+  --color-text-inverse: var(--mono-white);
+
+  --color-bg-normal: var(--mono-white);
+
+  --color-fg-lighter: var(--mono-050);
+  --color-fg-light: var(--mono-100);
+  --color-fg-inverse: var(--mono-900);
+
+  --color-stroke-lightest: var(--mono-050);
+  --color-stroke-lighter: var(--mono-100);
+  --color-stroke-inverse: var(--mono-900);
+
+  --color-icon-strong: var(--mono-900);
+  --color-icon-light: var(--mono-400);
+  --color-icon-lighter: var(--mono-200);
+  --color-icon-inverse: var(--mono-white);
+
+  --custom1: #50a2a6;
+  --custom2: #eef7f7;
+  --custom3: #ffffff;
+  --custom4: #33b4ba;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --color-text-strong: var(--mono-white);
+  --color-text-light: var(--mono-100);
+  --color-text-lighter: var(--mono-300);
+  --color-text-lightest: var(--mono-500);
+  --color-text-disable: var(--mono-700);
+  --color-text-inverse: var(--mono-white);
+
+  --color-bg-normal: var(--mono-black);
+
+  --color-fg-lighter: var(--mono-900);
+  --color-fg-light: var(--mono-800);
+  --color-fg-inverse: var(--mono-white);
+
+  --color-stroke-lightest: var(--mono-900);
+  --color-stroke-lighter: var(--mono-800);
+  --color-stroke-inverse: var(--mono-050);
+
+  --color-icon-strong: var(--mono-white);
+  --color-icon-light: var(--mono-600);
+  --color-icon-lighter: var(--mono-800);
+  --color-icon-inverse: var(--mono-black);
+
+  --custom1: #ff4400;
+  --custom2: #391306;
+  --custom3: #ffffff;
+  --custom4: #ff4400;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* [5] 전역 스타일 적용 */
+@layer base {
+  * {
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  body {
+    @apply font-pretendard antialiased;
+
+    background-color: var(--color-bg-normal);
+    color: var(--color-text-strong);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+@source "../../../packages/components/src/**/*.{ts,tsx}";

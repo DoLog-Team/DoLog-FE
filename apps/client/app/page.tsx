@@ -1,65 +1,60 @@
-import Image from "next/image";
+import { Button, Typography } from "components";
+import { ThemeToggle } from "../components/ThemeToggle";
 
-export default function Home() {
+export default function Page() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-bg-normal p-8 flex flex-col gap-12 transition-colors duration-300">
+      <section className="flex justify-end">
+        <ThemeToggle />
+      </section>
+
+      {/* 1. 타이포그래피 테스트 */}
+      <section className="flex flex-col gap-4">
+        <Typography type="head1" color="strong">
+          두록(DoLog) 디자인 시스템 테스트
+        </Typography>
+        <Typography type="body1" color="light">
+          이 텍스트는 다크 모드에서 자동으로 밝은 회색(mono-100)으로 변함
+        </Typography>
+      </section>
+
+      <hr className="border-stroke-lighter" />
+
+      {/* 2. 버튼 및 컬러 시스템 체크 */}
+      <section className="flex flex-col gap-6">
+        <Typography type="head2">Color System Check</Typography>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Foreground Lighter 테스트 */}
+          <div className="p-6 rounded-xl bg-fg-lighter border border-stroke-lighter">
+            <Typography type="body2Bold" color="strong">
+              Foreground Lighter Box
+            </Typography>
+            <Typography type="body3" color="light">
+              라이트: mono-050 / 다크: mono-900
+            </Typography>
+          </div>
+
+          {/* Inverse 테스트 */}
+          <div className="p-6 rounded-xl bg-bg-inverse">
+            <Typography type="body2Bold" color="inverse">
+              Inverse Background
+            </Typography>
+            <Typography type="body3" color="inverse" className="opacity-80">
+              라이트: mono-black / 다크: mono-white(유지)
+            </Typography>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+
+      <section className="flex gap-4">
+        <Button variant="primary" size="lg">
+          시작하기
+        </Button>
+        <Button variant="outline" size="lg">
+          더보기
+        </Button>
+      </section>
+    </main>
   );
 }
