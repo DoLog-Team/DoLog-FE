@@ -1,14 +1,17 @@
 @import "tailwindcss";
 
-@theme inline {
-  /* Font Family & Weight */
-  --font-pretendard: "Pretendard", system-ui, sans-serif;
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
+@font-face {
+  font-family: "Pretendard";
+  src: url("../../../packages/components/src/fonts/PretendardVariable.woff2")
+    format("woff2-variations");
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+}
 
-  /* Typography */
+@theme inline {
+  /* Typography & Font */
+  --font-pretendard: "Pretendard", system-ui, sans-serif;
   --text-head1: 24px;
   --text-head1--line-height: 36px;
   --text-head2: 22px;
@@ -22,26 +25,40 @@
   --text-body3: 12px;
   --text-body3--line-height: 16px;
 
-  /* Color Mapping */
-  --color-text-strong: var(--color-text-strong);
-  --color-text-light: var(--color-text-light);
-  --color-text-lighter: var(--color-text-lighter);
-  --color-text-lightest: var(--color-text-lightest);
-  --color-text-disable: var(--color-text-disable);
-  --color-text-inverse: var(--color-text-inverse);
+  /* Text 관련 색상 (사용 시: text-strong, text-light 등) */
+  --color-strong: var(--color-text-strong);
+  --color-light: var(--color-text-light);
+  --color-lighter: var(--color-text-lighter);
+  --color-lightest: var(--color-text-lightest);
+  --color-inverse: var(--color-text-inverse);
 
-  --color-bg-normal: var(--color-bg-normal);
-
-  --color-fg-lighter: var(--color-fg-lighter);
+  /* background, foreground 관련 색상 (사용 시: bg-normal, bg-fg-light 등) */
+  --color-normal: var(--color-bg-normal);
   --color-fg-light: var(--color-fg-light);
+  --color-fg-lighter: var(--color-fg-lighter);
   --color-fg-inverse: var(--color-fg-inverse);
 
-  --color-stroke-lightest: var(--color-stroke-lightest);
-  --color-stroke-lighter: var(--color-stroke-lighter);
-  --color-stroke-inverse: var(--color-stroke-inverse);
+  /* stroke 관련 색상 (사용 시: stroke-lighter 등) */
+  --color-lighter: var(--color-stroke-lighter);
+  --color-lightest: var(--color-stroke-lightest);
 
+  /* 학교별 커스텀 컬러 (사용 시: bg-custom1, text-custom1 등) */
   --color-custom1: var(--custom1);
   --color-custom2: var(--custom2);
   --color-custom3: var(--custom3);
   --color-custom4: var(--custom4);
+}
+
+@layer base {
+  * {
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+  body {
+    @apply font-pretendard antialiased;
+    background-color: var(--color-bg-normal);
+    color: var(--color-text-strong);
+  }
 }
