@@ -7,7 +7,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body>{children}</body>
+      <body className="bg-fg-lighter flex justify-center">
+        <main
+          className="
+            w-full max-w-135
+            min-h-dvh 
+            shadow-xl 
+            relative 
+            flex flex-col
+          "
+        >
+          {children}
+        </main>
+      </body>
     </html>
   );
 }

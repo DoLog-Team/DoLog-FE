@@ -97,6 +97,11 @@
 
     background-color: var(--color-bg-normal);
     color: var(--color-text-strong);
+
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 

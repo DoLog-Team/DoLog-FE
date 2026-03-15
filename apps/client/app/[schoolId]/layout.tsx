@@ -28,7 +28,7 @@ export default async function SchoolLayout({
       enableColorScheme={true}
     >
       <div
-        className="min-h-screen bg-bg-normal text-text-strong"
+        className="bg-normal text-strong min-h-dvh px-4"
         style={
           {
             "--main-color": `var(--${schoolData.mainColor})`,
