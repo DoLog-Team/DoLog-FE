@@ -1,2 +1,1 @@
-export * from "./Button";
-export * from "./src/Typography";
+export * from "./src/ui/Button/Button";
