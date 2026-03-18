@@ -19,15 +19,7 @@ export default function TestPage() {
           강조 버튼
         </button>
 
-        <div className={s.chip}>Chip 가이드</div>
-      </div>
-
-      <div className={s.infoCard}>
-        <p className="text-body2 text-light">
-          주소창에 <b className="text-strong">/dgu</b> 또는{" "}
-          <b className="text-strong">/snu</b>를 입력해서 <br />
-          테마가 바뀌는지 확인해보세요 ~~
-        </p>
+        <div className={s.chip}>Chip 확인</div>
       </div>
     </div>
   );

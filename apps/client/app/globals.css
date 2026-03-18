@@ -11,6 +11,35 @@
   font-display: swap;
 }
 
+@theme {
+  --color-strong: var(--color-text-strong);
+  --color-light: var(--color-text-light);
+  --color-lighter: var(--color-text-lighter);
+  --color-lightest: var(--color-text-lightest);
+  --color-disable: var(--color-text-disable);
+  --color-inverse: var(--color-text-inverse);
+
+  --color-bg-normal: var(--color-bg-normal);
+
+  --color-fg-lighter: var(--color-fg-lighter);
+  --color-fg-light: var(--color-fg-light);
+  --color-fg-inverse: var(--color-fg-inverse);
+
+  --color-stroke-lightest: var(--color-stroke-lightest);
+  --color-stroke-lighter: var(--color-stroke-lighter);
+  --color-stroke-inverse: var(--color-stroke-inverse);
+
+  --color-icon-strong: var(--color-icon-strong);
+  --color-icon-light: var(--color-icon-light);
+  --color-icon-lighter: var(--color-icon-lighter);
+  --color-icon-inverse: var(--color-icon-inverse);
+
+  --color-custom1: var(--custom1);
+  --color-custom2: var(--custom2);
+  --color-custom3: var(--custom3);
+  --color-custom4: var(--custom4);
+}
+
 :root {
   --mono-white: #ffffff;
   --mono-050: #f7f7f8;
@@ -83,7 +112,6 @@
   --custom4: #ff4400;
 }
 
-/* [5] 전역 스타일 적용 */
 @layer base {
   * {
     transition:
@@ -94,14 +122,11 @@
 
   body {
     @apply font-pretendard antialiased;
-
     background-color: var(--color-bg-normal);
     color: var(--color-text-strong);
-
     height: 100%;
     margin: 0;
     padding: 0;
-    -webkit-tap-highlight-color: transparent;
   }
 }
 
