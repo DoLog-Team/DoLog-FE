@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../../../packages/components/src/fonts/PretendardVariable.woff2")
+    format("woff2-variations");
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme inline {
+  /* Typography & Font */
+  --font-pretendard: "Pretendard", system-ui, sans-serif;
+
+  --text-head1: 24px;
+  --text-head1--line-height: 36px;
+  --text-head1--font-weight: 600;
+  --text-head1--letter-spacing: -0.02em;
+
+  --text-head2: 22px;
+  --text-head2--line-height: 32px;
+  --text-head2--font-weight: 600;
+  --text-head2--letter-spacing: -0.01em;
+
+  --text-head3: 19px;
+  --text-head3--line-height: 28px;
+  --text-head3--font-weight: 600;
+  --text-head3--letter-spacing: -0.01em;
+
+  /* [Body 계열] */
+  --text-body1: 16px;
+  --text-body1--line-height: 24px;
+  --text-body1--letter-spacing: -0.01em;
+
+  --text-body1-bold: 16px;
+  --text-body1-bold--line-height: 24px;
+  --text-body1-bold--font-weight: 500;
+  --text-body1-bold--letter-spacing: -0.01em;
+
+  --text-body2: 14px;
+  --text-body2--line-height: 20px;
+  --text-body2--letter-spacing: -0.01em;
+
+  --text-body2-bold: 14px;
+  --text-body2-bold--line-height: 20px;
+  --text-body2-bold--font-weight: 500;
+  --text-body2-bold--letter-spacing: -0.01em;
+
+  --text-body3: 12px;
+  --text-body3--line-height: 16px;
+  --text-body3--letter-spacing: -0.01em;
+
+  --text-body3-bold: 12px;
+  --text-body3-bold--line-height: 16px;
+  --text-body3-bold--font-weight: 500;
+  --text-body3-bold--letter-spacing: -0.01em;
+
+  /* [Element 계열] */
+  --text-element1: 16px;
+  --text-element1--line-height: 24px;
+  --text-element1--font-weight: 600;
+  --text-element1--letter-spacing: -0.01em;
+
+  --text-element2: 14px;
+  --text-element2--line-height: 20px;
+  --text-element2--font-weight: 600;
+  --text-element2--letter-spacing: -0.01em;
+
+  --text-element3: 12px;
+  --text-element3--line-height: 16px;
+  --text-element3--font-weight: 600;
+  --text-element3--letter-spacing: -0.01em;
+
+  /* Text 관련 색상 (사용 시: text-strong, text-light 등) */
+  --color-strong: var(--color-text-strong);
+  --color-light: var(--color-text-light);
+  --color-lighter: var(--color-text-lighter);
+  --color-lightest: var(--color-text-lightest);
+  --color-inverse: var(--color-text-inverse);
+
+  /* background, foreground 관련 색상 (사용 시: bg-normal, bg-fg-light 등) */
+  --color-normal: var(--color-bg-normal);
+  --color-fg-light: var(--color-fg-light);
+  --color-fg-lighter: var(--color-fg-lighter);
+  --color-fg-inverse: var(--color-fg-inverse);
+
+  /* stroke 관련 색상 (사용 시: stroke-lighter 등) */
+  --color-lighter: var(--color-stroke-lighter);
+  --color-lightest: var(--color-stroke-lightest);
+
+  /* 학교별 커스텀 컬러 (사용 시: bg-custom1, text-custom1 등) */
+  --color-custom1: var(--custom1);
+  --color-custom2: var(--custom2);
+  --color-custom3: var(--custom3);
+  --color-custom4: var(--custom4);
+}
+
+@layer base {
+  * {
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+  body {
+    @apply font-pretendard antialiased;
+    background-color: var(--color-bg-normal);
+    color: var(--color-text-strong);
+  }
+}
