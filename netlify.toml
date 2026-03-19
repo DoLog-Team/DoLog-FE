@@ -1,0 +1,12 @@
+[build]
+  
+  command = "npm install -g pnpm@10.30.3 && pnpm install && pnpm --filter client build"
+
+  publish = "apps/client/.next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  PNPM_FLAGS = "--shamefully-hoist"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
