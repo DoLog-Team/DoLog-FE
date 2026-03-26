@@ -5,6 +5,8 @@ import { Button } from "components";
 import { testPageStyles as s } from "./TestPage.styles";
 import { Modal } from "@/components/common/Modal/Modal";
 import { Title } from "@/components/common/Title/Title";
+import { CardGrid } from "@/components/common/Card/CardGrid";
+import { MOCK_WORK_DATA } from "@/constants/work";
 
 export default function TestPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,6 +29,8 @@ export default function TestPage() {
         <Button size="sm">작은 버튼</Button>
         <Button size="lg">큰 버튼</Button>
       </div>
+
+      <CardGrid items={MOCK_WORK_DATA} limit={4} />
 
       {/* 모달 사용 예시 */}
       <Modal
