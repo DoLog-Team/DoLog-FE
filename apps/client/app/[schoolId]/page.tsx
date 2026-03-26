@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "components";
 import { testPageStyles as s } from "./TestPage.styles";
 import { Modal } from "@/components/common/Modal/Modal";
+import { Title } from "@/components/common/Title/Title";
 
 export default function TestPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -11,7 +12,7 @@ export default function TestPage() {
   return (
     <div className={s.wrapper}>
       <h1 className="text-head1 text-strong mb-6">두록(DoLog) 테마 테스트</h1>
-
+      <Title title="두록(DoLog) Title 테스트" />
       <div className="flex flex-wrap gap-4">
         <Button onClick={() => setIsModalOpen(true)}>모달 열기</Button>
 
