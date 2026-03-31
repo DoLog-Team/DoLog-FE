@@ -20,7 +20,13 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "components": ["../../packages/components"],
+      "components/*": ["../../packages/components/*"],
+      "api": ["../../packages/api"],
+      "api/*": ["../../packages/api/*"],
+      "utils": ["../../packages/utils"],
+      "utils/*": ["../../packages/utils/*"]
     }
   },
   "include": [

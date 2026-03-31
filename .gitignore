@@ -1,1 +1,24 @@
+# 의존성 패키지 및 빌드 결과물
 node_modules
+node_modules/
+dist/
+.turbo/
+.next/
+out/
+build/
+
+# 로그 및 시스템 파일
+*.log
+.DS_Store
+Thumbs.db
+
+# 환경 변수
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE 관련
+.vscode/
+.idea/
