@@ -1,5 +1,5 @@
 import { ThemeProvider } from "@/providers/theme-providers";
-import SchoolFooter from "@/components/common/SchoolFooter";
+import SchoolFooter from "@/components/common/Footer/SchoolFooter";
 
 interface SchoolConfig {
   schoolName: string;

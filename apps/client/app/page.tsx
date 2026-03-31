@@ -4,7 +4,7 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useEffect } from "react";
 import { testPageStyles as s } from "./[schoolId]/TestPage.styles";
-import MainFooter from "@/components/common/MainFooter";
+import MainFooter from "@/components/common/Footer/MainFooter";
 
 export default function MainPage() {
   const { setTheme } = useTheme();
