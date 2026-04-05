@@ -5,16 +5,23 @@ import { Button } from "components";
 import { testPageStyles as s } from "./TestPage.styles";
 import { Modal } from "@/components/common/Modal/Modal";
 import { Title } from "@/components/common/Title/Title";
+import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 import { MOCK_WORK_DATA } from "@/constants/work";
 
 export default function TestPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
   return (
     <div className={s.wrapper}>
       <h1 className="text-head1 text-strong mb-6">두록(DoLog) 테마 테스트</h1>
       <Title title="두록(DoLog) Title 테스트" />
+      <SearchBar
+        placeholder="예시 : 전시회 제목을 검색해요."
+        value={search}
+        onChange={setSearch}
+      />
       <div className="flex flex-wrap gap-4">
         <Button onClick={() => setIsModalOpen(true)}>모달 열기</Button>
 
