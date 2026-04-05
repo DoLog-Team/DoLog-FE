@@ -35,7 +35,7 @@ export default function TestPage() {
 			</div>
 
 			<CardGrid items={MOCK_WORK_DATA} limit={4} />
-      <ListCardGrid items={MOCK_WORK_DATA} limit={3}/>
+			<ListCardGrid items={MOCK_WORK_DATA} limit={3} />
 
 			{/* 모달 사용 예시 */}
 			<Modal
