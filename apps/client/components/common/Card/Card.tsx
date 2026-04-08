@@ -1,12 +1,5 @@
 import { cardStyles as s } from "./Card.styles";
-
-export interface CardProps {
-  id: number;
-  imageUrl: string;
-  title: string;
-  category: string;
-  author: string;
-}
+import { CardProps } from "./Card.types";
 
 export const Card = ({ imageUrl, title, category, author }: CardProps) => {
   return (

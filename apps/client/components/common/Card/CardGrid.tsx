@@ -1,5 +1,5 @@
-import type { CardGridProps } from "@/components/common/Card/card";
 import { Card } from "./Card";
+import type { CardGridProps } from "./Card.types";
 
 export const CardGrid = ({ items, limit }: CardGridProps) => {
 	const displayedItems = limit ? items.slice(0, limit) : items;

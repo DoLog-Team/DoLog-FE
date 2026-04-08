@@ -1,4 +1,4 @@
-import type { CardProps } from "@/components/common/Card/card";
+import type { CardProps } from "../Card.types";
 import { listCardStyles as s } from "./ListCard.styles";
 
 export const ListCard = ({ imageUrl, title, category, author }: CardProps) => {
