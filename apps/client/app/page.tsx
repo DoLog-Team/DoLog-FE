@@ -28,7 +28,7 @@ export default function MainPage() {
             href="/dgu"
             className="p-6 fg-light stroke-lighter rounded-2xl hover:scale-105 transition-transform"
           >
-            <h2 className="text-head3 text-custom1">동국대학교</h2>
+            <h2 className="text-head3 text-cta-bg">동국대학교</h2>
             <p className="text-light">동국대 졸업 전시회</p>
           </Link>
 
@@ -36,7 +36,7 @@ export default function MainPage() {
             href="/snu"
             className="p-6 fg-light stroke-lighter rounded-2xl hover:scale-105 transition-transform"
           >
-            <h2 className="text-head3 text-custom1">서울대학교</h2>
+            <h2 className="text-head3 text-cta-bg">서울대학교</h2>
             <p className="text-light">서울대 졸업 전시회</p>
           </Link>
         </div>

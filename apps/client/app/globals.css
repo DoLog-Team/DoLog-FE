@@ -33,11 +33,6 @@
   --color-icon-light: var(--color-icon-light);
   --color-icon-lighter: var(--color-icon-lighter);
   --color-icon-inverse: var(--color-icon-inverse);
-
-  --color-custom1: var(--custom1);
-  --color-custom2: var(--custom2);
-  --color-custom3: var(--custom3);
-  --color-custom4: var(--custom4);
 }
 
 :root {
@@ -77,10 +72,10 @@
   --color-icon-lighter: var(--mono-200);
   --color-icon-inverse: var(--mono-white);
 
-  --custom1: #50a2a6;
-  --custom2: #eef7f7;
-  --custom3: #ffffff;
-  --custom4: #33b4ba;
+  --btn-bg: #50a2a6;
+  --btn-text: #eef7f7;
+  --cta-bg: #ffffff;
+  --cta-text: #33b4ba;
 }
 
 .dark {
@@ -106,10 +101,10 @@
   --color-icon-lighter: var(--mono-800);
   --color-icon-inverse: var(--mono-black);
 
-  --custom1: #ff4400;
-  --custom2: #391306;
-  --custom3: #ffffff;
-  --custom4: #ff4400;
+  --btn-bg: #391306;
+  --btn-text: #f40;
+  --cta-bg: #f40;
+  --cta-text: #fff;
 }
 
 @layer base {
