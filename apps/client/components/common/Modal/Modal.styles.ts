@@ -18,7 +18,7 @@ export const modalStyles = {
     {
       variants: {
         variant: {
-          primary: "bg-[var(--custom1,#1B1C1D)] text-[#FFF]",
+          primary: "bg-btn-bg text-btn-text",
 
           secondary: "bg-[#F7F7F8] text-[#2F3032]",
         },

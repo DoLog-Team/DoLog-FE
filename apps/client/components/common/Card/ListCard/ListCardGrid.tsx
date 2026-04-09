@@ -1,4 +1,4 @@
-import type { CardGridProps } from "@/app/types/card";
+import type { CardGridProps } from "../Card.types";
 import { ListCard } from "./ListCard";
 
 export const ListCardGrid = ({ items, limit }: CardGridProps) => {

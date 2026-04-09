@@ -89,11 +89,11 @@
   --color-lighter: var(--color-stroke-lighter);
   --color-lightest: var(--color-stroke-lightest);
 
-  /* 학교별 커스텀 컬러 (사용 시: bg-custom1, text-custom1 등) */
-  --color-custom1: var(--custom1);
-  --color-custom2: var(--custom2);
-  --color-custom3: var(--custom3);
-  --color-custom4: var(--custom4);
+  /* 전시회별 커스텀 컬러 (API에서 주입, 사용 시: bg-btn-bg, text-cta-bg 등) */
+  --color-btn-bg: var(--btn-bg);
+  --color-btn-text: var(--btn-text);
+  --color-cta-bg: var(--cta-bg);
+  --color-cta-text: var(--cta-text);
 }
 
 @layer base {
