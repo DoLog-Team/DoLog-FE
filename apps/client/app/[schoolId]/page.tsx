@@ -7,12 +7,15 @@ import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
 import { Modal } from "@/components/common/Modal/Modal";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { Title } from "@/components/common/Title/Title";
+import { Chip } from "@/components/common/Chip/Chip";
 import { MOCK_WORK_DATA } from "@/constants/work";
 import { testPageStyles as s } from "./TestPage.styles";
 
 export default function TestPage() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [search, setSearch] = useState("");
+	const [selected, setSelected] = useState("전체");
+  	const categories = ["전체", "카테고리 1", "카테고리 2"];
 
 	return (
 		<div className={s.wrapper}>
@@ -32,6 +35,19 @@ export default function TestPage() {
 
 				<Button size="sm">작은 버튼</Button>
 				<Button size="lg">큰 버튼</Button>
+			</div>
+
+			{/* Chip 사용 예시 */}
+			<div className="flex gap-2 mt-4">
+				{categories.map((cat) => (
+				<Chip
+					key={cat}
+					label={cat}
+					type="primary" // type을 각 디자인에 맞게 사용하면 됩니다. (primary, assistive, custom)
+					selected={selected === cat}
+					onClick={() => setSelected(cat)}
+				/>
+				))}
 			</div>
 
 			<CardGrid items={MOCK_WORK_DATA} limit={4} />
