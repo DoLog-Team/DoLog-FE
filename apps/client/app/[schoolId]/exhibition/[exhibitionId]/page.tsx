@@ -14,16 +14,14 @@ export default async function ExhibitionDetailPage({
 
 	return (
 		<main>
-            =====================<br></br>
-	        헤더 import 예정<br></br>
+			=====================<br></br>
+			헤더 import 예정<br></br>
 			=====================<br></br>
 			SC01 전시회 소개 페이지
-
-            {/* 0413 TODO */}
-
+			{/* 0413 TODO */}
 			{/* 1. 썸네일 + 전시 기본 정보 섹션 */}
 			{/* <ExhibitionCard exhibition={exhibition} /> */}
-            {/* 2. 전시 감상하기 버튼 (MainButton 만들어서 import) */}
+			{/* 2. 전시 감상하기 버튼 (MainButton 만들어서 import) */}
 			{/* 3. 전시 소개 섹션 */}
 			{/* <ExhibitionDetail exhibition={exhibition} /> */}
 			{/* 4. 장소 섹션 */}
