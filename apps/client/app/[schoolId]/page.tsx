@@ -25,15 +25,20 @@ export default function TestPage() {
 			<div className="flex flex-wrap gap-4">
 				<Button onClick={() => setIsModalOpen(true)}>모달 열기</Button>
 
+				{/* Button 사용 예시 */}
 				<div className="flex flex-wrap gap-4 items-start">
 					<Title title="variant 별 예시" />
 					<Button variant="primary">primary 버튼</Button>
-					<Button variant="assistive">assistive 버튼</Button>
+					<Button variant="secondary">secondary 버튼</Button>
 					<Button variant="outline">outline 버튼</Button>
 					<Button variant="main">main 버튼</Button>
 					<Button variant="cta">cta 버튼</Button>
-					<Button variant="main" round>round</Button>
-					<Button variant="main" iconOnly>icon</Button>
+					<Button variant="main" round>
+						round
+					</Button>
+					<Button variant="main" iconOnly>
+						icon
+					</Button>
 				</div>
 				<div className="flex flex-wrap gap-4 items-start">
 					<Title title="size 별 예시" />
@@ -41,10 +46,10 @@ export default function TestPage() {
 					<Button size="md">md 사이즈</Button>
 					<Button size="sm">sm 사이즈</Button>
 					<Button size="xs">xs 사이즈</Button>
-					<Button variant="main" size="lg" className="w-full">전체 너비 버튼으로 이렇게 가져다가 사용</Button>
+					<Button variant="main" size="lg" className="w-full">
+						전체 너비 버튼으로 이렇게 가져다가 사용
+					</Button>
 				</div>
-
-
 			</div>
 
 			{/* Chip 사용 예시 */}
