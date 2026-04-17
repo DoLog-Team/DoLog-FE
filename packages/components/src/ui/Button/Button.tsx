@@ -5,10 +5,10 @@ import { cn } from "../lib/utils";
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariantsProps {}
 
-export const Button = ({ className, variant, size, ...props }: ButtonProps) => {
+export const Button = ({ className, variant, size, round, iconOnly, ...props }: ButtonProps) => {
   return (
     <button
-      className={cn(buttonVariants({ variant, size }), className)}
+      className={cn(buttonVariants({ variant, size, round, iconOnly }), className)}
       {...props}
     />
   );
