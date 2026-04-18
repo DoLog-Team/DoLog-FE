@@ -10,8 +10,15 @@ pre-commit:
 commit-msg:
   commands:
     "lint-commit-message":
-      run: "msg=$(cat '{1}') && if [[ ! \"$msg\" =~ ^(feat|fix|chore|docs|style|refactor|test|setting|design):[[:space:]].+$ ]]; then echo '❌ [Commit Error] prefix: 내용 형식을 지켜주세요.'; exit 1; fi"
-
+      run: >
+        msg=$(cat '{1}') &&
+        if [[ "$msg" =~ ^Merge[[:space:]] ]]; then
+          exit 0;
+        fi &&
+        if [[ ! "$msg" =~ ^(feat|fix|chore|docs|style|refactor|test|setting|design):[[:space:]].+$ ]]; then
+          echo '❌ [Commit Error] prefix: 내용 형식을 지켜주세요.';
+          exit 1;
+        fi
 pre-push:
   commands:
     type-check:
