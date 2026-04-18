@@ -20,9 +20,9 @@ export default async function SchoolLayout({
 	} as React.CSSProperties;
 
 	return (
-		<ThemeProvider 
-			attribute="class" 
-			forcedTheme={schoolData.themeMode} 
+		<ThemeProvider
+			attribute="class"
+			forcedTheme={schoolData.themeMode}
 			enableColorScheme={true}
 			colors={{
 				btnBg: schoolData.btnBg,

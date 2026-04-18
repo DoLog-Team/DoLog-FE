@@ -20,7 +20,7 @@ export const MOCK_SCHOOL_DATA: Record<string, SchoolConfig> = {
 	dgu: {
 		schoolName: "동국대학교",
 		themeMode: "dark",
-		
+
 		btnBg: "#FFF0E6",
 		btnText: "#C45C1A",
 		ctaBg: "#E8621A",
