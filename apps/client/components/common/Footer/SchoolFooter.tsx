@@ -24,7 +24,7 @@ export default function SchoolFooter({
       <div className="flex flex-col px-4">
         <div className="flex flex-col gap-1">
           <h3 className="text-body1-bold text-light">{title}</h3>
-          <div className="h-[20px] w-full" />
+          <div className="h-5 w-full" />
           <p className="text-body2 text-lighter">{department}</p>
           <div>
             <p className="text-body2 text-lighter">{address}</p>
