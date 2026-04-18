@@ -84,7 +84,7 @@
   --color-text-lighter: var(--mono-300);
   --color-text-lightest: var(--mono-500);
   --color-text-disable: var(--mono-700);
-  --color-text-inverse: var(--mono-white);
+  --color-text-inverse: var(--mono-black);
 
   --color-bg-normal: var(--mono-black);
 
