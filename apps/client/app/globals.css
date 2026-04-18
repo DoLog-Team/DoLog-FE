@@ -72,10 +72,10 @@
   --color-icon-lighter: var(--mono-200);
   --color-icon-inverse: var(--mono-white);
 
-  --btn-bg: #50a2a6;
-  --btn-text: #eef7f7;
-  --cta-bg: #ffffff;
-  --cta-text: #33b4ba;
+  --btn-bg: #EEF7F7;
+  --btn-text: #50A2A6;
+  --cta-bg: #33B4BA;
+  --cta-text: #FFFFFF;
 }
 
 .dark {
@@ -84,7 +84,7 @@
   --color-text-lighter: var(--mono-300);
   --color-text-lightest: var(--mono-500);
   --color-text-disable: var(--mono-700);
-  --color-text-inverse: var(--mono-white);
+  --color-text-inverse: var(--mono-black);
 
   --color-bg-normal: var(--mono-black);
 

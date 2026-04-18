@@ -1,15 +1,16 @@
-import React from "react";
-import { buttonVariants, type ButtonVariantsProps } from "./Button.styles";
+import type React from "react";
 import { cn } from "../lib/utils";
+import { type ButtonVariantsProps, buttonVariants } from "./Button.styles";
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariantsProps {}
+	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+		ButtonVariantsProps {}
 
-export const Button = ({ className, variant, size, ...props }: ButtonProps) => {
-  return (
-    <button
-      className={cn(buttonVariants({ variant, size }), className)}
-      {...props}
-    />
-  );
+export const Button = ({ className, variant, size, round, iconOnly, ...props }: ButtonProps) => {
+	return (
+		<button
+			className={cn(buttonVariants({ variant, size, round, iconOnly }), className)}
+			{...props}
+		/>
+	);
 };

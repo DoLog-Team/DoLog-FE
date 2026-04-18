@@ -4,6 +4,7 @@ import { Button } from "components";
 import { useState } from "react";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
+import { Chip } from "@/components/common/Chip/Chip";
 import { Modal } from "@/components/common/Modal/Modal";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { Title } from "@/components/common/Title/Title";
@@ -13,6 +14,8 @@ import { testPageStyles as s } from "./TestPage.styles";
 export default function TestPage() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [search, setSearch] = useState("");
+	const [selected, setSelected] = useState("전체");
+	const categories = ["전체", "카테고리 1", "카테고리 2"];
 
 	return (
 		<div className={s.wrapper}>
@@ -22,16 +25,44 @@ export default function TestPage() {
 			<div className="flex flex-wrap gap-4">
 				<Button onClick={() => setIsModalOpen(true)}>모달 열기</Button>
 
-				<Button variant="secondary" size="md">
-					보조 버튼
-				</Button>
+				{/* Button 사용 예시 */}
+				<div className="flex flex-wrap gap-4 items-start">
+					<Title title="variant 별 예시" />
+					<Button variant="primary">primary 버튼</Button>
+					<Button variant="secondary">secondary 버튼</Button>
+					<Button variant="outline">outline 버튼</Button>
+					<Button variant="main">main 버튼</Button>
+					<Button variant="cta">cta 버튼</Button>
+					<Button variant="main" round>
+						round
+					</Button>
+					<Button variant="main" iconOnly>
+						icon
+					</Button>
+				</div>
+				<div className="flex flex-wrap gap-4 items-start">
+					<Title title="size 별 예시" />
+					<Button size="lg">lg 사이즈</Button>
+					<Button size="md">md 사이즈</Button>
+					<Button size="sm">sm 사이즈</Button>
+					<Button size="xs">xs 사이즈</Button>
+					<Button variant="main" size="lg" className="w-full">
+						전체 너비 버튼으로 이렇게 가져다가 사용
+					</Button>
+				</div>
+			</div>
 
-				<Button variant="outline" size="md">
-					기본 버튼 (Outline)
-				</Button>
-
-				<Button size="sm">작은 버튼</Button>
-				<Button size="lg">큰 버튼</Button>
+			{/* Chip 사용 예시 */}
+			<div className="flex gap-2 mt-4">
+				{categories.map((cat) => (
+					<Chip
+						key={cat}
+						label={cat}
+						type="assistive" // type을 각 디자인에 맞게 사용하면 됩니다. (primary, assistive, custom)
+						selected={selected === cat}
+						onClick={() => setSelected(cat)}
+					/>
+				))}
 			</div>
 
 			<CardGrid items={MOCK_WORK_DATA} limit={4} />
