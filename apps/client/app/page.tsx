@@ -16,6 +16,11 @@ export default function MainPage() {
     html.classList.remove("dark");
     html.classList.add("light");
     html.style.colorScheme = "light";
+    
+    html.style.removeProperty("--btn-bg");
+    html.style.removeProperty("--btn-text");
+    html.style.removeProperty("--cta-bg");
+    html.style.removeProperty("--cta-text");
   }, [setTheme]);
 
   return (

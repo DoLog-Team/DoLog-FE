@@ -20,7 +20,17 @@ export default async function SchoolLayout({
 	} as React.CSSProperties;
 
 	return (
-		<ThemeProvider attribute="class" forcedTheme={schoolData.themeMode} enableColorScheme={true}>
+		<ThemeProvider 
+			attribute="class" 
+			forcedTheme={schoolData.themeMode} 
+			enableColorScheme={true}
+			colors={{
+				btnBg: schoolData.btnBg,
+				btnText: schoolData.btnText,
+				ctaBg: schoolData.ctaBg,
+				ctaText: schoolData.ctaText,
+			}}
+		>
 			<div className="bg-normal text-strong min-h-dvh flex flex-col" style={colorVars}>
 				<div className="min-h-dvh flex flex-col px-4">{children}</div>
 
