@@ -1,3 +1,6 @@
+import { Button } from "components";
+import { Main } from "next/document";
+import { Title } from "@/components/common/Title/Title";
 import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
 
 export default async function ExhibitionDetailPage({
@@ -5,7 +8,7 @@ export default async function ExhibitionDetailPage({
 }: {
 	params: Promise<{ schoolId: string; exhibitionId: string }>;
 }) {
-	const { exhibitionId } = await params;
+	const { schoolId, exhibitionId } = await params;
 	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
 
 	if (!exhibition) {
@@ -18,16 +21,19 @@ export default async function ExhibitionDetailPage({
 			헤더 import 예정<br></br>
 			=====================<br></br>
 			SC01 전시회 소개 페이지
-			{/* 0413 TODO */}
-			{/* 1. 썸네일 + 전시 기본 정보 섹션 */}
-			{/* <ExhibitionCard exhibition={exhibition} /> */}
-			{/* 2. 전시 감상하기 버튼 (MainButton 만들어서 import) */}
-			{/* 3. 전시 소개 섹션 */}
+			<Title title="1. 전시 기본 정보 섹션" />
+			{/* 썸네일카드 */}
+			{/* <ExhibitionIntro exhibition={exhibition} /> */}
+			<Button variant="main" className="w-full">
+				전시물 감상하기
+			</Button>
+			<Title title="2. 전시 소개 섹션" />
 			{/* <ExhibitionDetail exhibition={exhibition} /> */}
-			{/* 4. 장소 섹션 */}
+			<Title title="3. 장소 섹션" />
 			{/* <ExhibitionLocation location={exhibition.location} /> */}
-			{/* 5. 주최 기관 섹션 */}
+			<Title title="4. 주최 기관 섹션" />
 			{/* <ExhibitionHost hostInfo={exhibition.hostInfo} /> */}
+			<Title title="푸터" />
 		</main>
 	);
 }

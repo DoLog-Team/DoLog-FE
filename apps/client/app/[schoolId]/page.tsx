@@ -29,7 +29,7 @@ export default function TestPage() {
 				<div className="flex flex-wrap gap-4 items-start">
 					<Title title="variant 별 예시" />
 					<Button variant="primary">primary 버튼</Button>
-					<Button variant="secondary">secondary 버튼</Button>
+					<Button variant="assistive">secondary 버튼</Button>
 					<Button variant="outline">outline 버튼</Button>
 					<Button variant="main">main 버튼</Button>
 					<Button variant="cta">cta 버튼</Button>

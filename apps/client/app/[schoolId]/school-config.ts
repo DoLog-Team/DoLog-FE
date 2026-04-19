@@ -20,11 +20,11 @@ export const MOCK_SCHOOL_DATA: Record<string, SchoolConfig> = {
 	dgu: {
 		schoolName: "동국대학교",
 		themeMode: "dark",
-		/*
-		btnBg: "#391306",
-		btnText: "#ff4400",
-		ctaBg: "#ff4400",
-		ctaText: "#ffffff",*/
+
+		btnBg: "#FFF0E6",
+		btnText: "#C45C1A",
+		ctaBg: "#E8621A",
+		ctaText: "##FFF5EE",
 		footerInfo: {
 			title: "도예과 졸업 전시",
 			department: "동국대학교 예술대학 도예과",
@@ -37,11 +37,10 @@ export const MOCK_SCHOOL_DATA: Record<string, SchoolConfig> = {
 	snu: {
 		schoolName: "서울대학교",
 		themeMode: "light",
-		/*
-		btnBg: "#391306",
-		btnText: "#ff4400",
-		ctaBg: "#ff4400",
-		ctaText: "#ffffff",*/
+		btnBg: "#FFE4E1",
+		btnText: "#FF69B4",
+		ctaBg: "#DB7093",
+		ctaText: "#ffffff",
 		footerInfo: {
 			title: "서울대학교 미술대학 졸업 주간",
 			department: "서울대학교 미술대학 디자인과",
