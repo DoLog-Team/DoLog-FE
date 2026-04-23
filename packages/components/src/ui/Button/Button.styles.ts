@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 /**
  * Variant Prop 구조
- * variant : primary | secondary | outline | main | cta
+ * variant : primary | assistive | outline | main | cta
  * size : lg | md | sm | xs
  * iconOnly : boolean
  * round : boolean
@@ -16,7 +16,7 @@ export const buttonVariants = cva(
 		variants: {
 			variant: {
 				primary: "",
-				secondary: "",
+				assistive: "",
 				outline: "border",
 				main: "",
 				cta: "",
@@ -43,7 +43,7 @@ export const buttonVariants = cva(
 				class: "bg-fg-inverse text-inverse disabled:bg-lighter disabled:text-disable",
 			},
 			{
-				variant: "secondary",
+				variant: "assistive",
 				class: "bg-fg-lighter text-light disabled:bg-lighter disabled:text-disable",
 			},
 			{ variant: "outline", class: "border-stroke-lighter text-lighter disabled:text-disable" },
