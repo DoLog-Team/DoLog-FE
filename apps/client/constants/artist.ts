@@ -11,6 +11,7 @@ export const MOCK_ARTIST_DATA = [
 		name: "티파니",
 		engName: "TIFFANY YOUNG",
 		email: "tiffany@dolog.site",
+
 		imageUrl: "/images/artists/artist3.png",
 	},
 	{
