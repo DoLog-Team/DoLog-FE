@@ -7,7 +7,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body className="bg-fg-lighter flex justify-center">
+      <body className="flex justify-center">
         <main
           className="
             w-full max-w-135
