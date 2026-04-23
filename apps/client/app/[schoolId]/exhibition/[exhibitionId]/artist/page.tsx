@@ -1,8 +1,8 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
 import { useTheme } from "next-themes";
+import { useEffect } from "react";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 import { RowCardGrid } from "@/components/common/Card/RowCard/RowCardGrid";
 import { Title } from "@/components/common/Title/Title";
