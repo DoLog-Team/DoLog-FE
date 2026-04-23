@@ -26,7 +26,7 @@ export default function TestPage() {
 					</Link>
 				</div>
 
-				<div className={s.infoCard + " mt-10"}>
+				<div className={`${s.infoCard} mt-10`}>
 					<p className="text-body2 text-light text-center">
 						위에 버튼을 누르거나 <br />
 						주소창에 <b className="text-strong">/dgu</b> 또는 <b className="text-strong">/snu</b>를
