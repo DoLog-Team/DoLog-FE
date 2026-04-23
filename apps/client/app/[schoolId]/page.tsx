@@ -2,6 +2,7 @@
 
 import { Button } from "components";
 import { useState } from "react";
+import { RowCardGrid } from "@/components/common/Card/RowCard/RowCardGrid";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
 import { Chip } from "@/components/common/Chip/Chip";
@@ -9,6 +10,7 @@ import { Modal } from "@/components/common/Modal/Modal";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { Title } from "@/components/common/Title/Title";
 import { MOCK_WORK_DATA } from "@/constants/work";
+import { MOCK_ARTIST_DATA } from "@/constants/artist";
 import { testPageStyles as s } from "./TestPage.styles";
 
 export default function TestPage() {
@@ -67,6 +69,10 @@ export default function TestPage() {
 
 			<CardGrid items={MOCK_WORK_DATA} limit={4} />
 			<ListCardGrid items={MOCK_WORK_DATA} limit={3} />
+			<RowCardGrid items={MOCK_ARTIST_DATA} limit={3} />
+
+			{/* 빈 영역 확인용 구분선 */}
+			<div className="mt-8 border-t border-gray-100" />
 
 			{/* 모달 사용 예시 */}
 			<Modal
