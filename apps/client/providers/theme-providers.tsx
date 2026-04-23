@@ -14,8 +14,14 @@ interface Props extends ThemeProviderProps {
 
 export function ThemeProvider({ children, colors, ...props }: Props) {
 	useEffect(() => {
-		if (!colors) return;
 		const root = document.documentElement;
+		if (!colors) {
+			root.style.removeProperty("--btn-bg");
+			root.style.removeProperty("--btn-text");
+			root.style.removeProperty("--cta-bg");
+			root.style.removeProperty("--cta-text");
+			return;
+		}
 		if (colors.btnBg) root.style.setProperty("--btn-bg", colors.btnBg);
 		if (colors.btnText) root.style.setProperty("--btn-text", colors.btnText);
 		if (colors.ctaBg) root.style.setProperty("--cta-bg", colors.ctaBg);

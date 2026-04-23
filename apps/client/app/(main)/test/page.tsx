@@ -1,28 +1,8 @@
-"use client";
-
 import Link from "next/link";
-import { useTheme } from "next-themes";
-import { useEffect } from "react";
 import MainFooter from "@/components/common/Footer/MainFooter";
-import { testPageStyles as s } from "./[schoolId]/TestPage.styles";
+import { testPageStyles as s } from "../../[schoolId]/TestPage.styles";
 
-export default function MainPage() {
-	const { setTheme } = useTheme();
-
-	useEffect(() => {
-		setTheme("light");
-
-		const html = document.documentElement;
-		html.classList.remove("dark");
-		html.classList.add("light");
-		html.style.colorScheme = "light";
-
-		html.style.removeProperty("--btn-bg");
-		html.style.removeProperty("--btn-text");
-		html.style.removeProperty("--cta-bg");
-		html.style.removeProperty("--cta-text");
-	}, [setTheme]);
-
+export default function TestPage() {
 	return (
 		<div className="flex flex-col bg-normal">
 			<div className="flex flex-col items-center text-strong min-h-dvh px-4 py-20">
@@ -30,7 +10,7 @@ export default function MainPage() {
 
 				<div className="grid grid-cols-2 gap-6 w-full max-w-lg">
 					<Link
-						href="/dgu"
+						href="/dgu-test"
 						className="p-6 fg-light stroke-lighter rounded-2xl hover:scale-105 transition-transform"
 					>
 						<h2 className="text-head3 text-cta-bg">동국대학교</h2>
@@ -38,7 +18,7 @@ export default function MainPage() {
 					</Link>
 
 					<Link
-						href="/snu"
+						href="/snu-test"
 						className="p-6 fg-light stroke-lighter rounded-2xl hover:scale-105 transition-transform"
 					>
 						<h2 className="text-head3 text-cta-bg">서울대학교</h2>
@@ -46,7 +26,7 @@ export default function MainPage() {
 					</Link>
 				</div>
 
-				<div className={s.infoCard + " mt-10"}>
+				<div className={`${s.infoCard} mt-10`}>
 					<p className="text-body2 text-light text-center">
 						위에 버튼을 누르거나 <br />
 						주소창에 <b className="text-strong">/dgu</b> 또는 <b className="text-strong">/snu</b>를
