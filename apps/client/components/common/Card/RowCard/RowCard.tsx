@@ -7,7 +7,7 @@ export const RowCard = ({ name, engName, email, imageUrl }: RowCardProps) => {
 	return (
 		<article className={s.wrapper}>
 			{/* 이미지 */}
-			<div className={s.imageBox}>
+			<div className={s.imageWrapper}>
 				<Image
 					src={imageUrl}
 					alt={`${name} ${engName}`}
