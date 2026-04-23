@@ -1,7 +1,7 @@
 "use client";
+import Image from "next/image";
 import { rowCardStyles as s } from "./RowCard.styles";
 import type { RowCardProps } from "./RowCard.types";
-import Image from "next/image";
 
 export const RowCard = ({ name, engName, email, imageUrl }: RowCardProps) => {
 	return (
