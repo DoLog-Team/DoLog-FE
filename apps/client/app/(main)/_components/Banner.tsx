@@ -47,7 +47,7 @@ export default function Banner({ banners }: { banners: BannerItem[] }) {
 					className="flex h-full transition-transform duration-300 ease-in-out"
 					style={{ transform: `translateX(-${current * 100}%)` }}
 				>
-					{banners.map((banner) => (
+					{banners.map((banner, i) => (
 						<Link
 							key={banner.id}
 							href={banner.linkUrl}
@@ -59,6 +59,7 @@ export default function Banner({ banners }: { banners: BannerItem[] }) {
 								fill
 								sizes="(max-width: 540px) 100vw, 540px"
 								className="object-cover"
+								priority={i === 0}
 							/>
 						</Link>
 					))}
