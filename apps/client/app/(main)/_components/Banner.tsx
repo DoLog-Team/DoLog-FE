@@ -11,13 +11,16 @@ export interface BannerItem {
 	linkUrl: string;
 }
 
+const MAX_BANNERS = 20;
+
 export default function Banner({ banners }: { banners: BannerItem[] }) {
+	const slicedBanners = banners.slice(0, MAX_BANNERS);
 	const [current, setCurrent] = useState(0);
 	const touchStartX = useRef(0);
 	const mouseStartX = useRef(0);
 
 	const prev = () => setCurrent((c) => Math.max(0, c - 1));
-	const next = () => setCurrent((c) => Math.min(banners.length - 1, c + 1));
+	const next = () => setCurrent((c) => Math.min(slicedBanners.length - 1, c + 1));
 
 	return (
 		<div className="flex flex-col overflow-hidden">
@@ -47,7 +50,7 @@ export default function Banner({ banners }: { banners: BannerItem[] }) {
 					className="flex h-full transition-transform duration-300 ease-in-out"
 					style={{ transform: `translateX(-${current * 100}%)` }}
 				>
-					{banners.map((banner, i) => (
+					{slicedBanners.map((banner, i) => (
 						<Link
 							key={banner.id}
 							href={banner.linkUrl}
@@ -68,7 +71,7 @@ export default function Banner({ banners }: { banners: BannerItem[] }) {
 
 			{/* dots */}
 			<div className="flex justify-center items-center gap-2 py-2.5">
-				{banners.map((banner, i) => (
+				{slicedBanners.map((banner, i) => (
 					<button
 						key={banner.id}
 						type="button"
