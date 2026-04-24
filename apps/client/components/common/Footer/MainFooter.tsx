@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function MainFooter() {
   return (
-    <footer className="w-full pt-12 pb-24 flex flex-col mt-auto bg-fg-lighter">
+    <footer className="w-full pt-12 pb-12 flex flex-col bg-fg-lighter mt-12">
       <div className="flex flex-col px-4">
         <Image src="/images/logo.svg" alt="DoLog Logo" width={50} height={25} />
         <div className="h-5 w-full" />
