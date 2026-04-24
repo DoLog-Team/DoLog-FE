@@ -18,6 +18,7 @@
         "name": "next"
       }
     ],
+    //"baseUrl": ".", // 더이상 지원 안 한다고 오류나서 제거
     "paths": {
       "@/*": ["./*"],
       "components": ["../../packages/components"],
