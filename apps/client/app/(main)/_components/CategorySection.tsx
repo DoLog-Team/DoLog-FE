@@ -21,7 +21,7 @@ export default function CategorySection({ title, categories, artworks }: Props) 
 			<Title title={title} />
 
 			{/* 카테고리 칩 */}
-			<div className="flex gap-2 mt-4 overflow-x-auto pb-1">
+			<div className="flex gap-2 mt-4 overflow-x-auto pb-1 scrollbar-hide">
 				{categories.map((category) => (
 					<Chip
 						key={category}
