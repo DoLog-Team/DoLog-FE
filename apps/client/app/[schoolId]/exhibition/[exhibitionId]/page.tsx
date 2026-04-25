@@ -1,17 +1,15 @@
-import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
-import { ExhibitionIntro } from "./_components/ExhibitionIntroSection";
-import { ExhibitionDetail } from "./_components/ExhibitionDetailSection";
-import { ExhibitionLocation } from "./_components/ExhibitionLocationSection";
-import { ExhibitionHost } from "./_components/ExhibitionHostSection";
 import Image from "next/image";
+import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
+import { ExhibitionDetail } from "./_components/ExhibitionDetailSection";
+import { ExhibitionHost } from "./_components/ExhibitionHostSection";
+import { ExhibitionIntro } from "./_components/ExhibitionIntroSection";
+import { ExhibitionLocation } from "./_components/ExhibitionLocationSection";
 
 interface ExhibitionDetailPageProps {
-	params: Promise<{schoolId: string; exhibitionId: string}>;
+	params: Promise<{ schoolId: string; exhibitionId: string }>;
 }
 
-export default async function ExhibitionDetailPage({
-	params,
-}: ExhibitionDetailPageProps) {
+export default async function ExhibitionDetailPage({ params }: ExhibitionDetailPageProps) {
 	const { exhibitionId } = await params;
 	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
 
@@ -26,13 +24,13 @@ export default async function ExhibitionDetailPage({
 			===================================================<br></br>
 			{/* 대표 이미지 */}
 			<div className="relative w-full aspect-[3/4]">
-					<Image
-					  src={exhibition.thumbnailUrl}
-					  alt={exhibition.title}
-					  fill
-					  className="object-cover"
-					  priority
-					/>
+				<Image
+					src={exhibition.thumbnailUrl}
+					alt={exhibition.title}
+					fill
+					className="object-cover"
+					priority
+				/>
 			</div>
 			{/* 전시 기본 정보 */}
 			<ExhibitionIntro exhibition={exhibition} />
