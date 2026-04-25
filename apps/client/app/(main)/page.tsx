@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { buttonVariants } from "components";
 import MainFooter from "@/components/common/Footer/MainFooter";
 import { Title } from "@/components/common/Title/Title";
 import Banner from "./_components/Banner";
@@ -31,7 +32,7 @@ export default function MainPage() {
 				</div>
 				<Link
 					href="/exhibitions"
-					className="bg-fg-lighter text-element1 text-light text-center py-4 rounded-lg mt-7"
+					className={buttonVariants({ variant: "assistive", className: "mt-7 w-full" })}
 				>
 					더보기
 				</Link>
