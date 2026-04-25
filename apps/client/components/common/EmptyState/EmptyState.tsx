@@ -3,7 +3,10 @@ interface EmptyStateProps {
 	message?: string;
 }
 
-export const EmptyState = ({ searchQuery, message = "해당하는 결과가 없어요." }: EmptyStateProps) => {
+export const EmptyState = ({
+	searchQuery,
+	message = "해당하는 결과가 없어요.",
+}: EmptyStateProps) => {
 	const truncated =
 		searchQuery && searchQuery.length > 8 ? `${searchQuery.slice(0, 8)}...` : searchQuery;
 
