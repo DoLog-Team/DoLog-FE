@@ -44,9 +44,7 @@ export const CollapsingHeader = ({
 				</Link>
 				<span
 					className={`text-strong transition-opacity duration-200 ${
-						isScrolled
-							? "opacity-100 text-body1-bold"
-							: "opacity-0 text-head2 pointer-events-none"
+						isScrolled ? "opacity-100 text-body1-bold" : "opacity-0 text-head2 pointer-events-none"
 					}`}
 				>
 					{title}
@@ -64,11 +62,7 @@ export const CollapsingHeader = ({
 
 			{/* 검색바 + 필터 */}
 			<div className="px-4 pb-6 flex flex-col gap-2.5">
-				<SearchBar
-					placeholder={searchPlaceholder}
-					value={searchQuery}
-					onChange={onSearchChange}
-				/>
+				<SearchBar placeholder={searchPlaceholder} value={searchQuery} onChange={onSearchChange} />
 				{children && <div className="flex gap-2.5">{children}</div>}
 			</div>
 		</div>

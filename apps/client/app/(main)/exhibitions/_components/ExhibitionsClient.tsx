@@ -35,8 +35,18 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 				onSearchChange={setSearchQuery}
 				searchPlaceholder="전시회 제목을 검색해요."
 			>
-				<FilterChip label="대학" options={univs} selected={selectedUniv} onSelect={setSelectedUniv} />
-				<FilterChip label="학과" options={depts} selected={selectedDept} onSelect={setSelectedDept} />
+				<FilterChip
+					label="대학"
+					options={univs}
+					selected={selectedUniv}
+					onSelect={setSelectedUniv}
+				/>
+				<FilterChip
+					label="학과"
+					options={depts}
+					selected={selectedDept}
+					onSelect={setSelectedDept}
+				/>
 			</CollapsingHeader>
 
 			{/* 전시회 목록 */}
