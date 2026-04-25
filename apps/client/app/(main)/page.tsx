@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { buttonVariants } from "components";
+import Link from "next/link";
 import MainFooter from "@/components/common/Footer/MainFooter";
 import { Title } from "@/components/common/Title/Title";
 import Banner from "./_components/Banner";
