@@ -19,7 +19,7 @@ export default function MainPage() {
 			<section className="flex flex-col px-4 pt-6">
 				<Title title="진행중인 전시회" />
 				<div className="flex flex-col gap-4 mt-4">
-					{MOCK_EXHIBITIONS.map((exhibition) => (
+					{MOCK_EXHIBITIONS.slice(0, 3).map((exhibition) => (
 						<Link
 							key={exhibition.id}
 							href={`/exhibition/${exhibition.id}`}
