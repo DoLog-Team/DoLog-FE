@@ -1,25 +1,28 @@
+import { Button } from "components";
+import Image from "next/image";
+
 interface PhotoSectionProps {
-  images: string[];
+	images: string[];
 }
 
 export const PhotoSection = ({ images }: PhotoSectionProps) => {
-  return (
-    <section className="flex flex-col px-4 pb-6">
-      {images.map((src, index) => (
-        <div key={index} className="relative w-full bg-gray-50">
-          {/* 이미지는 원본 비율을 유지하거나, 기획에 맞춰 높이를 조절하세요 */}
-          <img 
-            src={src} 
-            alt={`작품 상세 이미지 ${index + 1}`} 
-            className="w-full h-auto object-cover"
-          />
-          
-          {/* Next.js Image 사용 시 (권장) */}
-          {/* <div className="relative w-full aspect-[4/3]">
-             <Image src={src} alt="상세이미지" fill className="object-cover" />
-          </div> */}
-        </div>
-      ))}
-    </section>
-  );
+	return (
+		<section className="flex flex-col px-4 pb-6">
+			{images.map((src, index) => (
+				<div key={index} className="relative w-full">
+				<Image
+					src={src}
+					alt={`작품 상세 이미지 ${index + 1}`}
+					width={0}
+					height={0}
+					sizes="100vw"
+					className="w-full h-auto"
+				/>
+				</div>
+			))}
+			{/* TODO : 작품 구매하기 url이 들어올 때만 버튼 띄움 
+			(전체적으로 선택값에 해당하는 ui 제외 상태 확인 필요) */}
+			<Button variant="main" className="mt-6">작품 구매하기</Button>
+		</section>
+	);
 };
