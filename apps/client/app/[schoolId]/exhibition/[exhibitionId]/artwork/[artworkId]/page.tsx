@@ -7,8 +7,8 @@ import { DescriptionSection } from "./_components/DescriptionSection";
 import { InfoSection } from "./_components/InfoSection";
 import { LocationSection } from "./_components/LocationSection";
 import { PhotoSection } from "./_components/PhotoSection";
-import { RelatedSection } from "./_components/RelatedSection";
 import { PostNavigationSection } from "./_components/PostNavigationSection";
+import { RelatedSection } from "./_components/RelatedSection";
 
 export default function ArtworkDetailPage() {
 	const data = MOCK_ARTWORK_DETAIL; // TODO : fetch 변경 예정
@@ -25,7 +25,7 @@ export default function ArtworkDetailPage() {
 			{/* 작품 위치 섹션 */}
 			<LocationSection locationImageUrl={data.locationImageUrl} />
 			{/* 상세 소개 섹션 */}
-			<DescriptionSection content={data.description} exhibitionTitle={data.exhibitionTitle}/>
+			<DescriptionSection content={data.description} exhibitionTitle={data.exhibitionTitle} />
 			{/* 상세 이미지 섹션*/}
 			<PhotoSection images={data.detailImages} />
 			{/* 참여자 섹션 */}
@@ -36,10 +36,7 @@ export default function ArtworkDetailPage() {
 			{/* 동일한 카테고리 작품 섹션 */}
 			<RelatedSection category={data.category} />
 			{/* 둘러보기 섹션 */}
-			<PostNavigationSection
-				prevArtwork={data.prevArtwork} 
-				nextArtwork={data.nextArtwork} 
-			/>
+			<PostNavigationSection prevArtwork={data.prevArtwork} nextArtwork={data.nextArtwork} />
 		</div>
 	);
 }

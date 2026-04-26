@@ -1,12 +1,12 @@
-import { Title } from "@/components/common/Title/Title";
 import Image from "next/image";
+import { Title } from "@/components/common/Title/Title";
 
 // TODO : 머지 후 BTSCardGrid 컴포넌트 import 예정
 // import { BTSCardGrid, BTSCardGridProps } from "../BTSCardGrid";
 
 interface BtsSectionProps {
- 		bts: { id: number; title: string; author: string; imageUrl: string }[];
-// 		bts: BTSCardGridProps["items"]
+	bts: { id: number; title: string; author: string; imageUrl: string }[];
+	// 		bts: BTSCardGridProps["items"]
 }
 
 export const BtsSection = ({ bts }: BtsSectionProps) => {
@@ -15,7 +15,7 @@ export const BtsSection = ({ bts }: BtsSectionProps) => {
 			<Title title="Behind The Scene" />
 			{/* 머지 후 BTS 카드 아래와 같이 연결 예정 */}
 			{/* <BTSCardGrid items={bts} /> */}
-			
+
 			{/* 임시 예시입니다 */}
 			<div className="flex flex-col gap-4">
 				{bts.map((item) => (

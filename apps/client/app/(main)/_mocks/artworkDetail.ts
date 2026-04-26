@@ -41,8 +41,23 @@ export const MOCK_ARTWORK_DETAIL = {
 	bts: [
 		{ id: 1, title: "내 졸업 전시 이야기", author: "배주현", imageUrl: "/images/artwork/bts1.png" },
 		{ id: 2, title: "푸른 색의 미학", author: "배주현", imageUrl: "/images/artwork/bts2.png" },
-		{ id: 3, title: "내가 흙을 사랑하는 이유", author: "강슬기", imageUrl: "/images/artwork/bts3.png" },
+		{
+			id: 3,
+			title: "내가 흙을 사랑하는 이유",
+			author: "강슬기",
+			imageUrl: "/images/artwork/bts3.png",
+		},
 	],
-	prevArtwork: { id: 4, title: "깨진 다음의 모양", author: "강슬기", imageUrl: "/images/artwork/prev.png" },
-	nextArtwork: { id: 5, title: "흐린 날의 화병", author: "손승완", imageUrl: "/images/artwork/next.png" },
+	prevArtwork: {
+		id: 4,
+		title: "깨진 다음의 모양",
+		author: "강슬기",
+		imageUrl: "/images/artwork/prev.png",
+	},
+	nextArtwork: {
+		id: 5,
+		title: "흐린 날의 화병",
+		author: "손승완",
+		imageUrl: "/images/artwork/next.png",
+	},
 };
