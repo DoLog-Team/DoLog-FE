@@ -31,8 +31,8 @@ export function ExhibitionDetail({ exhibition }: ExhibitionDetailProps) {
 	return (
 		<section className="flex flex-col px-4 pb-6">
 			<Title title="전시 소개" />
-      <div className="flex flex-col gap-2 mb-4">
-       <InfoRow
+			<div className="flex flex-col gap-2 mb-4">
+				<InfoRow
 					label="전시 일정"
 					value={`${exhibition.period.start} ~ ${exhibition.period.end}`}
 				/>
@@ -41,7 +41,7 @@ export function ExhibitionDetail({ exhibition }: ExhibitionDetailProps) {
 					subValue={`${exhibition.hours.open} ~ ${exhibition.hours.close}
 					${exhibition.hours.note}`}
 				/>
-      </div>
+			</div>
 			<div className="flex flex-col gap-4">
 				{paragraphs.map((paragraph, index) => (
 					<p key={index} className="text-body1">
