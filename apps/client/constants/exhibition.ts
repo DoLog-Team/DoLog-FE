@@ -4,6 +4,7 @@ export interface Exhibition {
 	host: string;
 	department: string;
 	thumbnailUrl: string;
+	guideImages: string[]; 
 	period: {
 		start: string;
 		end: string;
@@ -17,8 +18,6 @@ export interface Exhibition {
 	location: {
 		address: string;
 		detail: string;
-		naverMapUrl?: string;
-		kakaoMapUrl?: string;
 	};
 	hostInfo: {
 		name: string;
@@ -30,6 +29,7 @@ export interface Exhibition {
 		instagram?: string;
 		X?: string;
 	};
+	
 }
 
 export const MOCK_EXHIBITION_DATA: Exhibition[] = [
@@ -39,6 +39,7 @@ export const MOCK_EXHIBITION_DATA: Exhibition[] = [
 		host: "한국대학교 예술대학",
 		department: "도예과",
 		thumbnailUrl: "/images/pottery.png",
+		guideImages: ["/images/guide.png"],
 		period: {
 			start: "2025.11.28",
 			end: "2025.12.02",
@@ -53,8 +54,6 @@ export const MOCK_EXHIBITION_DATA: Exhibition[] = [
 		location: {
 			address: "서울 중구 필동로1길 30 동국대학교",
 			detail: "문화관 한국갤러리 지하 1층",
-			naverMapUrl: "https://map.naver.com",
-			kakaoMapUrl: "https://map.kakao.com",
 		},
 		hostInfo: {
 			name: "동국대학교 예술대학",
@@ -74,6 +73,7 @@ export const MOCK_EXHIBITION_DATA: Exhibition[] = [
 		host: "한국대학교",
 		department: "불교미술전공",
 		thumbnailUrl: "/images/plate.png",
+		guideImages: ["/images/guide.png", "/images/artwork/artwork.png"],
 		period: {
 			start: "2025.11.28",
 			end: "2025.11.29",

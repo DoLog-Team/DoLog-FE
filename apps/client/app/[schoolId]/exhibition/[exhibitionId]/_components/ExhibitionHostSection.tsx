@@ -23,7 +23,7 @@ export function ExhibitionHost({ hostInfo, socialLinks }: ExhibitionHostProps) {
 
 			{/* 기관 소개 */}
 			{paragraphs.map((paragraph, index) => (
-				<p key={index} className="text-body1 leading-relaxed">
+				<p key={index} className="text-body1 leading-relaxed mb-7">
 					{paragraph}
 				</p>
 			))}
