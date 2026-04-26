@@ -14,7 +14,7 @@ export function LocationMap({ address }: LocationMapProps) {
 	useEffect(() => {
 		const initMap = () => {
 			if (!mapRef.current || !window.naver) return;
-      console.log(`${address} - 지도 초기화`); // address 의존성 배열 사용 누락 방지 위한 콘솔로그
+			console.log(`${address} - 지도 초기화`); // address 의존성 배열 사용 누락 방지 위한 콘솔로그
 			const location = new window.naver.maps.LatLng(37.5582, 127.0002);
 			const map = new window.naver.maps.Map(mapRef.current, {
 				center: location,
