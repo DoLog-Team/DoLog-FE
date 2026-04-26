@@ -18,13 +18,12 @@ export function ExhibitionHost({ hostInfo, socialLinks }: ExhibitionHostProps) {
 			<div className="relative w-full aspect-video overflow-hidden">
 				<Image src={hostInfo.imageUrl} alt={hostInfo.name} fill className="object-cover" />
 			</div>
-
 			{/* 기관명 */}
 			<span className="text-body1-bold mt-5 mb-4">{hostInfo.name}</span>
 
 			{/* 기관 소개 */}
 			{paragraphs.map((paragraph, index) => (
-				<p key={index} className="text-body1 leading-relaxed mb-7">
+				<p key={index} className="text-body1 leading-relaxed">
 					{paragraph}
 				</p>
 			))}
