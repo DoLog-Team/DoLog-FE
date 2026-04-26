@@ -15,7 +15,7 @@ export const MOCK_WORK_DATA = [
   },
   {
     id: 3,
-    title: "손에 남는 컵",
+    title: "위로 쌓은 컵",
     category: "생활 도자기",
     author: "김예림",
     imageUrl: "/images/cups.png",

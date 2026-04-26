@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Title } from "@/components/common/Title/Title";
 
-interface LocationSectionProps{
+interface LocationSectionProps {
 	locationImageUrl: string;
 }
 
