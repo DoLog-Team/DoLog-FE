@@ -51,8 +51,8 @@ export const MOCK_EXHIBITION_DATA: Exhibition[] = [
 		description:
 			"한국대학교 예술대학 조소과 2026년 졸업전시 〈흙에서 시작되는 이야기〉는 가장 가까운 재료인 '흙'에서 출발합니다. 손끝의 저항, 마르는 시간, 균열과 수축 같은 변화 속에서 조각은 형태를 얻고 이야기를 갖게 됩니다.\n\n참여 작가들은 흙을 빚고 깎고 쌓는 과정 자체를 하나의 서사로 확장하며, 개인의 기억과 일상, 도시와 자연의 경계, 사라지는 것들의 흔적을 조각으로 번역합니다.",
 		location: {
-			address: "서울 중구 필동로1길 30",
-			detail: "한국대학교 문화관 한국갤러리 지하 1층",
+			address: "서울 중구 필동로1길 30 동국대학교",
+			detail: "문화관 한국갤러리 지하 1층",
 			naverMapUrl: "https://map.naver.com",
 			kakaoMapUrl: "https://map.kakao.com",
 		},

@@ -8,8 +8,8 @@ interface ExhibitionIntroProps {
 
 interface InfoRowProps {
 	label: string;
-	value: string;
-	subValue?: string;
+	value?: string;
+	subValue?: React.ReactNode;
 }
 
 function InfoRow({ label, value, subValue }: InfoRowProps) {
@@ -33,15 +33,6 @@ export function ExhibitionIntro({ exhibition }: ExhibitionIntroProps) {
 			<div className="flex flex-col gap-2">
 				<InfoRow label="주최 대학" value={exhibition.host} />
 				<InfoRow label="학과" value={exhibition.department} />
-				<InfoRow
-					label="전시 일정"
-					value={`${exhibition.period.start} ~ ${exhibition.period.end}`}
-				/>
-				<InfoRow
-					label="관람 시간"
-					value={`${exhibition.hours.open} ~ ${exhibition.hours.close}`}
-					subValue={exhibition.hours.note}
-				/>
 			</div>
 			<Button variant="main" className="w-full mt-7">
 				전시물 감상하기
