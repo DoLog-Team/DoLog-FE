@@ -21,7 +21,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 		<main>
 			<Header />
 			{/* 대표 이미지 */}
-			<div className="relative w-full aspect-[3/4]">
+			<div className="relative w-full aspect-3/4">
 				<Image
 					src={exhibition.thumbnailUrl}
 					alt={exhibition.title}
