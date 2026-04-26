@@ -1,7 +1,7 @@
 import Image from "next/image";
 
-interface SchoolFooterProps {	
-  logoSrc?: string;
+interface SchoolFooterProps {
+	logoSrc?: string;
 	title: string;
 	department: string;
 	address: string;
@@ -20,7 +20,7 @@ export default function SchoolFooter({
 	copyright,
 }: SchoolFooterProps) {
 	return (
-		<footer className="w-full pt-12 pb-24 flex flex-col mt-auto bg-fg-lighter">
+		<footer className="w-full pt-12 pb-24 flex flex-col mt-12 bg-fg-lighter">
 			<div className="flex flex-col px-4">
 				<div className="flex flex-col gap-1">
 					<h3 className="text-body1-bold text-light">{title}</h3>
@@ -38,12 +38,7 @@ export default function SchoolFooter({
 					All Rights reserved.
 				</p>
 				<div className="h-7 w-full" />
-				<Image 
-          src={logoSrc || "/images/logo.svg"} 
-          alt={`${title} Logo`} 
-          width={60} 
-          height={18} 
-        />
+				<Image src={logoSrc || "/images/logo.svg"} alt={`${title} Logo`} width={60} height={18} />
 			</div>
 		</footer>
 	);

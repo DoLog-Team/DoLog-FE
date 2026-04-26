@@ -8,7 +8,7 @@ export interface Exhibition {
 		start: string;
 		end: string;
 	};
-	hours: {
+	hours?: {
 		open: string;
 		close: string;
 		note?: string;
@@ -22,13 +22,13 @@ export interface Exhibition {
 	};
 	hostInfo: {
 		name: string;
-		imageUrl?: string;
+		imageUrl: string;
 		description: string;
 	};
 	socialLinks?: {
-		behance?: string;
+		email?: string;
 		instagram?: string;
-		x?: string;
+		X?: string;
 	};
 }
 
@@ -63,9 +63,9 @@ export const MOCK_EXHIBITION_DATA: Exhibition[] = [
 				"예술은 인간의 가장 깊은 내면을 드러내는 언어이자, 시대를 넘어 공감과 가치를 만들어내는 힘입니다. 한국대학교 예술대학은 지난 수십 년간 창작과 실천을 기반으로 한 교육을 통해 수많은 예술가와 창작 인재를 길러내며 한국 문화예술의 성장에 기여해 왔습니다.\n\n우리의 졸업생들은 무대와 스크린, 전시장과 공연장, 디자인 스튜디오와 콘텐츠 산업 현장, 그리고 연구와 교육의 자리에서 각자의 방식으로 예술의 영향력을 확장하고 있습니다.",
 		},
 		socialLinks: {
-			behance: "https://tickets.interpark.com",
+			email: "doyeah@gmail.com",
 			instagram: "https://tickets.interpark.com",
-			x: "https://tickets.interpark.com",
+			X: "https://tickets.interpark.com",
 		},
 	},
 	{
@@ -84,12 +84,18 @@ export const MOCK_EXHIBITION_DATA: Exhibition[] = [
 		},
 		description: "불교미술전공 졸업전시입니다.",
 		location: {
-			address: "서울 중구 필동로1길 30",
-			detail: "한국대학교 예술관 지하1층 101호",
+			address: "서울 중구 필동로1길 30 동국대학교 ",
+			detail: "예술관 지하1층 101호",
 		},
 		hostInfo: {
 			name: "한국대학교 예술대학",
+			imageUrl: "/images/host.png",
 			description: "한국대학교 예술대학 소개입니다.",
+		},
+		socialLinks: {
+			email: "https://tickets.interpark.com",
+			instagram: "https://tickets.interpark.com",
+			X: "https://tickets.interpark.com",
 		},
 	},
 ];

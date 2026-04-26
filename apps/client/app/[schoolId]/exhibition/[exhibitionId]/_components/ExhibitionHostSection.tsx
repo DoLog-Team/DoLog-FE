@@ -1,79 +1,56 @@
 import Image from "next/image";
-import { Exhibition } from "@/constants/exhibition";
 import { Title } from "@/components/common/Title/Title";
+import type { Exhibition } from "@/constants/exhibition";
 
 interface ExhibitionHostProps {
-  hostInfo: Exhibition["hostInfo"];
-  socialLinks?: Exhibition["socialLinks"];
+	hostInfo: Exhibition["hostInfo"];
+	socialLinks?: Exhibition["socialLinks"];
 }
 
 export function ExhibitionHost({ hostInfo, socialLinks }: ExhibitionHostProps) {
-  const paragraphs = hostInfo.description.split("\n\n").filter(Boolean);
+	const paragraphs = hostInfo.description.split("\n\n").filter(Boolean);
 
-  return (
-    <section className="flex flex-col px-4 pb-6 mb-12">
-      <Title title="주최 기관"/>
-        
-        {/* 이미지 */}
-        {/* 이미지가 들어올 때만 렌더링 함 */}
-        {hostInfo.imageUrl && (
-        <div className="relative w-full aspect-video overflow-hidden"> 
-          <Image
-            src={hostInfo.imageUrl}
-            alt={hostInfo.name}
-            fill
-            className="object-cover"
-          />
-        </div>
-        )}
+	return (
+		<section className="flex flex-col px-4 pb-6">
+			<Title title="주최 기관" />
 
-        {/* 기관명 */}
-        <span className="text-body1-bold mt-5 mb-4">
-          {hostInfo.name}
-        </span>
-        
-        {/* 기관 소개 */}
-        {paragraphs.map((paragraph, index) => (
-          <p key={index} className="text-body1 leading-relaxed">
-            {paragraph}
-          </p>
-        ))}
+			{/* 이미지 */}
+			<div className="relative w-full aspect-video overflow-hidden">
+				<Image src={hostInfo.imageUrl} alt={hostInfo.name} fill className="object-cover" />
+			</div>
 
-      {/* 소셜 링크 */}
-      {socialLinks && (
-        <div className="border-t border-gray-100 pt-4 flex flex-col gap-2">
-          {socialLinks.behance && (
-            <SocialLink label="behance" href={socialLinks.behance} />
-          )}
-          {socialLinks.instagram && (
-            <SocialLink label="instagram" href={socialLinks.instagram} />
-          )}
-          {socialLinks.x && (
-            <SocialLink label="X" href={socialLinks.x} />
-          )}
-        </div>
-      )}
-    </section>
-  );
+			{/* 기관명 */}
+			<span className="text-body1-bold mt-5 mb-4">{hostInfo.name}</span>
+
+			{/* 기관 소개 */}
+			{paragraphs.map((paragraph, index) => (
+				<p key={index} className="text-body1 leading-relaxed mb-7">
+					{paragraph}
+				</p>
+			))}
+
+			{/* 소셜 링크 */}
+			{socialLinks && (
+				<div className="flex flex-col gap-1">
+					{socialLinks.email && <SocialLink label="email" href={socialLinks.email} />}
+					{socialLinks.instagram && <SocialLink label="instagram" href={socialLinks.instagram} />}
+					{socialLinks.X && <SocialLink label="X" href={socialLinks.X} />}
+				</div>
+			)}
+		</section>
+	);
 }
 
 interface SocialLinkProps {
-  label: string;
-  href: string;
+	label: string;
+	href: string;
 }
 
 function SocialLink({ label, href }: SocialLinkProps) {
-  return (
-    <div className="flex items-center gap-3 text-sm">
-      <span className="w-20 text-gray-400 flex-shrink-0">{label}</span>
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-gray-600 underline underline-offset-2 truncate"
-      >
-        {href}
-      </a>
-    </div>
-  );
+	return (
+		<div className="flex flex-wrap items-center gap-1">
+			<span className="min-w-19 text-body2-bold shrink-0">{label}</span>
+			<span className="text-body2">{href}</span>
+		</div>
+	);
 }

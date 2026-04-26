@@ -14,7 +14,7 @@ interface InfoRowProps {
 function InfoRow({ label, value, subValue }: InfoRowProps) {
 	return (
 		<div className="flex gap-4">
-			<span className="w-20 flex-shrink-0 text-body2-bold">{label}</span>
+			<span className="w-20 shrink-0 text-body2-bold">{label}</span>
 			<div className="flex flex-col">
 				<span className="text-body2">{value}</span>
 				{subValue && <span className="text-body2">{subValue}</span>}
@@ -36,11 +36,19 @@ export function ExhibitionDetail({ exhibition }: ExhibitionDetailProps) {
 					label="전시 일정"
 					value={`${exhibition.period.start} ~ ${exhibition.period.end}`}
 				/>
-				<InfoRow
-					label="추가 사항"
-					subValue={`${exhibition.hours.open} ~ ${exhibition.hours.close}
-					${exhibition.hours.note}`}
-				/>
+				{/* 선택값 - 추가 사항 */}
+				{exhibition.hours && (
+					<InfoRow
+						label="추가 사항"
+						subValue={
+							<>
+								{exhibition.hours.open} ~ {exhibition.hours.close}
+								<br />
+								{exhibition.hours.note}
+							</>
+						}
+					/>
+				)}
 			</div>
 			<div className="flex flex-col gap-4">
 				{paragraphs.map((paragraph, index) => (

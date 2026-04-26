@@ -4,6 +4,7 @@ import { ExhibitionDetail } from "./_components/ExhibitionDetailSection";
 import { ExhibitionHost } from "./_components/ExhibitionHostSection";
 import { ExhibitionIntro } from "./_components/ExhibitionIntroSection";
 import { ExhibitionLocation } from "./_components/ExhibitionLocationSection";
+import { Header } from "./_components/Header";
 
 interface ExhibitionDetailPageProps {
 	params: Promise<{ schoolId: string; exhibitionId: string }>;
@@ -12,16 +13,13 @@ interface ExhibitionDetailPageProps {
 export default async function ExhibitionDetailPage({ params }: ExhibitionDetailPageProps) {
 	const { exhibitionId } = await params;
 	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
-
 	if (!exhibition) {
 		return <div>전시회를 찾을 수 없습니다.</div>;
 	}
 
 	return (
 		<main>
-			===================================================<br></br>
-			로고 햄버거<br></br>
-			===================================================<br></br>
+			<Header />
 			{/* 대표 이미지 */}
 			<div className="relative w-full aspect-[3/4]">
 				<Image
@@ -32,15 +30,15 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 					priority
 				/>
 			</div>
-			{/* 전시 기본 정보 */}
+			{/* 제목 및 기본 정보 */}
 			<ExhibitionIntro exhibition={exhibition} />
 			{/* 전시 소개 */}
 			<ExhibitionDetail exhibition={exhibition} />
-			{/* TODO : 머지 후 Divider */}
+			{/* TODO : 머지 후 Divider import */}
 			{/* 장소 */}
 			<ExhibitionLocation location={exhibition.location} />
 			{/* 주최 기관 */}
-			<ExhibitionHost hostInfo={exhibition.hostInfo} />
+			<ExhibitionHost hostInfo={exhibition.hostInfo} socialLinks={exhibition.socialLinks} />
 		</main>
 	);
 }
