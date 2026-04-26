@@ -4,7 +4,7 @@ export interface Exhibition {
 	host: string;
 	department: string;
 	thumbnailUrl: string;
-	guideImages: string[]; 
+	guideImages: string[];
 	period: {
 		start: string;
 		end: string;
@@ -29,7 +29,6 @@ export interface Exhibition {
 		instagram?: string;
 		X?: string;
 	};
-	
 }
 
 export const MOCK_EXHIBITION_DATA: Exhibition[] = [
