@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { navigatorStyles as s } from "./Navigator.styles";
 import type { NavItem } from "./PostNavigation/PostNavigation.types";
 

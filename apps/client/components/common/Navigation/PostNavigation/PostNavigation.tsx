@@ -1,9 +1,8 @@
 "use client";
 
+import { Divider } from "../../Divider/Divider";
 import { Navigator } from "../Navigator";
 import { postNavigationStyles as s } from "./PostNavigation.styles";
-
-import { Divider } from "../../Divider/Divider";
 
 import type { NavItem, PostNavigationProps } from "./PostNavigation.types";
 
