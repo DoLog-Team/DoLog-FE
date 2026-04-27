@@ -1,3 +1,4 @@
+import { cn } from "components";
 import { titleLayoutStyles as s } from "./Title.styles";
 
 interface TitleLayoutProps {
@@ -10,7 +11,7 @@ interface TitleLayoutProps {
 
 export const Title = ({ title, margin, size, color, className }: TitleLayoutProps) => {
 	return (
-		<section className={s.wrapper({ margin, className })}>
+		<section className={cn(s.wrapper({ margin }), className)}>
 			<h2 className={s.text({ size, color })}>{title}</h2>
 		</section>
 	);
