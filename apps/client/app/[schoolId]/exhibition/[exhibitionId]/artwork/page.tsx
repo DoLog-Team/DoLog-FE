@@ -4,7 +4,7 @@ import { ArtworkListSection } from "./_components/ArtworkListSection";
 import { GuideSection } from "./_components/GuideSection";
 
 export default async function ExhibitionDetailPage() {
-	const exhibition = MOCK_EXHIBITION_DATA[0];
+	const exhibition = MOCK_EXHIBITION_DATA[1];
 
 	return (
 		<main>
@@ -18,8 +18,6 @@ export default async function ExhibitionDetailPage() {
 }
 
 // 0428 TODO
-// - 토글 onClick 이벤트 연결
 // - 스크롤 시 상단 요소 고정 완성
-// - 인디케이터 만들고 연결
 // - 헤더 분기처리 + 인터랙션 완성
 // - 버튼 이동 인터랙션 완성
