@@ -2,7 +2,7 @@ export interface CardItem {
 	id: number;
 	imageUrl: string;
 	title: string;
-	category: string;
+	category?: string;
 	author: string;
 }
 
@@ -12,4 +12,5 @@ export interface CardGridProps {
 	items: CardItem[];
 	limit?: number;
 	getHref?: (item: CardItem) => string;
+	className?: string;
 }
