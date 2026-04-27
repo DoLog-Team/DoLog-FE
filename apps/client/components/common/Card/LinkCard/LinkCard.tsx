@@ -14,7 +14,6 @@ export const LinkCard = ({ items, className }: LinkCardProps) => {
 		<section className={`${s.wrapper} ${className ?? ""}`}>
 			<div className={s.list}>
 				{sortedItems.map((item, idx) => {
-					// 🔥 ReactNode → 문자열 추출 (a 태그 대응)
 					const rawText =
 						typeof item.value === "string" ? item.value : ((item.value as any)?.props?.href ?? "");
 
