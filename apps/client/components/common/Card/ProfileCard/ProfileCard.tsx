@@ -10,8 +10,7 @@ export const ProfileCard = ({ imageUrl, name, engName, bio }: ProfileCardProps) 
 				<Image src={imageUrl} alt={name} width={150} height={200} className={s.image} />
 
 				<div className={s.textWrapper}>
-					{/* TODO: mt-auto 스타일로 넣으면 적용이 안 됨 ㅠㅠ */}
-					<div className={"flex flex-col mt-auto"}>
+					<div className={s.textInner}>
 						<h3 className={s.name}>{name}</h3>
 						<p className={s.engName}>{engName}</p>
 					</div>
