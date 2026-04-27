@@ -11,9 +11,9 @@ import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
 import { ProfileCard } from "@/components/common/Card/ProfileCard/ProfileCard";
 import { Divider } from "@/components/common/Divider/Divider";
 import { Modal } from "@/components/common/Modal/Modal";
+import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { Title } from "@/components/common/Title/Title";
 import { MOCK_WORK_DATA } from "@/constants/work";
-import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { Header } from "../../_components/Header";
 import { MOCK_BEHIND_THE_SCENE } from "../_mocks/behind-the-scene";
 
