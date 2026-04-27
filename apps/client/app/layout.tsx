@@ -1,4 +1,5 @@
 import "./globals.css";
+import Script from "next/script";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
@@ -14,6 +15,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "
 				>
 					{children}
+
+					{/* 네이버 지도 API 호출용 */}
+					<Script
+						src={`https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID}&submodules=geocoding`}
+						strategy="beforeInteractive"
+					/>
 				</main>
 			</body>
 		</html>

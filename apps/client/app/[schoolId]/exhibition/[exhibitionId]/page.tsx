@@ -1,39 +1,44 @@
-import { Button } from "components";
-import { Main } from "next/document";
-import { Title } from "@/components/common/Title/Title";
+import Image from "next/image";
 import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
+import { ExhibitionDetail } from "./_components/ExhibitionDetailSection";
+import { ExhibitionHost } from "./_components/ExhibitionHostSection";
+import { ExhibitionIntro } from "./_components/ExhibitionIntroSection";
+import { ExhibitionLocation } from "./_components/ExhibitionLocationSection";
+import { Header } from "./_components/Header";
 
-export default async function ExhibitionDetailPage({
-	params,
-}: {
+interface ExhibitionDetailPageProps {
 	params: Promise<{ schoolId: string; exhibitionId: string }>;
-}) {
-	const { schoolId, exhibitionId } = await params;
-	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
+}
 
+export default async function ExhibitionDetailPage({ params }: ExhibitionDetailPageProps) {
+	const { exhibitionId } = await params;
+	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
 	if (!exhibition) {
 		return <div>전시회를 찾을 수 없습니다.</div>;
 	}
 
 	return (
 		<main>
-			=====================<br></br>
-			헤더 import 예정<br></br>
-			=====================<br></br>
-			SC01 전시회 소개 페이지
-			<Title title="1. 전시 기본 정보 섹션" />
-			{/* 썸네일카드 */}
-			{/* <ExhibitionIntro exhibition={exhibition} /> */}
-			<Button variant="main" className="w-full">
-				전시물 감상하기
-			</Button>
-			<Title title="2. 전시 소개 섹션" />
-			{/* <ExhibitionDetail exhibition={exhibition} /> */}
-			<Title title="3. 장소 섹션" />
-			{/* <ExhibitionLocation location={exhibition.location} /> */}
-			<Title title="4. 주최 기관 섹션" />
-			{/* <ExhibitionHost hostInfo={exhibition.hostInfo} /> */}
-			<Title title="푸터" />
+			<Header />
+			{/* 대표 이미지 */}
+			<div className="relative w-full aspect-3/4">
+				<Image
+					src={exhibition.thumbnailUrl}
+					alt={exhibition.title}
+					fill
+					className="object-cover"
+					priority
+				/>
+			</div>
+			{/* 제목 및 기본 정보 */}
+			<ExhibitionIntro exhibition={exhibition} />
+			{/* 전시 소개 */}
+			<ExhibitionDetail exhibition={exhibition} />
+			{/* TODO : 머지 후 Divider import */}
+			{/* 장소 */}
+			<ExhibitionLocation location={exhibition.location} />
+			{/* 주최 기관 */}
+			<ExhibitionHost hostInfo={exhibition.hostInfo} socialLinks={exhibition.socialLinks} />
 		</main>
 	);
 }
