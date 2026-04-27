@@ -1,12 +1,12 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { PostNavigation } from "@/app/[schoolId]/exhibition/[exhibitionId]/artist/[artistId]/components/Navigation/PostNavigation/PostNavigation";
 import { BTSCardGrid } from "@/components/common/Card/BTSCard/BTSCardGrid";
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
 import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
 import { ProfileCard } from "@/components/common/Card/ProfileCard/ProfileCard";
 import { Divider } from "@/components/common/Divider/Divider";
-import { PostNavigation } from "@/app/[schoolId]/exhibition/[exhibitionId]/artist/[artistId]/components/Navigation/PostNavigation/PostNavigation";
 import { Title } from "@/components/common/Title/Title";
 import { MOCK_ARTIST_DATA } from "@/constants/artist";
 import { MOCK_WORK_DATA } from "@/constants/work";
