@@ -1,9 +1,16 @@
-import { dividerStyles } from "./Divider.styles";
+import { dividerStyles as s } from "./Divider.styles";
 
-export const Divider = () => {
+interface DividerProps {
+	spacing?: "none" | "sm" | "md" | "lg";
+	thickness?: "thin" | "medium" | "thick";
+	fullBleed?: boolean;
+	color?: "lightest" | "lighter";
+}
+
+export const Divider = ({ spacing, thickness, fullBleed, color }: DividerProps) => {
 	return (
-		<div style={dividerStyles.wrapper}>
-			<div style={dividerStyles.line} />
+		<div className={s.wrapper({ spacing, fullBleed })}>
+			<div className={s.line({ thickness, color })} />
 		</div>
 	);
 };
