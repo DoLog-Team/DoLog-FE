@@ -13,6 +13,7 @@ import { Divider } from "@/components/common/Divider/Divider";
 import { Modal } from "@/components/common/Modal/Modal";
 import { Title } from "@/components/common/Title/Title";
 import { MOCK_WORK_DATA } from "@/constants/work";
+import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { Header } from "../../_components/Header";
 import { MOCK_BEHIND_THE_SCENE } from "../_mocks/behind-the-scene";
 
@@ -32,7 +33,7 @@ export default function BtsDetailPage() {
 
 	const artistRef = useRef<HTMLElement>(null);
 	const relatedRef = useRef<HTMLElement>(null);
-	const [activeTab, setActiveTab] = useState<"artist" | "related">("artist");
+	const [activeTab, setActiveTab] = useState("artist");
 	const [isSnsModalOpen, setIsSnsModalOpen] = useState(false);
 
 	const btsIndex = MOCK_BEHIND_THE_SCENE.findIndex((item) => item.id === btsId);
@@ -71,10 +72,21 @@ export default function BtsDetailPage() {
 
 	const HEADER_HEIGHT = 44;
 
+	const sectionRefs: Record<string, React.RefObject<HTMLElement | null>> = {
+		artist: artistRef,
+		related: relatedRef,
+	};
+
 	const scrollTo = (ref: React.RefObject<HTMLElement | null>) => {
 		if (!ref.current) return;
 		const top = ref.current.getBoundingClientRect().top + window.scrollY - HEADER_HEIGHT;
 		window.scrollTo({ top, behavior: "smooth" });
+	};
+
+	const handleTabClick = (tabId: string) => {
+		setActiveTab(tabId);
+		const ref = sectionRefs[tabId];
+		if (ref) scrollTo(ref);
 	};
 
 	if (!btsItem) return null;
@@ -186,25 +198,7 @@ export default function BtsDetailPage() {
 			</div>
 
 			{/* 하단 고정 탭바 */}
-			<div className="fixed bottom-0 px-4 w-full max-w-135 z-20 flex border-t border-stroke-lightest bg-normal">
-				{TABS.map((tab) => (
-					<button
-						type="button"
-						key={tab.id}
-						onClick={() => {
-							setActiveTab(tab.id);
-							scrollTo(tab.id === "artist" ? artistRef : relatedRef);
-						}}
-						className={` px-2.5 py-3 text-body2 transition-colors ${
-							activeTab === tab.id
-								? "text-body2-bold text-light border-t-2 border-stroke-inverse -mt-0.5"
-								: "text-lightest text-body2 "
-						}`}
-					>
-						{tab.label}
-					</button>
-				))}
-			</div>
+			<ScrollTabBar tabs={TABS} activeTab={activeTab} onTabClick={handleTabClick} />
 		</div>
 	);
 }
