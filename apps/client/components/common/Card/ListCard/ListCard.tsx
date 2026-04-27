@@ -11,7 +11,12 @@ export const ListCard = ({ imageUrl, title, category, author }: CardProps) => {
 				<h3 className={s.title}>{title}</h3>
 				<div className={s.detail}>
 					<p className={s.author}>{author}</p>
-					{category && <> · <p className={s.category}>{category}</p></>}
+					{category && (
+						<>
+							{" "}
+							· <p className={s.category}>{category}</p>
+						</>
+					)}
 				</div>
 			</div>
 		</article>
