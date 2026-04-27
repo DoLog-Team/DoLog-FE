@@ -1,6 +1,6 @@
 interface Row {
-	label: string;
-	value: string;
+    label: string;
+    value: React.ReactNode;
 }
 
 interface RowListProps {
