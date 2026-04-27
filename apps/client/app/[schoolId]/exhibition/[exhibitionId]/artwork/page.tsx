@@ -1,7 +1,7 @@
 import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
 import { Header } from "../_components/Header";
 import { GuideSection } from "./_components/GuideSection";
-import ArtworkkListSection from "./_components/ArtworkkListSection";
+import { ArtworkListSection } from "./_components/ArtworkListSection";
 
 export default async function ExhibitionDetailPage() {
 	const exhibition = MOCK_EXHIBITION_DATA[0];
@@ -12,7 +12,7 @@ export default async function ExhibitionDetailPage() {
 			{/* 관람 안내 섹션 */}
 			<GuideSection guideImages={exhibition.guideImages} />
 			{/* 작품 목록 섹션 */}
-			<ArtworkkListSection/>
+			<ArtworkListSection />
 		</main>
 	);
 }

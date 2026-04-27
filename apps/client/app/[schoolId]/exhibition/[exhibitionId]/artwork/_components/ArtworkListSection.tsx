@@ -9,7 +9,7 @@ import { MOCK_ARTWORKS } from "@/app/(main)/_mocks/artwork";
 
 const items = MOCK_ARTWORKS["전체"];
 
-export default function() {
+export function ArtworkListSection() {
         return (
             <section className="flex flex-col px-4 pb-6">
                 <Title title="작품 목록"/>
