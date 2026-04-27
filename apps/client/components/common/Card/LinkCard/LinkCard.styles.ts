@@ -1,14 +1,13 @@
 export const linkCardStyles = {
-	wrapper: "w-full px-[16px] pb-[24px]",
-	list: "flex flex-col gap-[4px] w-full",
+	wrapper: "w-full px-4 pb-6",
 
-	row: "flex flex-row items-start w-full min-h-[20px] gap-[4px]",
+	list: "flex flex-col gap-1 w-full",
 
-	labelBox: "w-[80px] min-w-[80px] shrink-0",
-	label:
-		"block w-full px-[2px] text-[14px] font-medium leading-[20px] tracking-[-0.01em] text-[#070707] truncate",
+	row: "flex items-start w-full gap-1",
+
+	labelBox: "w-20 shrink-0",
+	label: "block w-full px-0.5 text-body2-bold text-strong",
 
 	valueBox: "flex-1 min-w-0",
-	value:
-		"block w-full px-[2px] text-[14px] font-normal leading-[20px] tracking-[-0.01em] text-[#2F3032] break-all",
+	value: "block w-full px-0.5 text-body2 text-light break-words",
 };
