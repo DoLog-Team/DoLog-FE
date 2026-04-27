@@ -1,10 +1,17 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
 import { useTheme } from "next-themes";
-import { ListCard } from "@/components/common/Card/ListCard/ListCard"; // 경로 확인 필요!
 import { Title } from "@/components/common/Title/Title";
+import { ProfileCard } from "@/components/common/Card/ProfileCard/ProfileCard";
+import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
+import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
+import { BTSCardGrid } from "@/components/common/Card/BTSCard/BTSCardGrid";
+import { PostNavigation } from "@/components/common/Navigation/PostNavigation/PostNavigation";
+
+import { Divider } from "@/components/common/Divider/Divider";
+
+import { MOCK_WORK_DATA } from "@/constants/work";
 
 export default function ArtistDetailPage() {
 	const { setTheme } = useTheme();
@@ -12,31 +19,71 @@ export default function ArtistDetailPage() {
 	const schoolId = params?.schoolId;
 	const id = params?.artistId;
 
-	// schoolId가 string | string[] | undefined일 수 있으므로 string으로 변환
 	const schoolIdStr = Array.isArray(schoolId) ? schoolId[0] : schoolId || "";
 	const idStr = Array.isArray(id) ? id[0] : id || "";
 
-	// exhibition 페이지처럼 초기 테마 설정 (팀 규칙이라면)
-	useEffect(() => {
-		setTheme("light");
-	}, [setTheme]);
-
 	return (
-		<div className="flex flex-col bg-normal min-h-screen p-8">
-			<header className="mb-10">
-				<Title title={`${schoolIdStr?.toUpperCase()} Artist`} />
-				<p className="text-body1 text-light">작가 번호: {idStr}의 포트폴리오</p>
-			</header>
-
-			<section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-				{/* 친구가 말한 공통 컴포넌트 사용 */}
-				<ListCard
-					imageUrl="/images/artist1.svg"
-					title="나의 첫 전시 작품"
-					category="Fine Art"
-					author="홍길동"
+		<div className="flex flex-col gap-4 py-20 w-full max-w-[375px] mx-auto">
+			<section>
+				<ProfileCard
+					imageUrl="/images/artists/artist4.png"
+					name="강슬기"
+					engName="Kang Seulgi"
+					bio="소성 후에 생기는 균열이나 깨짐을 보며 오히려 더 솔직한 형태라고 느꼈어요. 실패를 숨기지 않고 작업의 의미로 남겨보려 했습니다. 앞으로는 불완전함을 새 가능성으로 바꾸는 작가가 되고 싶습니다."
 				/>
-				{/* 필요한 만큼 더 배치하거나 map으로 돌리기 */}
+			</section>
+
+			<Title title="연락처" size="head2" />
+			<LinkCard
+				items={[
+					{ label: "Behance", value: "http://behance.com" },
+					{ label: "instagram", value: "http://instagram.com" },
+					{ label: "X", value: "http://x.com" },
+				]}
+			/>
+
+			{/* 구분선 */}
+			<Divider />
+
+			{/* Behind */}
+			<section className="mb-8">
+				<Title title="Behind The Scene" size="head2" />
+
+				<div className="mt-4">
+					<BTSCardGrid
+						items={[
+							{
+								id: 1,
+								title: "내가 흙을 사랑하는 이유",
+								author: "강슬기",
+								imageUrl: "/images/bts/bts1.png",
+							},
+							{
+								id: 2,
+								title: "내가 흙을 사랑하는 이유",
+								author: "강슬기",
+								imageUrl: "/images/bts/bts1.png",
+							},
+						]}
+					/>
+				</div>
+			</section>
+
+			{/* 작품 */}
+			<section>
+				<Title title="작품" size="head2" />
+				<ListCardGrid items={MOCK_WORK_DATA} limit={3} />
+			</section>
+
+			{/* 작가 둘러보기*/}
+			<section className="mb-10 px-[16px]">
+				<Title title="작가 둘러보기" size="head2" />
+				<div className="mt-4">
+					<PostNavigation
+						prevPost={{ id: 1, title: "배주현" }}
+						nextPost={{ id: 3, title: "박수영" }}
+					/>
+				</div>
 			</section>
 		</div>
 	);
