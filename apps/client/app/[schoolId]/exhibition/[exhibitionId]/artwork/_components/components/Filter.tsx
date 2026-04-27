@@ -9,7 +9,7 @@ interface FilterProps {
 
 export default function Filter({ categories, selected, onSelect }: FilterProps) {
 	return (
-		<div className="flex items-center mt-2.5 mb-6 gap-2.5 overflow-x-auto scrollbar-hide">
+		<div className="flex items-center mt-2.5 gap-2.5 overflow-x-auto scrollbar-hide">
 			{categories.map((category) => (
 				<Chip
 					key={category}

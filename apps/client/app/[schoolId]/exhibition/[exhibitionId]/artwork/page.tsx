@@ -18,6 +18,5 @@ export default async function ExhibitionDetailPage() {
 }
 
 // 0428 TODO
-// - 스크롤 시 상단 요소 고정 완성
 // - 헤더 분기처리 + 인터랙션 완성
 // - 버튼 이동 인터랙션 완성
