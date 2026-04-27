@@ -82,9 +82,7 @@ export default function BtsDetailPage() {
 	return (
 		<div className="flex flex-col min-h-screen pb-14">
 			{/* 헤더 */}
-			<div className="sticky top-0 z-10 bg-normal">
-				<Header variant="back" title="Behind The Scene 상세" />
-			</div>
+			<Header variant="back" title="Behind The Scene 상세" />
 
 			{/* 대표 이미지 */}
 			<div className="relative aspect-video w-full">
