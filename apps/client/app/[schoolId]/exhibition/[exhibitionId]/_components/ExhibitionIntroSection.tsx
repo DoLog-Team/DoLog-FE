@@ -1,7 +1,7 @@
 import { Button } from "components";
+import RowList from "@/components/common/RowList/RowList";
 import { Title } from "@/components/common/Title/Title";
 import type { Exhibition } from "@/constants/exhibition";
-import RowList from "@/components/common/RowList/RowList";
 
 interface ExhibitionIntroProps {
 	exhibition: Exhibition;
@@ -9,9 +9,9 @@ interface ExhibitionIntroProps {
 
 export function ExhibitionIntro({ exhibition }: ExhibitionIntroProps) {
 	const rows = [
-        { label: "주최 대학", value: exhibition.host },
-        { label: "학과", value: exhibition.department },
-    ];
+		{ label: "주최 대학", value: exhibition.host },
+		{ label: "학과", value: exhibition.department },
+	];
 
 	return (
 		<section className="flex flex-col px-4 pb-6">

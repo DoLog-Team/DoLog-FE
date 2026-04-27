@@ -1,6 +1,6 @@
+import RowList from "@/components/common/RowList/RowList";
 import { Title } from "@/components/common/Title/Title";
 import type { Exhibition } from "@/constants/exhibition";
-import RowList from "@/components/common/RowList/RowList";
 
 interface ExhibitionDetailProps {
 	exhibition: Exhibition;
@@ -12,22 +12,25 @@ export function ExhibitionDetail({ exhibition }: ExhibitionDetailProps) {
 	const paragraphs = exhibition.description.split("\n\n").filter(Boolean);
 
 	const rows = [
-        {
-            label: "전시 일정",
-            value: `${exhibition.period.start} ~ ${exhibition.period.end}`,
-        },
-        ...(exhibition.hours ? [{
-            label: "추가 사항",
-            value: (
-                <>
-                    {exhibition.hours.open} ~ {exhibition.hours.close}
-                    <br />
-                    {exhibition.hours.note}
-                </>
-            ),
-        }] : []),
-    ];
-
+		{
+			label: "전시 일정",
+			value: `${exhibition.period.start} ~ ${exhibition.period.end}`,
+		},
+		...(exhibition.hours
+			? [
+					{
+						label: "추가 사항",
+						value: (
+							<>
+								{exhibition.hours.open} ~ {exhibition.hours.close}
+								<br />
+								{exhibition.hours.note}
+							</>
+						),
+					},
+				]
+			: []),
+	];
 
 	return (
 		<section className="flex flex-col px-4 pb-6">
