@@ -1,8 +1,7 @@
 export const btsCardStyles = {
-	// RowCard와 동일한 레이아웃 구조
 	wrapper: "flex gap-[12px] items-center w-full",
 
-	// 사진 크기 강제: 64x64
+	// 사진 크기
 	imageWrapper: "w-[64px] h-[64px] overflow-hidden rounded-md flex-shrink-0",
 	image: "w-[64px] h-[64px] object-cover rotate-0",
 
