@@ -4,20 +4,34 @@ import { linkCardStyles as s } from "./LinkCard.styles";
 import type { LinkCardProps } from "./LinkCard.types";
 
 export const LinkCard = ({ items, className }: LinkCardProps) => {
+	const sortedItems = [...items].sort((a, b) => {
+		if (a.label === "email") return -1;
+		if (b.label === "email") return 1;
+		return 0;
+	});
+
 	return (
 		<section className={`${s.wrapper} ${className ?? ""}`}>
 			<div className={s.list}>
-				{items.map((item, idx) => (
-					<div key={idx} className={s.row}>
-						<div className={s.labelBox}>
-							<span className={s.label}>{item.label}</span>
-						</div>
+				{sortedItems.map((item, idx) => {
+					// 🔥 ReactNode → 문자열 추출 (a 태그 대응)
+					const rawText =
+						typeof item.value === "string" ? item.value : ((item.value as any)?.props?.href ?? "");
 
-						<div className={s.valueBox}>
-							<span className={s.value}>{item.value}</span>
+					return (
+						<div key={idx} className={s.row}>
+							<div className={s.labelBox}>
+								<span className={s.label}>{item.label}</span>
+							</div>
+
+							<div className={s.valueBox}>
+								<span className={s.value} title={rawText}>
+									{item.value}
+								</span>
+							</div>
 						</div>
-					</div>
-				))}
+					);
+				})}
 			</div>
 		</section>
 	);
