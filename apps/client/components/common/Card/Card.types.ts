@@ -1,8 +1,8 @@
 export interface CardItem {
-	id: number;
-	imageUrl: string;
+	id: number | string;
+	imageUrl?: string;
 	title: string;
-	category: string;
+	category?: string;
 	author: string;
 }
 
