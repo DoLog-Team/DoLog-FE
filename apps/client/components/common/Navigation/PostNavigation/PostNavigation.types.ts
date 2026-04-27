@@ -6,6 +6,6 @@ export interface NavItem {
 }
 
 export interface PostNavigationProps {
-	prevPost?: { id: number; title: string };
-	nextPost?: { id: number; title: string };
+	prevPost?: { id: string; title: string };
+	nextPost?: { id: string; title: string };
 }
