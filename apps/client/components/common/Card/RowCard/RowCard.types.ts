@@ -1,5 +1,5 @@
 export interface RowCardItem {
-	id: string;
+	id: string | number;
 	name: string;
 	engName?: string;
 	email?: string;
