@@ -1,46 +1,46 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useTheme } from "next-themes";
-import { Title } from "@/components/common/Title/Title";
-import { ProfileCard } from "@/components/common/Card/ProfileCard/ProfileCard";
+import { PostNavigation } from "@/app/[schoolId]/exhibition/[exhibitionId]/artist/[artistId]/components/Navigation/PostNavigation/PostNavigation";
+import { BTSCardGrid } from "@/components/common/Card/BTSCard/BTSCardGrid";
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
 import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
-import { BTSCardGrid } from "@/components/common/Card/BTSCard/BTSCardGrid";
-import { PostNavigation } from "@/components/common/Navigation/PostNavigation/PostNavigation";
-
+import { ProfileCard } from "@/components/common/Card/ProfileCard/ProfileCard";
 import { Divider } from "@/components/common/Divider/Divider";
-
+import { Title } from "@/components/common/Title/Title";
+import { MOCK_ARTIST_DATA } from "@/constants/artist";
 import { MOCK_WORK_DATA } from "@/constants/work";
+import { getPrevNextArtist } from "@/features/artists/mappers/artist.mapper";
+import { transformLinks } from "@/features/artists/mappers/link.mapper";
 
 export default function ArtistDetailPage() {
-	const { setTheme } = useTheme();
 	const params = useParams();
+
 	const schoolId = params?.schoolId;
 	const id = params?.artistId;
-
 	const schoolIdStr = Array.isArray(schoolId) ? schoolId[0] : schoolId || "";
 	const idStr = Array.isArray(id) ? id[0] : id || "";
+
+	const { prev, next } = getPrevNextArtist(MOCK_ARTIST_DATA, idStr);
+
+	const artist = MOCK_ARTIST_DATA.find((a) => a.id === idStr);
+	if (!artist) return <div>작가 없음</div>;
+
+	const linkItems = transformLinks(artist.email, artist.sns);
 
 	return (
 		<div className="flex flex-col gap-4 py-20 w-full max-w-[375px] mx-auto">
 			<section>
 				<ProfileCard
-					imageUrl="/images/artists/artist4.png"
-					name="강슬기"
-					engName="Kang Seulgi"
-					bio="소성 후에 생기는 균열이나 깨짐을 보며 오히려 더 솔직한 형태라고 느꼈어요. 실패를 숨기지 않고 작업의 의미로 남겨보려 했습니다. 앞으로는 불완전함을 새 가능성으로 바꾸는 작가가 되고 싶습니다."
+					imageUrl={artist.imageUrl ?? "/images/artists/artist2.png"}
+					name={artist.name}
+					engName={artist.engName}
+					bio={artist.bio}
 				/>
 			</section>
 
 			<Title title="연락처" size="head2" />
-			<LinkCard
-				items={[
-					{ label: "Behance", value: "http://behance.com" },
-					{ label: "instagram", value: "http://instagram.com" },
-					{ label: "X", value: "http://x.com" },
-				]}
-			/>
+			<LinkCard items={linkItems} />
 
 			{/* 구분선 */}
 			<Divider />
@@ -75,15 +75,13 @@ export default function ArtistDetailPage() {
 				<ListCardGrid items={MOCK_WORK_DATA} limit={3} />
 			</section>
 
-			{/* 작가 둘러보기*/}
-			<section className="mb-10 px-[16px]">
-				<Title title="작가 둘러보기" size="head2" />
-				<div className="mt-4">
-					<PostNavigation
-						prevPost={{ id: 1, title: "배주현" }}
-						nextPost={{ id: 3, title: "박수영" }}
-					/>
-				</div>
+			{/* 작가 둘러보기 */}
+			<section>
+				<Title title="작가 둘러보기" size="body1-bold" color="lighter" />
+				<PostNavigation
+					prevPost={prev ? { id: prev.id, title: prev.name } : undefined}
+					nextPost={next ? { id: next.id, title: next.name } : undefined}
+				/>
 			</section>
 		</div>
 	);

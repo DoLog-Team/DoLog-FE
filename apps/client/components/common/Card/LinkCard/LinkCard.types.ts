@@ -1,6 +1,6 @@
 export interface LinkItem {
 	label: string;
-	value: string;
+	value: React.ReactNode;
 }
 
 export interface LinkCardProps {

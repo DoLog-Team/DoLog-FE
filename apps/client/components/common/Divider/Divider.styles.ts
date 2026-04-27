@@ -1,17 +1,40 @@
-export const dividerStyles = {
-	wrapper: {
-		width: "calc(100% + 2rem)",
-		marginLeft: "-1rem",
-		marginRight: "-1rem",
-		padding: "20px 0",
-		display: "flex",
-		flexDirection: "column" as const,
-		justifyContent: "center",
-	},
+import { cva } from "class-variance-authority";
 
-	line: {
-		width: "100%",
-		height: "4px",
-		backgroundColor: "var(--color-stroke-lightest)",
-	},
+export const dividerStyles = {
+	wrapper: cva("flex flex-col justify-center", {
+		variants: {
+			spacing: {
+				none: "py-0",
+				sm: "py-2",
+				md: "py-4",
+				lg: "py-5",
+			},
+			fullBleed: {
+				true: "w-[calc(100%+2rem)] -mx-4",
+				false: "w-full",
+			},
+		},
+		defaultVariants: {
+			spacing: "lg",
+			fullBleed: true,
+		},
+	}),
+
+	line: cva("w-full", {
+		variants: {
+			thickness: {
+				thin: "h-[1px]",
+				medium: "h-[2px]",
+				thick: "h-[4px]",
+			},
+			color: {
+				lightest: "bg-stroke-lightest",
+				lighter: "bg-stroke-lighter",
+			},
+		},
+		defaultVariants: {
+			thickness: "thick",
+			color: "lightest",
+		},
+	}),
 };
