@@ -1,9 +1,9 @@
 export interface CardItem {
-	id: number;
-	imageUrl: string;
-	title: string;
-	category: string;
-	author: string;
+	id: number | string;
+	imageUrl?: string;
+	title?: string;
+	category?: string;
+	author?: string;
 }
 
 export interface CardProps extends Omit<CardItem, "id"> {}
