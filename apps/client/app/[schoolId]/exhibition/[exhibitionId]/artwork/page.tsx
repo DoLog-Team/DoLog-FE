@@ -1,7 +1,7 @@
 import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
 import { Header } from "../_components/Header";
-import { GuideSection } from "./_components/GuideSection";
 import { ArtworkListSection } from "./_components/ArtworkListSection";
+import { GuideSection } from "./_components/GuideSection";
 
 export default async function ExhibitionDetailPage() {
 	const exhibition = MOCK_EXHIBITION_DATA[0];
