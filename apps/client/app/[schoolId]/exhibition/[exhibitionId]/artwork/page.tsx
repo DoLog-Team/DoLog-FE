@@ -18,7 +18,6 @@ export default async function ExhibitionDetailPage() {
 }
 
 // 0428 TODO
-// - 필터탭 완성
 // - 토글 onClick 이벤트 연결
 // - 스크롤 시 상단 요소 고정 완성
 // - 인디케이터 만들고 연결
