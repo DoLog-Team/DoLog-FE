@@ -1,79 +1,45 @@
 "use client";
 
-import { postNavStyles as s } from "./PostNavigation.styles";
-import { Divider } from "@/components/common/Divider/Divider";
+import { Navigator } from "../Navigator";
+import { postNavigationStyles as s } from "./PostNavigation.styles";
 
-interface PostNavigationProps {
-	prevPost?: { id: number; title: string };
-	nextPost?: { id: number; title: string };
-}
+import { Divider } from "../../Divider/Divider";
 
-export const PostNavigation = ({ prevPost, nextPost }: PostNavigationProps) => {
+import type { NavItem, PostNavigationProps } from "./PostNavigation.types";
+
+export function PostNavigation({ prevPost, nextPost }: PostNavigationProps) {
+	const navItems: NavItem[] = [
+		prevPost && {
+			label: "이전 작가",
+			artistName: prevPost.title,
+			artistId: String(prevPost.id),
+			direction: "prev",
+		},
+		nextPost && {
+			label: "다음 작가",
+			artistName: nextPost.title,
+			artistId: String(nextPost.id),
+			direction: "next",
+		},
+	].filter(Boolean) as NavItem[];
+
+	if (navItems.length === 0) return null;
+
 	return (
-		<div className="flex flex-col  ">
-			{/* 첫 번째 라인 (ECEDEE) */}
-			<div className="px-4 py-6">
-				<Divider />
-			</div>
+		<section>
+			<Divider spacing="none" thickness="thin" fullBleed={false} color="lighter" />
 
-			{/* 이전 포스트 */}
-			<div className={s.navRow}>
-				<div className={s.contentBox}>
-					<span className={s.postTitle}>{prevPost?.title || "이전 작가가 없습니다"}</span>
-				</div>
-				<div className={s.labelBox}>
-					<span className={s.labelTag}>이전 작가</span>
-					<div className={s.iconBox}>
-						<svg
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-							className="rotate-180 text-icon-light"
-						>
-							<path
-								d="M7 10L12 15L17 10"
-								stroke="currentColor"
-								strokeWidth="2"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-						</svg>
+			<div className={s.wrapper}>
+				{navItems.map((item, idx) => (
+					<div key={item.artistId}>
+						<Navigator {...item} />
+
+						{idx !== navItems.length - 1 && (
+							<Divider spacing="none" thickness="thin" fullBleed={false} />
+						)}
 					</div>
-				</div>
+				))}
 			</div>
-
-			{/* 중간 라인 (F7F7F8) */}
-			<div className="px-4 py-6">
-				<Divider />
-			</div>
-
-			{/* 다음 포스트 */}
-			<div className={s.navRow}>
-				<div className={s.contentBox}>
-					<span className={s.postTitle}>{nextPost?.title || "다음 작가가 없습니다"}</span>
-				</div>
-				<div className={s.labelBox}>
-					<span className={s.labelTag}>다음 작가</span>
-					<div className={s.iconBox}>
-						<svg
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-							className="rotate-180 text-icon-light"
-						>
-							<path
-								d="M7 10L12 15L17 10"
-								stroke="currentColor"
-								strokeWidth="2"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-						</svg>
-					</div>
-				</div>
-			</div>
-		</div>
+		</section>
 	);
-};
+}
