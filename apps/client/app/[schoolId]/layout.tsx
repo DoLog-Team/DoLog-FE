@@ -32,7 +32,7 @@ export default async function SchoolLayout({
 			}}
 		>
 			<div className="bg-normal text-strong min-h-dvh flex flex-col" style={colorVars}>
-				<div className="min-h-dvh flex flex-col px-4">{children}</div>
+				<div className="min-h-dvh flex flex-col">{children}</div>
 
 				<SchoolFooter logoSrc={schoolData.footerInfo.logoSrc} {...schoolData.footerInfo} />
 			</div>
