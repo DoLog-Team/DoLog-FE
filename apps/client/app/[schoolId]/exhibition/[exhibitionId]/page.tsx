@@ -5,21 +5,24 @@ import { ExhibitionHost } from "./_components/ExhibitionHostSection";
 import { ExhibitionIntro } from "./_components/ExhibitionIntroSection";
 import { ExhibitionLocation } from "./_components/ExhibitionLocationSection";
 import { Header } from "./_components/Header";
+import { MOCK_SCHOOL_DATA } from "@/app/[schoolId]/school-config";
 
 interface ExhibitionDetailPageProps {
 	params: Promise<{ schoolId: string; exhibitionId: string }>;
 }
 
 export default async function ExhibitionDetailPage({ params }: ExhibitionDetailPageProps) {
-	const { exhibitionId } = await params;
-	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
+	const { schoolId, exhibitionId } = await params;
+    const schoolConfig = MOCK_SCHOOL_DATA[schoolId];
+    const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
+
 	if (!exhibition) {
 		return <div>전시회를 찾을 수 없습니다.</div>;
 	}
 
 	return (
 		<main>
-			<Header />
+			<Header logoUrl={schoolConfig.logoSrc} /*onMenuClick={() => {}}*/ />
 			{/* 대표 이미지 */}
 			<div className="relative w-full aspect-3/4">
 				<Image

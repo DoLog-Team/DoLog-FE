@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { MOCK_ARTWORK_DETAIL } from "@/app/(main)/_mocks/artworkDetail";
+import { MOCK_ARTWORK_DETAIL } from "@/app/[schoolId]/exhibition/[exhibitionId]/artwork/_mocks/artworkDetail";
 import { Header } from "../../_components/Header";
 import { ArtistSection } from "./_components/ArtistSection";
 import { BtsSection } from "./_components/BtsSection";
@@ -9,13 +9,20 @@ import { LocationSection } from "./_components/LocationSection";
 import { PhotoSection } from "./_components/PhotoSection";
 import { PostNavigationSection } from "./_components/PostNavigationSection";
 import { RelatedSection } from "./_components/RelatedSection";
+import { MOCK_SCHOOL_DATA } from "@/app/[schoolId]/school-config";
 
-export default function ArtworkDetailPage() {
-	const data = MOCK_ARTWORK_DETAIL; // TODO : fetch 변경 예정
+interface ArtworkDetailPageProps {
+    params: Promise<{ schoolId: string }>;
+}
+
+export default async function ArtworkDetailPage({ params }: ArtworkDetailPageProps) {
+    const { schoolId } = await params;
+    const schoolConfig = MOCK_SCHOOL_DATA[schoolId];
+    const data = MOCK_ARTWORK_DETAIL; // TODO : fetch 변경 예정
 
 	return (
 		<div className="flex flex-col">
-			<Header />
+			<Header logoUrl={schoolConfig.logoSrc} /*onMenuClick={() => {}}*/ />
 			{/* 대표 이미지 */}
 			<div className="relative aspect-video w-full">
 				<Image src={data.image} alt={data.title} fill className="object-cover" priority />

@@ -1,5 +1,6 @@
 export interface SchoolConfig {
 	schoolName: string;
+	logoSrc: string;
 	themeMode: "light" | "dark";
 	btnBg?: string;
 	btnText?: string;
@@ -12,15 +13,14 @@ export interface SchoolConfig {
 		addressDetail: string;
 		email: string;
 		copyright: string;
-		logoSrc?: string;
 	};
 }
 
 export const MOCK_SCHOOL_DATA: Record<string, SchoolConfig> = {
 	dgu: {
 		schoolName: "동국대학교",
+		logoSrc: "/images/exhibitionLogo.svg",
 		themeMode: "dark",
-
 		btnBg: "#FFF0E6",
 		btnText: "#C45C1A",
 		ctaBg: "#E8621A",
@@ -36,6 +36,7 @@ export const MOCK_SCHOOL_DATA: Record<string, SchoolConfig> = {
 	},
 	"dgu-test": {
 		schoolName: "동국대학교",
+		logoSrc: "/images/exhibitionLogo.svg",
 		themeMode: "dark",
 		btnBg: "#FFF0E6",
 		btnText: "#C45C1A",
@@ -52,6 +53,7 @@ export const MOCK_SCHOOL_DATA: Record<string, SchoolConfig> = {
 	},
 	snu: {
 		schoolName: "서울대학교",
+		logoSrc: "/images/exhibitionLogo.svg",
 		themeMode: "light",
 		btnBg: "#FFE4E1",
 		btnText: "#FF69B4",
@@ -68,6 +70,7 @@ export const MOCK_SCHOOL_DATA: Record<string, SchoolConfig> = {
 	},
 	"snu-test": {
 		schoolName: "서울대학교",
+		logoSrc: "/images/exhibitionLogo.svg",
 		themeMode: "light",
 		btnBg: "#FFE4E1",
 		btnText: "#FF69B4",
