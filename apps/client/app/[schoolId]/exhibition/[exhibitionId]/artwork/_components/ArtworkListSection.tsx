@@ -92,9 +92,9 @@ export function ArtworkListSection({ refs, refOffset }: ArtworkListSectionProps)
 							{items.length === 0 ? (
 								<EmptyState />
 							) : viewMode === "grid" ? (
-								<CardGrid items={items} getHref={(id) => `artwork/${id}`} />
+								<CardGrid items={items} getHref={(item) => `artwork/${item.id}`} />
 							) : (
-								<ListCardGrid items={items} getHref={(id) => `artwork/${id}`} />
+								<ListCardGrid items={items} getHref={(item) => `artwork/${item.id}`} />
 							)}
 						</div>
 					);

@@ -13,15 +13,24 @@ export const titleLayoutStyles = {
 		},
 	}),
 
-	text: cva("text-strong", {
+	text: cva("", {
 		variants: {
 			size: {
 				head1: "text-head1",
 				head2: "text-head2",
+				body1: "text-body1",
+				"body1-bold": "text-body1-bold",
+				body2: "text-body2",
+			},
+			color: {
+				strong: "text-strong",
+				light: "text-light",
+				lighter: "text-lighter",
 			},
 		},
 		defaultVariants: {
 			size: "head1",
+			color: "strong",
 		},
 	}),
 };

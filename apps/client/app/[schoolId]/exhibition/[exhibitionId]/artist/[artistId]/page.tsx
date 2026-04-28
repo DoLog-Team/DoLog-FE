@@ -1,42 +1,87 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
-import { useTheme } from "next-themes";
-import { ListCard } from "@/components/common/Card/ListCard/ListCard"; // 경로 확인 필요!
+import { PostNavigation } from "@/app/[schoolId]/exhibition/[exhibitionId]/artist/[artistId]/components/Navigation/PostNavigation/PostNavigation";
+import { BTSCardGrid } from "@/components/common/Card/BTSCard/BTSCardGrid";
+import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
+import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
+import { ProfileCard } from "@/components/common/Card/ProfileCard/ProfileCard";
+import { Divider } from "@/components/common/Divider/Divider";
 import { Title } from "@/components/common/Title/Title";
+import { MOCK_ARTIST_DATA } from "@/constants/artist";
+import { MOCK_WORK_DATA } from "@/constants/work";
+import { getPrevNextArtist } from "@/features/artists/mappers/artist.mapper";
+import { transformLinks } from "@/features/artists/mappers/link.mapper";
 
 export default function ArtistDetailPage() {
-	const { setTheme } = useTheme();
 	const params = useParams();
+
 	const schoolId = params?.schoolId;
 	const id = params?.artistId;
-
-	// schoolId가 string | string[] | undefined일 수 있으므로 string으로 변환
 	const schoolIdStr = Array.isArray(schoolId) ? schoolId[0] : schoolId || "";
 	const idStr = Array.isArray(id) ? id[0] : id || "";
 
-	// exhibition 페이지처럼 초기 테마 설정 (팀 규칙이라면)
-	useEffect(() => {
-		setTheme("light");
-	}, [setTheme]);
+	const { prev, next } = getPrevNextArtist(MOCK_ARTIST_DATA, idStr);
+
+	const artist = MOCK_ARTIST_DATA.find((a) => a.id === idStr);
+	if (!artist) return <div>작가 없음</div>;
+
+	const linkItems = transformLinks(artist.email, artist.sns);
 
 	return (
-		<div className="flex flex-col bg-normal min-h-screen p-8">
-			<header className="mb-10">
-				<Title title={`${schoolIdStr?.toUpperCase()} Artist`} />
-				<p className="text-body1 text-light">작가 번호: {idStr}의 포트폴리오</p>
-			</header>
-
-			<section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-				{/* 친구가 말한 공통 컴포넌트 사용 */}
-				<ListCard
-					imageUrl="/images/artist1.svg"
-					title="나의 첫 전시 작품"
-					category="Fine Art"
-					author="홍길동"
+		<div className="flex flex-col gap-4 py-20 w-full max-w-[375px] mx-auto">
+			<section>
+				<ProfileCard
+					imageUrl={artist.imageUrl ?? "/images/artists/artist2.png"}
+					name={artist.name}
+					engName={artist.engName}
+					bio={artist.bio}
 				/>
-				{/* 필요한 만큼 더 배치하거나 map으로 돌리기 */}
+			</section>
+
+			<Title title="연락처" size="head2" />
+			<LinkCard items={linkItems} />
+
+			{/* 구분선 */}
+			<Divider />
+
+			{/* Behind */}
+			<section className="mb-8">
+				<Title title="Behind The Scene" size="head2" />
+
+				<div className="mt-4">
+					<BTSCardGrid
+						items={[
+							{
+								id: 1,
+								title: "내가 흙을 사랑하는 이유",
+								author: "강슬기",
+								imageUrl: "/images/bts/bts1.png",
+							},
+							{
+								id: 2,
+								title: "내가 흙을 사랑하는 이유",
+								author: "강슬기",
+								imageUrl: "/images/bts/bts1.png",
+							},
+						]}
+					/>
+				</div>
+			</section>
+
+			{/* 작품 */}
+			<section>
+				<Title title="작품" size="head2" />
+				<ListCardGrid items={MOCK_WORK_DATA} limit={3} />
+			</section>
+
+			{/* 작가 둘러보기 */}
+			<section>
+				<Title title="작가 둘러보기" size="body1-bold" color="lighter" />
+				<PostNavigation
+					prevPost={prev ? { id: prev.id, title: prev.name } : undefined}
+					nextPost={next ? { id: next.id, title: next.name } : undefined}
+				/>
 			</section>
 		</div>
 	);

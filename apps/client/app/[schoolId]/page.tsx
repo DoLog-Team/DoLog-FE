@@ -6,6 +6,7 @@ import { CardGrid } from "@/components/common/Card/CardGrid";
 import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
 import { RowCardGrid } from "@/components/common/Card/RowCard/RowCardGrid";
 import { Chip } from "@/components/common/Chip/Chip";
+import { Divider } from "@/components/common/Divider/Divider";
 import { Modal } from "@/components/common/Modal/Modal";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { Title } from "@/components/common/Title/Title";
@@ -72,7 +73,7 @@ export default function TestPage() {
 			<RowCardGrid items={MOCK_ARTIST_DATA} limit={3} />
 
 			{/* 빈 영역 확인용 구분선 */}
-			<div className="mt-8 border-t border-gray-100" />
+			<Divider />
 
 			{/* 모달 사용 예시 */}
 			<Modal

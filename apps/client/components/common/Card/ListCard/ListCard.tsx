@@ -14,7 +14,7 @@ export const ListCard = ({
 		<article className={s.wrapper}>
 			<div className={s.imageWrapper}>
 				<Image
-					src={imageUrl}
+					src={imageUrl ?? ""}
 					alt={`${title} - ${author}`}
 					width={0}
 					height={0}
