@@ -26,7 +26,13 @@ export const ListCard = ({
 			<div className={s.info}>
 				<h3 className={s.title}>{title}</h3>
 				<div className={s.detail}>
-					<p className={s.author}>{author}</p> · <p className={s.category}>{category}</p>
+					<p className={s.author}>{author}</p>
+					{category && (
+						<>
+							{" "}
+							· <p className={s.category}>{category}</p>
+						</>
+					)}
 				</div>
 			</div>
 		</article>

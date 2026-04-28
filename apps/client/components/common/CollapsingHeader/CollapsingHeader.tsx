@@ -14,7 +14,8 @@ interface CollapsingHeaderProps {
 	children?: React.ReactNode;
 }
 
-const SCROLL_THRESHOLD = 10;
+const COLLAPSE_THRESHOLD = 150;
+const EXPAND_THRESHOLD = 20;
 
 export const CollapsingHeader = ({
 	title,
@@ -26,7 +27,14 @@ export const CollapsingHeader = ({
 	const [isScrolled, setIsScrolled] = useState(false);
 
 	useEffect(() => {
-		const handleScroll = () => setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
+		const handleScroll = () => {
+			const y = window.scrollY;
+			setIsScrolled((prev) => {
+				if (!prev && y > COLLAPSE_THRESHOLD) return true;
+				if (prev && y < EXPAND_THRESHOLD) return false;
+				return prev;
+			});
+		};
 		window.addEventListener("scroll", handleScroll, { passive: true });
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);

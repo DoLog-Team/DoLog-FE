@@ -12,6 +12,7 @@ import { MOCK_ARTIST_DATA } from "@/constants/artist";
 import { MOCK_WORK_DATA } from "@/constants/work";
 import { getPrevNextArtist } from "@/features/artists/mappers/artist.mapper";
 import { transformLinks } from "@/features/artists/mappers/link.mapper";
+import { Header } from "../../_components/Header";
 
 export default function ArtistDetailPage() {
 	const params = useParams();
@@ -29,60 +30,63 @@ export default function ArtistDetailPage() {
 	const linkItems = transformLinks(artist.email, artist.sns);
 
 	return (
-		<div className="flex flex-col gap-4 py-20 w-full max-w-[375px] mx-auto">
-			<section>
-				<ProfileCard
-					imageUrl={artist.imageUrl ?? "/images/artists/artist2.png"}
-					name={artist.name}
-					engName={artist.engName}
-					bio={artist.bio}
-				/>
-			</section>
-
-			<Title title="연락처" size="head2" />
-			<LinkCard items={linkItems} />
-
-			{/* 구분선 */}
-			<Divider />
-
-			{/* Behind */}
-			<section className="mb-8">
-				<Title title="Behind The Scene" size="head2" />
-
-				<div className="mt-4">
-					<BTSCardGrid
-						items={[
-							{
-								id: 1,
-								title: "내가 흙을 사랑하는 이유",
-								author: "강슬기",
-								imageUrl: "/images/bts/bts1.png",
-							},
-							{
-								id: 2,
-								title: "내가 흙을 사랑하는 이유",
-								author: "강슬기",
-								imageUrl: "/images/bts/bts1.png",
-							},
-						]}
+		<>
+			<Header variant="back" title="작가 상세" />
+			<div className="flex flex-col px-4 gap-4 w-full mx-auto">
+				<section>
+					<ProfileCard
+						imageUrl={artist.imageUrl ?? "/images/artists/artist2.png"}
+						name={artist.name}
+						engName={artist.engName}
+						bio={artist.bio}
 					/>
-				</div>
-			</section>
+				</section>
 
-			{/* 작품 */}
-			<section>
-				<Title title="작품" size="head2" />
-				<ListCardGrid items={MOCK_WORK_DATA} limit={3} />
-			</section>
+				<Title title="연락처" size="head2" />
+				<LinkCard items={linkItems} />
 
-			{/* 작가 둘러보기 */}
-			<section>
-				<Title title="작가 둘러보기" size="body1-bold" color="lighter" />
-				<PostNavigation
-					prevPost={prev ? { id: prev.id, title: prev.name } : undefined}
-					nextPost={next ? { id: next.id, title: next.name } : undefined}
-				/>
-			</section>
-		</div>
+				{/* 구분선 */}
+				<Divider />
+
+				{/* Behind */}
+				<section className="mb-8">
+					<Title title="Behind The Scene" size="head2" />
+
+					<div className="mt-4">
+						<BTSCardGrid
+							items={[
+								{
+									id: 1,
+									title: "내가 흙을 사랑하는 이유",
+									author: "강슬기",
+									imageUrl: "/images/bts/bts1.png",
+								},
+								{
+									id: 2,
+									title: "내가 흙을 사랑하는 이유",
+									author: "강슬기",
+									imageUrl: "/images/bts/bts1.png",
+								},
+							]}
+						/>
+					</div>
+				</section>
+
+				{/* 작품 */}
+				<section>
+					<Title title="작품" size="head2" />
+					<ListCardGrid items={MOCK_WORK_DATA} limit={3} />
+				</section>
+
+				{/* 작가 둘러보기 */}
+				<section>
+					<Title title="작가 둘러보기" size="body1-bold" color="lighter" />
+					<PostNavigation
+						prevPost={prev ? { id: prev.id, title: prev.name } : undefined}
+						nextPost={next ? { id: next.id, title: next.name } : undefined}
+					/>
+				</section>
+			</div>
+		</>
 	);
 }
