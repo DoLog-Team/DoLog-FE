@@ -13,6 +13,7 @@ export interface SchoolConfig {
 		addressDetail: string;
 		email: string;
 		copyright: string;
+		logoSrc?: string;
 	};
 }
 
