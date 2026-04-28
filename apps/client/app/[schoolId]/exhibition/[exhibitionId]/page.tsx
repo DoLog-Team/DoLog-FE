@@ -34,7 +34,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 				/>
 			</div>
 			{/* 제목 및 기본 정보 */}
-			<ExhibitionIntro exhibition={exhibition} schoolId={schoolId} />
+			<ExhibitionIntro exhibition={exhibition}/>
 			{/* 전시 소개 */}
 			<ExhibitionDetail exhibition={exhibition} />
 			{/* TODO : 머지 후 Divider import */}
