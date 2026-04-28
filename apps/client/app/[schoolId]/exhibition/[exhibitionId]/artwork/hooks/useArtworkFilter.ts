@@ -6,10 +6,6 @@ export function useArtworkFilter() {
 
 	const categories = ["전체", ...new Set(MOCK_ARTWORKS.map((a) => a.category))];
 
-	// const filtered =
-	// 	selected === "전체" ? MOCK_ARTWORKS : MOCK_ARTWORKS.filter((a) => a.category === selected);
-
-	// zone별 그룹화
 	const allZones = [...new Set(MOCK_ARTWORKS.map((a) => a.zone))];
 
 	const grouped = allZones.reduce(

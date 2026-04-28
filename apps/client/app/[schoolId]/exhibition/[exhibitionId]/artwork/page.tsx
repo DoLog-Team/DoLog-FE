@@ -19,6 +19,3 @@ export default async function ArtworkListPage({ params }: ArtworkListPageProps) 
 		</main>
 	);
 }
-
-// 0428 TODO
-// - 버튼 이동 인터랙션 완성
