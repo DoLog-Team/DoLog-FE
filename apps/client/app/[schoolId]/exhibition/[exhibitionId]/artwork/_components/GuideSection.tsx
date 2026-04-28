@@ -5,9 +5,10 @@ import { Title } from "@/components/common/Title/Title";
 
 interface GuideSectionProps {
 	guideImages: string[];
+	sectionRef?: React.RefObject<HTMLElement | null>;
 }
 
-export function GuideSection({ guideImages }: GuideSectionProps) {
+export function GuideSection({ guideImages, sectionRef }: GuideSectionProps) {
 	const [current, setCurrent] = useState(0);
 	const displayImages = guideImages.slice(0, 6);
 	const touchStartX = useRef<number>(0);
@@ -33,7 +34,7 @@ export function GuideSection({ guideImages }: GuideSectionProps) {
 	};
 
 	return (
-		<section className="flex flex-col px-4 pb-6">
+		<section ref={sectionRef} className="flex flex-col px-4 pb-6">
 			<Title title="관람 안내" />
 			<div
 				className="relative w-full aspect-video"

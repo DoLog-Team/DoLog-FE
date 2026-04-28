@@ -1,9 +1,11 @@
 import { Button } from "components";
 import Image from "next/image";
+import Link from "next/link";
 import RowList from "@/components/common/RowList/RowList";
 
 export interface ArtistCardProps {
 	author: {
+		id: string;
 		name: string;
 		nameEn: string;
 		role: string;
@@ -15,9 +17,10 @@ export interface ArtistCardProps {
 			x?: string;
 		};
 	};
+	profileHref: string;
 }
 
-export function ArtistCard({ author }: ArtistCardProps) {
+export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 	// artist → author
 	return (
 		<div className="flex flex-col">
@@ -53,9 +56,11 @@ export function ArtistCard({ author }: ArtistCardProps) {
 			</div>
 
 			{/* 프로필 더보기 버튼 */}
-			<Button variant="outline" size="sm" className="w-full">
-				프로필 더보기
-			</Button>
+			<Link href={profileHref}>
+				<Button variant="outline" size="sm" className="w-full">
+					프로필 더보기
+				</Button>
+			</Link>
 		</div>
 	);
 }
