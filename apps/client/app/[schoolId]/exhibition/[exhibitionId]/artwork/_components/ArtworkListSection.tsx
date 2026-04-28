@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { CardItem } from "@/components/common/Card/Card.types";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
+import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { Title } from "@/components/common/Title/Title";
 import type { Artwork } from "../_mocks/artworkList";
@@ -11,7 +12,6 @@ import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import { AlbumIcon } from "./components/AlbumIcon";
 import Filter from "./components/Filter";
 import { ListIcon } from "./components/ListIcon";
-import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 
 interface ArtworkListSectionProps {
 	refs: React.RefObject<HTMLDivElement | null>[];

@@ -15,9 +15,10 @@ export const EmptyState = ({
 		searchQuery && searchQuery.length > 8 ? `${searchQuery.slice(0, 8)}...` : searchQuery;
 
 	return (
-		<div className={cn(
-			"flex flex-col items-center justify-center py-20 gap-1 text-center text-body1 text-lightest",
-			className
+		<div
+			className={cn(
+				"flex flex-col items-center justify-center py-20 gap-1 text-center text-body1 text-lightest",
+				className,
 			)}
 		>
 			{searchQuery ? (
