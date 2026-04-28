@@ -5,7 +5,6 @@ import type { Exhibition } from "@/constants/exhibition";
 
 interface ExhibitionIntroProps {
 	exhibition: Exhibition;
-	schoolId: string;
 }
 
 export function ExhibitionIntro({ exhibition }: ExhibitionIntroProps) {

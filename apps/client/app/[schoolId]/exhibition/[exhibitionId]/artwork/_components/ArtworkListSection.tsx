@@ -9,9 +9,9 @@ import type { Artwork } from "../_mocks/artworkList";
 import { useArtworkFilter } from "../hooks/useArtworkFilter";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import { AlbumIcon } from "./components/AlbumIcon";
-import { EmptyState } from "./components/EmptyState";
 import Filter from "./components/Filter";
 import { ListIcon } from "./components/ListIcon";
+import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 
 interface ArtworkListSectionProps {
 	refs: React.RefObject<HTMLDivElement | null>[];
@@ -90,7 +90,10 @@ export function ArtworkListSection({ refs, refOffset }: ArtworkListSectionProps)
 						<div key={zone} ref={refs[index + refOffset]}>
 							{isMultiZone && <Title title={zone} />}
 							{items.length === 0 ? (
-								<EmptyState />
+								<EmptyState
+									message={"선택한 카테고리에 해당되는\n작품이 없어요"}
+									className="w-full pb-16 pt-10 px-2.5"
+								/>
 							) : viewMode === "grid" ? (
 								<CardGrid items={items} getHref={(item) => `artwork/${item.id}`} />
 							) : (
