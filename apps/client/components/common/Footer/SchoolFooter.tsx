@@ -20,7 +20,7 @@ export default function SchoolFooter({
 	copyright,
 }: SchoolFooterProps) {
 	return (
-		<footer className="w-full pt-12 pb-24 flex flex-col mt-12 bg-fg-lighter">
+		<footer className="w-full pt-6 pb-8 flex flex-col mt-12 bg-fg-lighter">
 			<div className="flex flex-col px-4">
 				<div className="flex flex-col gap-1">
 					<h3 className="text-body1-bold text-light">{title}</h3>
