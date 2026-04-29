@@ -92,7 +92,8 @@ export function ArtworkListSection({ sectionRefs }: ArtworkListSectionProps) {
 							key={zone}
 							ref={(el) => {
 								if (sectionRefs[zone]) {
-									(sectionRefs[zone] as unknown as React.RefObject<HTMLElement | null>).current = el;
+									(sectionRefs[zone] as unknown as React.RefObject<HTMLElement | null>).current =
+										el;
 								}
 							}}
 						>

@@ -2,7 +2,7 @@ import { BTSCardGrid, type BTSCardGridProps } from "@/components/common/Card/BTS
 import { Title } from "@/components/common/Title/Title";
 
 interface BtsSectionProps {
-	bts: BTSCardGridProps["items"]
+	bts: BTSCardGridProps["items"];
 }
 
 export const BtsSection = ({ bts }: BtsSectionProps) => {
