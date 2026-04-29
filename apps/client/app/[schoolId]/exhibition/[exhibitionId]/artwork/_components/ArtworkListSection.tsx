@@ -14,8 +14,8 @@ import Filter from "./components/Filter";
 import { ListIcon } from "./components/ListIcon";
 
 interface ArtworkListSectionProps {
-	refs: React.RefObject<HTMLDivElement | null>[];
-	refOffset: number;
+	sectionRefs: Record<string, React.RefObject<HTMLElement | null>>;
+	grouped: Record<string, Artwork[]>;
 }
 
 // [임시] Artwork → CardItem 변환
@@ -53,16 +53,17 @@ const ViewToggle = ({
 	</div>
 );
 
-export function ArtworkListSection({ refs, refOffset }: ArtworkListSectionProps) {
+export function ArtworkListSection({ sectionRefs }: ArtworkListSectionProps) {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 	const { ref: titleRef, isVisible: isTitleVisible } = useIntersectionObserver();
+
 	const { selected, setSelected, categories, grouped } = useArtworkFilter();
 
 	const zones = Object.keys(grouped);
 	const isMultiZone = zones.length > 1;
 
 	return (
-		<section className="flex flex-col pb-6">
+		<section className="flex flex-col">
 			{/* 스크롤 전 (Title + 토글버튼) */}
 			<div ref={titleRef} className="flex justify-between items-center px-4">
 				<Title title="작품 목록" />
@@ -84,10 +85,18 @@ export function ArtworkListSection({ refs, refOffset }: ArtworkListSectionProps)
 			구역이 2개 이상일 경우 구역 Title과 함께 작품 목록을
 			렌더링 합니다 */}
 			<div className="flex flex-col px-4 gap-6">
-				{zones.map((zone, index) => {
+				{zones.map((zone) => {
 					const items = grouped[zone].map(toCardItem);
 					return (
-						<div key={zone} ref={refs[index + refOffset]}>
+						<div
+							key={zone}
+							ref={(el) => {
+								if (sectionRefs[zone]) {
+									(sectionRefs[zone] as unknown as React.RefObject<HTMLElement | null>).current =
+										el;
+								}
+							}}
+						>
 							{isMultiZone && <Title title={zone} />}
 							{items.length === 0 ? (
 								<EmptyState

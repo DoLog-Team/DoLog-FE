@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { BTSCard } from "./BTSCard";
 
-interface BTSCardGridProps {
+export interface BTSCardGridProps {
 	items: { id: number; title: string; author: string; imageUrl: string }[];
 	getHref?: (item: { id: number }) => string;
 }
