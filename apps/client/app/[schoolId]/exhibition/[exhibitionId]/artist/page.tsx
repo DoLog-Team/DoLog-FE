@@ -1,31 +1,26 @@
-"use client";
-
-import { useParams } from "next/navigation";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 import { RowCardGrid } from "@/components/common/Card/RowCard/RowCardGrid";
 import { Divider } from "@/components/common/Divider/Divider";
 import { Title } from "@/components/common/Title/Title";
 import { MOCK_ARTIST_DATA } from "@/constants/artist";
 import { Header } from "../_components/Header";
+import { MOCK_PARTNERS } from "./_mocks/partners";
 
-export default function ArtistDetailPage() {
-	const params = useParams();
-	const schoolId = params?.schoolId;
-	const id = params?.id;
+interface ArtistPageProps {
+	params: Promise<{ schoolId: string; exhibitionId: string }>;
+}
 
-	const schoolIdStr = Array.isArray(schoolId) ? schoolId[0] : schoolId || "";
-	const exhibitionId = params?.exhibitionId;
-	const exhibitionIdStr = Array.isArray(exhibitionId) ? exhibitionId[0] : exhibitionId || "";
+export default async function ArtistPage({ params }: ArtistPageProps) {
+	const { schoolId, exhibitionId } = await params;
 
 	return (
 		<>
 			<Header variant="logo" />
-			{/* 페이지 타이틀 */}
 			<div className="flex flex-col w-full px-4">
 				<Title title="참여한 사람들" />
 
 				{/* 작가 리스트 */}
-				<section className="flex flex-col">
+				<section className="flex flex-col pb-6">
 					<Title title="작가" size="head2" />
 					<CardGrid
 						items={MOCK_ARTIST_DATA.map((artist) => ({
@@ -35,25 +30,28 @@ export default function ArtistDetailPage() {
 							imageUrl: artist.imageUrl,
 							category: "",
 						}))}
-						getHref={(item) => `/${schoolIdStr}/exhibition/${exhibitionIdStr}/artist/${item.id}`}
+						getHref={(item) => `/${schoolId}/exhibition/${exhibitionId}/artist/${item.id}`}
 					/>
 				</section>
 
-				{/* 구분선 */}
 				<Divider />
 
 				{/* 도움을 주신 분들 */}
 				<Title title="도움을 주신 분들" />
-				<section className="flex flex-col mb-6">
-					<Title title="지도 교수님" size="head2" />
-					<RowCardGrid items={MOCK_ARTIST_DATA} />
-				</section>
-
-				{/* 전시 준비 위원회 */}
-				<section className="flex flex-col">
-					<Title title="전시 준비 위원회" size="head2" />
-					<RowCardGrid items={MOCK_ARTIST_DATA} />
-				</section>
+				{MOCK_PARTNERS.sort((a, b) => a.order - b.order).map((part) => (
+					<section key={part.part_id} className="flex flex-col mb-6">
+						<Title title={part.part_name} size="head2" margin="compact" />
+						<RowCardGrid
+							items={part.members.map((m) => ({
+								id: m.member_id,
+								name: m.member_name,
+								engName: m.member_name_en ?? undefined,
+								email: m.member_email ?? undefined,
+								imageUrl: m.member_image_url ?? undefined,
+							}))}
+						/>
+					</section>
+				))}
 			</div>
 		</>
 	);

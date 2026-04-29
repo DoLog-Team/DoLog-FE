@@ -1,6 +1,6 @@
 "use client";
 
-import { Divider } from "../../../../../../../../../components/common/Divider/Divider";
+import { Divider } from "@/components/common/Divider/Divider";
 import { Navigator } from "../Navigator";
 import { postNavigationStyles as s } from "./PostNavigation.styles";
 

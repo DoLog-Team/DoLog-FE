@@ -1,7 +1,7 @@
 export const profileCardStyles = {
-	wrapper: "flex flex-col gap-4 w-full pt-4",
+	wrapper: "flex flex-col w-full",
 
-	top: "flex gap-[12px]",
+	top: "flex gap-[12px] mt-4 mb-4",
 
 	image: "w-[150px] h-[200px] object-cover",
 
@@ -9,8 +9,8 @@ export const profileCardStyles = {
 
 	textInner: "flex flex-col mt-auto",
 
-	name: "text-head3",
+	name: "text-head3 text-strong",
 	engName: "text-body2 text-light mt-[4px]",
 
-	bio: "text-body1 text-light leading-[24px] mt-2",
+	bio: "text-body1 text-light leading-[24px]",
 };
