@@ -1,11 +1,11 @@
 export const navigatorStyles = {
-  wrapper: "flex items-center justify-between py-[10px] w-full",
+	wrapper: "flex items-center justify-between py-[10px] w-full",
 
-  left: "text-body2-bold text-strong",
+	left: "text-body2-bold text-strong",
 
-  right: "flex items-center gap-1 pl-1",
+	right: "flex items-center gap-1 pl-1",
 
-  label: "text-body3-bold text-lightest",
+	label: "text-body3-bold text-lightest",
 
-  icon: "w-6 h-6 object-contain",
+	icon: "w-6 h-6 object-contain",
 };
