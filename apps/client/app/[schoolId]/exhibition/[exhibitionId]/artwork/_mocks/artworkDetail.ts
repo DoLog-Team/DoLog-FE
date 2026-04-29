@@ -10,8 +10,10 @@ export const MOCK_ARTWORK_DETAIL = {
 		"가장자리의 얇은 물결 라인은 바람이 스치는 수면을 떠올리게 한다. 멀리서 보면 단정한 그릇이지만, 가까이 다가가면 빛에 따라 표면의 요철이 천천히 드러나며 '잔잔한 움직임'을 만든다.\n\n형태는 과하게 흔들리지 않도록 중심을 낮게 잡고, 가장자리만 미세하게 리듬을 주어 쓰임과 조형 사이의 균형을 맞췄다. 유약은 빛을 받는 각도에 따라 색의 깊이가 달라지도록 여러 번 테스트하며 조정했고, 그 결과 같은 그릇이라도 시간과 조명에 따라 다른 표정을 보여준다.\n\n일상에서 자주 마주치는 물의 감각을, 조용하지만 오래 남는 장면으로 담아낸 작품이다.",
 	locationImageUrl: "/images/artwork/artworkLocation.png",
 	detailImages: ["/images/cups.png", "/images/plate.png"],
+	purchaseUrl: "https://naver.com",
 	authors: [
 		{
+			id: "1",
 			name: "배주현",
 			nameEn: "Bae JuHyun",
 			role: "팀 리더, 작품 기획",
@@ -25,6 +27,7 @@ export const MOCK_ARTWORK_DETAIL = {
 			},
 		},
 		{
+			id: "2",
 			name: "강슬기",
 			nameEn: "Kang Seulgi",
 			role: "작품 기획, 제작",
