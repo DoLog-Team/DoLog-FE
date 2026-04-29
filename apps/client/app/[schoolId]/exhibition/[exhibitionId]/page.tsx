@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { MOCK_SCHOOL_DATA } from "@/app/[schoolId]/school-config";
 import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
+import { getExhibitionMeta } from "./_api/getExhibitionMeta";
 import { ExhibitionDetail } from "./_components/ExhibitionDetailSection";
 import { ExhibitionHost } from "./_components/ExhibitionHostSection";
 import { ExhibitionIntro } from "./_components/ExhibitionIntroSection";
@@ -9,6 +11,21 @@ import { Header } from "./_components/Header";
 
 interface ExhibitionDetailPageProps {
 	params: Promise<{ schoolId: string; exhibitionId: string }>;
+}
+
+export async function generateMetadata({ params }: ExhibitionDetailPageProps): Promise<Metadata> {
+	const { exhibitionId } = await params;
+	const meta = await getExhibitionMeta(exhibitionId);
+
+	return {
+		title: meta?.title,
+		description: meta?.description,
+		openGraph: {
+			title: meta?.title,
+			description: meta?.description ?? undefined,
+			images: meta?.image ? [{ url: meta.image }] : [],
+		},
+	};
 }
 
 export default async function ExhibitionDetailPage({ params }: ExhibitionDetailPageProps) {
