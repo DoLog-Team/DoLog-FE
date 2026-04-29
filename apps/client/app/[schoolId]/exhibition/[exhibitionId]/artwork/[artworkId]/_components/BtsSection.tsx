@@ -1,9 +1,8 @@
-import { BTSCardGrid } from "@/components/common/Card/BTSCard/BTSCardGrid";
+import { BTSCardGrid, type BTSCardGridProps } from "@/components/common/Card/BTSCard/BTSCardGrid";
 import { Title } from "@/components/common/Title/Title";
 
 interface BtsSectionProps {
-	bts: { id: number; title: string; author: string; imageUrl: string }[];
-	// 		bts: BTSCardGridProps["items"]
+	bts: BTSCardGridProps["items"]
 }
 
 export const BtsSection = ({ bts }: BtsSectionProps) => {
