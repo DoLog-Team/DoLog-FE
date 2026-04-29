@@ -6,8 +6,11 @@ import { useState } from "react";
 import { Sidebar } from "./Sidebar";
 
 interface HeaderProps {
+	logoUrl?: string;
 	variant?: "logo" | "back";
 	title?: string;
+	onBackClick?: () => void;
+	onMenuClick?: () => void;
 }
 
 export const Header = ({ variant = "logo", title }: HeaderProps) => {

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { MOCK_SCHOOL_DATA } from "@/app/[schoolId]/school-config";
 import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
 import { ExhibitionDetail } from "./_components/ExhibitionDetailSection";
 import { ExhibitionHost } from "./_components/ExhibitionHostSection";
@@ -11,15 +12,17 @@ interface ExhibitionDetailPageProps {
 }
 
 export default async function ExhibitionDetailPage({ params }: ExhibitionDetailPageProps) {
-	const { exhibitionId } = await params;
+	const { schoolId, exhibitionId } = await params;
+	const schoolConfig = MOCK_SCHOOL_DATA[schoolId];
 	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
+
 	if (!exhibition) {
 		return <div>전시회를 찾을 수 없습니다.</div>;
 	}
 
 	return (
 		<main>
-			<Header />
+			<Header logoUrl={schoolConfig.logoSrc} /*onMenuClick={() => {}}*/ />
 			{/* 대표 이미지 */}
 			<div className="relative w-full aspect-3/4">
 				<Image

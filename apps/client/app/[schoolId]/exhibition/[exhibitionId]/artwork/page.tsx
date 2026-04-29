@@ -1,23 +1,21 @@
-import Image from "next/image";
+import { MOCK_SCHOOL_DATA } from "@/app/[schoolId]/school-config";
 import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
 import { Header } from "../_components/Header";
+import { ArtworksClient } from "./_components/ArtworksClient";
 
-interface ExhibitionDetailPageProps {
-	params: Promise<{ schoolId: string; exhibitionId: string }>;
+interface ArtworkListPageProps {
+	params: Promise<{ schoolId: string }>;
 }
 
-export default async function ExhibitionDetailPage({ params }: ExhibitionDetailPageProps) {
-	const { exhibitionId } = await params;
-	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
-	if (!exhibition) {
-		return <div>전시회를 찾을 수 없습니다.</div>;
-	}
+export default async function ArtworkListPage({ params }: ArtworkListPageProps) {
+	const { schoolId } = await params;
+	const schoolConfig = MOCK_SCHOOL_DATA[schoolId];
+	const exhibition = MOCK_EXHIBITION_DATA[1];
 
 	return (
 		<main>
-			<Header />
-			{/* 대표 이미지 */}
-			<div className="relative w-full aspect-3/4">SC02 전시물 목록 페이지</div>
+			<Header logoUrl={schoolConfig.logoSrc} />
+			<ArtworksClient guideImages={exhibition.guideImages} />
 		</main>
 	);
 }
