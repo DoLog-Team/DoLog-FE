@@ -9,11 +9,8 @@ export const BtsSection = ({ bts }: BtsSectionProps) => {
 	return (
 		<section className="flex flex-col px-4 pb-6">
 			<Title title="Behind The Scene" />
-			{/* getHref 경로 수정 */}
-			<BTSCardGrid 
-				items={bts}
-				getHref={(item) => `bts/${item.id}`} 
-			/>
+			{/* TODO : getHref 경로 수정 */}
+			<BTSCardGrid items={bts} getHref={(item) => `bts/${item.id}`} />
 		</section>
 	);
 };

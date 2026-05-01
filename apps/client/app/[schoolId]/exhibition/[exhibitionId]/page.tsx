@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { MOCK_SCHOOL_DATA } from "@/app/[schoolId]/school-config";
+import { Divider } from "@/components/common/Divider/Divider";
 import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
 import { ExhibitionDetail } from "./_components/ExhibitionDetailSection";
 import { ExhibitionHost } from "./_components/ExhibitionHostSection";
 import { ExhibitionIntro } from "./_components/ExhibitionIntroSection";
 import { ExhibitionLocation } from "./_components/ExhibitionLocationSection";
 import { Header } from "./_components/Header";
-import { Divider } from "@/components/common/Divider/Divider";
 
 interface ExhibitionDetailPageProps {
 	params: Promise<{ schoolId: string; exhibitionId: string }>;
@@ -35,10 +35,10 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 				/>
 			</div>
 			{/* 제목 및 기본 정보 */}
-			<ExhibitionIntro schoolId={schoolId} exhibition={exhibition} exhibitionId={exhibitionId}/>
+			<ExhibitionIntro schoolId={schoolId} exhibition={exhibition} exhibitionId={exhibitionId} />
 			{/* 전시 소개 */}
 			<ExhibitionDetail exhibition={exhibition} />
-			<Divider/>
+			<Divider />
 			{/* 장소 */}
 			<ExhibitionLocation location={exhibition.location} />
 			{/* 주최 기관 */}

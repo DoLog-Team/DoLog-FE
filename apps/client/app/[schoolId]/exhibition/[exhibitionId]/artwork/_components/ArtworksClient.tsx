@@ -1,14 +1,14 @@
 "use client";
+import { useState } from "react";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { useArtworkFilter } from "../hooks/useArtworkFilter";
 import { ArtworkListSection } from "./ArtworkListSection";
 import { GuideSection } from "./GuideSection";
-import { useState } from "react";
 
 export function ArtworksClient({ guideImages }: { guideImages: string[] }) {
 	const hasGuide = guideImages.length > 0;
-	
+
 	const [searchQuery, setSearchQuery] = useState("");
 	const { selected, setSelected, grouped } = useArtworkFilter(searchQuery); // TODO : 백에서 구역 그룹화되어 내려오는지 확인
 
@@ -36,12 +36,12 @@ export function ArtworksClient({ guideImages }: { guideImages: string[] }) {
 					<GuideSection guideImages={guideImages} />
 				</div>
 			)}
-			<ArtworkListSection 
-				grouped={grouped} 
+			<ArtworkListSection
+				grouped={grouped}
 				sectionRefs={sectionRefs}
-				searchQuery = {searchQuery}
-				onSearchChange = {setSearchQuery}
-				 />
+				searchQuery={searchQuery}
+				onSearchChange={setSearchQuery}
+			/>
 			<ScrollTabBar tabs={TABS} activeTab={activeTab} onTabClick={handleTabClick} />
 		</>
 	);

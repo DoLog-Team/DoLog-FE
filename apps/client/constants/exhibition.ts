@@ -24,7 +24,7 @@ export interface Exhibition {
 		imageUrl: string;
 		description: string;
 		socialLinks?: { name: string; url: string }[];
-	};	
+	};
 }
 
 export const MOCK_EXHIBITION_DATA: Exhibition[] = [
@@ -56,12 +56,11 @@ export const MOCK_EXHIBITION_DATA: Exhibition[] = [
 			description:
 				"예술은 인간의 가장 깊은 내면을 드러내는 언어이자, 시대를 넘어 공감과 가치를 만들어내는 힘입니다. 한국대학교 예술대학은 지난 수십 년간 창작과 실천을 기반으로 한 교육을 통해 수많은 예술가와 창작 인재를 길러내며 한국 문화예술의 성장에 기여해 왔습니다.\n\n우리의 졸업생들은 무대와 스크린, 전시장과 공연장, 디자인 스튜디오와 콘텐츠 산업 현장, 그리고 연구와 교육의 자리에서 각자의 방식으로 예술의 영향력을 확장하고 있습니다.",
 			socialLinks: [
-			{ name: "email", url: "doyeah@gmail.com" },
-			{ name: "instagram", url: "https://tickets.interpark.com" },
-			{ name: "X", url: "https://tickets.interpark.com" },
+				{ name: "email", url: "doyeah@gmail.com" },
+				{ name: "instagram", url: "https://tickets.interpark.com" },
+				{ name: "X", url: "https://tickets.interpark.com" },
 			],
 		},
-		
 	},
 	{
 		id: "2",
@@ -88,11 +87,10 @@ export const MOCK_EXHIBITION_DATA: Exhibition[] = [
 			imageUrl: "/images/host.png",
 			description: "한국대학교 예술대학 소개입니다.",
 			socialLinks: [
-			{ name: "email", url: "https://tickets.interpark.com" },
-			{ name: "instagram", url: "https://tickets.interpark.com" },
-			{ name: "X", url: "https://tickets.interpark.com" },
+				{ name: "email", url: "https://tickets.interpark.com" },
+				{ name: "instagram", url: "https://tickets.interpark.com" },
+				{ name: "X", url: "https://tickets.interpark.com" },
 			],
 		},
-		
 	},
 ];
