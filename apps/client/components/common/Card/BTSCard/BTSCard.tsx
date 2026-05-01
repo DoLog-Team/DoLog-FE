@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import { btsCardStyles as s } from "./BTSCard.styles";
 

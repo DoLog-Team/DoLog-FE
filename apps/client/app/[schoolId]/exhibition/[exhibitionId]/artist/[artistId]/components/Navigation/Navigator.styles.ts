@@ -5,7 +5,7 @@ export const navigatorStyles = {
 
 	right: "flex items-center gap-1 pl-1",
 
-	label: "text-body3 text-light",
+	label: "text-body3-bold text-lightest",
 
 	icon: "w-6 h-6 object-contain",
 };
