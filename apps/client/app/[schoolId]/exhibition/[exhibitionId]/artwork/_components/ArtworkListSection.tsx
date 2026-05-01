@@ -16,6 +16,8 @@ import { ListIcon } from "./components/ListIcon";
 interface ArtworkListSectionProps {
 	sectionRefs: Record<string, React.RefObject<HTMLElement | null>>;
 	grouped: Record<string, Artwork[]>;
+	searchQuery: string;
+	onSearchChange: (value: string) => void;
 }
 
 // [임시] Artwork → CardItem 변환
@@ -29,6 +31,7 @@ const toCardItem = (artwork: Artwork): CardItem => ({
 	category: artwork.category,
 	author: artwork.artists.map((a) => a.name).join(", "),
 });
+
 
 // 보기 방식 토글 버튼
 const ViewToggle = ({
@@ -53,11 +56,12 @@ const ViewToggle = ({
 	</div>
 );
 
-export function ArtworkListSection({ sectionRefs }: ArtworkListSectionProps) {
+
+export function ArtworkListSection({ sectionRefs, grouped, searchQuery, onSearchChange }: ArtworkListSectionProps) {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 	const { ref: titleRef, isVisible: isTitleVisible } = useIntersectionObserver();
 
-	const { selected, setSelected, categories, grouped } = useArtworkFilter();
+	const { selected, setSelected, categories } = useArtworkFilter();
 
 	const zones = Object.keys(grouped);
 	const isMultiZone = zones.length > 1;
@@ -72,7 +76,7 @@ export function ArtworkListSection({ sectionRefs }: ArtworkListSectionProps) {
 
 			{/* sticky 영역 */}
 			<div className="sticky top-11 bg-white z-10 px-4 pb-2">
-				<SearchBar placeholder="작품명, 작가명을 검색하세요" className="mb-2.5" />
+				<SearchBar placeholder="작품명, 작가명을 검색하세요" className="mb-2.5" value={searchQuery} onChange={onSearchChange}/>
 				<div className="flex items-center justify-between">
 					<Filter categories={categories} selected={selected} onSelect={setSelected} />
 					{!isTitleVisible && <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />}
@@ -90,6 +94,7 @@ export function ArtworkListSection({ sectionRefs }: ArtworkListSectionProps) {
 					return (
 						<div
 							key={zone}
+							className={!isMultiZone ? "pt-4" : ""}
 							ref={(el) => {
 								if (sectionRefs[zone]) {
 									(sectionRefs[zone] as unknown as React.RefObject<HTMLElement | null>).current =

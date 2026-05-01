@@ -8,14 +8,13 @@ export interface ArtistCardProps {
 		id: string;
 		name: string;
 		nameEn: string;
-		role: string;
+		role?: string;
 		profileUrl: string;
 		description: string;
 		sns: {
-			behance?: string;
-			instagram?: string;
-			x?: string;
-		};
+			name: string;
+			url: string;
+		}[];
 	};
 	profileHref: string;
 }
@@ -39,22 +38,23 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 				<div className="flex flex-col justify-end px-4">
 					<span className="text-head3 text-strong">{author.name}</span>
 					<span className="text-body2 text-light pt-1">{author.nameEn}</span>
+					{author.role && (
 					<span className="text-body2 text-lighter pt-2">{author.role}</span>
+					)}
 				</div>
 			</div>
 
 			{/* 소개글 */}
 			<p className="text-body1 pb-6">{author.description}</p>
 
-			{/* SNS 링크 */}
+			{/* SNS 링크 - 선택값 */}
+			{author.sns.length > 0 && (
 			<div className="flex flex-col pb-5">
-				{author.sns.behance && <RowList rows={[{ label: "Behance", value: author.sns.behance }]} />}
-				{author.sns.instagram && (
-					<RowList rows={[{ label: "instagram", value: author.sns.instagram }]} />
-				)}
-				{author.sns.x && <RowList rows={[{ label: "X", value: author.sns.x }]} />}
+				<RowList
+				rows={author.sns.map((sns) => ({ label: sns.name, value: sns.url }))}
+				/>
 			</div>
-
+			)}
 			{/* 프로필 더보기 버튼 */}
 			<Link href={profileHref}>
 				<Button variant="outline" size="sm" className="w-full">

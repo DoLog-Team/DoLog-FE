@@ -4,10 +4,13 @@ import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { useArtworkFilter } from "../hooks/useArtworkFilter";
 import { ArtworkListSection } from "./ArtworkListSection";
 import { GuideSection } from "./GuideSection";
+import { useState } from "react";
 
 export function ArtworksClient({ guideImages }: { guideImages: string[] }) {
 	const hasGuide = guideImages.length > 0;
-	const { grouped } = useArtworkFilter(); // TODO : 백에서 구역 그룹화되어 내려오는지 확인
+	
+	const [searchQuery, setSearchQuery] = useState("");
+	const { selected, setSelected, grouped } = useArtworkFilter(searchQuery); // TODO : 백에서 구역 그룹화되어 내려오는지 확인
 
 	// ScrollTabBar 탭 [관람 안내(선택값), zone(고유값)]
 	const TABS = [
@@ -33,7 +36,12 @@ export function ArtworksClient({ guideImages }: { guideImages: string[] }) {
 					<GuideSection guideImages={guideImages} />
 				</div>
 			)}
-			<ArtworkListSection grouped={grouped} sectionRefs={sectionRefs} />
+			<ArtworkListSection 
+				grouped={grouped} 
+				sectionRefs={sectionRefs}
+				searchQuery = {searchQuery}
+				onSearchChange = {setSearchQuery}
+				 />
 			<ScrollTabBar tabs={TABS} activeTab={activeTab} onTabClick={handleTabClick} />
 		</>
 	);

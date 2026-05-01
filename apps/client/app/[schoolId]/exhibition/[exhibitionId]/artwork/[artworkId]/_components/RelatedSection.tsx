@@ -8,7 +8,10 @@ export const RelatedSection = ({ category }: { category: string }) => {
 	return (
 		<section className="flex flex-col px-4 pb-6">
 			<Title title="동일한 카테고리 작품" />
-			<CardGrid items={relatedArtworks} limit={2} />
+			<CardGrid 
+				items={relatedArtworks}
+				getHref={(item) => `${item.id}`} 
+				limit={2} />
 		</section>
 	);
 };

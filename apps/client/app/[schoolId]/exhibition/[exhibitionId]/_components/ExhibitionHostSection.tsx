@@ -4,10 +4,9 @@ import type { Exhibition } from "@/constants/exhibition";
 
 interface ExhibitionHostProps {
 	hostInfo: Exhibition["hostInfo"];
-	socialLinks?: Exhibition["socialLinks"];
 }
 
-export function ExhibitionHost({ hostInfo, socialLinks }: ExhibitionHostProps) {
+export function ExhibitionHost({ hostInfo, }: ExhibitionHostProps) {
 	const paragraphs = hostInfo.description.split("\n\n").filter(Boolean);
 
 	return (
@@ -29,12 +28,12 @@ export function ExhibitionHost({ hostInfo, socialLinks }: ExhibitionHostProps) {
 			))}
 
 			{/* 소셜 링크 */}
-			{socialLinks && (
-				<div className="flex flex-col gap-1">
-					{socialLinks.email && <SocialLink label="email" href={socialLinks.email} />}
-					{socialLinks.instagram && <SocialLink label="instagram" href={socialLinks.instagram} />}
-					{socialLinks.X && <SocialLink label="X" href={socialLinks.X} />}
-				</div>
+			{hostInfo.socialLinks && hostInfo.socialLinks.length > 0 && (
+			<div className="flex flex-col gap-1">
+				{hostInfo.socialLinks.map((link) => (
+				<SocialLink key={link.name} label={link.name} href={link.url} />
+				))}
+			</div>
 			)}
 		</section>
 	);

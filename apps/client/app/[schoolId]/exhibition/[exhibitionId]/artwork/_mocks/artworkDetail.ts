@@ -20,11 +20,10 @@ export const MOCK_ARTWORK_DETAIL = {
 			profileUrl: "/images/artists/artist1.svg",
 			description:
 				"일상에서 자주 쓰는 그릇을 만들며 '손에 닿는 감정'을 담고 싶었어요. 완벽함보다 사용하며 생기는 흔적을 좋아합니다. 앞으로는 일상의 시간을 조용히 기록하는 작가가 되고 싶습니다.",
-			sns: {
-				behance: "https://example.com/artists",
-				instagram: "https://example.com/artists",
-				x: "https://example.com/artists",
-			},
+			sns: [
+					{ name: "인스타그램", url: "@dolog.archive" },
+					{ name: "비헨스", url: "https://behance.net/..." },
+				]
 		},
 		{
 			id: "2",
@@ -34,11 +33,10 @@ export const MOCK_ARTWORK_DETAIL = {
 			profileUrl: "/images/artists/artist4.png",
 			description:
 				"소성 후에 생기는 균열이나 깨짐을 보며 오히려 더 솔직한 형태라고 느꼈어요. 실패를 숨기지 않고 작업의 의미로 남겨보려 했습니다. 앞으로는 불완전함을 새 가능성으로 바꾸는 작가가 되고 싶습니다.",
-			sns: {
-				behance: "https://example.com/artists",
-				instagram: "https://example.com/artists",
-				x: "https://example.com/artists",
-			},
+			sns: [
+					{ name: "인스타그램", url: "@dolog.archive" },
+					{ name: "비헨스", url: "https://behance.net/..." },
+				]
 		},
 	],
 	bts: [
