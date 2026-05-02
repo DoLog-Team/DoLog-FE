@@ -11,7 +11,6 @@ import { ExhibitionLocation } from "./_components/ExhibitionLocationSection";
 import { Header } from "./_components/Header";
 import { DEFAULT_EXHIBITION_CONFIG, MOCK_EXHIBITION_CONFIG } from "./exhibition-config";
 
-
 interface ExhibitionDetailPageProps {
 	params: Promise<{ exhibitionId: string }>;
 }
