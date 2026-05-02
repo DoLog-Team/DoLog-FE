@@ -22,7 +22,7 @@ export default function MainPage() {
 					{MOCK_EXHIBITIONS.slice(0, 3).map((exhibition) => (
 						<Link
 							key={exhibition.id}
-							href={`/exhibition/${exhibition.id}`}
+							href={`/${exhibition.id}`}
 							target="_blank"
 							rel="noopener noreferrer"
 						>
