@@ -71,7 +71,7 @@ export function ArtworkDetailClient({
 						sectionRefs.behind.current = el;
 					}}
 				>
-					<BtsSection bts={data.bts} />
+					<BtsSection bts={data.bts} exhibitionId={exhibitionId} />
 				</section>
 			)}
 			{/* 동일한 카테고리 작품 섹션 */}

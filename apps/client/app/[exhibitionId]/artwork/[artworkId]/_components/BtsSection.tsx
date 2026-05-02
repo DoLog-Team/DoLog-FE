@@ -3,14 +3,14 @@ import { Title } from "@/components/common/Title/Title";
 
 interface BtsSectionProps {
 	bts: BTSCardGridProps["items"];
+	exhibitionId: string;
 }
 
-export const BtsSection = ({ bts }: BtsSectionProps) => {
+export const BtsSection = ({ bts, exhibitionId }: BtsSectionProps) => {
 	return (
 		<section className="flex flex-col px-4 pb-6">
 			<Title title="Behind The Scene" />
-			{/* getHref 경로 수정 */}
-			<BTSCardGrid items={bts} getHref={(item) => `bts/${item.id}`} />
+			<BTSCardGrid items={bts} getHref={(item) => `/${exhibitionId}/bts/${item.id}`} />
 		</section>
 	);
 };

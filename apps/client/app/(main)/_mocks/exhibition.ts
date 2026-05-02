@@ -2,7 +2,7 @@ import type { ExhibitionItem } from "../_components/ExhibitionCard";
 
 export const MOCK_EXHIBITIONS: ExhibitionItem[] = [
 	{
-		id: "uuid-1",
+		id: "1",
 		title: "흙에서 시작되는 모든 이야기",
 		univName: "한국대학교",
 		deptName: "도예과",
@@ -12,7 +12,7 @@ export const MOCK_EXHIBITIONS: ExhibitionItem[] = [
 		endDate: "2025-11-29",
 	},
 	{
-		id: "uuid-2",
+		id: "2",
 		title: "되돌아가는 삶",
 		univName: "한국대학교",
 		deptName: "불교미술전공",
@@ -22,7 +22,7 @@ export const MOCK_EXHIBITIONS: ExhibitionItem[] = [
 		endDate: "2025-11-29",
 	},
 	{
-		id: "uuid-3",
+		id: "3",
 		title: "마음을 여닫는 힘",
 		univName: "한국대학교",
 		deptName: "시각디자인학과",
@@ -32,7 +32,7 @@ export const MOCK_EXHIBITIONS: ExhibitionItem[] = [
 		endDate: "2025-11-29",
 	},
 	{
-		id: "uuid-4",
+		id: "4",
 		title: "비대칭과 균형",
 		univName: "한국대학교",
 		deptName: "조소",
@@ -42,7 +42,7 @@ export const MOCK_EXHIBITIONS: ExhibitionItem[] = [
 		endDate: "2025-11-28",
 	},
 	{
-		id: "uuid-5",
+		id: "5",
 		title: "빛",
 		univName: "서울예술대학교",
 		deptName: "서양화전공",
@@ -52,7 +52,7 @@ export const MOCK_EXHIBITIONS: ExhibitionItem[] = [
 		endDate: "2025-11-29",
 	},
 	{
-		id: "uuid-6",
+		id: "6",
 		title: "마음을 여닫는 형",
 		univName: "서울예술대학교",
 		deptName: "시각디자인학과",

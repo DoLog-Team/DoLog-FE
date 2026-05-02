@@ -25,7 +25,7 @@ interface ArtworkListSectionProps {
 // Card 컴포넌트들이 현재 CardItem 타입을 받고 있고 여러 곳에서 쓰이고 있어 임시로 변환했습니다.
 // 추후 백엔드 연동 시 Card 컴포넌트 타입을 Artwork 기준으로 수정하면 이 변환 로직은 제거할 예정입니다!
 const toCardItem = (artwork: Artwork): CardItem => ({
-	id: Number(artwork.artworkId.replace("uuid-", "")),
+	id: Number(artwork.artworkId),
 	imageUrl: artwork.mainImage,
 	title: artwork.title,
 	category: artwork.category,
