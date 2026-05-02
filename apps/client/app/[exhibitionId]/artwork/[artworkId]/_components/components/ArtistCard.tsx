@@ -38,9 +38,7 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 				<div className="flex flex-col justify-end px-4">
 					<span className="text-head3 text-strong">{author.name}</span>
 					<span className="text-body2 text-light pt-1">{author.nameEn}</span>
-					{author.role && (
-					<span className="text-body2 text-lighter pt-2">{author.role}</span>
-					)}
+					{author.role && <span className="text-body2 text-lighter pt-2">{author.role}</span>}
 				</div>
 			</div>
 
@@ -49,11 +47,9 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 
 			{/* SNS 링크 - 선택값 */}
 			{author.sns.length > 0 && (
-			<div className="flex flex-col pb-5">
-				<RowList
-				rows={author.sns.map((sns) => ({ label: sns.name, value: sns.url }))}
-				/>
-			</div>
+				<div className="flex flex-col pb-5">
+					<RowList rows={author.sns.map((sns) => ({ label: sns.name, value: sns.url }))} />
+				</div>
 			)}
 			{/* 프로필 더보기 버튼 */}
 			<Link href={profileHref}>

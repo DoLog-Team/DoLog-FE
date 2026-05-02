@@ -32,7 +32,6 @@ const toCardItem = (artwork: Artwork): CardItem => ({
 	author: artwork.artists.map((a) => a.name).join(", "),
 });
 
-
 // 보기 방식 토글 버튼
 const ViewToggle = ({
 	viewMode,
@@ -56,8 +55,12 @@ const ViewToggle = ({
 	</div>
 );
 
-
-export function ArtworkListSection({ sectionRefs, grouped, searchQuery, onSearchChange }: ArtworkListSectionProps) {
+export function ArtworkListSection({
+	sectionRefs,
+	grouped,
+	searchQuery,
+	onSearchChange,
+}: ArtworkListSectionProps) {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 	const { ref: titleRef, isVisible: isTitleVisible } = useIntersectionObserver();
 
@@ -76,7 +79,12 @@ export function ArtworkListSection({ sectionRefs, grouped, searchQuery, onSearch
 
 			{/* sticky 영역 */}
 			<div className="sticky top-11 bg-white z-10 px-4 pb-2">
-				<SearchBar placeholder="작품명, 작가명을 검색하세요" className="mb-2.5" value={searchQuery} onChange={onSearchChange}/>
+				<SearchBar
+					placeholder="작품명, 작가명을 검색하세요"
+					className="mb-2.5"
+					value={searchQuery}
+					onChange={onSearchChange}
+				/>
 				<div className="flex items-center justify-between">
 					<Filter categories={categories} selected={selected} onSelect={setSelected} />
 					{!isTitleVisible && <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />}

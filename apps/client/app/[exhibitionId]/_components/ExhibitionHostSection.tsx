@@ -6,7 +6,7 @@ interface ExhibitionHostProps {
 	hostInfo: Exhibition["hostInfo"];
 }
 
-export function ExhibitionHost({ hostInfo, }: ExhibitionHostProps) {
+export function ExhibitionHost({ hostInfo }: ExhibitionHostProps) {
 	const paragraphs = hostInfo.description.split("\n\n").filter(Boolean);
 
 	return (
@@ -29,11 +29,11 @@ export function ExhibitionHost({ hostInfo, }: ExhibitionHostProps) {
 
 			{/* 소셜 링크 */}
 			{hostInfo.socialLinks && hostInfo.socialLinks.length > 0 && (
-			<div className="flex flex-col gap-1">
-				{hostInfo.socialLinks.map((link) => (
-				<SocialLink key={link.name} label={link.name} href={link.url} />
-				))}
-			</div>
+				<div className="flex flex-col gap-1">
+					{hostInfo.socialLinks.map((link) => (
+						<SocialLink key={link.name} label={link.name} href={link.url} />
+					))}
+				</div>
 			)}
 		</section>
 	);

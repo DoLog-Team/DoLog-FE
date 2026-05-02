@@ -31,43 +31,43 @@ export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigati
 			<hr className="border border-stroke-lighter" />
 			{prevArtwork && (
 				<Link href={`../artwork/${prevArtwork.id}`}>
-				<div className="flex items-center justify-between py-2.5">
-					<div className="flex items-center gap-2">
-						<Image
-							src={prevArtwork.imageUrl}
-							alt={prevArtwork.title}
-							width={64}
-							height={64}
-							className="object-cover"
-						/>
-						<div className="flex flex-col">
-							<span className="text-body1-bold">{prevArtwork.title}</span>
-							<span className="text-body2 text-lighter">{prevArtwork.author}</span>
+					<div className="flex items-center justify-between py-2.5">
+						<div className="flex items-center gap-2">
+							<Image
+								src={prevArtwork.imageUrl}
+								alt={prevArtwork.title}
+								width={64}
+								height={64}
+								className="object-cover"
+							/>
+							<div className="flex flex-col">
+								<span className="text-body1-bold">{prevArtwork.title}</span>
+								<span className="text-body2 text-lighter">{prevArtwork.author}</span>
+							</div>
 						</div>
+						<Image src="/icons/arrowUp.svg" alt="이전" width={24} height={24} />
 					</div>
-					<Image src="/icons/arrowUp.svg" alt="이전" width={24} height={24} />
-				</div>
 				</Link>
 			)}
 			<hr className="border border-stroke-lightest" />
 			{nextArtwork && (
 				<Link href={`../artwork/${nextArtwork.id}`}>
-				<div className="flex items-center justify-between py-2.5">
-					<div className="flex items-center gap-2">
-						<Image
-							src={nextArtwork.imageUrl}
-							alt={nextArtwork.title}
-							width={64}
-							height={64}
-							className="object-cover"
-						/>
-						<div className="flex flex-col">
-							<span className="text-body1-bold">{nextArtwork.title}</span>
-							<span className="text-body2 text-lighter">{nextArtwork.author}</span>
+					<div className="flex items-center justify-between py-2.5">
+						<div className="flex items-center gap-2">
+							<Image
+								src={nextArtwork.imageUrl}
+								alt={nextArtwork.title}
+								width={64}
+								height={64}
+								className="object-cover"
+							/>
+							<div className="flex flex-col">
+								<span className="text-body1-bold">{nextArtwork.title}</span>
+								<span className="text-body2 text-lighter">{nextArtwork.author}</span>
+							</div>
 						</div>
+						<Image src="/icons/arrowDown.svg" alt="다음" width={24} height={24} />
 					</div>
-					<Image src="/icons/arrowDown.svg" alt="다음" width={24} height={24} />
-				</div>
 				</Link>
 			)}
 		</section>

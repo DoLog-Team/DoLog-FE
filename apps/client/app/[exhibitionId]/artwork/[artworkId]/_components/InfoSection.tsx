@@ -7,8 +7,8 @@ import { Title } from "@/components/common/Title/Title";
  * 카테고리 (category)
  * 작품 재료 (materials) : 선택값
  * 작품 크기 (size) : 선택값
- * 작가 (authors) 
- * 
+ * 작가 (authors)
+ *
  */
 interface InfoSectionProps {
 	data: {
@@ -35,12 +35,10 @@ export const InfoSection = ({ data }: InfoSectionProps) => {
 					<Chip key={cat} label={cat} type="assistive" selected={true} />
 				))}
 				<Title title={data.title} />
-				
+
 				{/* 작품 재료, 작품 사이즈 - 선택값 */}
 				{(data.materials || data.size) && (
-					<p className="text-body1">
-						{[data.materials, data.size].filter(Boolean).join(" | ")}
-					</p>
+					<p className="text-body1">{[data.materials, data.size].filter(Boolean).join(" | ")}</p>
 				)}
 			</div>
 			<div>

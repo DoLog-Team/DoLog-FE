@@ -1,9 +1,8 @@
 import { Button } from "components";
+import Link from "next/link";
 import RowList from "@/components/common/RowList/RowList";
 import { Title } from "@/components/common/Title/Title";
 import type { Exhibition } from "@/constants/exhibition";
-import Link from "next/link";
-
 
 interface ExhibitionIntroProps {
 	exhibition: Exhibition;

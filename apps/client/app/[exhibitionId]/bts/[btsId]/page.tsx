@@ -186,10 +186,7 @@ export default function BtsDetailPage() {
 				{relatedBts.length > 0 && (
 					<section className="mb-6">
 						<Title title="추천 Behind The Scene" size="head2" className="mt-4 mb-4" />
-						<BTSCardGrid
-							items={relatedBts}
-							getHref={(item) => `/${exhibitionId}/bts/${item.id}`}
-						/>
+						<BTSCardGrid items={relatedBts} getHref={(item) => `/${exhibitionId}/bts/${item.id}`} />
 					</section>
 				)}
 			</div>

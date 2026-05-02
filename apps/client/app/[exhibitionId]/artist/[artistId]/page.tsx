@@ -49,10 +49,7 @@ export default async function ArtistDetailPage({ params }: ArtistDetailPageProps
 					<section className="mb-8">
 						<Title title="Behind The Scene" size="head2" margin="compact" />
 						<div className="mt-4">
-							<BTSCardGrid
-								items={btsItems}
-								getHref={(item) => `/${exhibitionId}/bts/${item.id}`}
-							/>
+							<BTSCardGrid items={btsItems} getHref={(item) => `/${exhibitionId}/bts/${item.id}`} />
 						</div>
 					</section>
 				)}
