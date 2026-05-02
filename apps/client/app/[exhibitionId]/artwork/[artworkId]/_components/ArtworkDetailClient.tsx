@@ -11,6 +11,7 @@ import { BtsSection } from "../_components/BtsSection";
 import { DescriptionSection } from "../_components/DescriptionSection";
 import { InfoSection } from "../_components/InfoSection";
 import { LocationSection } from "../_components/LocationSection";
+import { YoutubeSection } from "../_components/YoutubeSection";
 import { PhotoSection } from "../_components/PhotoSection";
 import { PostNavigationSection } from "../_components/PostNavigationSection";
 import { RelatedSection } from "../_components/RelatedSection";
@@ -53,6 +54,8 @@ export function ArtworkDetailClient({
 			>
 				<DescriptionSection content={data.description} />
 			</section>
+			{/*  유튜브 섹션  */}
+			<YoutubeSection youtubeUrl={data.youtubeUrl} />
 			{/* 상세 이미지 섹션*/}
 			<PhotoSection images={data.detailImages} purchaseUrl={data.purchaseUrl} />
 			{/* 참여자 섹션 */}
