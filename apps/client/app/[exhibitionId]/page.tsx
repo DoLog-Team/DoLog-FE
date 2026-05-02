@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Divider } from "@/components/common/Divider/Divider";
 import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
 import { getExhibitionMeta } from "./_api/getExhibitionMeta";
+import { resolveExhibitionId } from "./_api/resolveExhibitionId";
 import { ExhibitionDetail } from "./_components/ExhibitionDetailSection";
 import { ExhibitionHost } from "./_components/ExhibitionHostSection";
 import { ExhibitionIntro } from "./_components/ExhibitionIntroSection";
@@ -10,13 +11,15 @@ import { ExhibitionLocation } from "./_components/ExhibitionLocationSection";
 import { Header } from "./_components/Header";
 import { DEFAULT_EXHIBITION_CONFIG, MOCK_EXHIBITION_CONFIG } from "./exhibition-config";
 
+
 interface ExhibitionDetailPageProps {
 	params: Promise<{ exhibitionId: string }>;
 }
 
 export async function generateMetadata({ params }: ExhibitionDetailPageProps): Promise<Metadata> {
 	const { exhibitionId } = await params;
-	const meta = await getExhibitionMeta(exhibitionId);
+	const uuid = await resolveExhibitionId(exhibitionId);
+	const meta = uuid ? await getExhibitionMeta(uuid) : null;
 
 	return {
 		title: meta?.title,
@@ -31,8 +34,9 @@ export async function generateMetadata({ params }: ExhibitionDetailPageProps): P
 
 export default async function ExhibitionDetailPage({ params }: ExhibitionDetailPageProps) {
 	const { exhibitionId } = await params;
-	const config = MOCK_EXHIBITION_CONFIG[exhibitionId] ?? DEFAULT_EXHIBITION_CONFIG;
-	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
+	const uuid = await resolveExhibitionId(exhibitionId);
+	const config = (uuid ? MOCK_EXHIBITION_CONFIG[uuid] : undefined) ?? DEFAULT_EXHIBITION_CONFIG;
+	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === uuid);
 
 	if (!exhibition) {
 		return <div>전시회를 찾을 수 없습니다.</div>;
