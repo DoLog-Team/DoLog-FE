@@ -4,17 +4,24 @@ import Image from "next/image";
 import { useState } from "react";
 import { Modal } from "@/components/common/Modal/Modal";
 
+/**
+ * 작품소개 상세사진(images) : 선택값
+ * 구매링크(purchaseUrl) : 선택값
+ */
+
 interface PhotoSectionProps {
-	images: string[];
+	images?: string[];
 	purchaseUrl?: string;
 }
 
 export const PhotoSection = ({ images, purchaseUrl }: PhotoSectionProps) => {
 	const [isOpen, setIsOpen] = useState(false);
+	if (!images || images.length === 0) return null;
 
 	return (
 		<section className="flex flex-col px-4 pb-6">
 			{/* TODO : 이미지 간 gap? */}
+			{/* 작품소개 상세사진 - 선택값 */}
 			{images.map((src, index) => (
 				<div key={index} className="relative w-full">
 					<Image

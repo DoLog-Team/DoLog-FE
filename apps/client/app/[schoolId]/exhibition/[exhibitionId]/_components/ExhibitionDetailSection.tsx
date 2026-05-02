@@ -23,8 +23,12 @@ export function ExhibitionDetail({ exhibition }: ExhibitionDetailProps) {
 						value: (
 							<>
 								{exhibition.hours.open} ~ {exhibition.hours.close}
-								<br />
-								{exhibition.hours.note}
+								{exhibition.hours.note && (
+									<>
+									<br />
+									{exhibition.hours.note}
+									</>
+								)}
 							</>
 						),
 					},
