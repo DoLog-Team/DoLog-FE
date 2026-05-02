@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { PostNavigation } from "@/app/[exhibitionId]/artist/[artistId]/components/Navigation/PostNavigation/PostNavigation";
 import { BTSCardGrid } from "@/components/common/Card/BTSCard/BTSCardGrid";
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
@@ -14,6 +15,19 @@ import { MOCK_BEHIND_THE_SCENE } from "../../bts/_mocks/behind-the-scene";
 
 interface ArtistDetailPageProps {
 	params: Promise<{ exhibitionId: string; artistId: string }>;
+}
+
+export async function generateMetadata({ params }: ArtistDetailPageProps): Promise<Metadata> {
+	const { artistId } = await params;
+	const artist = MOCK_ARTIST_DATA.find((a) => a.id === artistId);
+
+	return {
+		title: artist?.name ?? "작가 소개",
+		openGraph: {
+			title: artist?.name ?? "작가 소개",
+			images: artist?.imageUrl ? [{ url: artist.imageUrl }] : [],
+		},
+	};
 }
 
 export default async function ArtistDetailPage({ params }: ArtistDetailPageProps) {
