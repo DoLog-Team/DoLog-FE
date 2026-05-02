@@ -24,14 +24,13 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 	const params = useParams();
 	const pathname = usePathname();
 
-	const schoolId = Array.isArray(params.schoolId) ? params.schoolId[0] : params.schoolId;
 	const exhibitionId = Array.isArray(params.exhibitionId)
 		? params.exhibitionId[0]
 		: params.exhibitionId;
 
 	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
 	const hasBts = MOCK_BEHIND_THE_SCENE.length > 0;
-	const baseUrl = `/${schoolId}/exhibition/${exhibitionId}`;
+	const baseUrl = `/${exhibitionId}`;
 
 	useEffect(() => {
 		document.body.style.overflow = isOpen ? "hidden" : "";

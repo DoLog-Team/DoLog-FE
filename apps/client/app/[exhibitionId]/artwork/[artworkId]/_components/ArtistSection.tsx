@@ -3,10 +3,10 @@ import { ArtistCard, type ArtistCardProps } from "./components/ArtistCard"; // A
 
 interface ArtistSectionProps {
 	authors: ArtistCardProps["author"][];
-	schoolId: string;
+	exhibitionId: string;
 }
 
-export function ArtistSection({ authors, schoolId }: ArtistSectionProps) {
+export function ArtistSection({ authors, exhibitionId }: ArtistSectionProps) {
 	return (
 		<section className="flex flex-col px-4 pb-6 gap-4">
 			<Title title="참여자" />
@@ -15,7 +15,7 @@ export function ArtistSection({ authors, schoolId }: ArtistSectionProps) {
 					<ArtistCard
 						key={index}
 						author={author}
-						profileHref={`/${schoolId}/exhibition/artist/${author.id}`}
+						profileHref={`/${exhibitionId}/artist/${author.id}`}
 					/>
 				))}
 			</div>

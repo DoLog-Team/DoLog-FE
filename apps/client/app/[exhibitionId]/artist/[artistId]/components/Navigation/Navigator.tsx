@@ -9,12 +9,11 @@ import type { NavItem } from "./PostNavigation/PostNavigation.types";
 export function Navigator({ label, artistName, artistId, direction }: NavItem) {
 	const params = useParams();
 
-	const schoolId = Array.isArray(params.schoolId) ? params.schoolId[0] : params.schoolId;
 	const exhibitionId = Array.isArray(params.exhibitionId)
 		? params.exhibitionId[0]
 		: params.exhibitionId;
 
-	const href = `/${schoolId}/exhibition/${exhibitionId}/artist/${artistId}`;
+	const href = `/${exhibitionId}/artist/${artistId}`;
 
 	const iconSrc = direction === "prev" ? "/icons/arrowUp.svg" : "/icons/arrowDown.svg";
 

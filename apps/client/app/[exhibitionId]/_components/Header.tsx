@@ -18,11 +18,10 @@ export const Header = ({ variant = "logo", title }: HeaderProps) => {
 	const params = useParams();
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-	const schoolId = Array.isArray(params.schoolId) ? params.schoolId[0] : params.schoolId;
 	const exhibitionId = Array.isArray(params.exhibitionId)
 		? params.exhibitionId[0]
 		: params.exhibitionId;
-	const baseUrl = `/${schoolId}/exhibition/${exhibitionId}`;
+	const baseUrl = `/${exhibitionId}`;
 
 	return (
 		<>

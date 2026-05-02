@@ -7,11 +7,11 @@ import { Header } from "../_components/Header";
 import { MOCK_PARTNERS } from "./_mocks/partners";
 
 interface ArtistPageProps {
-	params: Promise<{ schoolId: string; exhibitionId: string }>;
+	params: Promise<{ exhibitionId: string }>;
 }
 
 export default async function ArtistPage({ params }: ArtistPageProps) {
-	const { schoolId, exhibitionId } = await params;
+	const { exhibitionId } = await params;
 
 	return (
 		<>
@@ -30,7 +30,7 @@ export default async function ArtistPage({ params }: ArtistPageProps) {
 							imageUrl: artist.imageUrl,
 							category: "",
 						}))}
-						getHref={(item) => `/${schoolId}/exhibition/${exhibitionId}/artist/${item.id}`}
+						getHref={(item) => `/${exhibitionId}/artist/${item.id}`}
 					/>
 				</section>
 

@@ -1,4 +1,4 @@
-import { PostNavigation } from "@/app/[schoolId]/exhibition/[exhibitionId]/artist/[artistId]/components/Navigation/PostNavigation/PostNavigation";
+import { PostNavigation } from "@/app/[exhibitionId]/artist/[artistId]/components/Navigation/PostNavigation/PostNavigation";
 import { BTSCardGrid } from "@/components/common/Card/BTSCard/BTSCardGrid";
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
 import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
@@ -13,11 +13,11 @@ import { Header } from "../../_components/Header";
 import { MOCK_BEHIND_THE_SCENE } from "../../bts/_mocks/behind-the-scene";
 
 interface ArtistDetailPageProps {
-	params: Promise<{ schoolId: string; exhibitionId: string; artistId: string }>;
+	params: Promise<{ exhibitionId: string; artistId: string }>;
 }
 
 export default async function ArtistDetailPage({ params }: ArtistDetailPageProps) {
-	const { schoolId, exhibitionId, artistId } = await params;
+	const { exhibitionId, artistId } = await params;
 
 	const artist = MOCK_ARTIST_DATA.find((a) => a.id === artistId);
 	if (!artist) return <div>작가 없음</div>;
@@ -51,7 +51,7 @@ export default async function ArtistDetailPage({ params }: ArtistDetailPageProps
 						<div className="mt-4">
 							<BTSCardGrid
 								items={btsItems}
-								getHref={(item) => `/${schoolId}/exhibition/${exhibitionId}/bts/${item.id}`}
+								getHref={(item) => `/${exhibitionId}/bts/${item.id}`}
 							/>
 						</div>
 					</section>

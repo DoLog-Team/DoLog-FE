@@ -18,7 +18,6 @@ const EXPAND_THRESHOLD = 20;
 
 export default function BehindTheSceneClient({ items }: BehindTheSceneClientProps) {
 	const params = useParams();
-	const schoolId = Array.isArray(params.schoolId) ? params.schoolId[0] : params.schoolId;
 	const exhibitionId = Array.isArray(params.exhibitionId)
 		? params.exhibitionId[0]
 		: params.exhibitionId;
@@ -73,7 +72,7 @@ export default function BehindTheSceneClient({ items }: BehindTheSceneClientProp
 				{filtered.length > 0 ? (
 					<ListCardGrid
 						items={filtered}
-						getHref={(item) => `/${schoolId}/exhibition/${exhibitionId}/bts/${item.id}`}
+						getHref={(item) => `/${exhibitionId}/bts/${item.id}`}
 						className="gap-y-10"
 					/>
 				) : (

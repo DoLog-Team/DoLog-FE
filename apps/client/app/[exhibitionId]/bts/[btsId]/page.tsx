@@ -25,7 +25,6 @@ const TABS = [
 export default function BtsDetailPage() {
 	const params = useParams();
 
-	const schoolId = Array.isArray(params.schoolId) ? params.schoolId[0] : params.schoolId;
 	const exhibitionId = Array.isArray(params.exhibitionId)
 		? params.exhibitionId[0]
 		: params.exhibitionId;
@@ -165,7 +164,7 @@ export default function BtsDetailPage() {
 								})) ?? []
 							}
 						/>
-						<Link href={`/${schoolId}/exhibition/${exhibitionId}/artist/${btsItem.artistId}`}>
+						<Link href={`/${exhibitionId}/artist/${btsItem.artistId}`}>
 							<Button variant="outline" size="sm" className="w-full mt-5 mb-4">
 								프로필 더보기
 							</Button>
@@ -189,7 +188,7 @@ export default function BtsDetailPage() {
 						<Title title="추천 Behind The Scene" size="head2" className="mt-4 mb-4" />
 						<BTSCardGrid
 							items={relatedBts}
-							getHref={(item) => `/${schoolId}/exhibition/${exhibitionId}/bts/${item.id}`}
+							getHref={(item) => `/${exhibitionId}/bts/${item.id}`}
 						/>
 					</section>
 				)}

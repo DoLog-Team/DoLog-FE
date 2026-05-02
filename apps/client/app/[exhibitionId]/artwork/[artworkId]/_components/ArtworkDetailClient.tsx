@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useMemo } from "react";
-import type { MOCK_ARTWORK_DETAIL } from "@/app/[schoolId]/exhibition/[exhibitionId]/artwork/_mocks/artworkDetail";
+import type { MOCK_ARTWORK_DETAIL } from "@/app/[exhibitionId]/artwork/_mocks/artworkDetail";
 import { Divider } from "@/components/common/Divider/Divider";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
@@ -17,10 +17,10 @@ import { RelatedSection } from "../_components/RelatedSection";
 
 export function ArtworkDetailClient({
 	data,
-	schoolId,
+	exhibitionId,
 }: {
 	data: typeof MOCK_ARTWORK_DETAIL;
-	schoolId: string;
+	exhibitionId: string;
 }) {
 	// ScrollTabBar 탭 목록 [ 작품 소개, 작가 소개, 비하인드(선택) ]
 	const TABS = useMemo(() => {
@@ -61,7 +61,7 @@ export function ArtworkDetailClient({
 					sectionRefs.artist.current = el;
 				}}
 			>
-				<ArtistSection authors={data.authors} schoolId={schoolId} />
+				<ArtistSection authors={data.authors} exhibitionId={exhibitionId} />
 			</section>
 			<Divider />
 			{/* BTS 섹션 - 선택값 */}
