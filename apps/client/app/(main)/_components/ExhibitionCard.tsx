@@ -2,13 +2,14 @@ import Image from "next/image";
 
 export interface ExhibitionItem {
 	id: string;
+	slug?: string;
 	title: string;
 	univName: string;
 	deptName: string;
-	location: string;
-	imageUrl: string;
-	startDate: string;
-	endDate: string;
+	location?: string;
+	imageUrl: string | null;
+	startDate: string | null;
+	endDate: string | null;
 }
 
 const formatDate = (date: string) => date.replace(/-/g, ".");
@@ -25,17 +26,19 @@ export default function ExhibitionCard({
 	return (
 		<article className="flex gap-4">
 			<div className="relative self-stretch h-40 aspect-3/4 shrink-0 overflow-hidden">
-				<Image src={imageUrl} alt={title} fill />
+				{imageUrl && <Image src={imageUrl} alt={title} fill />}
 			</div>
 			<div className="flex flex-col gap-1">
 				<h3 className="text-head3 text-strong">{title}</h3>
 				<p className="text-body2 text-light">
 					{univName} · {deptName}
 				</p>
-				<p className="text-body2 text-light">{location}</p>
-				<p className="text-body2 text-light">
-					{formatDate(startDate)} ~ {formatDate(endDate)}
-				</p>
+				{location && <p className="text-body2 text-light">{location}</p>}
+				{startDate && endDate && (
+					<p className="text-body2 text-light">
+						{formatDate(startDate)} ~ {formatDate(endDate)}
+					</p>
+				)}
 			</div>
 		</article>
 	);
