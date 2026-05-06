@@ -53,7 +53,7 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 			<section className="flex flex-col flex-1 px-4 gap-4">
 				{filtered.length > 0 ? (
 					filtered.map((exhibition) => (
-						<Link key={exhibition.id} href={`/${exhibition.id}`}>
+						<Link key={exhibition.id} href={`/${exhibition.slug || exhibition.id}`}>
 							<ExhibitionCard {...exhibition} />
 						</Link>
 					))

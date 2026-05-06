@@ -1,8 +1,19 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-	/* config options here */
 	transpilePackages: ["components", "api", "utils"],
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "dolog-s3-873593443627-ap-northeast-2-an.s3.ap-northeast-2.amazonaws.com",
+			},
+			{
+				protocol: "https",
+				hostname: "storage.com",
+			},
+		],
+	},
 };
 
 export default nextConfig;
