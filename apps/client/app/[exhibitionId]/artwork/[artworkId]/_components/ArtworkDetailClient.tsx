@@ -58,7 +58,7 @@ export function ArtworkDetailClient({
 			<YoutubeSection youtubeUrl={data.youtubeUrl} />
 			{/* 상세 이미지 섹션*/}
 			<PhotoSection images={data.detailImages} purchaseUrl={data.purchaseUrl} />
-			{/* TODO : 여기에 유튜브 임베드 맞는지 !! */}
+			{/* TODO : 여기에 유튜브 임베드 */}
 			{/* 참여자 섹션 */}
 			<section
 				ref={(el) => {
