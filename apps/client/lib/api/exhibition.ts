@@ -32,3 +32,44 @@ export async function resolveExhibitionSlug(
 		return null;
 	}
 }
+
+/**
+ * [SC01] 전시회 정보 통합 조회
+ * exhibitions/{exhibitionId}/details
+ * @author: 이보연
+ */
+
+export interface ExhibitionLocation {
+	address: string;
+	detail_location: string | null;
+	latitude: string;
+	longitude: string;
+}
+
+export interface ExhibitionDetail {
+  	exhibitionId: string;
+	univName: string;
+	deptName: string;
+	title: string;
+	exhibitionImg: string;
+	startDate: string;
+	endDate: string;
+	dateInfo: string;
+	description: string;
+	location: ExhibitionLocation;
+	isPublic: boolean;
+}
+
+export async function getExhibitionDetail (
+	baseURL: string,
+	exhibitionId: string,
+) : Promise<ExhibitionDetail | null> {
+	const fetcher = createApiClient(baseURL);
+	try {
+		return await fetcher<ExhibitionDetail>(
+			`exhibitions/${exhibitionId}/details`
+		);
+	} catch {
+		return null;
+	}
+}
