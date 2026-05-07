@@ -1,7 +1,6 @@
 [build]
-  base = "apps/client"
-  command = "cd ../.. && npm install -g pnpm@10.30.3 --force && pnpm install && pnpm --filter client build"
-  publish = ".next"
+  command = "npm install -g pnpm@10.30.3 --force && pnpm install && pnpm --filter client build"
+  publish = "apps/client/.next"
 
 [build.environment]
   NODE_VERSION = "20.20.1"
