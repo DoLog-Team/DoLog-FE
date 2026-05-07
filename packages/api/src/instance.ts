@@ -29,3 +29,5 @@ export function createApiClient(baseURL: string) {
 		return json.data;
 	};
 }
+
+export const apiClient = createApiClient(process.env.NEXT_PUBLIC_API_URL ?? "");
