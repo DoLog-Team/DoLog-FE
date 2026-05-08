@@ -2,6 +2,7 @@ import { apiClient } from "api";
 
 /************************
  * [SC02] 전시물 목록 조회
+ * GET exhibitions/{id}/artworks
  ************************/
 export interface ArtworkArtist {
 	id: string;
@@ -58,6 +59,7 @@ export async function getArtworks(
 
 /************************
  * [SC02-01] 전시물 상세 조회
+ * GET exhibitions/{id}/artworks/{artworkId}
  ************************/
 
 // 작가 SNS

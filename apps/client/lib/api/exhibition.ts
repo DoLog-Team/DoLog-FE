@@ -29,9 +29,11 @@ export async function resolveExhibitionSlug(slug: string): Promise<{ uuid: strin
 }
 
 /************************
- * [SC01] 전시회 정보 통합 조회
+ * [SC01] 전시회 정보 통합 조회, 주최기관 정보 조회, 주최기관 SNS 조회
+ * GET exhibitions/{exhibitionId}/details
+ * GET exhibitions/{exhibitionId}/host
+ * GET exhibitions/{exhibitionId}/host/sns
  ************************/
-
 
 export interface ExhibitionLocation {
 	address: string;

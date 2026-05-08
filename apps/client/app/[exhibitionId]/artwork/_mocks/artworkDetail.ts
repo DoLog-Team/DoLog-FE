@@ -3,14 +3,14 @@ import type { ArtworkDetail } from "@/lib/api/artwork";
 export const MOCK_ARTWORK_DETAIL: ArtworkDetail = {
 	title: "파도의 그릇",
 	category: "생활 도자기",
-	material: "청자토, 청자유", // materials → material
+	material: "청자토, 청자유",
 	size: "지름 22cm × 높이 7cm",
 	description: "가장자리의 얇은 물결 라인은...",
 	purchaseUrl: "https://naver.com",
-	mainImage: "/images/artwork/artwork.png", // image → mainImage
-	locationMap: "/images/artwork/artworkLocation.png", // locationImageUrl → locationMap
+	mainImage: "/images/artwork/artwork.png",
+	locationMap: "/images/artwork/artworkLocation.png",
 	detailImages: [
-		{ imageUrl: "/images/cups.png", description: "" }, // string[] → object[]
+		{ imageUrl: "/images/cups.png", description: "" },
 		{ imageUrl: "/images/plate.png", description: "" },
 	],
 	participants: [
@@ -18,13 +18,13 @@ export const MOCK_ARTWORK_DETAIL: ArtworkDetail = {
 		{
 			artistId: "1",
 			profileId: "profile-1",
-			nameKo: "배주현", // name → nameKo
+			nameKo: "배주현",
 			nameEn: "Bae JuHyun",
-			profileImg: "/images/artists/artist1.svg", // profileUrl → profileImg
+			profileImg: "/images/artists/artist1.svg",
 			role: "팀 리더, 작품 기획",
-			bio: "일상에서 자주 쓰는 그릇을 만들며...", // description → bio
+			bio: "일상에서 자주 쓰는 그릇을 만들며...",
 			sns: [
-				{ platformName: "인스타그램", url: "@dolog.archive" }, // name → platformName
+				{ platformName: "인스타그램", url: "@dolog.archive" },
 				{ platformName: "비헨스", url: "https://behance.net/..." },
 			],
 		},
