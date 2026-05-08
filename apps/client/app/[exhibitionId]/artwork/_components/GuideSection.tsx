@@ -2,31 +2,32 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { Title } from "@/components/common/Title/Title";
+import type { ExhibitionMap } from "@/lib/api/artwork";
 
 interface GuideSectionProps {
-	guideImages: string[];
+	maps: ExhibitionMap[];
 	sectionRef?: React.RefObject<HTMLElement | null>;
 }
 
-export function GuideSection({ guideImages, sectionRef }: GuideSectionProps) {
+export function GuideSection({ maps, sectionRef }: GuideSectionProps) {
 	const [current, setCurrent] = useState(0);
-	const displayImages = guideImages.slice(0, 6);
+	const displayMaps = maps.slice(0, 6);
 	const touchStartX = useRef<number>(0);
 
 	// GuideSection (관람 안내 섹션) - 선택값
 	// guideImages가 빈 배열로 내려오면 GuideSection 자체를 띄우지 않습니다.
-	if (!displayImages.length) return null;
+	if (!displayMaps.length) return null;
 
 	// 이미지 2장 이상일 경우 인디케이터 스와이프 로직
-	const handlePrev = () => setCurrent((prev) => (prev === 0 ? displayImages.length - 1 : prev - 1));
-	const handleNext = () => setCurrent((prev) => (prev === displayImages.length - 1 ? 0 : prev + 1));
+	const handlePrev = () => setCurrent((prev) => (prev === 0 ? displayMaps.length - 1 : prev - 1));
+	const handleNext = () => setCurrent((prev) => (prev === displayMaps.length - 1 ? 0 : prev + 1));
 
 	const handleTouchStart = (e: React.TouchEvent) => {
 		touchStartX.current = e.touches[0].clientX;
 	};
 
 	const handleTouchEnd = (e: React.TouchEvent) => {
-		if (displayImages.length <= 1) return;
+		if (displayMaps.length <= 1) return;
 		const diff = touchStartX.current - e.changedTouches[0].clientX;
 		if (Math.abs(diff) < 50) return;
 		if (diff > 0) handleNext();
@@ -42,17 +43,17 @@ export function GuideSection({ guideImages, sectionRef }: GuideSectionProps) {
 				onTouchEnd={handleTouchEnd}
 			>
 				<Image
-					src={displayImages[current]}
-					alt={`관람 안내 이미지 ${current + 1}`}
+					src={displayMaps[current].imageUrl}
+					alt={displayMaps[current].description ?? `관람 안내 이미지 ${current + 1}`}
 					fill
 					className="object-cover"
 					priority
 				/>
 			</div>
 			{/* 이미지가 2장 이상일 경우에만 인디케이터 활성화 */}
-			{displayImages.length > 1 && (
+			{displayMaps.length > 1 && (
 				<div className="flex gap-2 justify-center mt-3">
-					{displayImages.map((_, index) => (
+					{displayMaps.map((_, index) => (
 						<button
 							key={index}
 							onClick={() => setCurrent(index)}

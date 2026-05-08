@@ -1,5 +1,4 @@
-import { createApiClient } from "api";
-import { apiClient } from "api";
+import { apiClient, createApiClient } from "api";
 
 export interface ArtworkArtist {
 	id: string;
@@ -43,20 +42,20 @@ export interface GetArtworksParams {
  * [SC02] 전시물 목록 조회
  */
 export async function getArtworks(
-  exhibitionId: string,
-  params?: GetArtworksParams,
+	exhibitionId: string,
+	params?: GetArtworksParams,
 ): Promise<ArtworkListResponse | null> {
-  try {
-    const query = new URLSearchParams();
-    if (params?.zone) query.set("zone", params.zone);
-    if (params?.category) query.set("category", params.category);
-    if (params?.search) query.set("search", params.search);
+	try {
+		const query = new URLSearchParams();
+		if (params?.zone) query.set("zone", params.zone);
+		if (params?.category) query.set("category", params.category);
+		if (params?.search) query.set("search", params.search);
 
-    const queryString = query.toString();
-    const path = `/exhibitions/${exhibitionId}/artworks${queryString ? `?${queryString}` : ""}`;
+		const queryString = query.toString();
+		const path = `/exhibitions/${exhibitionId}/artworks${queryString ? `?${queryString}` : ""}`;
 
-    return await apiClient<ArtworkListResponse>(path);
-  } catch {
-    return null;
-  }
+		return await apiClient<ArtworkListResponse>(path);
+	} catch {
+		return null;
+	}
 }

@@ -68,32 +68,26 @@ export interface ExhibitionDetail {
 	isPublic: boolean;
 }
 
-export async function getExhibitionDetail(
-  exhibitionId: string,
-): Promise<ExhibitionDetail | null> {
-  try {
-    return await apiClient<ExhibitionDetail>(`/exhibitions/${exhibitionId}/details`);
-  } catch {
-    return null;
-  }
+export async function getExhibitionDetail(exhibitionId: string): Promise<ExhibitionDetail | null> {
+	try {
+		return await apiClient<ExhibitionDetail>(`/exhibitions/${exhibitionId}/details`);
+	} catch {
+		return null;
+	}
 }
 
-export async function getExhibitionHost(
-  exhibitionId: string,
-): Promise<ExhibitionHost | null> {
-  try {
-    return await apiClient<ExhibitionHost>(`/exhibitions/${exhibitionId}/host`);
-  } catch {
-    return null;
-  }
+export async function getExhibitionHost(exhibitionId: string): Promise<ExhibitionHost | null> {
+	try {
+		return await apiClient<ExhibitionHost>(`/exhibitions/${exhibitionId}/host`);
+	} catch {
+		return null;
+	}
 }
 
-export async function getHostSns(
-  exhibitionId: string,
-): Promise<HostSns[]> {
-  try {
-    return await apiClient<HostSns[]>(`/exhibitions/${exhibitionId}/host/sns`);
-  } catch {
-    return [];
-  }
+export async function getHostSns(exhibitionId: string): Promise<HostSns[]> {
+	try {
+		return await apiClient<HostSns[]>(`/exhibitions/${exhibitionId}/host/sns`);
+	} catch {
+		return [];
+	}
 }

@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { type Artwork, MOCK_ARTWORKS } from "../_mocks/artworkList";
+import type { ArtworkListItem } from "@/lib/api/artwork";
 
-export function useArtworkFilter(searchQuery: string = "") {
+export function useArtworkFilter(artworks: ArtworkListItem[], searchQuery: string = "") {
 	const [selected, setSelected] = useState("전체");
 
-	const categories = ["전체", ...new Set(MOCK_ARTWORKS.map((a) => a.category))];
-
-	const allZones = [...new Set(MOCK_ARTWORKS.map((a) => a.zone))];
+	const categories = ["전체", ...new Set(artworks.map((a) => a.category))];
+	const allZones = [...new Set(artworks.map((a) => a.zone))];
 
 	const grouped = allZones.reduce(
 		(acc, zone) => {
-			const zoneItems = MOCK_ARTWORKS.filter((a) => a.zone === zone);
+			const zoneItems = artworks.filter((a) => a.zone === zone);
 			acc[zone] = zoneItems.filter((a) => {
 				const matchCategory = selected === "전체" || a.category === selected;
 				const matchSearch =
@@ -21,7 +20,7 @@ export function useArtworkFilter(searchQuery: string = "") {
 			});
 			return acc;
 		},
-		{} as Record<string, Artwork[]>,
+		{} as Record<string, ArtworkListItem[]>,
 	);
 
 	return { selected, setSelected, categories, grouped };
