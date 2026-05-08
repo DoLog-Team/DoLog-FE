@@ -1,8 +1,9 @@
 import { apiClient } from "api";
 
-export interface MainArtworkItem {
+export interface ArtworkItem {
 	id: string;
 	title: string;
+	category?: string;
 	imageUrl: string;
 	exhibitionTitle: string;
 	exhibitionId: string;
@@ -12,7 +13,15 @@ export interface MainArtworkItem {
 
 export interface MainArtworkCategory {
 	categoryName: string;
-	artworks: MainArtworkItem[];
+	artworks: ArtworkItem[];
+}
+
+export async function getArtworks(): Promise<ArtworkItem[]> {
+	try {
+		return await apiClient<ArtworkItem[]>("/artworks");
+	} catch {
+		return [];
+	}
 }
 
 export async function getMainArtworks(): Promise<MainArtworkCategory[]> {
