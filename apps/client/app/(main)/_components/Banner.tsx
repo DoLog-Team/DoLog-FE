@@ -3,13 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
-
-export interface BannerItem {
-	id: number;
-	imageUrl: string;
-	orderIndex: number;
-	linkUrl: string;
-}
+import type { BannerItem } from "@/lib/api/exhibition";
 
 const MAX_BANNERS = 20;
 
