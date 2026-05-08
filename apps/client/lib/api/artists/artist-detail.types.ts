@@ -6,7 +6,7 @@ export interface ArtistSns {
 
 export interface ArtistContact {
 	email: string;
-	sns: ArtistSns[];
+	snsList: ArtistSns[];
 }
 
 export interface ArtistBts {
