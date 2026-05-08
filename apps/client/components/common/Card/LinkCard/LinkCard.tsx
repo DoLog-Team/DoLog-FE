@@ -10,12 +10,19 @@ export const LinkCard = ({ items, className }: LinkCardProps) => {
 		return 0;
 	});
 
+	const getHref = (item: LinkCardProps["items"][number]) => {
+		if (item.label === "email") return `mailto:${item.value}`;
+		if (typeof item.value === "string" && item.value.startsWith("http")) {
+			return item.value;
+		}
+		return null;
+	};
+
 	return (
 		<section className={`${s.wrapper} ${className ?? ""}`}>
 			<div className={s.list}>
 				{sortedItems.map((item, idx) => {
-					const rawText =
-						typeof item.value === "string" ? item.value : ((item.value as any)?.props?.href ?? "");
+					const href = getHref(item);
 
 					return (
 						<div key={idx} className={s.row}>
@@ -24,9 +31,19 @@ export const LinkCard = ({ items, className }: LinkCardProps) => {
 							</div>
 
 							<div className={s.valueBox}>
-								<span className={s.value} title={rawText}>
-									{item.value}
-								</span>
+								{href ? (
+									href.startsWith("http") ? (
+										<a href={href} target="_blank" rel="noopener noreferrer" className={s.value}>
+											{item.value}
+										</a>
+									) : (
+										<a href={href} className={s.value}>
+											{item.value}
+										</a>
+									)
+								) : (
+									<span className={s.value}>{item.value}</span>
+								)}
 							</div>
 						</div>
 					);
