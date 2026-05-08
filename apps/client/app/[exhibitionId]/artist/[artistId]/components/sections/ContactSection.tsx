@@ -1,6 +1,6 @@
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
-import { Title } from "@/components/common/Title/Title";
 import type { LinkItem } from "@/components/common/Card/LinkCard/LinkCard.types";
+import { Title } from "@/components/common/Title/Title";
 
 type Sns = {
 	snsId: string;

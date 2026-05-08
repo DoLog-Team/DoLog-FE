@@ -17,12 +17,7 @@ interface ArtistPageClientProps {
 	artists: ArtistProfile[];
 }
 
-export function ArtistPageClient({
-	schoolId,
-	exhibitionId,
-	partners,
-	artists,
-}: ArtistPageClientProps) {
+export function ArtistPageClient({ exhibitionId, partners, artists }: ArtistPageClientProps) {
 	const TABS = useMemo(
 		() => [
 			{ id: "artists", label: "작가" },
