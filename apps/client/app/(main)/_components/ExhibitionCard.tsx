@@ -1,16 +1,5 @@
 import Image from "next/image";
-
-export interface ExhibitionItem {
-	id: string;
-	slug?: string;
-	title: string;
-	univName: string;
-	deptName: string;
-	location?: string;
-	imageUrl: string | null;
-	startDate: string | null;
-	endDate: string | null;
-}
+import type { ExhibitionItem } from "@/lib/api/exhibition";
 
 const formatDate = (date: string) => date.replace(/-/g, ".");
 
@@ -18,7 +7,7 @@ export default function ExhibitionCard({
 	title,
 	univName,
 	deptName,
-	location,
+	address,
 	imageUrl,
 	startDate,
 	endDate,
@@ -33,7 +22,7 @@ export default function ExhibitionCard({
 				<p className="text-body2 text-light">
 					{univName} · {deptName}
 				</p>
-				{location && <p className="text-body2 text-light">{location}</p>}
+				{address && <p className="text-body2 text-light">{address}</p>}
 				{startDate && endDate && (
 					<p className="text-body2 text-light">
 						{formatDate(startDate)} ~ {formatDate(endDate)}

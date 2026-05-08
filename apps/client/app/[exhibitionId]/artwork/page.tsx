@@ -14,7 +14,9 @@ export default async function ArtworkListPage({ params }: ArtworkListPageProps) 
 	const uuid = await resolveExhibitionId(exhibitionId);
 	const config = MOCK_EXHIBITION_CONFIG[exhibitionId] ?? DEFAULT_EXHIBITION_CONFIG;
 
-	const artworkData = uuid ? ((await getArtworksList(uuid)) ?? MOCK_ARTWORK_LIST) : MOCK_ARTWORK_LIST;
+	const artworkData = uuid
+		? ((await getArtworksList(uuid)) ?? MOCK_ARTWORK_LIST)
+		: MOCK_ARTWORK_LIST;
 
 	// const exhibition =
 	// 	MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId) ?? MOCK_EXHIBITION_DATA[0];
