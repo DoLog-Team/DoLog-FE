@@ -1,12 +1,11 @@
 import { resolveExhibitionSlug } from "@/lib/api/exhibition";
-import { getArtistDetail } from "./api/artist-detail";
 import { Header } from "../../_components/Header";
-
-import { ProfileSection } from "./components/sections/ProfileSection";
-import { ContactSection } from "./components/sections/ContactSection";
-import { BTSSection } from "./components/sections/BTSSection";
-import { NavigationSection } from "./components/sections/NavigationSection";
+import { getArtistDetail } from "./api/artist-detail";
 import { ArtworkSection } from "./components/sections/ArtworkSection";
+import { BTSSection } from "./components/sections/BTSSection";
+import { ContactSection } from "./components/sections/ContactSection";
+import { NavigationSection } from "./components/sections/NavigationSection";
+import { ProfileSection } from "./components/sections/ProfileSection";
 
 interface Props {
 	params: Promise<{

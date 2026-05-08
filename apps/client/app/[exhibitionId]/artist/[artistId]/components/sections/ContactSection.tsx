@@ -1,5 +1,5 @@
-import { Title } from "@/components/common/Title/Title";
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
+import { Title } from "@/components/common/Title/Title";
 
 export function ContactSection({
 	contact,
