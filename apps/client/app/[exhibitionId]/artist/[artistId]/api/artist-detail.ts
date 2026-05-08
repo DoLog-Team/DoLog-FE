@@ -43,7 +43,7 @@ export async function getArtistDetail(profileId: string): Promise<ArtistDetail |
 		if (res) return res;
 
 		return null;
-	} catch (e) {
+	} catch (_e) {
 		return null;
 	}
 }
