@@ -1,7 +1,7 @@
 import { RowCardGrid } from "@/components/common/Card/RowCard/RowCardGrid";
 import { Title } from "@/components/common/Title/Title";
 
-import type { PartnerPart } from "../../api/partner";
+import type { PartnerPart } from "@/lib/api/partner";
 
 interface PartnerSectionProps {
 	partners: PartnerPart[];
@@ -12,7 +12,7 @@ export function PartnerSection({ partners }: PartnerSectionProps) {
 		<section className="flex flex-col pt-4">
 			<Title title="도움을 주신 분들" />
 
-			{partners
+			{[...partners]
 				.sort((a, b) => a.order - b.order)
 				.map((part) => (
 					<div key={part.part_id} className="flex flex-col mb-6">
