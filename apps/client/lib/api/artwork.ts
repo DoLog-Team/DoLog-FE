@@ -1,8 +1,7 @@
-import { apiClient, createApiClient } from "api";
+import { apiClient } from "api";
 
 /************************
  * [SC02] 전시물 목록 조회
- * @author: 이보연
  ************************/
 export interface ArtworkArtist {
 	id: string;
@@ -59,7 +58,6 @@ export async function getArtworks(
 
 /************************
  * [SC02-01] 전시물 상세 조회
- * @author: 이보연
  ************************/
 
 // 작가 SNS
@@ -112,7 +110,7 @@ export interface ArtworkDetail {
 	description: string;
 	purchaseUrl?: string | null;
 	mainImage: string;
-	locationMap: string; // zone 객체 아니고 이미지 URL로 옴!
+	locationMap: string;
 	detailImages: ArtworkDetailImage[];
 	youtubeUrl?: string | null;
 	participants: ArtworkParticipant[];
@@ -131,11 +129,3 @@ export async function getArtworkDetail(
 		return null;
 	}
 }
-
-// {
-// 		title: string;
-// 		category: string; // "생활 도자기" 등
-// 		materials?: string;
-// 		size?: string;
-// 		authors: { name: string; role: string }[];
-// 	};

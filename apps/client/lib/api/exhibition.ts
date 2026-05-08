@@ -28,11 +28,10 @@ export async function resolveExhibitionSlug(slug: string): Promise<{ uuid: strin
 	}
 }
 
-/**
+/************************
  * [SC01] 전시회 정보 통합 조회
- * exhibitions/{exhibitionId}/details
- * @author: 이보연
- */
+ ************************/
+
 
 export interface ExhibitionLocation {
 	address: string;

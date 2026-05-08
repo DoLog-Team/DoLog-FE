@@ -18,13 +18,13 @@ export function LocationMap({ address }: LocationMapProps) {
 
 		const initMap = () => {
 			if (!mapRef.current || !window.naver || !window.naver.maps) return;
-			
+
 			// 2. 만약 mapRef 안에 이미 네이버가 만든 요소가 들어있다면 초기화 중단
 			if (mapRef.current.firstChild) return;
 
 			console.log(`${address} - 지도 초기화`);
 			const location = new window.naver.maps.LatLng(37.5582, 127.0002);
-			
+
 			const map = new window.naver.maps.Map(mapRef.current, {
 				center: location,
 				zoom: 16,
