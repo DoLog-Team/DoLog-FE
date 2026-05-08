@@ -9,26 +9,21 @@ import { CardGrid } from "@/components/common/Card/CardGrid";
 import { Title } from "@/components/common/Title/Title";
 
 interface Props {
-  title: string;
-  categories: string[];
-  artworks: Record<string, CardItem[]>;
-  slugMap?: Record<string, string>;
+	title: string;
+	categories: string[];
+	artworks: Record<string, CardItem[]>;
+	slugMap?: Record<string, string>;
 }
 
-export default function CategorySection({
-  title,
-  categories,
-  artworks,
-  slugMap,
-}: Props) {
-  const [selected] = useState(categories[0]);
+export default function CategorySection({ title, categories, artworks, slugMap }: Props) {
+	const [selected] = useState(categories[0]);
 
-  return (
-    <section className="flex flex-col px-4 pt-6">
-      <Title title={title} />
+	return (
+		<section className="flex flex-col px-4 pt-6">
+			<Title title={title} />
 
-      {/* 카테고리 칩 */}
-      {/* <div className="flex gap-2 mt-4 overflow-x-auto pb-1 scrollbar-hide">
+			{/* 카테고리 칩 */}
+			{/* <div className="flex gap-2 mt-4 overflow-x-auto pb-1 scrollbar-hide">
 				{categories.map((category) => (
 					<Chip
 						key={category}
@@ -40,31 +35,31 @@ export default function CategorySection({
 				))}
 			</div> */}
 
-      {/* 작품 그리드 */}
-      <div className="mt-4">
-        <CardGrid
-          items={artworks[selected] ?? []}
-          limit={4}
-          getHref={
-            slugMap
-              ? (item) => {
-                  const slug = slugMap[String(item.id)];
-                  return slug ? `/${slug}/artwork/${item.id}` : "#";
-                }
-              : undefined
-          }
-        />
-      </div>
+			{/* 작품 그리드 */}
+			<div className="mt-4">
+				<CardGrid
+					items={artworks[selected] ?? []}
+					limit={4}
+					getHref={
+						slugMap
+							? (item) => {
+									const slug = slugMap[String(item.id)];
+									return slug ? `/${slug}/artwork/${item.id}` : "#";
+								}
+							: undefined
+					}
+				/>
+			</div>
 
-      <Link
-        href="/artworks"
-        className={buttonVariants({
-          variant: "assistive",
-          className: "mt-7 mb-6 w-full",
-        })}
-      >
-        더보기
-      </Link>
-    </section>
-  );
+			<Link
+				href="/artworks"
+				className={buttonVariants({
+					variant: "assistive",
+					className: "mt-7 mb-6 w-full",
+				})}
+			>
+				더보기
+			</Link>
+		</section>
+	);
 }
