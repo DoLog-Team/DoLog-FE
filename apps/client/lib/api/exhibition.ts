@@ -19,6 +19,27 @@ export interface ExhibitionListItem {
 	dDay: number | null;
 }
 
+export interface MainExhibitionItem {
+	id: string;
+	slug: string;
+	title: string;
+	univName: string;
+	deptName: string;
+	imageUrl: string | null;
+	startDate: string | null;
+	endDate: string | null;
+	dday: number | null;
+}
+
+export async function getMainExhibitions(): Promise<MainExhibitionItem[]> {
+	try {
+		const data = await apiClient<{ mainExhibitions: MainExhibitionItem[] }>("/exhibitions/main");
+		return data.mainExhibitions;
+	} catch {
+		return [];
+	}
+}
+
 export async function getBanners(): Promise<BannerItem[]> {
 	try {
 		return await apiClient<BannerItem[]>("/exhibitions/mainbanner");
