@@ -1,12 +1,15 @@
 import Image from "next/image";
 import { Title } from "@/components/common/Title/Title";
 import type { Exhibition } from "@/constants/exhibition";
+import type { ExhibitionHost, HostSns } from "@/lib/api/exhibition";
 
 interface ExhibitionHostProps {
-	hostInfo: Exhibition["hostInfo"];
+	hostInfo: ExhibitionHost;
+	sns: HostSns[]; // 별도 props로 분리 (백 명세상 get 엔드포인트가 분리되어있기 떄문)
+	/* TODO : sns 데이터를 별도의 엔드포인트로 받는게 맞는지 확인하기 */
 }
 
-export function ExhibitionHost({ hostInfo }: ExhibitionHostProps) {
+export function ExhibitionHostSection({ hostInfo, sns }: ExhibitionHostProps) {
 	const paragraphs = hostInfo.description.split("\n\n").filter(Boolean);
 
 	return (
@@ -15,10 +18,10 @@ export function ExhibitionHost({ hostInfo }: ExhibitionHostProps) {
 
 			{/* 이미지 */}
 			<div className="relative w-full aspect-video overflow-hidden">
-				<Image src={hostInfo.imageUrl} alt={hostInfo.name} fill className="object-cover" />
+				<Image src={hostInfo.hostImageUrl} alt={hostInfo.hostName} fill className="object-cover" />
 			</div>
 			{/* 기관명 */}
-			<span className="text-body1-bold mt-5 mb-4">{hostInfo.name}</span>
+			<span className="text-body1-bold mt-5 mb-4">{hostInfo.hostName}</span>
 
 			{/* 기관 소개 */}
 			{paragraphs.map((paragraph, index) => (
@@ -28,10 +31,10 @@ export function ExhibitionHost({ hostInfo }: ExhibitionHostProps) {
 			))}
 
 			{/* 소셜 링크 */}
-			{hostInfo.socialLinks && hostInfo.socialLinks.length > 0 && (
+			{sns.length > 0 && (
 				<div className="flex flex-col gap-1">
-					{hostInfo.socialLinks.map((link) => (
-						<SocialLink key={link.name} label={link.name} href={link.url} />
+					{sns.map((link) => (
+						<SocialLink key={link.snsId} label={link.platformName} href={link.url} />
 					))}
 				</div>
 			)}

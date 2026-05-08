@@ -46,8 +46,21 @@ export interface ExhibitionLocation {
 	longitude: string;
 }
 
+export interface ExhibitionHost {
+	hostId: string;
+	hostName: string;
+	hostImageUrl: string;
+	description: string;
+	email: string;
+}
+export interface HostSns {
+	snsId: string;
+	platformName: string;
+	url: string;
+}
+
 export interface ExhibitionDetail {
-  	exhibitionId: string;
+	exhibitionId: string;
 	univName: string;
 	deptName: string;
 	title: string;
@@ -60,16 +73,35 @@ export interface ExhibitionDetail {
 	isPublic: boolean;
 }
 
-export async function getExhibitionDetail (
+export async function getExhibitionDetail(
 	baseURL: string,
 	exhibitionId: string,
-) : Promise<ExhibitionDetail | null> {
+): Promise<ExhibitionDetail | null> {
 	const fetcher = createApiClient(baseURL);
 	try {
-		return await fetcher<ExhibitionDetail>(
-			`exhibitions/${exhibitionId}/details`
-		);
+		return await fetcher<ExhibitionDetail>(`/exhibitions/${exhibitionId}/details`);
 	} catch {
 		return null;
+	}
+}
+
+export async function getExhibitionHost(
+	baseURL: string,
+	exhibitionId: string,
+): Promise<ExhibitionHost | null> {
+	const fetcher = createApiClient(baseURL);
+	try {
+		return await fetcher<ExhibitionHost>(`/exhibitions/${exhibitionId}/host`);
+	} catch {
+		return null;
+	}
+}
+
+export async function getHostSns(baseURL: string, exhibitionId: string): Promise<HostSns[]> {
+	const fetcher = createApiClient(baseURL);
+	try {
+		return await fetcher<HostSns[]>(`/exhibitions/${exhibitionId}/host/sns`);
+	} catch {
+		return [];
 	}
 }
