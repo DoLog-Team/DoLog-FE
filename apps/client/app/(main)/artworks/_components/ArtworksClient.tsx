@@ -11,9 +11,10 @@ import MainFooter from "@/components/common/Footer/MainFooter";
 interface ArtworksClientProps {
 	artworks: CardItem[];
 	categories: string[];
+	slugMap?: Record<string, string>;
 }
 
-export default function ArtworksClient({ artworks, categories }: ArtworksClientProps) {
+export default function ArtworksClient({ artworks, categories, slugMap }: ArtworksClientProps) {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -42,7 +43,13 @@ export default function ArtworksClient({ artworks, categories }: ArtworksClientP
 
 			<section className="flex flex-col flex-1 px-4 pt-4 pb-6">
 				{filtered.length > 0 ? (
-					<CardGrid items={filtered} getHref={(item) => `/artwork/${item.id}`} />
+					<CardGrid
+						items={filtered}
+						getHref={(item) => {
+							const slug = slugMap?.[String(item.id)];
+							return slug ? `/${slug}/artwork/${item.id}` : "#";
+						}}
+					/>
 				) : (
 					<EmptyState searchQuery={searchQuery} message="해당하는 작품이 없어요." />
 				)}

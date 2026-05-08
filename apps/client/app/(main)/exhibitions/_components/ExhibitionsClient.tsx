@@ -6,7 +6,8 @@ import { CollapsingHeader } from "@/components/common/CollapsingHeader/Collapsin
 import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { FilterChip } from "@/components/common/FilterChip/FilterChip";
 import MainFooter from "@/components/common/Footer/MainFooter";
-import ExhibitionCard, { type ExhibitionItem } from "../../_components/ExhibitionCard";
+import type { ExhibitionItem } from "@/lib/api/exhibition";
+import ExhibitionCard from "../../_components/ExhibitionCard";
 
 interface ExhibitionsClientProps {
 	exhibitions: ExhibitionItem[];
