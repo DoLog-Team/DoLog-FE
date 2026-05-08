@@ -100,7 +100,7 @@ export interface RelatedArtwork {
 	title: string;
 	category: string;
 	artistName: string;
-	//imageUrl: string; TODO : img 안 내려오는지
+	imageUrl?: string | null; //TODO : img 안 내려오는지
 }
 
 // 작품 상세 전체 응답

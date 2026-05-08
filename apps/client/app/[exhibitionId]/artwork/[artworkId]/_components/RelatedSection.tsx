@@ -14,7 +14,7 @@ export const RelatedSection = ({ artworks }: RelatedSectionProps) => {
 		title: a.title,
 		category: a.category,
 		author: a.artistName,
-		imageUrl: "", // TODO : API에 이미지 없어서 백에 확인 필요
+		imageUrl: a.imageUrl || "/images/cups.png", // TODO : API에 이미지 없어서 백에 확인 필요, 폴백 이미지는 제거 예정
 	}));
 
 	return (
