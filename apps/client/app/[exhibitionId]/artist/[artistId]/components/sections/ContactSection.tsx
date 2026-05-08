@@ -1,20 +1,31 @@
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
 import { Title } from "@/components/common/Title/Title";
+import type { LinkItem } from "@/components/common/Card/LinkCard/LinkCard.types";
+
+type Sns = {
+	snsId: string;
+	platformName: string;
+	url: string;
+};
 
 export function ContactSection({
 	contact,
 }: {
 	contact: {
 		email?: string;
-		snsList?: { platformName: string; url: string }[];
+		snsList?: Sns[];
 	};
 }) {
-	const items = [
-		...(contact?.email ? [{ label: "email", value: contact.email }] : []),
-		...(contact?.snsList ?? []).map((s) => ({
-			label: s.platformName,
-			value: s.url,
-		})),
+	const items: LinkItem[] = [
+		...(contact?.email ? [{ label: "email", value: contact.email, type: "email" as const }] : []),
+
+		...(contact?.snsList ?? []).map(
+			(s: Sns): LinkItem => ({
+				label: s.platformName,
+				value: s.url,
+				type: "url" as const,
+			}),
+		),
 	];
 
 	return (

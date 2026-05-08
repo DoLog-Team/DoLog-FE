@@ -1,5 +1,3 @@
-"use client";
-
 import { linkCardStyles as s } from "./LinkCard.styles";
 import type { LinkCardProps } from "./LinkCard.types";
 
@@ -11,10 +9,8 @@ export const LinkCard = ({ items, className }: LinkCardProps) => {
 	});
 
 	const getHref = (item: LinkCardProps["items"][number]) => {
-		if (item.label === "email") return `mailto:${item.value}`;
-		if (typeof item.value === "string" && item.value.startsWith("http")) {
-			return item.value;
-		}
+		if (item.type === "email") return `mailto:${item.value}`;
+		if (item.type === "url") return item.value;
 		return null;
 	};
 

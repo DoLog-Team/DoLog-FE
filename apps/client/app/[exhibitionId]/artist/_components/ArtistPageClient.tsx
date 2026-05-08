@@ -48,7 +48,7 @@ export function ArtistPageClient({
 						sectionRefs.artists.current = el;
 					}}
 				>
-					<ArtistSection schoolId={schoolId} exhibitionId={exhibitionId} artists={artists} />
+					<ArtistSection exhibitionId={exhibitionId} artists={artists} />
 				</section>
 
 				<Divider />
