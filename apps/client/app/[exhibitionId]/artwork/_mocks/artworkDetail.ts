@@ -48,11 +48,35 @@ export const MOCK_ARTWORK_DETAIL: ArtworkDetail = {
 		{ id: "3", title: "내가 흙을 사랑하는 이유", mainImg: "/images/artwork/bts3.png" },
 	],
 	sameCategoryArtworks: [
-		{ id: "4", title: "깨진 다음의 모양", category: "생활 도자기", artistName: "강슬기", imageUrl: "/images/cups.png" },
-		{ id: "5", title: "흐린 날의 화병", category: "생활 도자기", artistName: "손승완", imageUrl: "/images/plate.png" },
+		{
+			id: "4",
+			title: "깨진 다음의 모양",
+			category: "생활 도자기",
+			artistName: "강슬기",
+			imageUrl: "/images/cups.png",
+		},
+		{
+			id: "5",
+			title: "흐린 날의 화병",
+			category: "생활 도자기",
+			artistName: "손승완",
+			imageUrl: "/images/plate.png",
+		},
 	],
 	alphabeticalArtworks: [
-		{ id: "4", title: "깨진 다음의 모양", category: "생활 도자기", artistName: "강슬기", imageUrl: "/images/artwork/artwork.png" },
-		{ id: "5", title: "흐린 날의 화병", category: "생활 도자기", artistName: "손승완", imageUrl: "/images/artwork/artwork.png" },
+		{
+			id: "4",
+			title: "깨진 다음의 모양",
+			category: "생활 도자기",
+			artistName: "강슬기",
+			imageUrl: "/images/artwork/artwork.png",
+		},
+		{
+			id: "5",
+			title: "흐린 날의 화병",
+			category: "생활 도자기",
+			artistName: "손승완",
+			imageUrl: "/images/artwork/artwork.png",
+		},
 	],
 };
