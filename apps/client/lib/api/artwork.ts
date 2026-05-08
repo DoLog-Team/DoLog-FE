@@ -164,4 +164,3 @@ export async function getArtworkDetail(
 		return null;
 	}
 }
-
