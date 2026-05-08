@@ -1,8 +1,9 @@
 import { Title } from "@/components/common/Title/Title";
 import { ArtistCard, type ArtistCardProps } from "./components/ArtistCard"; // ArtistCardProps import 추가
+import type { ArtworkParticipant } from "@/lib/api/artwork";
 
 interface ArtistSectionProps {
-	authors: ArtistCardProps["author"][];
+	authors: ArtworkParticipant[];
 	exhibitionId: string;
 }
 
@@ -15,7 +16,7 @@ export function ArtistSection({ authors, exhibitionId }: ArtistSectionProps) {
 					<ArtistCard
 						key={index}
 						author={author}
-						profileHref={`/${exhibitionId}/artist/${author.id}`}
+						profileHref={`/${exhibitionId}/artist/${author.artistId}`}
 					/>
 				))}
 			</div>

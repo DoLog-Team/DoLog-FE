@@ -1,16 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-
-interface NavItem {
-	id: number;
-	title: string;
-	author: string;
-	imageUrl: string;
-}
+import type { RelatedArtwork } from "@/lib/api/artwork";
 
 interface PostNavigationProps {
-	prevArtwork?: NavItem;
-	nextArtwork?: NavItem;
+	prevArtwork?: RelatedArtwork;
+	nextArtwork?: RelatedArtwork;
 }
 
 /**
@@ -33,16 +27,16 @@ export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigati
 				<Link href={`../artwork/${prevArtwork.id}`}>
 					<div className="flex items-center justify-between py-2.5">
 						<div className="flex items-center gap-2">
-							<Image
+							{/* <Image
 								src={prevArtwork.imageUrl}
 								alt={prevArtwork.title}
 								width={64}
 								height={64}
 								className="object-cover"
-							/>
+							/> */}
 							<div className="flex flex-col">
 								<span className="text-body1-bold">{prevArtwork.title}</span>
-								<span className="text-body2 text-lighter">{prevArtwork.author}</span>
+								<span className="text-body2 text-lighter">{prevArtwork.artistName}</span>
 							</div>
 						</div>
 						<Image src="/icons/arrowUp.svg" alt="이전" width={24} height={24} />
@@ -54,16 +48,16 @@ export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigati
 				<Link href={`../artwork/${nextArtwork.id}`}>
 					<div className="flex items-center justify-between py-2.5">
 						<div className="flex items-center gap-2">
-							<Image
+							{/* <Image
 								src={nextArtwork.imageUrl}
 								alt={nextArtwork.title}
 								width={64}
 								height={64}
 								className="object-cover"
-							/>
+							/> */}
 							<div className="flex flex-col">
 								<span className="text-body1-bold">{nextArtwork.title}</span>
-								<span className="text-body2 text-lighter">{nextArtwork.author}</span>
+								<span className="text-body2 text-lighter">{nextArtwork.artistName}</span>
 							</div>
 						</div>
 						<Image src="/icons/arrowDown.svg" alt="다음" width={24} height={24} />

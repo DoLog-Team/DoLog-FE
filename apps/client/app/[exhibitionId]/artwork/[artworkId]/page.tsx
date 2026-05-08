@@ -1,25 +1,36 @@
 import type { Metadata } from "next";
 import { MOCK_ARTWORK_DETAIL } from "@/app/[exhibitionId]/artwork/_mocks/artworkDetail";
 import { ArtworkDetailClient } from "./_components/ArtworkDetailClient";
+import { getArtworkDetail } from "@/lib/api/artwork";
+import { resolveExhibitionId } from "../../_api/resolveExhibitionId";
 
 interface ArtworkDetailPageProps {
-	params: Promise<{ exhibitionId: string }>;
+	params: Promise<{ exhibitionId: string, artworkId: string }>;
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-	const data = MOCK_ARTWORK_DETAIL;
+export async function generateMetadata({params}: ArtworkDetailPageProps): Promise<Metadata> {
+	const {exhibitionId, artworkId} = await params;
+	const uuid = await resolveExhibitionId(exhibitionId);
+	const data = uuid
+	? (await getArtworkDetail(uuid, artworkId)) ?? MOCK_ARTWORK_DETAIL
+	: MOCK_ARTWORK_DETAIL;
+
 	return {
 		title: data.title,
 		openGraph: {
 			title: data.title,
-			images: [{ url: data.image }],
+			images: [{ url: data.mainImage }],
 		},
 	};
 }
 
 export default async function ArtworkDetailPage({ params }: ArtworkDetailPageProps) {
-	const { exhibitionId } = await params;
-	const data = MOCK_ARTWORK_DETAIL;
+	const { exhibitionId, artworkId } = await params;
+	const uuid = await resolveExhibitionId(exhibitionId);
+
+	const data = uuid
+	? (await getArtworkDetail(uuid, artworkId)) ?? MOCK_ARTWORK_DETAIL
+	: MOCK_ARTWORK_DETAIL;
 
 	return <ArtworkDetailClient data={data} exhibitionId={exhibitionId} />;
 }
