@@ -1,5 +1,5 @@
 import { ProfileCard } from "@/components/common/Card/ProfileCard/ProfileCard";
-import type { ArtistDetail } from "../../api/artist-detail";
+import type { ArtistDetail } from "@/lib/api/artists/artist-detail.types";
 
 export function ProfileSection({ artist }: { artist: ArtistDetail }) {
 	return (

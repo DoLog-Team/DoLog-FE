@@ -1,6 +1,6 @@
 import { resolveExhibitionSlug } from "@/lib/api/exhibition";
 import { Header } from "../../_components/Header";
-import { getArtistDetail } from "./api/artist-detail";
+import { getArtistDetail } from "../../../../lib/api/artists/artist-detail";
 import { ArtworkSection } from "./components/sections/ArtworkSection";
 import { BTSSection } from "./components/sections/BTSSection";
 import { ContactSection } from "./components/sections/ContactSection";

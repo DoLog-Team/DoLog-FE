@@ -1,6 +1,6 @@
 import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
 import { Title } from "@/components/common/Title/Title";
-import type { ArtistDetail } from "../../api/artist-detail";
+import type { ArtistDetail } from "@/lib/api/artists/artist-detail.types";
 
 export function ArtworkSection({
 	artist,

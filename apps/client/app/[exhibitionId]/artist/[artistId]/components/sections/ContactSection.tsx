@@ -1,26 +1,22 @@
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
 import type { LinkItem } from "@/components/common/Card/LinkCard/LinkCard.types";
 import { Title } from "@/components/common/Title/Title";
+import type { ArtistDetail } from "@/lib/api/artists/artist-detail.types";
 
-type Sns = {
-	snsId: string;
-	platformName: string;
-	url: string;
-};
-
-export function ContactSection({
-	contact,
-}: {
-	contact: {
-		email?: string;
-		snsList?: Sns[];
-	};
-}) {
+export function ContactSection({ contact }: { contact: ArtistDetail["contact"] }) {
 	const items: LinkItem[] = [
-		...(contact?.email ? [{ label: "email", value: contact.email, type: "email" as const }] : []),
+		...(contact.email
+			? [
+					{
+						label: "email",
+						value: contact.email,
+						type: "email" as const,
+					},
+				]
+			: []),
 
-		...(contact?.snsList ?? []).map(
-			(s: Sns): LinkItem => ({
+		...(contact.sns ?? []).map(
+			(s: ArtistDetail["contact"]["sns"][number]): LinkItem => ({
 				label: s.platformName,
 				value: s.url,
 				type: "url" as const,
