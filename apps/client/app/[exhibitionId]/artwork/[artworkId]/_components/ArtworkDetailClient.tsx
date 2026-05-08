@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
 import { useMemo } from "react";
-import type { MOCK_ARTWORK_DETAIL } from "@/app/[exhibitionId]/artwork/_mocks/artworkDetail";
 import { Divider } from "@/components/common/Divider/Divider";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
+import type { ArtworkDetail } from "@/lib/api/artwork";
 import { Header } from "../../../_components/Header";
 import { ArtistSection } from "../_components/ArtistSection";
 import { BtsSection } from "../_components/BtsSection";
@@ -15,7 +15,6 @@ import { PhotoSection } from "../_components/PhotoSection";
 import { PostNavigationSection } from "../_components/PostNavigationSection";
 import { RelatedSection } from "../_components/RelatedSection";
 import { YoutubeSection } from "../_components/YoutubeSection";
-import type { ArtworkDetail } from "@/lib/api/artwork";
 
 export function ArtworkDetailClient({
 	data,
@@ -25,9 +24,9 @@ export function ArtworkDetailClient({
 	exhibitionId: string;
 }) {
 	console.log("relatedBts:", data.relatedBts);
-  	console.log("alphabeticalArtworks:", data.alphabeticalArtworks);
-  	console.log("sameCategoryArtworks:", data.sameCategoryArtworks);
-  	console.log("youtubeUrl:", data.youtubeUrl);
+	console.log("alphabeticalArtworks:", data.alphabeticalArtworks);
+	console.log("sameCategoryArtworks:", data.sameCategoryArtworks);
+	console.log("youtubeUrl:", data.youtubeUrl);
 
 	// ScrollTabBar 탭 목록 [ 작품 소개, 작가 소개, 비하인드(선택) ]
 	const TABS = useMemo(() => {

@@ -8,7 +8,6 @@ interface RelatedSectionProps {
 }
 
 export const RelatedSection = ({ artworks }: RelatedSectionProps) => {
-
 	// 직접 카테고리 filter 대신 백에서 내려주는 데이터로 받음
 	const items = artworks.map((a) => ({
 		id: a.id,
@@ -16,7 +15,7 @@ export const RelatedSection = ({ artworks }: RelatedSectionProps) => {
 		category: a.category,
 		author: a.artistName,
 		imageUrl: "", // TODO : API에 이미지 없어서 백에 확인 필요
-	}))
+	}));
 
 	return (
 		<section className="flex flex-col px-4 pb-6">

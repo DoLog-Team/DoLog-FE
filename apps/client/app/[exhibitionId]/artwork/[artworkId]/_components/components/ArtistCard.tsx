@@ -38,11 +38,12 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 			{/* SNS 링크 - 선택값 */}
 			{(author.sns ?? []).length > 0 && (
 				<div className="flex flex-col pb-5">
-					<RowList 
-					 	rows={(author.sns ?? []).map((sns) => ({ 
-							label: sns.platformName, 
+					<RowList
+						rows={(author.sns ?? []).map((sns) => ({
+							label: sns.platformName,
 							value: sns.url,
-					}))} />
+						}))}
+					/>
 				</div>
 			)}
 			{/* 프로필 더보기 버튼 */}

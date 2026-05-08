@@ -64,74 +64,72 @@ export async function getArtworks(
 
 // 작가 SNS
 export interface ArtistSns {
-  platformName: string;
-  url: string;
+	platformName: string;
+	url: string;
 }
 
 // 참여 작가 상세
 export interface ArtworkParticipant {
-  artistId: string;
-  profileId: string;
-  nameKo: string;
-  nameEn: string;
-  profileImg: string | null;
-  role?: string;
-  bio?: string;
-  sns?: ArtistSns[];
+	artistId: string;
+	profileId: string;
+	nameKo: string;
+	nameEn: string;
+	profileImg: string | null;
+	role?: string;
+	bio?: string;
+	sns?: ArtistSns[];
 }
 
 // 상세 이미지
 export interface ArtworkDetailImage {
-  imageUrl: string;
-  description: string;
+	imageUrl: string;
+	description: string;
 }
 
 // BTS
 export interface ArtworkBts {
-  id: string;
-  title: string;
-  mainImg: string;
-  //author: string;
+	id: string;
+	title: string;
+	mainImg: string;
+	//author: string;
 }
 
 // 관련 작품 (sameCategoryArtworks, alphabeticalArtworks 공통)
 export interface RelatedArtwork {
-  id: string;
-  title: string;
-  category: string;
-  artistName: string;
-  //imageUrl: string; TODO : img 안 내려오는지
+	id: string;
+	title: string;
+	category: string;
+	artistName: string;
+	//imageUrl: string; TODO : img 안 내려오는지
 }
 
 // 작품 상세 전체 응답
 export interface ArtworkDetail {
-  title: string;
-  category: string;
-  material?: string;
-  size?: string | null;
-  description: string;
-  purchaseUrl?: string | null;
-  mainImage: string;
-  locationMap: string;          // zone 객체 아니고 이미지 URL로 옴!
-  detailImages: ArtworkDetailImage[];
-  youtubeUrl?: string | null;
-  participants: ArtworkParticipant[];
-  relatedBts?: ArtworkBts[];
-  sameCategoryArtworks: RelatedArtwork[];
-  alphabeticalArtworks: RelatedArtwork[];
+	title: string;
+	category: string;
+	material?: string;
+	size?: string | null;
+	description: string;
+	purchaseUrl?: string | null;
+	mainImage: string;
+	locationMap: string; // zone 객체 아니고 이미지 URL로 옴!
+	detailImages: ArtworkDetailImage[];
+	youtubeUrl?: string | null;
+	participants: ArtworkParticipant[];
+	relatedBts?: ArtworkBts[];
+	sameCategoryArtworks: RelatedArtwork[];
+	alphabeticalArtworks: RelatedArtwork[];
 }
 
 export async function getArtworkDetail(
-  exhibitionId: string,
-  artworkId: string,
+	exhibitionId: string,
+	artworkId: string,
 ): Promise<ArtworkDetail | null> {
-  try {
-    return await apiClient<ArtworkDetail>(
-      `/exhibitions/${exhibitionId}/artworks/${artworkId}`
-    );
-  } catch {
-    return null;
-  }
+	try {
+		return await apiClient<ArtworkDetail>(`/exhibitions/${exhibitionId}/artworks/${artworkId}`);
+	} catch {
+		return null;
+	}
 }
 
 // {

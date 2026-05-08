@@ -1,6 +1,6 @@
 import { Title } from "@/components/common/Title/Title";
-import { ArtistCard, type ArtistCardProps } from "./components/ArtistCard"; // ArtistCardProps import 추가
 import type { ArtworkParticipant } from "@/lib/api/artwork";
+import { ArtistCard, type ArtistCardProps } from "./components/ArtistCard"; // ArtistCardProps import 추가
 
 interface ArtistSectionProps {
 	authors: ArtworkParticipant[];
