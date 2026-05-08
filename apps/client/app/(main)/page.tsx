@@ -12,45 +12,41 @@ import { MOCK_EXHIBITIONS } from "./_mocks/exhibition";
 // import { MOCK_SECTIONS } from "./_mocks/section";
 
 export default async function MainPage() {
-  const [banners, mainExhibitions] = await Promise.all([
-    getBanners(),
-    getMainExhibitions(),
-  ]);
-  const displayBanners = banners.length > 0 ? banners : MOCK_BANNERS;
-  const displayExhibitions =
-    mainExhibitions.length > 0 ? mainExhibitions : MOCK_EXHIBITIONS;
+	const [banners, mainExhibitions] = await Promise.all([getBanners(), getMainExhibitions()]);
+	const displayBanners = banners.length > 0 ? banners : MOCK_BANNERS;
+	const displayExhibitions = mainExhibitions.length > 0 ? mainExhibitions : MOCK_EXHIBITIONS;
 
-  return (
-    <div className="flex flex-col">
-      <Header />
-      <Banner banners={displayBanners} />
+	return (
+		<div className="flex flex-col">
+			<Header />
+			<Banner banners={displayBanners} />
 
-      <section className="flex flex-col px-4 pt-6">
-        <Title title="진행중인 전시회" />
-        <div className="flex flex-col gap-4 mt-4">
-          {displayExhibitions.slice(0, 3).map((exhibition) => (
-            <Link
-              key={exhibition.id}
-              href={`/${exhibition.slug ?? exhibition.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ExhibitionCard {...exhibition} />
-            </Link>
-          ))}
-        </div>
-        <Link
-          href="/exhibitions"
-          className={buttonVariants({
-            variant: "assistive",
-            className: "mt-7 w-full",
-          })}
-        >
-          더보기
-        </Link>
-      </section>
+			<section className="flex flex-col px-4 pt-6">
+				<Title title="진행중인 전시회" />
+				<div className="flex flex-col gap-4 mt-4">
+					{displayExhibitions.slice(0, 3).map((exhibition) => (
+						<Link
+							key={exhibition.id}
+							href={`/${exhibition.slug ?? exhibition.id}`}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<ExhibitionCard {...exhibition} />
+						</Link>
+					))}
+				</div>
+				<Link
+					href="/exhibitions"
+					className={buttonVariants({
+						variant: "assistive",
+						className: "mt-7 w-full",
+					})}
+				>
+					더보기
+				</Link>
+			</section>
 
-      {/* {MOCK_SECTIONS.map((section) => (
+			{/* {MOCK_SECTIONS.map((section) => (
 				<div key={section.title}>
 					<CategorySection
 						title={section.title}
@@ -59,7 +55,7 @@ export default async function MainPage() {
 					/>
 				</div>
 			))} */}
-      <MainFooter />
-    </div>
-  );
+			<MainFooter />
+		</div>
+	);
 }
