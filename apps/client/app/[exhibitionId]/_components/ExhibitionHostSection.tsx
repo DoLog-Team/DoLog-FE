@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Title } from "@/components/common/Title/Title";
-import type { Exhibition } from "@/constants/exhibition";
 import type { ExhibitionHost, HostSns } from "@/lib/api/exhibition";
 
 interface ExhibitionHostProps {

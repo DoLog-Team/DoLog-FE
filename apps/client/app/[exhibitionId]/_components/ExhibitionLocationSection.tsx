@@ -1,7 +1,5 @@
 import { Title } from "@/components/common/Title/Title";
-import type {
-	ExhibitionLocation
-} from "@/lib/api/exhibition";
+import type { ExhibitionLocation } from "@/lib/api/exhibition";
 import { LocationMap } from "./LocationMap";
 
 interface ExhibitionLocationProps {
