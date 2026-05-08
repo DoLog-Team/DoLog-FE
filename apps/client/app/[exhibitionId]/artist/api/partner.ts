@@ -35,8 +35,7 @@ export async function getPartners(exhibitionId: string): Promise<PartnerPart[]> 
 		}));
 
 		return sortedParts;
-	} catch (error) {
-		console.error(error);
+	} catch (_error) {
 		return [];
 	}
 }

@@ -1,8 +1,7 @@
 import { resolveExhibitionSlug } from "@/lib/api/exhibition";
-import { getPartners } from "./api/partner";
-import { getArtistProfiles } from "./api/artist";
-
 import { ArtistPageClient } from "./_components/ArtistPageClient";
+import { getArtistProfiles } from "./api/artist";
+import { getPartners } from "./api/partner";
 
 interface ArtistPageProps {
 	params: Promise<{

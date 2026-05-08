@@ -1,15 +1,14 @@
 import { useMemo } from "react";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 import { Title } from "@/components/common/Title/Title";
-import { ArtistProfile } from "../../api/artist";
+import type { ArtistProfile } from "../../api/artist";
 
 interface ArtistSectionProps {
-	schoolId: string;
 	exhibitionId: string;
 	artists: ArtistProfile[];
 }
 
-export function ArtistSection({ schoolId, exhibitionId, artists = [] }: ArtistSectionProps) {
+export function ArtistSection({ exhibitionId, artists = [] }: ArtistSectionProps) {
 	const cardItems = useMemo(() => {
 		const mapped = artists.map((artist) => ({
 			id: artist.profileId,
