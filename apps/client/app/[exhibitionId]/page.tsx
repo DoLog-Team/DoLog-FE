@@ -50,6 +50,14 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 		getHostSns(uuid),
 	]);
 
+	console.log("exhibition 전체 응답:", exhibition);  // ← 추가
+ 	console.log("host 전체 응답:", host);
+  	console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);         
+  	console.log("-----------------------------------------");
+	console.log("✅ [전시 상세] :", exhibition ? "데이터 있음" : "데이터 없음(null)");
+	console.log("✅ [호스트 정보] :", host ? "데이터 있음" : "데이터 없음(null)");
+	console.log("✅ [SNS 목록] :", sns.length > 0 ? `${sns.length}개 있음` : "데이터 없음(빈 배열)");
+	console.log("-----------------------------------------");
 	// /* TODO : 제거 */
 	// if (!exhibition) return <div>전시회를 찾을 수 없습니다.</div>;
 

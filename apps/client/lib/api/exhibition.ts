@@ -70,8 +70,10 @@ export interface ExhibitionDetail {
 
 export async function getExhibitionDetail(exhibitionId: string): Promise<ExhibitionDetail | null> {
 	try {
+		console.log("호출 URL:", `${process.env.NEXT_PUBLIC_API_URL}/exhibitions/${exhibitionId}/details`);
 		return await apiClient<ExhibitionDetail>(`/exhibitions/${exhibitionId}/details`);
-	} catch {
+	} catch (error) {
+		console.error("getExhibitionDetail 에러:", error);
 		return null;
 	}
 }
