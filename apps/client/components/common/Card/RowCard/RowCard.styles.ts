@@ -2,7 +2,7 @@ export const rowCardStyles = {
 	wrapper: "flex gap-[12px] items-center w-full",
 
 	imageWrapper: "w-[72px] h-[96px] overflow-hidden flex-shrink-0",
-	image: "w-[72px] h-[96px] object-cover",
+	image: "object-cover w-full h-full",
 
 	info: "flex-1 flex flex-col gap-[4px]",
 

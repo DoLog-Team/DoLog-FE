@@ -14,6 +14,7 @@ export const RowCard = ({ name, engName, email, imageUrl }: RowCardProps) => {
 					width={72}
 					height={96}
 					className={s.image}
+					unoptimized
 				/>
 			</div>
 
