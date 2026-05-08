@@ -21,11 +21,11 @@ export const LinkCard = ({ items, className }: LinkCardProps) => {
 	return (
 		<section className={`${s.wrapper} ${className ?? ""}`}>
 			<div className={s.list}>
-				{sortedItems.map((item, idx) => {
+				{sortedItems.map((item) => {
 					const href = getHref(item);
 
 					return (
-						<div key={idx} className={s.row}>
+						<div key={`${item.label}-${item.value}`} className={s.row}>
 							<div className={s.labelBox}>
 								<span className={s.label}>{item.label}</span>
 							</div>
