@@ -22,7 +22,7 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 						width={0}
 						height={0}
 						sizes="100vw"
-						className="w-32 h-auto shrink-0 object-cover"
+						className="w-32 aspect-[1/1.414] h-auto shrink-0 object-cover"
 					/>
 				</div>
 				<div className="flex flex-col justify-end px-4">
