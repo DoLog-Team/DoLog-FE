@@ -1,5 +1,4 @@
 import { ProfileCard } from "@/components/common/Card/ProfileCard/ProfileCard";
-import { Title } from "@/components/common/Title/Title";
 import type { ArtistDetail } from "../../api/artist-detail";
 
 export function ProfileSection({ artist }: { artist: ArtistDetail }) {

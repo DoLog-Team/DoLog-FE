@@ -36,11 +36,6 @@ export interface ArtistDetail {
 	public: boolean;
 }
 
-interface GetArtistDetailResponse {
-	isSuccess: boolean;
-	data: ArtistDetail;
-}
-
 export async function getArtistDetail(profileId: string): Promise<ArtistDetail | null> {
 	try {
 		const res = await apiClient<ArtistDetail>(`/artist-profiles/${profileId}`);
@@ -49,7 +44,6 @@ export async function getArtistDetail(profileId: string): Promise<ArtistDetail |
 
 		return null;
 	} catch (e) {
-		console.error("artist detail error:", e);
 		return null;
 	}
 }
