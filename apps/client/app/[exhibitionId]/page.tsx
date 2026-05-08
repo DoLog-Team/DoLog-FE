@@ -7,7 +7,7 @@ import { resolveExhibitionId } from "./_api/resolveExhibitionId";
 import { ExhibitionDetailSection } from "./_components/ExhibitionDetailSection";
 import { ExhibitionHostSection } from "./_components/ExhibitionHostSection";
 import { ExhibitionIntroSection } from "./_components/ExhibitionIntroSection";
-import { ExhibitionLocation } from "./_components/ExhibitionLocationSection";
+import { ExhibitionLocationSection } from "./_components/ExhibitionLocationSection";
 import { Header } from "./_components/Header";
 import { MOCK_EXHIBITION_DETAIL, MOCK_EXHIBITION_HOST, MOCK_HOST_SNS } from "./_mocks/exhibition";
 import { DEFAULT_EXHIBITION_CONFIG, MOCK_EXHIBITION_CONFIG } from "./exhibition-config";
@@ -35,7 +35,6 @@ export async function generateMetadata({ params }: ExhibitionDetailPageProps): P
 export default async function ExhibitionDetailPage({ params }: ExhibitionDetailPageProps) {
 	const { exhibitionId } = await params;
 	const uuid = await resolveExhibitionId(exhibitionId);
-	const baseURL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 	// const exhibition = uuid
 	// ? await getExhibitionDetail(baseURL, uuid)
@@ -46,9 +45,9 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 	}
 
 	const [exhibition, host, sns] = await Promise.all([
-		getExhibitionDetail(baseURL, uuid),
-		getExhibitionHost(baseURL, uuid),
-		getHostSns(baseURL, uuid),
+		getExhibitionDetail(uuid),
+		getExhibitionHost(uuid),
+		getHostSns(uuid),
 	]);
 
 	/* TODO : 제거 */
@@ -83,7 +82,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 			<ExhibitionDetailSection exhibition={exhibitionData} />
 			<Divider />
 			{/* 장소 */}
-			<ExhibitionLocation location={exhibitionData.location} />
+			<ExhibitionLocationSection location={exhibitionData.location} />
 			{/* 주최 기관 */}
 			<ExhibitionHostSection hostInfo={hostData} sns={snsData} />
 		</main>
