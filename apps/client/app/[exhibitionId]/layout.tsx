@@ -1,6 +1,8 @@
 import SchoolFooter from "@/components/common/Footer/SchoolFooter";
 import { ThemeProvider } from "@/providers/theme-providers";
-import { DEFAULT_EXHIBITION_CONFIG, MOCK_EXHIBITION_CONFIG } from "./exhibition-config";
+import { getExhibitionCustom } from "./_api/getExhibitionCustom";
+import { resolveExhibitionId } from "./_api/resolveExhibitionId";
+import { DEFAULT_EXHIBITION_CONFIG } from "./exhibition-config";
 
 export default async function ExhibitionLayout({
 	children,
@@ -10,7 +12,20 @@ export default async function ExhibitionLayout({
 	params: Promise<{ exhibitionId: string }>;
 }) {
 	const { exhibitionId } = await params;
-	const config = MOCK_EXHIBITION_CONFIG[exhibitionId] ?? DEFAULT_EXHIBITION_CONFIG;
+	const uuid = await resolveExhibitionId(exhibitionId);
+	const custom = uuid ? await getExhibitionCustom(uuid) : null;
+	console.log("[exhibitionCustom]", JSON.stringify(custom, null, 2));
+
+	const config = {
+		...DEFAULT_EXHIBITION_CONFIG,
+		...(custom && {
+			themeMode: custom.theme_mode,
+			btnBg: custom.btn_bg ?? undefined,
+			btnText: custom.btn_text ?? undefined,
+			ctaBg: custom.cta_bg ?? undefined,
+			ctaText: custom.cta_text ?? undefined,
+		}),
+	};
 
 	const colorVars = {
 		...(config.btnBg && { "--btn-bg": config.btnBg }),
