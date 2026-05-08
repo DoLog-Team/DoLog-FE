@@ -50,8 +50,8 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 		getHostSns(uuid),
 	]);
 
-	/* TODO : 제거 */
-	if (!exhibition) return <div>전시회를 찾을 수 없습니다.</div>;
+	// /* TODO : 제거 */
+	// if (!exhibition) return <div>전시회를 찾을 수 없습니다.</div>;
 
 	/* TODO : mockdata 제거 예정 */
 	// const config = (uuid ? MOCK_EXHIBITION_CONFIG[uuid] : undefined) ?? DEFAULT_EXHIBITION_CONFIG;

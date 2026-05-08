@@ -2,10 +2,10 @@
 import { useState } from "react";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
+import type { ArtworkListItem, ExhibitionMap } from "@/lib/api/artwork";
 import { useArtworkFilter } from "../hooks/useArtworkFilter";
 import { ArtworkListSection } from "./ArtworkListSection";
 import { GuideSection } from "./GuideSection";
-import type { ExhibitionMap, ArtworkListItem } from "@/lib/api/artwork";
 
 interface ArtworksClientProps {
 	maps: ExhibitionMap[];
