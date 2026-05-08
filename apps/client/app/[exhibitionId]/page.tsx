@@ -36,10 +36,6 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 	const { exhibitionId } = await params;
 	const uuid = await resolveExhibitionId(exhibitionId);
 
-	// const exhibition = uuid
-	// ? await getExhibitionDetail(baseURL, uuid)
-	// : null;
-
 	if (!uuid) {
 		return <div>전시회를 찾을 수 없습니다.</div>;
 	}
@@ -49,13 +45,6 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 		getExhibitionHost(uuid),
 		getHostSns(uuid),
 	]);
-
-	// /* TODO : 제거 */
-	// if (!exhibition) return <div>전시회를 찾을 수 없습니다.</div>;
-
-	/* TODO : mockdata 제거 예정 */
-	// const config = (uuid ? MOCK_EXHIBITION_CONFIG[uuid] : undefined) ?? DEFAULT_EXHIBITION_CONFIG;
-	// const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === uuid);
 
 	/* 임의 폴백 변수 (TODO : 추후 제거) */
 	const exhibitionData = exhibition ?? MOCK_EXHIBITION_DETAIL;

@@ -27,7 +27,7 @@ export const MOCK_EXHIBITION_HOST: ExhibitionHost = {
 	hostImageUrl:
 		"https://dolog-s3-873593443627-ap-northeast-2-an.s3.ap-northeast-2.amazonaws.com/hosts/1bcc2b5f-dfc6-4f5d-8b94-3c3372998079.webp",
 	description:
-		"가나다대학교 예술대학은 조형예술, 디자인, 공연예술 등\n\n다양한 분야의 예술 교육을 담당하고 있습니다.",
+		"가나다대학교 예술대학은 조형예술, 디자인, 공연예술 등 다양한 분야의 예술 교육을 담당하고 있습니다.",
 	email: "art@gnd.ac.kr",
 };
 

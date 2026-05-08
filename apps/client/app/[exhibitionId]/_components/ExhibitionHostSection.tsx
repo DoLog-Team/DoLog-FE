@@ -4,8 +4,7 @@ import type { ExhibitionHost, HostSns } from "@/lib/api/exhibition";
 
 interface ExhibitionHostProps {
 	hostInfo: ExhibitionHost;
-	sns: HostSns[]; // 별도 props로 분리 (백 명세상 get 엔드포인트가 분리되어있기 떄문)
-	/* TODO : sns 데이터를 별도의 엔드포인트로 받는게 맞는지 확인하기 */
+	sns: HostSns[];
 }
 
 export function ExhibitionHostSection({ hostInfo, sns }: ExhibitionHostProps) {

@@ -7,17 +7,6 @@ interface PostNavigationProps {
 	nextArtwork?: RelatedArtwork;
 }
 
-/**
- TODO (연동 시)
- 1. 목데이터에서 prevArtwork, nextArtwork 제거
- 2. page.tsx에서 prev, next 직접 연산
-  - artworkId params로 받기
-  - 전체 작품 목록 API 호출
-  - findIndex로 현재 위치 찾아서 prev/next 계산하기 !
- 3. ArtworkDetailClient에 props 전달
-  - 계산된 prev/next를 내려줘서 PostNavigationSection까지 전달될 수 있도록
- */
-
 export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigationProps) {
 	return (
 		<section className="flex flex-col px-4 pb-6">
