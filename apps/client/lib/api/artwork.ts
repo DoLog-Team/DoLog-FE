@@ -28,7 +28,7 @@ export interface ExhibitionMap {
 export interface ArtworkListResponse {
 	exhibitionId: string;
 	maps: ExhibitionMap[];
-	artworks: ArtworkListItem[];
+	artworks: ArtworkListItem[]; // TODO : 응답이 zone[]으로 옴 >> 확인하기
 }
 
 // 파라미터
@@ -38,7 +38,7 @@ export interface GetArtworksParams {
 	search?: string;
 }
 
-export async function getArtworks(
+export async function getArtworksList(
 	exhibitionId: string,
 	params?: GetArtworksParams,
 ): Promise<ArtworkListResponse | null> {

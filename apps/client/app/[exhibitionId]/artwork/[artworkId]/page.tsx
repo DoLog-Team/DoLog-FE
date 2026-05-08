@@ -8,12 +8,8 @@ interface ArtworkDetailPageProps {
 	params: Promise<{ exhibitionId: string; artworkId: string }>;
 }
 
-export async function generateMetadata({ params }: ArtworkDetailPageProps): Promise<Metadata> {
-	const { exhibitionId, artworkId } = await params;
-	const uuid = await resolveExhibitionId(exhibitionId);
-	const data = uuid
-		? ((await getArtworkDetail(uuid, artworkId)) ?? MOCK_ARTWORK_DETAIL)
-		: MOCK_ARTWORK_DETAIL;
+export async function generateMetadata(): Promise<Metadata> {
+	const data = MOCK_ARTWORK_DETAIL;
 
 	return {
 		title: data.title,
