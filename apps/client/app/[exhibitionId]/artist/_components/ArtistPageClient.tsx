@@ -4,9 +4,9 @@ import { useMemo } from "react";
 import { Divider } from "@/components/common/Divider/Divider";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
-import { Header } from "../../_components/Header";
 import type { ArtistProfile } from "@/lib/api/artists/artist";
 import type { PartnerPart } from "@/lib/api/partner";
+import { Header } from "../../_components/Header";
 import { ArtistSection } from "./sections/ArtistSection";
 import { PartnerSection } from "./sections/PartnerSection";
 
