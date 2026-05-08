@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
 	transpilePackages: ["components", "api", "utils"],
 	images: {
+		unoptimized: true,
 		remotePatterns: [
 			{
 				protocol: "https",

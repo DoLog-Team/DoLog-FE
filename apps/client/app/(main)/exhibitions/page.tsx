@@ -3,8 +3,8 @@ import { MOCK_EXHIBITIONS } from "../_mocks/exhibition";
 import ExhibitionsClient from "./_components/ExhibitionsClient";
 
 export default async function ExhibitionsPage() {
-	const baseURL = process.env.NEXT_PUBLIC_API_URL;
-	const exhibitions = baseURL ? await getExhibitions(baseURL) : MOCK_EXHIBITIONS;
+	const exhibitions = await getExhibitions();
+	const displayExhibitions = exhibitions.length > 0 ? exhibitions : MOCK_EXHIBITIONS;
 
-	return <ExhibitionsClient exhibitions={exhibitions} />;
+	return <ExhibitionsClient exhibitions={displayExhibitions} />;
 }

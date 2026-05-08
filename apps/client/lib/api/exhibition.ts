@@ -1,4 +1,4 @@
-import { createApiClient } from "api";
+import { apiClient } from "api";
 
 export interface ExhibitionListItem {
 	id: string;
@@ -12,22 +12,17 @@ export interface ExhibitionListItem {
 	dDay: number | null;
 }
 
-export async function getExhibitions(baseURL: string): Promise<ExhibitionListItem[]> {
-	const fetcher = createApiClient(baseURL);
+export async function getExhibitions(): Promise<ExhibitionListItem[]> {
 	try {
-		return await fetcher<ExhibitionListItem[]>("/exhibitions");
+		return await apiClient<ExhibitionListItem[]>("/exhibitions");
 	} catch {
 		return [];
 	}
 }
 
-export async function resolveExhibitionSlug(
-	baseURL: string,
-	slug: string,
-): Promise<{ uuid: string } | null> {
-	const fetcher = createApiClient(baseURL);
+export async function resolveExhibitionSlug(slug: string): Promise<{ uuid: string } | null> {
 	try {
-		return await fetcher<{ uuid: string }>(`/exhibitions/resolve/${slug}`);
+		return await apiClient<{ uuid: string }>(`/exhibitions/resolve/${slug}`);
 	} catch {
 		return null;
 	}
