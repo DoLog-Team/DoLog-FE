@@ -1,6 +1,7 @@
 export interface LinkItem {
 	label: string;
-	value: React.ReactNode;
+	value: string;
+	type?: "email" | "url" | "text";
 }
 
 export interface LinkCardProps {
