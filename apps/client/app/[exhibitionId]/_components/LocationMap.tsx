@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface LocationMapProps {
 	address: string;
@@ -8,14 +8,23 @@ interface LocationMapProps {
 
 export function LocationMap({ address }: LocationMapProps) {
 	const mapRef = useRef<HTMLDivElement>(null);
+	const [isMapLoaded, setIsMapLoaded] = useState(false);
 
 	/***************************************/
 	// WIP : 네이버 맵 호출 수정 중
 	useEffect(() => {
+		// 1. 이미 지도가 생성되었거나 Ref가 없으면 실행 방지
+		if (!mapRef.current || isMapLoaded) return;
+
 		const initMap = () => {
-			if (!mapRef.current || !window.naver) return;
-			console.log(`${address} - 지도 초기화`); // address 의존성 배열 사용 누락 방지 위한 콘솔로그
+			if (!mapRef.current || !window.naver || !window.naver.maps) return;
+
+			// 2. 만약 mapRef 안에 이미 네이버가 만든 요소가 들어있다면 초기화 중단
+			if (mapRef.current.firstChild) return;
+
+			console.log(`${address} - 지도 초기화`);
 			const location = new window.naver.maps.LatLng(37.5582, 127.0002);
+
 			const map = new window.naver.maps.Map(mapRef.current, {
 				center: location,
 				zoom: 16,
@@ -25,20 +34,25 @@ export function LocationMap({ address }: LocationMapProps) {
 				position: location,
 				map: map,
 			});
+
+			setIsMapLoaded(true);
 		};
 
 		if (window.naver && window.naver.maps) {
+			console.log("2. 바로 실행");
 			initMap();
 		} else {
+			console.log("2. 타이머 시작");
 			const timer = setInterval(() => {
 				if (window.naver && window.naver.maps) {
+					console.log("4. 타이머 안에서 로드 확인");
 					initMap();
 					clearInterval(timer);
 				}
 			}, 100);
 			return () => clearInterval(timer);
 		}
-	}, [address]);
+	}, [address, isMapLoaded]);
 	/***************************************/
 
 	const encodedAddress = encodeURIComponent(address);

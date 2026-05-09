@@ -1,6 +1,7 @@
 import { Chip } from "@/components/common/Chip/Chip";
 import RowList from "@/components/common/RowList/RowList";
 import { Title } from "@/components/common/Title/Title";
+import type { ArtworkDetail } from "@/lib/api/artwork";
 
 /**
  * 작품 제목 (title)
@@ -8,24 +9,18 @@ import { Title } from "@/components/common/Title/Title";
  * 작품 재료 (materials) : 선택값
  * 작품 크기 (size) : 선택값
  * 작가 (authors)
- *
  */
+
 interface InfoSectionProps {
-	data: {
-		title: string;
-		category: string; // "생활 도자기" 등
-		materials?: string;
-		size?: string;
-		authors: { name: string; role: string }[];
-	};
+	data: ArtworkDetail;
 }
 
 // RowList를 위한 작가정보 map
 export const InfoSection = ({ data }: InfoSectionProps) => {
 	const categories = [data.category];
-	const artistRows = data.authors.map((authors) => ({
-		label: authors.name,
-		value: authors.role,
+	const artistRows = data.participants.map((participant) => ({
+		label: participant.nameKo,
+		value: participant.role,
 	}));
 
 	return (
@@ -37,8 +32,8 @@ export const InfoSection = ({ data }: InfoSectionProps) => {
 				<Title title={data.title} />
 
 				{/* 작품 재료, 작품 사이즈 - 선택값 */}
-				{(data.materials || data.size) && (
-					<p className="text-body1">{[data.materials, data.size].filter(Boolean).join(" | ")}</p>
+				{(data.material || data.size) && (
+					<p className="text-body1">{[data.material, data.size].filter(Boolean).join(" | ")}</p>
 				)}
 			</div>
 			<div>

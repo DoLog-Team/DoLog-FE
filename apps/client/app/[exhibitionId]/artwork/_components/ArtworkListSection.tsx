@@ -6,8 +6,7 @@ import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
 import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { Title } from "@/components/common/Title/Title";
-import type { Artwork } from "../_mocks/artworkList";
-import { useArtworkFilter } from "../hooks/useArtworkFilter";
+import type { ArtworkListItem } from "@/lib/api/artwork";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import { AlbumIcon } from "./components/AlbumIcon";
 import Filter from "./components/Filter";
@@ -15,21 +14,25 @@ import { ListIcon } from "./components/ListIcon";
 
 interface ArtworkListSectionProps {
 	sectionRefs: Record<string, React.RefObject<HTMLElement | null>>;
-	grouped: Record<string, Artwork[]>;
+	grouped: Record<string, ArtworkListItem[]>;
 	searchQuery: string;
 	onSearchChange: (value: string) => void;
+	/* useArtworkFilter 중복 호출을 제거하고 props로 받고자 함 */
+	categories: string[];
+	selected: string;
+	onSelect: (value: string) => void;
 }
 
 // [임시] Artwork → CardItem 변환
 // 현재 백엔드 스펙에 맞춰 Artwork 타입으로 목데이터를 구성했습니다.
 // Card 컴포넌트들이 현재 CardItem 타입을 받고 있고 여러 곳에서 쓰이고 있어 임시로 변환했습니다.
 // 추후 백엔드 연동 시 Card 컴포넌트 타입을 Artwork 기준으로 수정하면 이 변환 로직은 제거할 예정입니다!
-const toCardItem = (artwork: Artwork): CardItem => ({
-	id: Number(artwork.artworkId),
+const toCardItem = (artwork: ArtworkListItem): CardItem => ({
+	id: artwork.artworkId,
 	imageUrl: artwork.mainImage,
 	title: artwork.title,
 	category: artwork.category,
-	author: artwork.artists.map((a) => a.name).join(", "),
+	author: artwork.artists.map?.((a) => a.name).join(", ") || "",
 });
 
 // 보기 방식 토글 버튼
@@ -60,11 +63,14 @@ export function ArtworkListSection({
 	grouped,
 	searchQuery,
 	onSearchChange,
+	categories,
+	selected,
+	onSelect,
 }: ArtworkListSectionProps) {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 	const { ref: titleRef, isVisible: isTitleVisible } = useIntersectionObserver();
 
-	const { selected, setSelected, categories } = useArtworkFilter();
+	//const { selected, setSelected, categories } = useArtworkFilter();
 
 	const zones = Object.keys(grouped);
 	const isMultiZone = zones.length > 1;
@@ -86,7 +92,7 @@ export function ArtworkListSection({
 					onChange={onSearchChange}
 				/>
 				<div className="flex items-center justify-between">
-					<Filter categories={categories} selected={selected} onSelect={setSelected} />
+					<Filter categories={categories} selected={selected} onSelect={onSelect} />
 					{!isTitleVisible && <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />}
 				</div>
 			</div>

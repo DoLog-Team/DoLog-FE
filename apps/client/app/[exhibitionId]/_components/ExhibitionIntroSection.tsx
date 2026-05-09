@@ -2,17 +2,17 @@ import { Button } from "components";
 import Link from "next/link";
 import RowList from "@/components/common/RowList/RowList";
 import { Title } from "@/components/common/Title/Title";
-import type { Exhibition } from "@/constants/exhibition";
+import type { ExhibitionDetail } from "@/lib/api/exhibition";
 
 interface ExhibitionIntroProps {
-	exhibition: Exhibition;
+	exhibition: ExhibitionDetail;
 	exhibitionId: string;
 }
 
-export function ExhibitionIntro({ exhibition, exhibitionId }: ExhibitionIntroProps) {
+export function ExhibitionIntroSection({ exhibition, exhibitionId }: ExhibitionIntroProps) {
 	const rows = [
-		{ label: "주최 대학", value: exhibition.host },
-		{ label: "학과", value: exhibition.department },
+		{ label: "주최 대학", value: exhibition.univName },
+		{ label: "학과", value: exhibition.deptName },
 	];
 
 	return (

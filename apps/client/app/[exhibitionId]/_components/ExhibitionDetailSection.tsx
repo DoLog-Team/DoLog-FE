@@ -1,12 +1,12 @@
 import RowList from "@/components/common/RowList/RowList";
 import { Title } from "@/components/common/Title/Title";
-import type { Exhibition } from "@/constants/exhibition";
+import type { ExhibitionDetail } from "@/lib/api/exhibition";
 
 interface ExhibitionDetailProps {
-	exhibition: Exhibition;
+	exhibition: ExhibitionDetail;
 }
 
-export function ExhibitionDetail({ exhibition }: ExhibitionDetailProps) {
+export function ExhibitionDetailSection({ exhibition }: ExhibitionDetailProps) {
 	// mockdata상 description에 \n이 있으면 단락을 분리하기 위함
 	// TODO : 백에서 오는 실제 데이터 개행 방식에 따라 수정 예정
 	const paragraphs = exhibition.description.split("\n\n").filter(Boolean);
@@ -14,23 +14,13 @@ export function ExhibitionDetail({ exhibition }: ExhibitionDetailProps) {
 	const rows = [
 		{
 			label: "전시 일정",
-			value: `${exhibition.period.start} ~ ${exhibition.period.end}`,
+			value: `${exhibition.startDate} ~ ${exhibition.endDate}`,
 		},
-		...(exhibition.hours
+		...(exhibition.dateInfo
 			? [
 					{
 						label: "추가 사항",
-						value: (
-							<>
-								{exhibition.hours.open} ~ {exhibition.hours.close}
-								{exhibition.hours.note && (
-									<>
-										<br />
-										{exhibition.hours.note}
-									</>
-								)}
-							</>
-						),
+						value: exhibition.dateInfo,
 					},
 				]
 			: []),

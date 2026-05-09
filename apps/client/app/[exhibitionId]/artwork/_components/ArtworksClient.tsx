@@ -2,15 +2,21 @@
 import { useState } from "react";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
+import type { ArtworkListItem, ExhibitionMap } from "@/lib/api/artwork";
 import { useArtworkFilter } from "../hooks/useArtworkFilter";
 import { ArtworkListSection } from "./ArtworkListSection";
 import { GuideSection } from "./GuideSection";
 
-export function ArtworksClient({ guideImages }: { guideImages: string[] }) {
-	const hasGuide = guideImages.length > 0;
+interface ArtworksClientProps {
+	maps: ExhibitionMap[];
+	artworks: ArtworkListItem[];
+}
+
+export function ArtworksClient({ maps, artworks }: ArtworksClientProps) {
+	const hasGuide = maps.length > 0;
 
 	const [searchQuery, setSearchQuery] = useState("");
-	const { selected, setSelected, grouped } = useArtworkFilter(searchQuery); // TODO : 백에서 구역 그룹화되어 내려오는지 확인
+	const { selected, setSelected, categories, grouped } = useArtworkFilter(artworks, searchQuery); // TODO : 백에서 구역 그룹화되어 내려오는지 확인
 
 	// ScrollTabBar 탭 [관람 안내(선택값), zone(고유값)]
 	const TABS = [
@@ -33,7 +39,7 @@ export function ArtworksClient({ guideImages }: { guideImages: string[] }) {
 						if (sectionRefs.guide) sectionRefs.guide.current = el;
 					}}
 				>
-					<GuideSection guideImages={guideImages} />
+					<GuideSection maps={maps} />
 				</div>
 			)}
 			<ArtworkListSection
@@ -41,6 +47,9 @@ export function ArtworksClient({ guideImages }: { guideImages: string[] }) {
 				sectionRefs={sectionRefs}
 				searchQuery={searchQuery}
 				onSearchChange={setSearchQuery}
+				categories={categories}
+				selected={selected}
+				onSelect={setSelected}
 			/>
 			<ScrollTabBar tabs={TABS} activeTab={activeTab} onTabClick={handleTabClick} />
 		</>
