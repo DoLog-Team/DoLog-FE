@@ -3,7 +3,7 @@ export const profileCardStyles = {
 
 	top: "flex gap-[12px] mt-4 mb-4",
 
-	image: "w-[150px] h-[200px] object-cover",
+	image: "h-[212.1px] aspect-[1/1.414] object-cover",
 
 	textWrapper: "flex flex-col flex-1",
 

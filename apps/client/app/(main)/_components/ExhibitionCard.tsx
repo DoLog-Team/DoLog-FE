@@ -14,8 +14,8 @@ export default function ExhibitionCard({
 }: Omit<ExhibitionItem, "id">) {
 	return (
 		<article className="flex gap-4">
-			<div className="relative self-stretch h-40 aspect-3/4 shrink-0 overflow-hidden">
-				{imageUrl && <Image src={imageUrl} alt={title} fill />}
+			<div className="relative self-stretch h-40 aspect-[1/1.414] shrink-0 overflow-hidden">
+				{imageUrl && <Image src={imageUrl} alt={title} fill className="object-cover" />}
 			</div>
 			<div className="flex flex-col gap-1">
 				<h3 className="text-head3 text-strong">{title}</h3>

@@ -56,7 +56,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 		<main>
 			<Header logoUrl={config.logoSrc} />
 			{/* 대표 이미지 */}
-			<div className="relative w-full aspect-3/4">
+			<div className="relative w-full aspect-[1/1.414]">
 				<Image
 					src={exhibitionData.exhibitionImg}
 					alt={exhibitionData.title}
