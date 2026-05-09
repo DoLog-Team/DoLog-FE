@@ -44,7 +44,7 @@ export function ArtworkDetailClient({
 	const nextArtwork = data.alphabeticalArtworks[1];
 
 	return (
-		<div className="flex flex-col">
+		<div className="flex flex-col pb-12">
 			<Header variant="back" />
 
 			{/* 대표 이미지 */}
