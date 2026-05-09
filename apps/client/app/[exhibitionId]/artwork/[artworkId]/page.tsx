@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { MOCK_ARTWORK_DETAIL } from "@/app/[exhibitionId]/artwork/_mocks/artworkDetail";
 import { getArtworkDetail } from "@/lib/api/artwork";
 import { resolveExhibitionId } from "../../_api/resolveExhibitionId";
-import { ArtworkDetailClient } from "./_components/ArtworkDetailClient";
 import { MOCK_ARTWORK_DETAIL_META } from "../_mocks/metaArtworkDetail";
+import { ArtworkDetailClient } from "./_components/ArtworkDetailClient";
 
 interface ArtworkDetailPageProps {
 	params: Promise<{ exhibitionId: string; artworkId: string }>;
