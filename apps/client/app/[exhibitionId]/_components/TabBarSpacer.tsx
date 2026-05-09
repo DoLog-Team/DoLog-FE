@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 const TAB_BAR_ROUTES = ["/artwork", "/artist"];
 
 export function TabBarSpacer() {
-  const pathname = usePathname();
-  const hasTabBar = TAB_BAR_ROUTES.some((route) => pathname.includes(route));
+	const pathname = usePathname();
+	const hasTabBar = TAB_BAR_ROUTES.some((route) => pathname.includes(route));
 
-  if (!hasTabBar) return null;
-  return <div className="h-11" />;
+	if (!hasTabBar) return null;
+	return <div className="h-11" />;
 }
