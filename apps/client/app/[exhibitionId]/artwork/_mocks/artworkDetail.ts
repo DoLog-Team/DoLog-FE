@@ -14,7 +14,6 @@ export const MOCK_ARTWORK_DETAIL: ArtworkDetail = {
 		{ imageUrl: "/images/plate.png", description: "" },
 	],
 	participants: [
-		// authors → participants
 		{
 			artistId: "1",
 			profileId: "profile-1",

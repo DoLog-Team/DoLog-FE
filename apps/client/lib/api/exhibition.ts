@@ -1,6 +1,13 @@
 import { apiClient } from "api";
 
-export interface ExhibitionListItem {
+export interface BannerItem {
+	id: number;
+	imageUrl: string;
+	orderIndex: number;
+	linkUrl: string;
+}
+
+export interface ExhibitionItem {
 	id: string;
 	slug: string;
 	title: string;
@@ -9,12 +16,30 @@ export interface ExhibitionListItem {
 	imageUrl: string | null;
 	startDate: string | null;
 	endDate: string | null;
-	dDay: number | null;
+	address: string | null;
+	dday: number | null;
 }
 
-export async function getExhibitions(): Promise<ExhibitionListItem[]> {
+export async function getMainExhibitions(): Promise<ExhibitionItem[]> {
 	try {
-		return await apiClient<ExhibitionListItem[]>("/exhibitions");
+		const data = await apiClient<{ mainExhibitions: ExhibitionItem[] }>("/exhibitions/main");
+		return data.mainExhibitions;
+	} catch {
+		return [];
+	}
+}
+
+export async function getBanners(): Promise<BannerItem[]> {
+	try {
+		return await apiClient<BannerItem[]>("/exhibitions/mainbanner");
+	} catch {
+		return [];
+	}
+}
+
+export async function getExhibitions(): Promise<ExhibitionItem[]> {
+	try {
+		return await apiClient<ExhibitionItem[]>("/exhibitions");
 	} catch {
 		return [];
 	}

@@ -3,13 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
-
-export interface BannerItem {
-	id: number;
-	imageUrl: string;
-	orderIndex: number;
-	linkUrl: string;
-}
+import type { BannerItem } from "@/lib/api/exhibition";
 
 const MAX_BANNERS = 20;
 
@@ -56,14 +50,16 @@ export default function Banner({ banners }: { banners: BannerItem[] }) {
 							href={banner.linkUrl}
 							className="relative min-w-full h-full block"
 						>
-							<Image
-								src={banner.imageUrl}
-								alt=""
-								fill
-								sizes="(max-width: 540px) 100vw, 540px"
-								className="object-cover"
-								priority={i === 0}
-							/>
+							{banner.imageUrl && (
+								<Image
+									src={banner.imageUrl}
+									alt={`배너 ${banner.orderIndex}번 이미지`}
+									fill
+									sizes="(max-width: 540px) 100vw, 540px"
+									className="object-cover"
+									priority={i === 0}
+								/>
+							)}
 						</Link>
 					))}
 				</div>

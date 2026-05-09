@@ -10,9 +10,9 @@ import type { ArtworkDetail } from "@/lib/api/artwork";
  * 구매링크(purchaseUrl) : 선택값
  */
 
-interface PhotoSectionProps {
-	data: ArtworkDetail;
-}
+  interface PhotoSectionProps {                                                 
+    data: Pick<ArtworkDetail, 'detailImages' | 'purchaseUrl'>;
+  } 
 
 export const PhotoSection = ({ data }: PhotoSectionProps) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +20,6 @@ export const PhotoSection = ({ data }: PhotoSectionProps) => {
 
 	return (
 		<section className="flex flex-col px-4 pb-6">
-			{/* TODO : 이미지 간 gap? */}
 			{/* 작품소개 상세사진 - 선택값 */}
 			{data.detailImages.map((img, index) => (
 				<div key={index} className="relative w-full">

@@ -1,5 +1,38 @@
 import { apiClient } from "api";
 
+export interface ArtworkItem {
+	id: string;
+	title: string;
+	category?: string;
+	imageUrl: string;
+	exhibitionTitle: string;
+	exhibitionId: string;
+	slug: string;
+	artistName: string;
+}
+
+export interface MainArtworkCategory {
+	categoryName: string;
+	artworks: ArtworkItem[];
+}
+
+export async function getArtworks(): Promise<ArtworkItem[]> {
+	try {
+		return await apiClient<ArtworkItem[]>("/artworks");
+	} catch {
+		return [];
+	}
+}
+
+export async function getMainArtworks(): Promise<MainArtworkCategory[]> {
+	try {
+		const data = await apiClient<{ categories: MainArtworkCategory[] }>("/artworks?main=true");
+		return data.categories;
+	} catch {
+		return [];
+	}
+}
+
 /************************
  * [SC02] 전시물 목록 조회
  * GET exhibitions/{id}/artworks
@@ -28,7 +61,7 @@ export interface ExhibitionMap {
 export interface ArtworkListResponse {
 	exhibitionId: string;
 	maps: ExhibitionMap[];
-	artworks: ArtworkListItem[];
+	artworks: ArtworkListItem[]; // TODO : 응답이 zone[]으로 옴 >> 확인하기
 }
 
 // 파라미터
@@ -38,7 +71,7 @@ export interface GetArtworksParams {
 	search?: string;
 }
 
-export async function getArtworks(
+export async function getArtworksList(
 	exhibitionId: string,
 	params?: GetArtworksParams,
 ): Promise<ArtworkListResponse | null> {

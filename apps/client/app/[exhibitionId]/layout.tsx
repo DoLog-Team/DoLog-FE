@@ -1,8 +1,9 @@
 import SchoolFooter from "@/components/common/Footer/SchoolFooter";
 import { getExhibitionFooter } from "@/lib/api/layout";
 import { ThemeProvider } from "@/providers/theme-providers";
+import { getExhibitionCustom } from "./_api/getExhibitionCustom";
 import { resolveExhibitionId } from "./_api/resolveExhibitionId";
-import { DEFAULT_EXHIBITION_CONFIG, MOCK_EXHIBITION_CONFIG } from "./exhibition-config";
+import { DEFAULT_EXHIBITION_CONFIG } from "./exhibition-config";
 
 const MOCK_FOOTER = {
 	title: "흙에서 시작되는 모든 이야기",
@@ -22,7 +23,19 @@ export default async function ExhibitionLayout({
 }) {
 	const { exhibitionId } = await params;
 	const uuid = await resolveExhibitionId(exhibitionId);
-	const config = MOCK_EXHIBITION_CONFIG[exhibitionId] ?? DEFAULT_EXHIBITION_CONFIG;
+	const custom = uuid ? await getExhibitionCustom(uuid) : null;
+	console.log("[exhibitionCustom]", JSON.stringify(custom, null, 2));
+
+	const config = {
+		...DEFAULT_EXHIBITION_CONFIG,
+		...(custom && {
+			themeMode: custom.theme_mode,
+			btnBg: custom.btn_bg ?? undefined,
+			btnText: custom.btn_text ?? undefined,
+			ctaBg: custom.cta_bg ?? undefined,
+			ctaText: custom.cta_text ?? undefined,
+		}),
+	};
 
 	const footer = uuid ? ((await getExhibitionFooter(uuid)) ?? MOCK_FOOTER) : MOCK_FOOTER;
 

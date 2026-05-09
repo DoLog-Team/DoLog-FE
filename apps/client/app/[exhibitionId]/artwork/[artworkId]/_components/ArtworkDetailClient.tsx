@@ -73,7 +73,7 @@ export function ArtworkDetailClient({
 					sectionRefs.artist.current = el;
 				}}
 			>
-				<ArtistSection authors={data.participants} exhibitionId={exhibitionId} />
+				<ArtistSection authors={data.participants} slug={exhibitionId} />
 			</section>
 			<Divider />
 			{/* BTS 섹션 - 선택값 */}

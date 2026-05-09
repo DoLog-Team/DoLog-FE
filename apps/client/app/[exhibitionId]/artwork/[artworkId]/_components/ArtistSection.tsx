@@ -1,13 +1,13 @@
 import { Title } from "@/components/common/Title/Title";
 import type { ArtworkParticipant } from "@/lib/api/artwork";
-import { ArtistCard, type ArtistCardProps } from "./components/ArtistCard"; // ArtistCardProps import 추가
+import { ArtistCard } from "./components/ArtistCard";
 
 interface ArtistSectionProps {
 	authors: ArtworkParticipant[];
-	exhibitionId: string;
+	slug: string;
 }
 
-export function ArtistSection({ authors, exhibitionId }: ArtistSectionProps) {
+export function ArtistSection({ authors, slug }: ArtistSectionProps) {
 	return (
 		<section className="flex flex-col px-4 pb-6 gap-4">
 			<Title title="참여자" />
@@ -16,7 +16,7 @@ export function ArtistSection({ authors, exhibitionId }: ArtistSectionProps) {
 					<ArtistCard
 						key={index}
 						author={author}
-						profileHref={`/${exhibitionId}/artist/${author.artistId}`}
+						profileHref={`/${slug}/artist/${author.artistId}`}
 					/>
 				))}
 			</div>
