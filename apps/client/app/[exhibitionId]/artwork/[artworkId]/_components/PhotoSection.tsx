@@ -20,7 +20,6 @@ export const PhotoSection = ({ data }: PhotoSectionProps) => {
 
 	return (
 		<section className="flex flex-col px-4 pb-6">
-			{/* TODO : 이미지 간 gap? */}
 			{/* 작품소개 상세사진 - 선택값 */}
 			{data.detailImages.map((img, index) => (
 				<div key={index} className="relative w-full">
