@@ -10,9 +10,9 @@ import type { ArtworkDetail } from "@/lib/api/artwork";
  * 구매링크(purchaseUrl) : 선택값
  */
 
-interface PhotoSectionProps {
-	data: ArtworkDetail;
-}
+  interface PhotoSectionProps {                                                 
+    data: Pick<ArtworkDetail, 'detailImages' | 'purchaseUrl'>;
+  } 
 
 export const PhotoSection = ({ data }: PhotoSectionProps) => {
 	const [isOpen, setIsOpen] = useState(false);
