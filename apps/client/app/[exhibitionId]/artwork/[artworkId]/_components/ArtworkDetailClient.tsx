@@ -34,8 +34,10 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(TABS.map((t) => t.id));
 
 	// 둘러보기 목록(prev,next 정의)
-	const prevArtwork = data.alphabeticalArtworks[0];
-	const nextArtwork = data.alphabeticalArtworks[1];
+	const alphabetical = data.alphabeticalArtworks;
+	const currentTitle = data.title;
+	const prevArtwork = alphabetical.find(a => a.title < currentTitle);
+	const nextArtwork = alphabetical.find(a => a.title > currentTitle);
 
 	return (
 		<div className="flex flex-col">

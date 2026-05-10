@@ -23,7 +23,7 @@ export default async function ArtworkListPage({ params }: ArtworkListPageProps) 
 
 	return (
 		<main>
-			<Header/>
+			<Header />
 			<ArtworksClient maps={artworkData.maps} artworks={artworkData.artworks} />
 		</main>
 	);
