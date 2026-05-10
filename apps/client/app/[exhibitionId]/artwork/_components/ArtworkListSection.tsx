@@ -112,8 +112,9 @@ export function ArtworkListSection({
 							className={!isMultiZone ? "pt-4" : ""}
 							ref={(el) => {
 								if (sectionRefs[zone.zoneName]) {
-									(sectionRefs[zone.zoneName] as unknown as React.RefObject<HTMLElement | null>).current =
-										el;
+									(
+										sectionRefs[zone.zoneName] as unknown as React.RefObject<HTMLElement | null>
+									).current = el;
 								}
 							}}
 						>

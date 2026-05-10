@@ -50,26 +50,26 @@ export interface ArtworkArtist {
 }
 
 export interface ArtworkListItem {
-    id: string;
-    title: string;
-    imageUrl: string;
-    exhibitionId: string;
-    slug: string;
-    exhibitionTitle: string;
-    artistName: string;
+	id: string;
+	title: string;
+	imageUrl: string;
+	exhibitionId: string;
+	slug: string;
+	exhibitionTitle: string;
+	artistName: string;
 }
 
 // 2. 카테고리 그룹
 export interface CategoryGroup {
-    categoryName: string;
-    artworks: ArtworkListItem[];
+	categoryName: string;
+	artworks: ArtworkListItem[];
 }
 
 // 3. 존(Zone) 그룹
 export interface ZoneGroup {
-    zoneName: string;
-    zoneOrderId: number;
-    categories: CategoryGroup[];
+	zoneName: string;
+	zoneOrderId: number;
+	categories: CategoryGroup[];
 }
 
 // 전체 응답
@@ -101,7 +101,7 @@ export async function getArtworksList(
 
 		return await apiClient<ArtworkListResponse>(path);
 	} catch (error) {
-		console.error("[getArtworkList] 에러:", error)
+		console.error("[getArtworkList] 에러:", error);
 		return null;
 	}
 }
@@ -177,7 +177,7 @@ export async function getArtworkDetail(
 	try {
 		return await apiClient<ArtworkDetail>(`/exhibitions/${exhibitionId}/artworks/${artworkId}`);
 	} catch (error) {
-		console.error("[getArtworkDetail] 에러:", error)
+		console.error("[getArtworkDetail] 에러:", error);
 		return null;
 	}
 }

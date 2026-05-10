@@ -112,7 +112,7 @@ export async function getExhibitionHost(exhibitionId: string): Promise<Exhibitio
 	try {
 		return await apiClient<ExhibitionHost>(`/exhibitions/${exhibitionId}/host`);
 	} catch (error) {
-		console.error("getExhibitionHost 에러:", error)
+		console.error("getExhibitionHost 에러:", error);
 		return null;
 	}
 }
@@ -121,7 +121,7 @@ export async function getHostSns(exhibitionId: string): Promise<HostSns[]> {
 	try {
 		return await apiClient<HostSns[]>(`/exhibitions/${exhibitionId}/host/sns`);
 	} catch (error) {
-		console.error("getHostSNS 에러:", error)
+		console.error("getHostSNS 에러:", error);
 		return [];
 	}
 }
