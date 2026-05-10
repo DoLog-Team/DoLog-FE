@@ -2,28 +2,28 @@
 import { useState } from "react";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
-import type { ArtworkListItem, ExhibitionMap } from "@/lib/api/artwork";
+import type { ExhibitionMap, ZoneGroup } from "@/lib/api/artwork";
 import { useArtworkFilter } from "../hooks/useArtworkFilter";
 import { ArtworkListSection } from "./ArtworkListSection";
 import { GuideSection } from "./GuideSection";
 
 interface ArtworksClientProps {
 	maps: ExhibitionMap[];
-	artworks: ArtworkListItem[];
+	zones: ZoneGroup[];
 }
 
-export function ArtworksClient({ maps, artworks }: ArtworksClientProps) {
+export function ArtworksClient({ maps, zones }: ArtworksClientProps) {
 	const hasGuide = maps.length > 0;
 
 	const [searchQuery, setSearchQuery] = useState("");
-	const { selected, setSelected, categories, grouped } = useArtworkFilter(artworks, searchQuery); // TODO : 백에서 구역 그룹화되어 내려오는지 확인
+	const { selected, setSelected, categories, filteredZones } = useArtworkFilter(zones, searchQuery);
 
 	// ScrollTabBar 탭 [관람 안내(선택값), zone(고유값)]
 	const TABS = [
 		...(hasGuide ? [{ id: "guide", label: "관람 안내" }] : []),
-		...Object.keys(grouped).map((zone) => ({
-			id: zone,
-			label: zone,
+		...filteredZones.map((z) => ({
+			id: z.zoneName,
+			label: z.zoneName,
 		})),
 	];
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(
@@ -43,7 +43,7 @@ export function ArtworksClient({ maps, artworks }: ArtworksClientProps) {
 				</div>
 			)}
 			<ArtworkListSection
-				grouped={grouped}
+				zones={filteredZones}
 				sectionRefs={sectionRefs}
 				searchQuery={searchQuery}
 				onSearchChange={setSearchQuery}

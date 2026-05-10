@@ -24,7 +24,7 @@ export default async function ArtworkListPage({ params }: ArtworkListPageProps) 
 	return (
 		<main>
 			<Header />
-			<ArtworksClient maps={artworkData.maps} artworks={artworkData.artworks} />
+			<ArtworksClient maps={artworkData.maps} zones={artworkData.zones} />
 		</main>
 	);
 }

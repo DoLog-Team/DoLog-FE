@@ -37,19 +37,6 @@ export async function getMainArtworks(): Promise<MainArtworkCategory[]> {
  * [SC02] 전시물 목록 조회
  * GET exhibitions/{id}/artworks
  ************************/
-export interface ArtworkArtist {
-	id: string;
-	name: string;
-}
-
-export interface ArtworkListItem {
-	artworkId: string;
-	title: string;
-	category: string;
-	zone: string;
-	mainImage: string;
-	artists: ArtworkArtist[];
-}
 
 export interface ExhibitionMap {
 	id: string;
@@ -57,11 +44,39 @@ export interface ExhibitionMap {
 	description: string | null;
 }
 
+export interface ArtworkArtist {
+	id: string;
+	name: string;
+}
+
+export interface ArtworkListItem {
+    id: string;
+    title: string;
+    imageUrl: string;
+    exhibitionId: string;
+    slug: string;
+    exhibitionTitle: string;
+    artistName: string;
+}
+
+// 2. 카테고리 그룹
+export interface CategoryGroup {
+    categoryName: string;
+    artworks: ArtworkListItem[];
+}
+
+// 3. 존(Zone) 그룹
+export interface ZoneGroup {
+    zoneName: string;
+    zoneOrderId: number;
+    categories: CategoryGroup[];
+}
+
 // 전체 응답
 export interface ArtworkListResponse {
 	exhibitionId: string;
 	maps: ExhibitionMap[];
-	artworks: ArtworkListItem[]; // TODO : 응답이 zone[]으로 옴 >> 확인하기
+	zones: ZoneGroup[];
 }
 
 // 파라미터
@@ -85,7 +100,8 @@ export async function getArtworksList(
 		const path = `/exhibitions/${exhibitionId}/artworks${queryString ? `?${queryString}` : ""}`;
 
 		return await apiClient<ArtworkListResponse>(path);
-	} catch {
+	} catch (error) {
+		console.error("[getArtworkList] 에러:", error)
 		return null;
 	}
 }
@@ -160,7 +176,8 @@ export async function getArtworkDetail(
 ): Promise<ArtworkDetail | null> {
 	try {
 		return await apiClient<ArtworkDetail>(`/exhibitions/${exhibitionId}/artworks/${artworkId}`);
-	} catch {
+	} catch (error) {
+		console.error("[getArtworkDetail] 에러:", error)
 		return null;
 	}
 }

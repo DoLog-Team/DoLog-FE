@@ -36,8 +36,8 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 	// 둘러보기 목록(prev,next 정의)
 	const alphabetical = data.alphabeticalArtworks;
 	const currentTitle = data.title;
-	const prevArtwork = alphabetical.find(a => a.title < currentTitle);
-	const nextArtwork = alphabetical.find(a => a.title > currentTitle);
+	const prevArtwork = alphabetical.find((a) => a.title < currentTitle);
+	const nextArtwork = alphabetical.find((a) => a.title > currentTitle);
 
 	return (
 		<div className="flex flex-col">
