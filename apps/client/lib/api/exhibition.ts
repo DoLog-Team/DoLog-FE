@@ -14,6 +14,7 @@ export interface ExhibitionItem {
 	univName: string;
 	deptName: string;
 	imageUrl: string | null;
+	logoImg: string;  
 	startDate: string | null;
 	endDate: string | null;
 	address: string | null;

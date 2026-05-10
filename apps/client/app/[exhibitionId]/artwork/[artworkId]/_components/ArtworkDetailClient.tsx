@@ -18,10 +18,8 @@ import { YoutubeSection } from "../_components/YoutubeSection";
 
 export function ArtworkDetailClient({
 	data,
-	exhibitionId,
 }: {
 	data: ArtworkDetail;
-	exhibitionId: string;
 }) {
 	console.log("relatedBts:", data.relatedBts);
 	console.log("alphabeticalArtworks:", data.alphabeticalArtworks);
@@ -73,7 +71,7 @@ export function ArtworkDetailClient({
 					sectionRefs.artist.current = el;
 				}}
 			>
-				<ArtistSection authors={data.participants} slug={exhibitionId} />
+				<ArtistSection authors={data.participants}/>
 			</section>
 			<Divider />
 			{/* BTS 섹션 - 선택값 */}
@@ -83,7 +81,7 @@ export function ArtworkDetailClient({
 						sectionRefs.behind.current = el;
 					}}
 				>
-					<BtsSection bts={data.relatedBts} exhibitionId={exhibitionId} />
+					<BtsSection bts={data.relatedBts}/>
 				</section>
 			)}
 			{/* 동일한 카테고리 작품 섹션 */}

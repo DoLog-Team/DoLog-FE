@@ -4,6 +4,8 @@ import { ThemeProvider } from "@/providers/theme-providers";
 import { getExhibitionCustom } from "./_api/getExhibitionCustom";
 import { resolveExhibitionId } from "./_api/resolveExhibitionId";
 import { DEFAULT_EXHIBITION_CONFIG } from "./exhibition-config";
+import { getExhibitions } from "@/lib/api/exhibition";
+import { ExhibitionProvider } from "./_context/ExhibitionContext";
 
 const MOCK_FOOTER = {
 	title: "흙에서 시작되는 모든 이야기",
@@ -26,6 +28,13 @@ export default async function ExhibitionLayout({
 	const custom = uuid ? await getExhibitionCustom(uuid) : null;
 	console.log("[exhibitionCustom]", JSON.stringify(custom, null, 2));
 
+	// TODO : /{slug} 또는 uuid 단건 조회 api get 가능할지 물어보기
+	// 예상 : const exhibition = await getExhibitionBySlug(exhibitionId);
+	const exhibitions = await getExhibitions();
+	const exhibition = 
+		exhibitions.find( e=> e.slug === exhibitionId );
+		exhibitions.find( e=> e.id === uuid);
+
 	const config = {
 		...DEFAULT_EXHIBITION_CONFIG,
 		...(custom && {
@@ -47,31 +56,35 @@ export default async function ExhibitionLayout({
 	} as React.CSSProperties;
 
 	return (
-		<ThemeProvider
-			attribute="class"
-			forcedTheme={config.themeMode}
-			enableColorScheme={true}
-			colors={{
-				btnBg: config.btnBg,
-				btnText: config.btnText,
-				ctaBg: config.ctaBg,
-				ctaText: config.ctaText,
-			}}
+		<ExhibitionProvider
+			slug = {exhibition?.slug ?? exhibitionId}
+			logoImg = {exhibition?.logoImg ?? ""}
 		>
-			<div className="bg-normal text-strong min-h-dvh flex flex-col" style={colorVars}>
-				<div className="min-h-dvh flex flex-col w-full max-w-135 mx-auto">{children}</div>
+			<ThemeProvider
+				attribute="class"
+				forcedTheme={config.themeMode}
+				enableColorScheme={true}
+				colors={{
+					btnBg: config.btnBg,
+					btnText: config.btnText,
+					ctaBg: config.ctaBg,
+					ctaText: config.ctaText,
+				}}
+			>
+				<div className="bg-normal text-strong min-h-dvh flex flex-col" style={colorVars}>
+					<div className="min-h-dvh flex flex-col w-full max-w-135 mx-auto">{children}</div>
 
-				{/* <SchoolFooter logoSrc={config.footerInfo.logoSrc} {...config.footerInfo} /> */}
-				<SchoolFooter
-					logoSrc={config.footerInfo.logoSrc}
-					title={footer.title}
-					department={footer.department}
-					address={footer.address ?? ""}
-					addressDetail={footer.address_detail ?? ""}
-					email={footer.email}
-					copyright={footer.copyright ?? ""}
-				/>
-			</div>
-		</ThemeProvider>
+					<SchoolFooter
+						logoSrc={config.footerInfo.logoSrc}
+						title={footer.title}
+						department={footer.department}
+						address={footer.address ?? ""}
+						addressDetail={footer.address_detail ?? ""}
+						email={footer.email}
+						copyright={footer.copyright ?? ""}
+					/>
+				</div>
+			</ThemeProvider>
+		</ExhibitionProvider>
 	);
 }

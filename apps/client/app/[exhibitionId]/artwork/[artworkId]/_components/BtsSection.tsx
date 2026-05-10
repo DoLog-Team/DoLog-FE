@@ -1,13 +1,15 @@
 import { BTSCardGrid, type BTSCardGridProps } from "@/components/common/Card/BTSCard/BTSCardGrid";
 import { Title } from "@/components/common/Title/Title";
 import type { ArtworkBts } from "@/lib/api/artwork";
+import { useExhibition } from "@/app/[exhibitionId]/_context/ExhibitionContext";
 
 interface BtsSectionProps {
 	bts: ArtworkBts[];
-	exhibitionId: string;
 }
 
-export const BtsSection = ({ bts, exhibitionId }: BtsSectionProps) => {
+export const BtsSection = ({ bts }: BtsSectionProps) => {
+	const {slug} = useExhibition();
+
 	return (
 		<section className="flex flex-col px-4 pb-6">
 			<Title title="Behind The Scene" />
@@ -19,7 +21,7 @@ export const BtsSection = ({ bts, exhibitionId }: BtsSectionProps) => {
 					author: "", // TODO: API에 author 없음 — 백엔드 확인 필요
 					imageUrl: b.mainImg,
 				}))}
-				getHref={(item) => `/${exhibitionId}/bts/${item.id}`}
+				getHref={(item) => `/${slug}/bts/${item.id}`}
 			/>
 		</section>
 	);
