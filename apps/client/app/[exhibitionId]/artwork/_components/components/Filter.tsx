@@ -14,7 +14,7 @@ export default function Filter({ categories, selected, onSelect }: FilterProps) 
 				<Chip
 					key={category}
 					label={category}
-					type={category === "전체" ? "custom" : "assistive"}
+					type="custom"
 					selected={selected === category}
 					onClick={() => onSelect(category)}
 				/>

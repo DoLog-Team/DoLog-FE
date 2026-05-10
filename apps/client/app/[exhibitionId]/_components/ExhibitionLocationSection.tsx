@@ -10,8 +10,11 @@ export function ExhibitionLocationSection({ location }: ExhibitionLocationProps)
 	return (
 		<section className="flex flex-col px-4 pb-6">
 			<Title title="장소" />
-			{/* WIP : 네이버지도 api 호출 오류 해결 중 */}
-			<LocationMap address={location.address} />
+			<LocationMap 
+				address={location.address}
+				lat={location.latitude}
+				lng={location.longitude}
+			/>
 			<p className="text-body1">{location.address}</p>
 			{location.detail_location && <p className="text-body1">{location.detail_location}</p>}
 		</section>
