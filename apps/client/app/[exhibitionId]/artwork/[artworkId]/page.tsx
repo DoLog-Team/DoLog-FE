@@ -28,5 +28,5 @@ export default async function ArtworkDetailPage({ params }: ArtworkDetailPagePro
 		? ((await getArtworkDetail(uuid, artworkId)) ?? MOCK_ARTWORK_DETAIL)
 		: MOCK_ARTWORK_DETAIL;
 
-	return <ArtworkDetailClient data={data}/>;
+	return <ArtworkDetailClient data={data} />;
 }

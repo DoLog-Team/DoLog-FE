@@ -1,11 +1,11 @@
 import SchoolFooter from "@/components/common/Footer/SchoolFooter";
+import { getExhibitions } from "@/lib/api/exhibition";
 import { getExhibitionFooter } from "@/lib/api/layout";
 import { ThemeProvider } from "@/providers/theme-providers";
 import { getExhibitionCustom } from "./_api/getExhibitionCustom";
 import { resolveExhibitionId } from "./_api/resolveExhibitionId";
-import { DEFAULT_EXHIBITION_CONFIG } from "./exhibition-config";
-import { getExhibitions } from "@/lib/api/exhibition";
 import { ExhibitionProvider } from "./_context/ExhibitionContext";
+import { DEFAULT_EXHIBITION_CONFIG } from "./exhibition-config";
 
 const MOCK_FOOTER = {
 	title: "흙에서 시작되는 모든 이야기",
@@ -31,9 +31,8 @@ export default async function ExhibitionLayout({
 	// TODO : /{slug} 또는 uuid 단건 조회 api get 가능할지 물어보기
 	// 예상 : const exhibition = await getExhibitionBySlug(exhibitionId);
 	const exhibitions = await getExhibitions();
-	const exhibition = 
-		exhibitions.find( e=> e.slug === exhibitionId );
-		exhibitions.find( e=> e.id === uuid);
+	const exhibition = exhibitions.find((e) => e.slug === exhibitionId);
+	exhibitions.find((e) => e.id === uuid);
 
 	const config = {
 		...DEFAULT_EXHIBITION_CONFIG,
@@ -56,10 +55,7 @@ export default async function ExhibitionLayout({
 	} as React.CSSProperties;
 
 	return (
-		<ExhibitionProvider
-			slug = {exhibition?.slug ?? exhibitionId}
-			logoImg = {exhibition?.logoImg ?? ""}
-		>
+		<ExhibitionProvider slug={exhibition?.slug ?? exhibitionId} logoImg={exhibition?.logoImg ?? ""}>
 			<ThemeProvider
 				attribute="class"
 				forcedTheme={config.themeMode}

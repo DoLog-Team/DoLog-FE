@@ -16,11 +16,7 @@ import { PostNavigationSection } from "../_components/PostNavigationSection";
 import { RelatedSection } from "../_components/RelatedSection";
 import { YoutubeSection } from "../_components/YoutubeSection";
 
-export function ArtworkDetailClient({
-	data,
-}: {
-	data: ArtworkDetail;
-}) {
+export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 	console.log("relatedBts:", data.relatedBts);
 	console.log("alphabeticalArtworks:", data.alphabeticalArtworks);
 	console.log("sameCategoryArtworks:", data.sameCategoryArtworks);
@@ -71,7 +67,7 @@ export function ArtworkDetailClient({
 					sectionRefs.artist.current = el;
 				}}
 			>
-				<ArtistSection authors={data.participants}/>
+				<ArtistSection authors={data.participants} />
 			</section>
 			<Divider />
 			{/* BTS 섹션 - 선택값 */}
@@ -81,7 +77,7 @@ export function ArtworkDetailClient({
 						sectionRefs.behind.current = el;
 					}}
 				>
-					<BtsSection bts={data.relatedBts}/>
+					<BtsSection bts={data.relatedBts} />
 				</section>
 			)}
 			{/* 동일한 카테고리 작품 섹션 */}
