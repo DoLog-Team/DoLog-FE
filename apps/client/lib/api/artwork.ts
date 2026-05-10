@@ -124,7 +124,7 @@ export interface ArtworkBts {
 	id: string;
 	title: string;
 	mainImg: string;
-	//author: string;
+	author: string;
 }
 
 // 관련 작품 (sameCategoryArtworks, alphabeticalArtworks 공통)
@@ -133,7 +133,7 @@ export interface RelatedArtwork {
 	title: string;
 	category: string;
 	artistName: string;
-	imageUrl?: string | null; //TODO : img 안 내려오는지
+	mainImage: string;
 }
 
 // 작품 상세 전체 응답

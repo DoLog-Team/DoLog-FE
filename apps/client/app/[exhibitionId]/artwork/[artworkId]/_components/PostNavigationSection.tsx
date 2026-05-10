@@ -17,7 +17,7 @@ export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigati
 					<div className="flex items-center justify-between py-2.5">
 						<div className="flex items-center gap-2">
 							<Image
-								src={prevArtwork.imageUrl || ""} // TODO : 엠티뷰 추가
+								src={prevArtwork.mainImage}
 								alt={prevArtwork.title}
 								width={64}
 								height={64}
@@ -38,7 +38,7 @@ export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigati
 					<div className="flex items-center justify-between py-2.5">
 						<div className="flex items-center gap-2">
 							<Image
-								src={nextArtwork.imageUrl || ""} // TODO : 엠티뷰 추가
+								src={nextArtwork.mainImage}
 								alt={nextArtwork.title}
 								width={64}
 								height={64}

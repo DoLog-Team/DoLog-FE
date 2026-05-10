@@ -42,9 +42,9 @@ export const MOCK_ARTWORK_DETAIL: ArtworkDetail = {
 		},
 	],
 	relatedBts: [
-		{ id: "1", title: "내 졸업 전시 이야기", mainImg: "/images/artwork/bts1.png" },
-		{ id: "2", title: "푸른 색의 미학", mainImg: "/images/artwork/bts2.png" },
-		{ id: "3", title: "내가 흙을 사랑하는 이유", mainImg: "/images/artwork/bts3.png" },
+		{ id: "1", title: "내 졸업 전시 이야기", author: "오찬주", mainImg: "/images/artwork/bts1.png" },
+		{ id: "2", title: "푸른 색의 미학", author: "이보연", mainImg: "/images/artwork/bts2.png" },
+		{ id: "3", title: "내가 흙을 사랑하는 이유", author: "하연희", mainImg: "/images/artwork/bts3.png" },
 	],
 	sameCategoryArtworks: [
 		{
@@ -52,14 +52,14 @@ export const MOCK_ARTWORK_DETAIL: ArtworkDetail = {
 			title: "깨진 다음의 모양",
 			category: "생활 도자기",
 			artistName: "강슬기",
-			imageUrl: "/images/cups.png",
+			mainImage: "/images/cups.png",
 		},
 		{
 			id: "5",
 			title: "흐린 날의 화병",
 			category: "생활 도자기",
 			artistName: "손승완",
-			imageUrl: "/images/plate.png",
+			mainImage: "/images/plate.png",
 		},
 	],
 	alphabeticalArtworks: [
@@ -68,14 +68,14 @@ export const MOCK_ARTWORK_DETAIL: ArtworkDetail = {
 			title: "깨진 다음의 모양",
 			category: "생활 도자기",
 			artistName: "강슬기",
-			imageUrl: "/images/artwork/artwork.png",
+			mainImage: "/images/artwork/artwork.png",
 		},
 		{
 			id: "5",
 			title: "흐린 날의 화병",
 			category: "생활 도자기",
 			artistName: "손승완",
-			imageUrl: "/images/artwork/artwork.png",
+			mainImage: "/images/artwork/artwork.png",
 		},
 	],
 };
