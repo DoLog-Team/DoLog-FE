@@ -17,82 +17,97 @@ import { RelatedSection } from "../_components/RelatedSection";
 import { YoutubeSection } from "../_components/YoutubeSection";
 
 export function ArtworkDetailClient({
-	data,
-	exhibitionId,
+  data,
+  exhibitionId,
 }: {
-	data: ArtworkDetail;
-	exhibitionId: string;
+  data: ArtworkDetail;
+  exhibitionId: string;
 }) {
-	console.log("relatedBts:", data.relatedBts);
-	console.log("alphabeticalArtworks:", data.alphabeticalArtworks);
-	console.log("sameCategoryArtworks:", data.sameCategoryArtworks);
-	console.log("youtubeUrl:", data.youtubeUrl);
+  console.log("relatedBts:", data.relatedBts);
+  console.log("alphabeticalArtworks:", data.alphabeticalArtworks);
+  console.log("sameCategoryArtworks:", data.sameCategoryArtworks);
+  console.log("youtubeUrl:", data.youtubeUrl);
 
-	// ScrollTabBar 탭 목록 [ 작품 소개, 작가 소개, 비하인드(선택) ]
-	const TABS = useMemo(() => {
-		const base = [
-			{ id: "detail", label: "작품 소개" },
-			{ id: "artist", label: "작가 소개" },
-		];
-		if (data.relatedBts?.length) base.push({ id: "behind", label: "비하인드" });
-		return base;
-	}, [data.relatedBts]);
-	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(TABS.map((t) => t.id));
+  // ScrollTabBar 탭 목록 [ 작품 소개, 작가 소개, 비하인드(선택) ]
+  const TABS = useMemo(() => {
+    const base = [
+      { id: "detail", label: "작품 소개" },
+      { id: "artist", label: "작가 소개" },
+    ];
+    if (data.relatedBts?.length) base.push({ id: "behind", label: "비하인드" });
+    return base;
+  }, [data.relatedBts]);
+  const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(
+    TABS.map((t) => t.id),
+  );
 
-	// 둘러보기 목록(prev,next 정의)
-	const prevArtwork = data.alphabeticalArtworks[0];
-	const nextArtwork = data.alphabeticalArtworks[1];
+  // 둘러보기 목록(prev,next 정의)
+  const prevArtwork = data.alphabeticalArtworks[0];
+  const nextArtwork = data.alphabeticalArtworks[1];
 
-	return (
-		<div className="flex flex-col pb-12">
-			<Header variant="back" />
+  return (
+    <div className="flex flex-col">
+      <Header variant="back" />
 
-			{/* 대표 이미지 */}
-			<div className="relative aspect-video w-full">
-				<Image src={data.mainImage} alt={data.title} fill className="object-cover" priority />
-			</div>
-			{/* 작품 제목 및 정보 섹션 */}
-			<InfoSection data={data} />
-			{/* 작품 위치 섹션 */}
-			<LocationSection locationImageUrl={data.locationMap} />
-			{/* 상세 소개 섹션 */}
-			<section
-				ref={(el) => {
-					sectionRefs.detail.current = el;
-				}}
-			>
-				<DescriptionSection content={data.description} />
-			</section>
-			{/*  유튜브 섹션  */}
-			<YoutubeSection youtubeUrl={data.youtubeUrl} />
-			{/* 상세 이미지 섹션*/}
-			<PhotoSection data={data} />
-			{/* 참여자 섹션 */}
-			<section
-				ref={(el) => {
-					sectionRefs.artist.current = el;
-				}}
-			>
-				<ArtistSection authors={data.participants} slug={exhibitionId} />
-			</section>
-			<Divider />
-			{/* BTS 섹션 - 선택값 */}
-			{data.relatedBts && data.relatedBts.length > 0 && (
-				<section
-					ref={(el) => {
-						sectionRefs.behind.current = el;
-					}}
-				>
-					<BtsSection bts={data.relatedBts} exhibitionId={exhibitionId} />
-				</section>
-			)}
-			{/* 동일한 카테고리 작품 섹션 */}
-			<RelatedSection artworks={data.sameCategoryArtworks} />
-			{/* 둘러보기 섹션 */}
-			<PostNavigationSection prevArtwork={prevArtwork} nextArtwork={nextArtwork} />
+      {/* 대표 이미지 */}
+      <div className="relative aspect-video w-full">
+        <Image
+          src={data.mainImage}
+          alt={data.title}
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
+      {/* 작품 제목 및 정보 섹션 */}
+      <InfoSection data={data} />
+      {/* 작품 위치 섹션 */}
+      <LocationSection locationImageUrl={data.locationMap} />
+      {/* 상세 소개 섹션 */}
+      <section
+        ref={(el) => {
+          sectionRefs.detail.current = el;
+        }}
+      >
+        <DescriptionSection content={data.description} />
+      </section>
+      {/*  유튜브 섹션  */}
+      <YoutubeSection youtubeUrl={data.youtubeUrl} />
+      {/* 상세 이미지 섹션*/}
+      <PhotoSection data={data} />
+      {/* 참여자 섹션 */}
+      <section
+        ref={(el) => {
+          sectionRefs.artist.current = el;
+        }}
+      >
+        <ArtistSection authors={data.participants} slug={exhibitionId} />
+      </section>
+      <Divider />
+      {/* BTS 섹션 - 선택값 */}
+      {data.relatedBts && data.relatedBts.length > 0 && (
+        <section
+          ref={(el) => {
+            sectionRefs.behind.current = el;
+          }}
+        >
+          <BtsSection bts={data.relatedBts} exhibitionId={exhibitionId} />
+        </section>
+      )}
+      {/* 동일한 카테고리 작품 섹션 */}
+      <RelatedSection artworks={data.sameCategoryArtworks} />
+      {/* 둘러보기 섹션 */}
+      <PostNavigationSection
+        prevArtwork={prevArtwork}
+        nextArtwork={nextArtwork}
+      />
 
-			{/* 하단 스크롤탭바 */}
-			<ScrollTabBar tabs={TABS} activeTab={activeTab} onTabClick={handleTabClick} />
-		</div>
-	);
+      {/* 하단 스크롤탭바 */}
+      <ScrollTabBar
+        tabs={TABS}
+        activeTab={activeTab}
+        onTabClick={handleTabClick}
+      />
+    </div>
+  );
 }
