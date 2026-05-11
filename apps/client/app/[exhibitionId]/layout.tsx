@@ -4,8 +4,8 @@ import { getExhibitionFooter } from "@/lib/api/layout";
 import { ThemeProvider } from "@/providers/theme-providers";
 import { getExhibitionCustom } from "./_api/getExhibitionCustom";
 import { resolveExhibitionId } from "./_api/resolveExhibitionId";
-import { ExhibitionProvider } from "./_context/ExhibitionContext";
 import { TabBarSpacer } from "./_components/TabBarSpacer";
+import { ExhibitionProvider } from "./_context/ExhibitionContext";
 import { DEFAULT_EXHIBITION_CONFIG } from "./exhibition-config";
 
 const MOCK_FOOTER = {
@@ -71,19 +71,19 @@ export default async function ExhibitionLayout({
 				<div className="bg-normal text-strong min-h-dvh flex flex-col" style={colorVars}>
 					<div className="min-h-dvh flex flex-col w-full max-w-135 mx-auto">{children}</div>
 
-				{/* <SchoolFooter logoSrc={config.footerInfo.logoSrc} {...config.footerInfo} /> */}
-				<SchoolFooter
-					logoSrc={config.footerInfo.logoSrc}
-					title={footer.title}
-					department={footer.department}
-					address={footer.address ?? ""}
-					addressDetail={footer.address_detail ?? ""}
-					email={footer.email}
-					copyright={footer.copyright ?? ""}
-				/>
-				<TabBarSpacer />
-			</div>
-		</ThemeProvider>
-	</ExhibitionProvider>
+					{/* <SchoolFooter logoSrc={config.footerInfo.logoSrc} {...config.footerInfo} /> */}
+					<SchoolFooter
+						logoSrc={config.footerInfo.logoSrc}
+						title={footer.title}
+						department={footer.department}
+						address={footer.address ?? ""}
+						addressDetail={footer.address_detail ?? ""}
+						email={footer.email}
+						copyright={footer.copyright ?? ""}
+					/>
+					<TabBarSpacer />
+				</div>
+			</ThemeProvider>
+		</ExhibitionProvider>
 	);
 }
