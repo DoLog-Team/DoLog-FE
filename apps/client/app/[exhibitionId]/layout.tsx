@@ -84,5 +84,6 @@ export default async function ExhibitionLayout({
 				<TabBarSpacer />
 			</div>
 		</ThemeProvider>
+	</ExhibitionProvider>
 	);
 }
