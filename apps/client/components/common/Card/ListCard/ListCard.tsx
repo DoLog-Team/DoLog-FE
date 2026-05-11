@@ -13,15 +13,21 @@ export const ListCard = ({
 	const content = (
 		<article className={s.wrapper}>
 			<div className={s.imageWrapper}>
-				<Image
-					src={imageUrl ?? ""}
-					alt={`${title} - ${author}`}
-					width={0}
-					height={0}
-					sizes="100vw"
-					className={s.image}
-					loading="lazy"
-				/>
+				{imageUrl ? (
+					<Image
+						src={imageUrl}
+						alt={`${title} - ${author}`}
+						width={0}
+						height={0}
+						sizes="100vw"
+						className={s.image}
+						loading="lazy"
+					/>
+				) : (
+					<div className="w-full h-full bg-fg-lighter flex items-center justify-center">
+						<Image src="/icons/empty-image.svg" alt="이미지 없음" width={32} height={32} />
+					</div>
+				)}
 			</div>
 			<div className={s.info}>
 				<h3 className={s.title}>{title}</h3>

@@ -3,6 +3,7 @@ import { getExhibitionFooter } from "@/lib/api/layout";
 import { ThemeProvider } from "@/providers/theme-providers";
 import { getExhibitionCustom } from "./_api/getExhibitionCustom";
 import { resolveExhibitionId } from "./_api/resolveExhibitionId";
+import { TabBarSpacer } from "./_components/TabBarSpacer";
 import { DEFAULT_EXHIBITION_CONFIG } from "./exhibition-config";
 
 const MOCK_FOOTER = {
@@ -71,6 +72,7 @@ export default async function ExhibitionLayout({
 					email={footer.email}
 					copyright={footer.copyright ?? ""}
 				/>
+				<TabBarSpacer />
 			</div>
 		</ThemeProvider>
 	);

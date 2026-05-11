@@ -84,7 +84,7 @@ export function ArtworkListSection({
 			</div>
 
 			{/* sticky 영역 */}
-			<div className="sticky top-11 bg-white z-10 px-4 pb-2">
+			<div className="sticky top-11 bg-normal z-10 px-4 pb-2">
 				<SearchBar
 					placeholder="작품명, 작가명을 검색하세요"
 					className="mb-2.5"
