@@ -34,7 +34,8 @@ export default function SchoolFooter({
 				</div>
 				<div className="h-3 w-full" />
 				<p className="text-lightest text-body3-bold">
-					{copyright}
+					{copyright} <br />
+					All Rights reserved.
 				</p>
 				<div className="h-7 w-full" />
 				<Image src={logoSrc || "/images/logo.svg"} alt={`${title} Logo`} width={60} height={18} />
