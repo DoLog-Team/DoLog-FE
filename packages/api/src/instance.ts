@@ -17,12 +17,12 @@ export function createApiClient(baseURL: string) {
 		});
 
 		if (!res.ok) {
+			let message = `HTTP ${res.status}`;
 			try {
 				const json = await res.json();
-				throw new Error(`HTTP ${res.status}: ${json.message}`);
-			} catch {
-				throw new Error(`HTTP ${res.status}`);
-			}
+				message = `HTTP ${res.status}: ${json.message}`;
+			} catch {}
+			throw new Error(message);
 		}
 
 		const json: ApiResponse<T> = await res.json();

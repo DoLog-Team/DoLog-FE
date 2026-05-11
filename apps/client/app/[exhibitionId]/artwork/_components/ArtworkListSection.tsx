@@ -12,9 +12,15 @@ import { AlbumIcon } from "./components/AlbumIcon";
 import Filter from "./components/Filter";
 import { ListIcon } from "./components/ListIcon";
 
+interface FilteredZone {
+	zoneName: string;
+	zoneOrderId: number;
+	artworks: ArtworkListItem[];
+}
+
 interface ArtworkListSectionProps {
 	sectionRefs: Record<string, React.RefObject<HTMLElement | null>>;
-	grouped: Record<string, ArtworkListItem[]>;
+	zones: FilteredZone[];
 	searchQuery: string;
 	onSearchChange: (value: string) => void;
 	/* useArtworkFilter 중복 호출을 제거하고 props로 받고자 함 */
@@ -28,11 +34,10 @@ interface ArtworkListSectionProps {
 // Card 컴포넌트들이 현재 CardItem 타입을 받고 있고 여러 곳에서 쓰이고 있어 임시로 변환했습니다.
 // 추후 백엔드 연동 시 Card 컴포넌트 타입을 Artwork 기준으로 수정하면 이 변환 로직은 제거할 예정입니다!
 const toCardItem = (artwork: ArtworkListItem): CardItem => ({
-	id: artwork.artworkId,
-	imageUrl: artwork.mainImage,
+	id: artwork.id,
+	imageUrl: artwork.imageUrl,
 	title: artwork.title,
-	category: artwork.category,
-	author: artwork.artists.map?.((a) => a.name).join(", ") || "",
+	author: artwork.artistName || "",
 });
 
 // 보기 방식 토글 버튼
@@ -60,7 +65,7 @@ const ViewToggle = ({
 
 export function ArtworkListSection({
 	sectionRefs,
-	grouped,
+	zones,
 	searchQuery,
 	onSearchChange,
 	categories,
@@ -69,10 +74,6 @@ export function ArtworkListSection({
 }: ArtworkListSectionProps) {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 	const { ref: titleRef, isVisible: isTitleVisible } = useIntersectionObserver();
-
-	//const { selected, setSelected, categories } = useArtworkFilter();
-
-	const zones = Object.keys(grouped);
 	const isMultiZone = zones.length > 1;
 
 	return (
@@ -104,19 +105,20 @@ export function ArtworkListSection({
 			렌더링 합니다 */}
 			<div className="flex flex-col px-4 gap-6">
 				{zones.map((zone) => {
-					const items = grouped[zone].map(toCardItem);
+					const items = zone.artworks.map(toCardItem);
 					return (
 						<div
-							key={zone}
+							key={zone.zoneName}
 							className={!isMultiZone ? "pt-4" : ""}
 							ref={(el) => {
-								if (sectionRefs[zone]) {
-									(sectionRefs[zone] as unknown as React.RefObject<HTMLElement | null>).current =
-										el;
+								if (sectionRefs[zone.zoneName]) {
+									(
+										sectionRefs[zone.zoneName] as unknown as React.RefObject<HTMLElement | null>
+									).current = el;
 								}
 							}}
 						>
-							{isMultiZone && <Title title={zone} />}
+							{isMultiZone && <Title title={zone.zoneName} />}
 							{items.length === 0 ? (
 								<EmptyState
 									message={"선택한 카테고리에 해당되는\n작품이 없어요"}

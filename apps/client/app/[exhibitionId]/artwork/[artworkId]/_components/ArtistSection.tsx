@@ -1,13 +1,15 @@
+import { useExhibition } from "@/app/[exhibitionId]/_context/ExhibitionContext";
 import { Title } from "@/components/common/Title/Title";
 import type { ArtworkParticipant } from "@/lib/api/artwork";
 import { ArtistCard } from "./components/ArtistCard";
 
 interface ArtistSectionProps {
 	authors: ArtworkParticipant[];
-	slug: string;
 }
 
-export function ArtistSection({ authors, slug }: ArtistSectionProps) {
+export function ArtistSection({ authors }: ArtistSectionProps) {
+	const { slug } = useExhibition();
+
 	return (
 		<section className="flex flex-col px-4 pb-6 gap-4">
 			<Title title="참여자" />

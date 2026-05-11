@@ -14,6 +14,7 @@ export interface ExhibitionItem {
 	univName: string;
 	deptName: string;
 	imageUrl: string | null;
+	logoImg: string;
 	startDate: string | null;
 	endDate: string | null;
 	address: string | null;
@@ -110,7 +111,8 @@ export async function getExhibitionDetail(exhibitionId: string): Promise<Exhibit
 export async function getExhibitionHost(exhibitionId: string): Promise<ExhibitionHost | null> {
 	try {
 		return await apiClient<ExhibitionHost>(`/exhibitions/${exhibitionId}/host`);
-	} catch {
+	} catch (error) {
+		console.error("getExhibitionHost 에러:", error);
 		return null;
 	}
 }
@@ -118,7 +120,8 @@ export async function getExhibitionHost(exhibitionId: string): Promise<Exhibitio
 export async function getHostSns(exhibitionId: string): Promise<HostSns[]> {
 	try {
 		return await apiClient<HostSns[]>(`/exhibitions/${exhibitionId}/host/sns`);
-	} catch {
+	} catch (error) {
+		console.error("getHostSNS 에러:", error);
 		return [];
 	}
 }

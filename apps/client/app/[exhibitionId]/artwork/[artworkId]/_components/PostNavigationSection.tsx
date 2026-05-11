@@ -16,6 +16,15 @@ export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigati
 				<Link href={`../artwork/${prevArtwork.id}`}>
 					<div className="flex items-center justify-between py-2.5">
 						<div className="flex items-center gap-2">
+<<<<<<< refactor/#71/api
+							<Image
+								src={prevArtwork.mainImage}
+								alt={prevArtwork.title}
+								width={64}
+								height={64}
+								className="object-cover"
+							/>
+=======
 							{prevArtwork.imageUrl ? (
 								<Image
 									src={prevArtwork.imageUrl}
@@ -28,6 +37,7 @@ export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigati
 								// TODO : 엠티뷰 추가
 								<div className="w-16 h-16 bg-gray-100" />
 							)}
+>>>>>>> dev
 							<div className="flex flex-col">
 								<span className="text-body1-bold">{prevArtwork.title}</span>
 								<span className="text-body2 text-lighter">{prevArtwork.artistName}</span>
@@ -42,6 +52,15 @@ export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigati
 				<Link href={`../artwork/${nextArtwork.id}`}>
 					<div className="flex items-center justify-between py-2.5">
 						<div className="flex items-center gap-2">
+<<<<<<< refactor/#71/api
+							<Image
+								src={nextArtwork.mainImage}
+								alt={nextArtwork.title}
+								width={64}
+								height={64}
+								className="object-cover"
+							/>
+=======
 							{nextArtwork.imageUrl ? (
 								<Image
 									src={nextArtwork.imageUrl}
@@ -53,6 +72,7 @@ export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigati
 							) : (
 								<div className="w-16 h-16 bg-gray-100" />
 							)}
+>>>>>>> dev
 							<div className="flex flex-col">
 								<span className="text-body1-bold">{nextArtwork.title}</span>
 								<span className="text-body2 text-lighter">{nextArtwork.artistName}</span>

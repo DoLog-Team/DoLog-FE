@@ -16,13 +16,7 @@ import { PostNavigationSection } from "../_components/PostNavigationSection";
 import { RelatedSection } from "../_components/RelatedSection";
 import { YoutubeSection } from "../_components/YoutubeSection";
 
-export function ArtworkDetailClient({
-	data,
-	exhibitionId,
-}: {
-	data: ArtworkDetail;
-	exhibitionId: string;
-}) {
+export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 	console.log("relatedBts:", data.relatedBts);
 	console.log("alphabeticalArtworks:", data.alphabeticalArtworks);
 	console.log("sameCategoryArtworks:", data.sameCategoryArtworks);
@@ -40,8 +34,10 @@ export function ArtworkDetailClient({
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(TABS.map((t) => t.id));
 
 	// 둘러보기 목록(prev,next 정의)
-	const prevArtwork = data.alphabeticalArtworks[0];
-	const nextArtwork = data.alphabeticalArtworks[1];
+	const alphabetical = data.alphabeticalArtworks;
+	const currentTitle = data.title;
+	const prevArtwork = alphabetical.find((a) => a.title < currentTitle);
+	const nextArtwork = alphabetical.find((a) => a.title > currentTitle);
 
 	return (
 		<div className="flex flex-col">
@@ -73,7 +69,7 @@ export function ArtworkDetailClient({
 					sectionRefs.artist.current = el;
 				}}
 			>
-				<ArtistSection authors={data.participants} slug={exhibitionId} />
+				<ArtistSection authors={data.participants} />
 			</section>
 			<Divider />
 			{/* BTS 섹션 - 선택값 */}
@@ -83,7 +79,7 @@ export function ArtworkDetailClient({
 						sectionRefs.behind.current = el;
 					}}
 				>
-					<BtsSection bts={data.relatedBts} exhibitionId={exhibitionId} />
+					<BtsSection bts={data.relatedBts} />
 				</section>
 			)}
 			{/* 동일한 카테고리 작품 섹션 */}

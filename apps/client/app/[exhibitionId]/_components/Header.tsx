@@ -3,10 +3,10 @@
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
+import { useExhibition } from "../_context/ExhibitionContext";
 import { Sidebar } from "./Sidebar";
 
 interface HeaderProps {
-	logoUrl?: string;
 	variant?: "logo" | "back";
 	title?: string;
 	onBackClick?: () => void;
@@ -15,13 +15,10 @@ interface HeaderProps {
 
 export const Header = ({ variant = "logo", title }: HeaderProps) => {
 	const router = useRouter();
-	const params = useParams();
+	const { slug, logoImg } = useExhibition();
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-	const exhibitionId = Array.isArray(params.exhibitionId)
-		? params.exhibitionId[0]
-		: params.exhibitionId;
-	const baseUrl = `/${exhibitionId}`;
+	const baseUrl = `/${slug}`;
 
 	return (
 		<>
@@ -40,7 +37,20 @@ export const Header = ({ variant = "logo", title }: HeaderProps) => {
 					</div>
 				) : (
 					<button type="button" onClick={() => router.push(baseUrl)} className="cursor-pointer">
-						<Image src="/images/exhibitionLogo.svg" alt="DoLog" width={34} height={24} priority />
+						{logoImg ? (
+							<Image
+								src={logoImg}
+								alt="전시 로고"
+								width={0}
+								height={0}
+								sizes="100vw"
+								className="h-16 w-auto"
+								priority
+							/>
+						) : (
+							<Image src="/images/exhibitionLogo.svg" alt="DoLog" width={34} height={24} priority />
+						)}
+						{/* TODO : 기본 로고 fallback 제거 예정 */}
 					</button>
 				)}
 				<button
