@@ -44,7 +44,7 @@ export const Header = ({ variant = "logo", title }: HeaderProps) => {
 								width={0}
 								height={0}
 								sizes="100vw"
-								className="h-5 w-auto"
+								className="h-16 w-auto"
 								priority
 							/>
 						) : (
