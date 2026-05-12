@@ -63,9 +63,10 @@ export async function resolveExhibitionSlug(slug: string): Promise<{ uuid: strin
 
 export interface ExhibitionLocation {
 	address: string;
-	detail_location: string | null;
 	latitude: string;
 	longitude: string;
+	detail_location: string | null;
+	location_description: string | null; // 찾아오는 길 설명
 }
 
 export interface ExhibitionHost {

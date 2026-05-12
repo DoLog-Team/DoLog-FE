@@ -9,7 +9,7 @@ export async function getExhibitionMeta(exhibitionId: string): Promise<Exhibitio
 	if (!process.env.NEXT_PUBLIC_API_URL) return null;
 
 	try {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/exhibition/${exhibitionId}/meta`, {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/exhibitions/${exhibitionId}/meta`, {
 			next: { revalidate: 3600 },
 		});
 

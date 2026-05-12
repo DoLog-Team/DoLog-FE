@@ -7,10 +7,6 @@ interface ExhibitionDetailProps {
 }
 
 export function ExhibitionDetailSection({ exhibition }: ExhibitionDetailProps) {
-	// mockdata상 description에 \n이 있으면 단락을 분리하기 위함
-	// TODO : 백에서 오는 실제 데이터 개행 방식에 따라 수정 예정
-	const paragraphs = exhibition.description.split("\n\n").filter(Boolean);
-
 	const rows = [
 		{
 			label: "전시 일정",
@@ -32,13 +28,7 @@ export function ExhibitionDetailSection({ exhibition }: ExhibitionDetailProps) {
 			<div className="flex flex-col gap-2 mb-4">
 				<RowList rows={rows} />
 			</div>
-			<div className="flex flex-col gap-4">
-				{paragraphs.map((paragraph, index) => (
-					<p key={index} className="text-body1">
-						{paragraph}
-					</p>
-				))}
-			</div>
+			<p className="text-body1 whitespace-pre-line">{exhibition.description}</p>
 		</section>
 	);
 }

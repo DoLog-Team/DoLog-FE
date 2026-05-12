@@ -72,10 +72,10 @@
   --color-icon-lighter: var(--mono-200);
   --color-icon-inverse: var(--mono-white);
 
-  --btn-bg: #EEF7F7;
-  --btn-text: #50A2A6;
-  --cta-bg: #33B4BA;
-  --cta-text: #FFFFFF;
+  --btn-bg: #eef7f7;
+  --btn-text: #50a2a6;
+  --cta-bg: #33b4ba;
+  --cta-text: #ffffff;
 }
 
 .dark {
@@ -97,7 +97,7 @@
   --color-stroke-inverse: var(--mono-050);
 
   --color-icon-strong: var(--mono-white);
-  --color-icon-light: var(--mono-600);
+  --color-icon-light: var(--mono-500);
   --color-icon-lighter: var(--mono-800);
   --color-icon-inverse: var(--mono-black);
 

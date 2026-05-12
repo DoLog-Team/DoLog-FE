@@ -30,7 +30,11 @@ export function ListIcon({ active, onClick, className }: IconProps) {
 				/>
 			</mask>
 			<g mask="url(#mask0_1854_14693)">
-				<rect width="24" height="24" fill={active ? "#909398" : "#D2D3D5"} />
+				<rect
+					width="24"
+					height="24"
+					fill={active ? "var(--color-icon-light)" : "var(--color-icon-lighter)"}
+				/>
 			</g>
 		</svg>
 	);

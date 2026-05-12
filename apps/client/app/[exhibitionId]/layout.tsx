@@ -12,7 +12,7 @@ const MOCK_FOOTER = {
 	title: "흙에서 시작되는 모든 이야기",
 	department: "한국대학교 예술대학 도예과",
 	address: "서울 중구 필동로1길 30",
-	address_detail: "동국대학교 문화관 지하 1층 동국갤러리",
+	detail_location: "동국대학교 문화관 지하 1층 동국갤러리",
 	email: "dgu_art@dongguk.edu",
 	copyright: "©2025. Dongguk University Sculpture Department Exhibition.",
 };
@@ -27,7 +27,6 @@ export default async function ExhibitionLayout({
 	const { exhibitionId } = await params;
 	const uuid = await resolveExhibitionId(exhibitionId);
 	const custom = uuid ? await getExhibitionCustom(uuid) : null;
-	console.log("[exhibitionCustom]", JSON.stringify(custom, null, 2));
 
 	// TODO : /{slug} 또는 uuid 단건 조회 api get 가능할지 물어보기
 	// 예상 : const exhibition = await getExhibitionBySlug(exhibitionId);
@@ -77,7 +76,7 @@ export default async function ExhibitionLayout({
 						title={footer.title}
 						department={footer.department}
 						address={footer.address ?? ""}
-						addressDetail={footer.address_detail ?? ""}
+						detail_location={footer.detail_location ?? ""}
 						email={footer.email}
 						copyright={footer.copyright ?? ""}
 					/>

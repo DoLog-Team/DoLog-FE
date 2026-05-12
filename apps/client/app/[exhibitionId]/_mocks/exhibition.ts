@@ -17,6 +17,7 @@ export const MOCK_EXHIBITION_DETAIL: ExhibitionDetail = {
 		detail_location: "문화관 지하 1층",
 		latitude: "37.55788",
 		longitude: "127.00315",
+		location_description: "",
 	},
 	isPublic: true,
 };

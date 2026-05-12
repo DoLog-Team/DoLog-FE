@@ -5,7 +5,7 @@ interface SchoolFooterProps {
 	title: string;
 	department: string;
 	address: string;
-	addressDetail: string;
+	detail_location: string; //상세 주소
 	email: string;
 	copyright: string;
 }
@@ -15,7 +15,7 @@ export default function SchoolFooter({
 	title,
 	department,
 	address,
-	addressDetail,
+	detail_location,
 	email,
 	copyright,
 }: SchoolFooterProps) {
@@ -28,7 +28,7 @@ export default function SchoolFooter({
 					<p className="text-body2 text-lighter">{department}</p>
 					<div>
 						<p className="text-body2 text-lighter">{address}</p>
-						<p className="text-body2 text-lighter">{addressDetail}</p>
+						<p className="text-body2 text-lighter">{detail_location}</p>
 					</div>
 					<p className="text-body2 text-lighter">{email}</p>
 				</div>
