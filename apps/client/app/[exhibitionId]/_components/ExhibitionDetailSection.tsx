@@ -25,7 +25,7 @@ export function ExhibitionDetailSection({ exhibition }: ExhibitionDetailProps) {
 	return (
 		<section className="flex flex-col px-4 pb-6">
 			<Title title="전시 소개" />
-			<div className="flex flex-col gap-2 mb-4 whitespace-pre-line">
+			<div className="flex flex-col gap-2 mb-4">
 				<RowList rows={rows} />
 			</div>
 			<p className="text-body1 whitespace-pre-line">{exhibition.description}</p>
