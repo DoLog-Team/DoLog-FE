@@ -13,7 +13,7 @@ export default function RowList({ rows }: RowListProps) {
 			{rows.map((row, index) => (
 				<div key={index} className="flex gap-4">
 					<span className="w-20 shrink-0 text-body2-bold">{row.label}</span>
-					<span className="text-body2">{row.value}</span>
+					<span className="text-body2 whitespace-pre-wrap">{row.value}</span>
 				</div>
 			))}
 		</div>

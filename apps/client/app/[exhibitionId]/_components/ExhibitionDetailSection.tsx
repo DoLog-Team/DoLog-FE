@@ -9,7 +9,7 @@ interface ExhibitionDetailProps {
 export function ExhibitionDetailSection({ exhibition }: ExhibitionDetailProps) {
 	const rows = [
 		{
-			label: "전시 일정",
+			label: "전시 일자",
 			value: `${exhibition.startDate} ~ ${exhibition.endDate}`,
 		},
 		...(exhibition.dateInfo
