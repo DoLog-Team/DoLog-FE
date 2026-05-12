@@ -1,61 +1,57 @@
 import { apiClient } from "api";
 
 export interface BannerItem {
-  id: number;
-  imageUrl: string;
-  orderIndex: number;
-  linkUrl: string;
+	id: number;
+	imageUrl: string;
+	orderIndex: number;
+	linkUrl: string;
 }
 
 export interface ExhibitionItem {
-  id: string;
-  slug: string;
-  title: string;
-  univName: string;
-  deptName: string;
-  imageUrl: string | null;
-  logoImg: string;
-  startDate: string | null;
-  endDate: string | null;
-  address: string | null;
-  dday: number | null;
+	id: string;
+	slug: string;
+	title: string;
+	univName: string;
+	deptName: string;
+	imageUrl: string | null;
+	logoImg: string;
+	startDate: string | null;
+	endDate: string | null;
+	address: string | null;
+	dday: number | null;
 }
 
 export async function getMainExhibitions(): Promise<ExhibitionItem[]> {
-  try {
-    const data = await apiClient<{ mainExhibitions: ExhibitionItem[] }>(
-      "/exhibitions/main",
-    );
-    return data.mainExhibitions;
-  } catch {
-    return [];
-  }
+	try {
+		const data = await apiClient<{ mainExhibitions: ExhibitionItem[] }>("/exhibitions/main");
+		return data.mainExhibitions;
+	} catch {
+		return [];
+	}
 }
 
 export async function getBanners(): Promise<BannerItem[]> {
-  try {
-    return await apiClient<BannerItem[]>("/exhibitions/mainbanner");
-  } catch {
-    return [];
-  }
+	try {
+		return await apiClient<BannerItem[]>("/exhibitions/mainbanner");
+	} catch {
+		return [];
+	}
 }
 
 export async function getExhibitions(): Promise<ExhibitionItem[]> {
-  try {
-    return await apiClient<ExhibitionItem[]>("/exhibitions");
-  } catch {
-    return [];
-  }
+	try {
+		return await apiClient<ExhibitionItem[]>("/exhibitions");
+	} catch {
+		return [];
+	}
 }
 
-export async function resolveExhibitionSlug(
-  slug: string,
-): Promise<{ uuid: string } | null> {
-  try {
-    return await apiClient<{ uuid: string }>(`/exhibitions/resolve/${slug}`);
-  } catch {
-    return null;
-  }
+export async function resolveExhibitionSlug(slug: string): Promise<{ uuid: string } | null> {
+	try {
+		return await apiClient<{ uuid: string }>(`/exhibitions/resolve/${slug}`);
+	} catch {
+		return null;
+	}
 }
 
 /************************
@@ -66,73 +62,67 @@ export async function resolveExhibitionSlug(
  ************************/
 
 export interface ExhibitionLocation {
-  address: string;
-  latitude: string;
-  longitude: string;
-  detail_location: string | null;
-  location_description: string | null; // 찾아오는 길 설명
+	address: string;
+	latitude: string;
+	longitude: string;
+	detail_location: string | null;
+	location_description: string | null; // 찾아오는 길 설명
 }
 
 export interface ExhibitionHost {
-  hostId: string;
-  hostName: string;
-  hostImageUrl: string;
-  description: string;
-  email: string;
+	hostId: string;
+	hostName: string;
+	hostImageUrl: string;
+	description: string;
+	email: string;
 }
 export interface HostSns {
-  snsId: string;
-  platformName: string;
-  url: string;
+	snsId: string;
+	platformName: string;
+	url: string;
 }
 
 export interface ExhibitionDetail {
-  exhibitionId: string;
-  univName: string;
-  deptName: string;
-  title: string;
-  exhibitionImg: string;
-  startDate: string;
-  endDate: string;
-  dateInfo: string;
-  description: string;
-  location: ExhibitionLocation;
-  isPublic: boolean;
+	exhibitionId: string;
+	univName: string;
+	deptName: string;
+	title: string;
+	exhibitionImg: string;
+	startDate: string;
+	endDate: string;
+	dateInfo: string;
+	description: string;
+	location: ExhibitionLocation;
+	isPublic: boolean;
 }
 
-export async function getExhibitionDetail(
-  exhibitionId: string,
-): Promise<ExhibitionDetail | null> {
-  try {
-    console.log(
-      "호출 URL:",
-      `${process.env.NEXT_PUBLIC_API_URL}/exhibitions/${exhibitionId}/details`,
-    );
-    return await apiClient<ExhibitionDetail>(
-      `/exhibitions/${exhibitionId}/details`,
-    );
-  } catch (error) {
-    console.error("getExhibitionDetail 에러:", error);
-    return null;
-  }
+export async function getExhibitionDetail(exhibitionId: string): Promise<ExhibitionDetail | null> {
+	try {
+		console.log(
+			"호출 URL:",
+			`${process.env.NEXT_PUBLIC_API_URL}/exhibitions/${exhibitionId}/details`,
+		);
+		return await apiClient<ExhibitionDetail>(`/exhibitions/${exhibitionId}/details`);
+	} catch (error) {
+		console.error("getExhibitionDetail 에러:", error);
+		return null;
+	}
 }
 
-export async function getExhibitionHost(
-  exhibitionId: string,
-): Promise<ExhibitionHost | null> {
-  try {
-    return await apiClient<ExhibitionHost>(`/exhibitions/${exhibitionId}/host`);
-  } catch (error) {
-    console.error("getExhibitionHost 에러:", error);
-    return null;
-  }
+export async function getExhibitionHost(exhibitionId: string): Promise<ExhibitionHost | null> {
+	try {
+		return await apiClient<ExhibitionHost>(`/exhibitions/${exhibitionId}/host`);
+	} catch (error) {
+		console.error("getExhibitionHost 에러:", error);
+		return null;
+	}
 }
 
 export async function getHostSns(exhibitionId: string): Promise<HostSns[]> {
-  try {
-    return await apiClient<HostSns[]>(`/exhibitions/${exhibitionId}/host/sns`);
-  } catch (error) {
-    console.error("getHostSNS 에러:", error);
-    return [];
-  }
+	try {
+		return await apiClient<HostSns[]>(`/exhibitions/${exhibitionId}/host/sns`);
+	} catch (error) {
+		console.error("getHostSNS 에러:", error);
+		return [];
+	}
 }

@@ -6,22 +6,18 @@ import { apiClient } from "api";
  *******************/
 
 export interface ExhibitionFooter {
-  title: string;
-  department: string;
-  address: string | null;
-  detail_location: string | null;
-  email: string;
-  copyright: string | null;
+	title: string;
+	department: string;
+	address: string | null;
+	detail_location: string | null;
+	email: string;
+	copyright: string | null;
 }
 
-export async function getExhibitionFooter(
-  exhibitionId: string,
-): Promise<ExhibitionFooter | null> {
-  try {
-    return await apiClient<ExhibitionFooter>(
-      `/exhibitions/${exhibitionId}/footer-info`,
-    );
-  } catch {
-    return null;
-  }
+export async function getExhibitionFooter(exhibitionId: string): Promise<ExhibitionFooter | null> {
+	try {
+		return await apiClient<ExhibitionFooter>(`/exhibitions/${exhibitionId}/footer-info`);
+	} catch {
+		return null;
+	}
 }
