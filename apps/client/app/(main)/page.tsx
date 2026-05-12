@@ -70,7 +70,7 @@ export default async function MainPage() {
 				title="작품"
 				categories={["작품"]}
 				artworks={{
-					작품: allArtworks.length > 0 ? allArtworks : MOCK_SECTIONS[0].artworks["전체"],
+					작품: allArtworks.length > 0 ? allArtworks : MOCK_SECTIONS[0].artworks.전체,
 				}}
 				slugMap={artworkSlugMap}
 			/>
