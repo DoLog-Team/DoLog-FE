@@ -1,3 +1,5 @@
+import { apiClient } from "api";
+
 interface ExhibitionMeta {
 	id: string;
 	title: string;
@@ -6,15 +8,8 @@ interface ExhibitionMeta {
 }
 
 export async function getExhibitionMeta(exhibitionId: string): Promise<ExhibitionMeta | null> {
-	if (!process.env.NEXT_PUBLIC_API_URL) return null;
-
 	try {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/exhibitions/${exhibitionId}/meta`, {
-			next: { revalidate: 3600 },
-		});
-
-		if (!res.ok) return null;
-		return res.json();
+		return await apiClient<ExhibitionMeta>(`/exhibitions/${exhibitionId}/meta`);
 	} catch {
 		return null;
 	}
