@@ -21,7 +21,6 @@ export function useArtworkFilter(zones: ZoneGroup[], searchQuery: string = "") {
 						!searchQuery || a.title.includes(searchQuery) || a.artistName.includes(searchQuery),
 				),
 		}))
-		.filter((z) => z.artworks.length > 0)
 		.sort((a, b) => a.zoneOrderId - b.zoneOrderId);
 
 	return { selected, setSelected, categories, filteredZones };
