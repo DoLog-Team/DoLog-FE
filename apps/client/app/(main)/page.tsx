@@ -64,7 +64,7 @@ export default async function MainPage() {
 				</Link>
 			</section>
 
-			<Divider />
+			<Divider fullBleed={false} />
 
 			<CategorySection
 				title="작품"
