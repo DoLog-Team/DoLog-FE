@@ -13,7 +13,7 @@ export function LocationSection({ locationImageUrl }: LocationSectionProps) {
 	if (!locationImageUrl) return null;
 	return (
 		<section className="flex flex-col px-4 pb-6">
-			<Title title="작품 위치" />
+			<Title title="작품 위치" margin="compact" />
 			<div className="relative w-full aspect-video">
 				<Image
 					src={locationImageUrl}

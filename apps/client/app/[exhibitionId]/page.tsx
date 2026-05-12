@@ -10,7 +10,6 @@ import { ExhibitionIntroSection } from "./_components/ExhibitionIntroSection";
 import { ExhibitionLocationSection } from "./_components/ExhibitionLocationSection";
 import { Header } from "./_components/Header";
 import { MOCK_EXHIBITION_DETAIL, MOCK_EXHIBITION_HOST, MOCK_HOST_SNS } from "./_mocks/exhibition";
-import { DEFAULT_EXHIBITION_CONFIG, MOCK_EXHIBITION_CONFIG } from "./exhibition-config";
 
 interface ExhibitionDetailPageProps {
 	params: Promise<{ exhibitionId: string }>;

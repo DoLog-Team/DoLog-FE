@@ -15,9 +15,6 @@ export function ContactSection({ contact }: { contact: ArtistContact }) {
 	];
 
 	return (
-		<>
-			<Title title="연락처" size="head2" />
 			<LinkCard items={items} />
-		</>
 	);
 }

@@ -17,7 +17,7 @@ interface InfoSectionProps {
 
 // RowList를 위한 작가정보 map
 export const InfoSection = ({ data }: InfoSectionProps) => {
-	const categories = [data.category];
+	const categories = data.category ? [data.category] : [];
 	const artistRows = data.participants.map((participant) => ({
 		label: participant.nameKo,
 		value: participant.role,
@@ -25,18 +25,18 @@ export const InfoSection = ({ data }: InfoSectionProps) => {
 
 	return (
 		<section className="flex flex-col px-4 pb-6">
-			<div className="mt-6 mb-2.5">
+			<div className="mt-8 mb-5">
 				{categories.map((cat) => (
 					<Chip key={cat} label={cat} type="assistive" selected={true} />
 				))}
-				<Title title={data.title} />
+				<Title title={data.title} margin="none" />
 
 				{/* 작품 재료, 작품 사이즈 - 선택값 */}
 				{(data.material || data.size) && (
-					<p className="text-body1">{[data.material, data.size].filter(Boolean).join(" | ")}</p>
+					<p className="text-body1 mt-px">{[data.material, data.size].filter(Boolean).join(" | ")}</p>
 				)}
 			</div>
-			<div>
+			<div className="mt-2.5">
 				<RowList rows={artistRows} />
 			</div>
 		</section>

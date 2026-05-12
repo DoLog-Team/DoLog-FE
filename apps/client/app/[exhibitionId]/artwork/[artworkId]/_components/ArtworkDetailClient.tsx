@@ -17,10 +17,6 @@ import { RelatedSection } from "../_components/RelatedSection";
 import { YoutubeSection } from "../_components/YoutubeSection";
 
 export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
-	console.log("relatedBts:", data.relatedBts);
-	console.log("alphabeticalArtworks:", data.alphabeticalArtworks);
-	console.log("sameCategoryArtworks:", data.sameCategoryArtworks);
-	console.log("youtubeUrl:", data.youtubeUrl);
 
 	// ScrollTabBar 탭 목록 [ 작품 소개, 작가 소개, 비하인드(선택) ]
 	const TABS = useMemo(() => {
@@ -45,7 +41,13 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 
 			{/* 대표 이미지 */}
 			<div className="relative aspect-video w-full">
-				<Image src={data.mainImage} alt={data.title} fill className="object-cover" priority />
+				{data.mainImage ? (
+					<Image src={data.mainImage} alt={data.title} fill className="object-cover" priority />
+				) : (
+					<div className="w-full h-full bg-fg-lighter flex items-center justify-center">
+						<Image src="/icons/empty-image.svg" alt="이미지 없음" width={32} height={32} />
+					</div>
+				)}
 			</div>
 			{/* 작품 제목 및 정보 섹션 */}
 			<InfoSection data={data} />
@@ -71,9 +73,11 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 			>
 				<ArtistSection authors={data.participants} />
 			</section>
-			<Divider />
+			
 			{/* BTS 섹션 - 선택값 */}
 			{data.relatedBts && data.relatedBts.length > 0 && (
+				<>
+				<Divider />
 				<section
 					ref={(el) => {
 						sectionRefs.behind.current = el;
@@ -81,9 +85,12 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 				>
 					<BtsSection bts={data.relatedBts} />
 				</section>
+				</>
 			)}
 			{/* 동일한 카테고리 작품 섹션 */}
-			<RelatedSection artworks={data.sameCategoryArtworks} />
+			{data.sameCategoryArtworks && data.sameCategoryArtworks.length > 0 && (
+				<RelatedSection artworks={data.sameCategoryArtworks} />
+			)}
 			{/* 둘러보기 섹션 */}
 			<PostNavigationSection prevArtwork={prevArtwork} nextArtwork={nextArtwork} />
 
