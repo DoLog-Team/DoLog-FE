@@ -50,7 +50,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 	const exhibitionData = exhibition ?? MOCK_EXHIBITION_DETAIL;
 	const hostData = host ?? MOCK_EXHIBITION_HOST; // TODO : 고치긴
 	const snsData = sns.length > 0 ? sns : MOCK_HOST_SNS;
-	const config = MOCK_EXHIBITION_CONFIG[uuid ?? ""] ?? DEFAULT_EXHIBITION_CONFIG;
+	
 
 	return (
 		<main>
@@ -69,7 +69,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 			<ExhibitionIntroSection exhibition={exhibitionData} exhibitionId={exhibitionId} />
 			{/* 전시 소개 */}
 			<ExhibitionDetailSection exhibition={exhibitionData} />
-			<Divider />
+			<Divider fullBleed={false} />
 			{/* 장소 */}
 			<ExhibitionLocationSection location={exhibitionData.location} />
 			{/* 주최 기관 */}
