@@ -26,8 +26,8 @@ export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigati
 								/>
 							) : (
 								<div className="w-20 h-[45px] shrink-0 bg-fg-lighter flex items-center justify-center">
-								<Image src="/icons/empty-image.svg" alt="이미지 없음" width={24} height={24} />
-							</div>
+									<Image src="/icons/empty-image.svg" alt="이미지 없음" width={24} height={24} />
+								</div>
 							)}
 							<div className="flex flex-col">
 								<span className="text-body1-bold">{prevArtwork.title}</span>
@@ -53,8 +53,8 @@ export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigati
 								/>
 							) : (
 								<div className="w-20 h-11.5 shrink-0 bg-fg-lighter flex items-center justify-center">
-								<Image src="/icons/empty-image.svg" alt="이미지 없음" width={24} height={24} />
-							</div>
+									<Image src="/icons/empty-image.svg" alt="이미지 없음" width={24} height={24} />
+								</div>
 							)}
 							<div className="flex flex-col">
 								<span className="text-body1-bold">{nextArtwork.title}</span>

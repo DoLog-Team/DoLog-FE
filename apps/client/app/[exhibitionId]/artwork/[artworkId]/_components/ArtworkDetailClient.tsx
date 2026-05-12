@@ -17,7 +17,6 @@ import { RelatedSection } from "../_components/RelatedSection";
 import { YoutubeSection } from "../_components/YoutubeSection";
 
 export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
-
 	// ScrollTabBar 탭 목록 [ 작품 소개, 작가 소개, 비하인드(선택) ]
 	const TABS = useMemo(() => {
 		const base = [
@@ -73,18 +72,18 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 			>
 				<ArtistSection authors={data.participants} />
 			</section>
-			
+
 			{/* BTS 섹션 - 선택값 */}
 			{data.relatedBts && data.relatedBts.length > 0 && (
 				<>
-				<Divider />
-				<section
-					ref={(el) => {
-						sectionRefs.behind.current = el;
-					}}
-				>
-					<BtsSection bts={data.relatedBts} />
-				</section>
+					<Divider />
+					<section
+						ref={(el) => {
+							sectionRefs.behind.current = el;
+						}}
+					>
+						<BtsSection bts={data.relatedBts} />
+					</section>
 				</>
 			)}
 			{/* 동일한 카테고리 작품 섹션 */}

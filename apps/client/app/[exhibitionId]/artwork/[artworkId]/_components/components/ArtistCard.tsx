@@ -17,12 +17,7 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 			<div className="flex pb-4">
 				<div className="relative shrink-0 w-32 aspect-[1/1.414]">
 					{author.profileImg ? (
-						<Image
-							src={author.profileImg}
-							alt={author.nameKo}
-							fill
-							className="object-cover"
-						/>
+						<Image src={author.profileImg} alt={author.nameKo} fill className="object-cover" />
 					) : (
 						<div className="w-full h-full bg-fg-lighter flex items-center justify-center">
 							<Image src="/icons/empty-image.svg" alt="이미지 없음" width={32} height={32} />

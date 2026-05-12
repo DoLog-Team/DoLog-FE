@@ -49,7 +49,6 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 	const exhibitionData = exhibition ?? MOCK_EXHIBITION_DETAIL;
 	const hostData = host ?? MOCK_EXHIBITION_HOST; // TODO : 고치긴
 	const snsData = sns.length > 0 ? sns : MOCK_HOST_SNS;
-	
 
 	return (
 		<main>
