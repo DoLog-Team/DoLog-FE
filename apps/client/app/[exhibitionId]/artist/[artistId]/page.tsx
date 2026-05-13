@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { resolveExhibitionSlug } from "@/lib/api/exhibition";
 import { getArtistDetail } from "../../../../lib/api/artists/artist-detail";
+import { getExhibitionMeta } from "../../_api/getExhibitionMeta";
+import { resolveExhibitionId } from "../../_api/resolveExhibitionId";
 import { Header } from "../../_components/Header";
 import { ArtworkSection } from "./components/sections/ArtworkSection";
 import { BTSSection } from "./components/sections/BTSSection";
@@ -16,14 +18,20 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-	const { artistId } = await params;
-	const artist = await getArtistDetail(artistId);
+	const { exhibitionId, artistId } = await params;
+	const uuid = await resolveExhibitionId(exhibitionId);
+	const [artist, meta] = await Promise.all([
+		getArtistDetail(artistId),
+		uuid ? getExhibitionMeta(uuid) : null,
+	]);
+
+	const title = [meta?.title, artist?.nameKo].filter(Boolean).join(" | ");
 
 	return {
-		title: artist?.nameKo,
+		title,
 		description: artist?.bio ?? undefined,
 		openGraph: {
-			title: artist?.nameKo,
+			title,
 			description: artist?.bio ?? undefined,
 			images: artist?.profileImage ? [{ url: artist.profileImage }] : [],
 		},

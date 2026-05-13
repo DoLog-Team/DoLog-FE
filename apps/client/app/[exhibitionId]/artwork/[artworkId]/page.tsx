@@ -13,13 +13,15 @@ export async function generateMetadata({ params }: ArtworkDetailPageProps): Prom
 	const uuid = await resolveExhibitionId(exhibitionId);
 	const data = uuid ? await getArtworkDetail(uuid, artworkId) : null;
 
+	const artistName = data?.participants.map((p) => p.nameKo).join(", ");
+	const title = [artistName, data?.title].filter(Boolean).join(" | ") || undefined;
 	const description = [data?.material, data?.size].filter(Boolean).join(" | ") || undefined;
 
 	return {
-		title: data?.title,
+		title,
 		description,
 		openGraph: {
-			title: data?.title,
+			title,
 			description,
 			images: data?.mainImage ? [{ url: data.mainImage }] : [],
 		},
