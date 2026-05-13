@@ -14,11 +14,11 @@ export function ArtistSection({ authors }: ArtistSectionProps) {
 		<section className="flex flex-col px-4 pb-6 gap-4">
 			<Title title="참여자" />
 			<div className="flex flex-col gap-10">
-				{authors.map((author, index) => (
+				{authors.map((author) => (
 					<ArtistCard
-						key={index}
+						key={author.profileId}
 						author={author}
-						profileHref={`/${slug}/artist/${author.artistId}`}
+						profileHref={`/${slug}/artist/${author.profileId}`}
 					/>
 				))}
 			</div>
