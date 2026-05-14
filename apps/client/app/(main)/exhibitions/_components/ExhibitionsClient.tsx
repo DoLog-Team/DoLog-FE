@@ -31,7 +31,7 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 	return (
 		<div className="flex flex-col min-h-screen">
 			<CollapsingHeader
-				title="전체 전시회"
+				title="전체 전시"
 				searchQuery={searchQuery}
 				onSearchChange={setSearchQuery}
 				searchPlaceholder="전시회 제목을 검색해요."
