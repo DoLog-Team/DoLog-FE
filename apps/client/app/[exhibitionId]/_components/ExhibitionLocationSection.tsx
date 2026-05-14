@@ -13,7 +13,9 @@ export function ExhibitionLocationSection({ location }: ExhibitionLocationProps)
 			<LocationMap address={location.address} lat={location.latitude} lng={location.longitude} />
 			<p className="text-body1">{location.address}</p>
 			{location.detail_location && <p className="text-body1">{location.detail_location}</p>}
-			{location.location_description && <p className="text-body1">{location.location_description}</p>}
+			{location.location_description && (
+				<p className="text-body1">{location.location_description}</p>
+			)}
 		</section>
 	);
 }
