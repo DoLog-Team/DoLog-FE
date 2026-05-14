@@ -13,6 +13,7 @@ export default async function ArtworksPage() {
 					imageUrl: a.imageUrl,
 					author: a.artistName,
 					category: a.category,
+					exhibitionTitle: a.exhibitionTitle,
 				}))
 			: [
 					...new Map(
@@ -21,6 +22,10 @@ export default async function ArtworksPage() {
 							.map((item) => [item.id, item]),
 					).values(),
 				];
+
+	const exhibitions = [...new Set(artworks.map((a) => a.exhibitionTitle).filter(Boolean))].sort(
+		(a, b) => a.localeCompare(b, "ko"),
+	);
 
 	const categories = [
 		...new Set(
@@ -32,5 +37,12 @@ export default async function ArtworksPage() {
 
 	const slugMap = Object.fromEntries(artworks.map((a) => [a.id, a.slug]));
 
-	return <ArtworksClient artworks={displayArtworks} categories={categories} slugMap={slugMap} />;
+	return (
+		<ArtworksClient
+			artworks={displayArtworks}
+			exhibitions={exhibitions}
+			categories={categories}
+			slugMap={slugMap}
+		/>
+	);
 }

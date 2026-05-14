@@ -34,7 +34,7 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 				title="전체 전시"
 				searchQuery={searchQuery}
 				onSearchChange={setSearchQuery}
-				searchPlaceholder="전시회 제목을 검색해요."
+				searchPlaceholder="전시 제목을 검색해요."
 			>
 				<FilterChip
 					label="대학"

@@ -10,19 +10,27 @@ import MainFooter from "@/components/common/Footer/MainFooter";
 
 interface ArtworksClientProps {
 	artworks: CardItem[];
+	exhibitions: string[];
 	categories: string[];
 	slugMap?: Record<string, string>;
 }
 
-export default function ArtworksClient({ artworks, categories, slugMap }: ArtworksClientProps) {
+export default function ArtworksClient({
+	artworks,
+	exhibitions,
+	categories,
+	slugMap,
+}: ArtworksClientProps) {
 	const [searchQuery, setSearchQuery] = useState("");
+	const [selectedExhibition, setSelectedExhibition] = useState<string | null>(null);
 	const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
 	const filtered = artworks.filter((item) => {
+		const matchExhibition = !selectedExhibition || item.exhibitionTitle === selectedExhibition;
 		const matchCategory = !selectedCategory || item.category === selectedCategory;
 		const matchSearch =
 			!searchQuery || item.title.includes(searchQuery) || item.author.includes(searchQuery);
-		return matchCategory && matchSearch;
+		return matchExhibition && matchCategory && matchSearch;
 	});
 
 	return (
@@ -33,6 +41,12 @@ export default function ArtworksClient({ artworks, categories, slugMap }: Artwor
 				onSearchChange={setSearchQuery}
 				searchPlaceholder="작품명, 작가 명을 검색해요."
 			>
+				<FilterChip
+					label="전시"
+					options={exhibitions}
+					selected={selectedExhibition}
+					onSelect={setSelectedExhibition}
+				/>
 				<FilterChip
 					label="카테고리"
 					options={categories}
