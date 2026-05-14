@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    //"baseUrl": ".", // 더이상 지원 안 한다고 오류나서 제거
+    "paths": {
+      "@/*": ["./*"],
+      "components": ["../../packages/components"],
+      "components/*": ["../../packages/components/*"],
+      "api": ["../../packages/api"],
+      "api/*": ["../../packages/api/*"],
+      "utils": ["../../packages/utils"],
+      "utils/*": ["../../packages/utils/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": ["node_modules"]
+}

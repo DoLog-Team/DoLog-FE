@@ -1,0 +1,7 @@
+# 모든 텍스트 파일은 자동으로 LF로 커밋되도록 설정
+* text=auto
+
+# 쉘 스크립트나 설정 파일은 명시적으로 LF 강제
+*.sh text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
