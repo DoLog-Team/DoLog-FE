@@ -4,6 +4,7 @@ export interface CardItem {
 	title: string;
 	category?: string;
 	author: string;
+	exhibitionTitle?: string;
 }
 
 export interface CardProps extends Omit<CardItem, "id"> {}

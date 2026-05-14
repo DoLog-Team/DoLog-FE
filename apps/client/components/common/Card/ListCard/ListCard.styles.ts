@@ -4,7 +4,7 @@ export const listCardStyles = {
 	image: "w-full h-full object-cover",
 	info: "w-full flex flex-col gap-[4px]",
 	detail: "flex gap-2 items-center",
-	title: "text-strong text-head3",
+	title: "text-strong text-head3 break-all",
 	category: "text-light text-body2",
 	author: "text-light text-body2",
 };

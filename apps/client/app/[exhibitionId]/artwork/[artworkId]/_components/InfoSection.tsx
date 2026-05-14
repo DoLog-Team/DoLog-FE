@@ -27,13 +27,13 @@ export const InfoSection = ({ data }: InfoSectionProps) => {
 		<section className="flex flex-col px-4 pb-6">
 			<div className="mt-8 mb-5">
 				{categories.map((cat) => (
-					<Chip key={cat} label={cat} type="assistive" selected={true} />
+					<Chip key={cat} label={cat} type="assistive" selected={true} className="mb-2" />
 				))}
-				<Title title={data.title} margin="none" />
+				<Title title={data.title} margin="none" className="break-all" />
 
 				{/* 작품 재료, 작품 사이즈 - 선택값 */}
 				{(data.material || data.size) && (
-					<p className="text-body1 mt-px">
+					<p className="text-body1 mt-1">
 						{[data.material, data.size].filter(Boolean).join(" | ")}
 					</p>
 				)}

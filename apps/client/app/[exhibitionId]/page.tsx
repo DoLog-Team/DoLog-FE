@@ -36,7 +36,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 	const uuid = await resolveExhibitionId(exhibitionId);
 
 	if (!uuid) {
-		return <div>전시회를 찾을 수 없습니다.</div>;
+		return <div>전시를 찾을 수 없습니다.</div>;
 	}
 
 	const [exhibition, host, sns] = await Promise.all([
