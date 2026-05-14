@@ -28,7 +28,7 @@ export default async function ArtworksPage() {
 				? artworks.map((a) => a.category).filter((c): c is string => !!c)
 				: CATEGORIES.filter((c) => c !== "전체"),
 		),
-	];
+	].sort((a, b) => a.localeCompare(b, "ko"));
 
 	const slugMap = Object.fromEntries(artworks.map((a) => [a.id, a.slug]));
 
