@@ -1,12 +1,35 @@
+import type { Metadata } from "next";
 import SchoolFooter from "@/components/common/Footer/SchoolFooter";
 import { getExhibitions } from "@/lib/api/exhibition";
 import { getExhibitionFooter } from "@/lib/api/layout";
 import { ThemeProvider } from "@/providers/theme-providers";
 import { getExhibitionCustom } from "./_api/getExhibitionCustom";
+import { getExhibitionMeta } from "./_api/getExhibitionMeta";
 import { resolveExhibitionId } from "./_api/resolveExhibitionId";
 import { TabBarSpacer } from "./_components/TabBarSpacer";
 import { ExhibitionProvider } from "./_context/ExhibitionContext";
 import { DEFAULT_EXHIBITION_CONFIG } from "./exhibition-config";
+
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ exhibitionId: string }>;
+}): Promise<Metadata> {
+	const { exhibitionId } = await params;
+	const uuid = await resolveExhibitionId(exhibitionId);
+	const meta = uuid ? await getExhibitionMeta(uuid) : null;
+
+	return {
+		title: meta?.title ?? "두록",
+		description: meta?.description ?? "우리의 졸업 전시, 더 오래 기록하는 방법",
+		icons: { icon: meta?.favicon ?? "/favicon.ico" },
+		openGraph: {
+			title: meta?.title ?? "두록",
+			description: meta?.description ?? "우리의 졸업 전시, 더 오래 기록하는 방법",
+			images: meta?.image ? [{ url: meta.image }] : [{ url: "/images/og-default.png" }],
+		},
+	};
+}
 
 const MOCK_FOOTER = {
 	title: "흙에서 시작되는 모든 이야기",
