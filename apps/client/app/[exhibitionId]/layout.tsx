@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import MainFooter from "@/components/common/Footer/MainFooter";
 import SchoolFooter from "@/components/common/Footer/SchoolFooter";
 import { getExhibitions } from "@/lib/api/exhibition";
 import { getExhibitionFooter } from "@/lib/api/layout";
@@ -31,15 +32,6 @@ export async function generateMetadata({
 	};
 }
 
-const MOCK_FOOTER = {
-	title: "흙에서 시작되는 모든 이야기",
-	department: "한국대학교 예술대학 도예과",
-	address: "서울 중구 필동로1길 30",
-	detail_location: "동국대학교 문화관 지하 1층 동국갤러리",
-	email: "dgu_art@dongguk.edu",
-	copyright: "©2025. Dongguk University Sculpture Department Exhibition.",
-};
-
 export default async function ExhibitionLayout({
 	children,
 	params,
@@ -68,7 +60,7 @@ export default async function ExhibitionLayout({
 		}),
 	};
 
-	const footer = uuid ? ((await getExhibitionFooter(uuid)) ?? MOCK_FOOTER) : MOCK_FOOTER;
+	const footer = uuid ? await getExhibitionFooter(uuid) : null;
 
 	const colorVars = {
 		...(config.btnBg && { "--btn-bg": config.btnBg }),
@@ -93,16 +85,19 @@ export default async function ExhibitionLayout({
 				<div className="bg-normal text-strong min-h-dvh flex flex-col" style={colorVars}>
 					<div className="min-h-dvh flex flex-col w-full max-w-135 mx-auto">{children}</div>
 
-					{/* <SchoolFooter logoSrc={config.footerInfo.logoSrc} {...config.footerInfo} /> */}
-					<SchoolFooter
-						logoSrc={config.footerInfo.logoSrc}
-						title={footer.title}
-						department={footer.department}
-						address={footer.address ?? ""}
-						detail_location={footer.detail_location ?? ""}
-						email={footer.email}
-						copyright={footer.copyright ?? ""}
-					/>
+					{footer ? (
+						<SchoolFooter
+							logoSrc={config.footerInfo.logoSrc}
+							title={footer.title}
+							department={footer.department}
+							address={footer.address ?? ""}
+							detail_location={footer.detail_location ?? ""}
+							email={footer.email}
+							copyright={footer.copyright ?? ""}
+						/>
+					) : (
+						<MainFooter />
+					)}
 					<TabBarSpacer />
 				</div>
 			</ThemeProvider>
