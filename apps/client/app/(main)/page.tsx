@@ -40,7 +40,7 @@ export default async function MainPage() {
 			<Banner banners={displayBanners} />
 
 			<section className="flex flex-col px-4 pt-6 pb-6 ">
-				<Title title="진행중인 전시회" />
+				<Title title="진행 중인 전시" />
 				<div className="flex flex-col gap-4 mt-4">
 					{displayExhibitions.slice(0, 3).map((exhibition) => (
 						<Link
@@ -67,10 +67,10 @@ export default async function MainPage() {
 			<Divider fullBleed={false} />
 
 			<CategorySection
-				title="작품"
+				title="전체 작품"
 				categories={["작품"]}
 				artworks={{
-					작품: allArtworks.length > 0 ? allArtworks : MOCK_SECTIONS[0].artworks["전체"],
+					작품: allArtworks.length > 0 ? allArtworks : MOCK_SECTIONS[0].artworks.전체,
 				}}
 				slugMap={artworkSlugMap}
 			/>

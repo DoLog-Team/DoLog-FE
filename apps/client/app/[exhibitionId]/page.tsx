@@ -10,7 +10,6 @@ import { ExhibitionIntroSection } from "./_components/ExhibitionIntroSection";
 import { ExhibitionLocationSection } from "./_components/ExhibitionLocationSection";
 import { Header } from "./_components/Header";
 import { MOCK_EXHIBITION_DETAIL, MOCK_EXHIBITION_HOST, MOCK_HOST_SNS } from "./_mocks/exhibition";
-import { DEFAULT_EXHIBITION_CONFIG, MOCK_EXHIBITION_CONFIG } from "./exhibition-config";
 
 interface ExhibitionDetailPageProps {
 	params: Promise<{ exhibitionId: string }>;
@@ -37,7 +36,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 	const uuid = await resolveExhibitionId(exhibitionId);
 
 	if (!uuid) {
-		return <div>전시회를 찾을 수 없습니다.</div>;
+		return <div>전시를 찾을 수 없습니다.</div>;
 	}
 
 	const [exhibition, host, sns] = await Promise.all([
@@ -50,7 +49,6 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 	const exhibitionData = exhibition ?? MOCK_EXHIBITION_DETAIL;
 	const hostData = host ?? MOCK_EXHIBITION_HOST; // TODO : 고치긴
 	const snsData = sns.length > 0 ? sns : MOCK_HOST_SNS;
-	const config = MOCK_EXHIBITION_CONFIG[uuid ?? ""] ?? DEFAULT_EXHIBITION_CONFIG;
 
 	return (
 		<main>
@@ -69,7 +67,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 			<ExhibitionIntroSection exhibition={exhibitionData} exhibitionId={exhibitionId} />
 			{/* 전시 소개 */}
 			<ExhibitionDetailSection exhibition={exhibitionData} />
-			<Divider />
+			<Divider fullBleed={false} />
 			{/* 장소 */}
 			<ExhibitionLocationSection location={exhibitionData.location} />
 			{/* 주최 기관 */}

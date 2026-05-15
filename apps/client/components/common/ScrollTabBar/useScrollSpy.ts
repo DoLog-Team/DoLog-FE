@@ -8,11 +8,12 @@
  *
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 // 기본 offset : 44px (헤더높이)
 export const useScrollSpy = (tabIds: string[], offset: number = 44) => {
 	const [activeTab, setActiveTab] = useState(tabIds[0]);
+	const isScrollingByClick = useRef(false);
 
 	// 1. 각 섹션(tabId)에 대응하는 객체 배열 생성
 	// 2. 각 객체에 refs를 담음 (할당)
@@ -32,8 +33,12 @@ export const useScrollSpy = (tabIds: string[], offset: number = 44) => {
 		const ref = sectionRefs[tabId];
 		if (ref?.current) {
 			const top = ref.current.getBoundingClientRect().top + window.scrollY - offset;
+			isScrollingByClick.current = true;
 			window.scrollTo({ top, behavior: "smooth" });
 			setActiveTab(tabId);
+			setTimeout(() => {
+				isScrollingByClick.current = false;
+			}, 1000);
 		}
 	};
 
@@ -41,6 +46,7 @@ export const useScrollSpy = (tabIds: string[], offset: number = 44) => {
 	useEffect(() => {
 		const observer = new IntersectionObserver(
 			(entries) => {
+				if (isScrollingByClick.current) return;
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						const matchedId = Object.keys(sectionRefs).find(

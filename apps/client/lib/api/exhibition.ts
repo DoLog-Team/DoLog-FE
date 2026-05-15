@@ -98,13 +98,8 @@ export interface ExhibitionDetail {
 
 export async function getExhibitionDetail(exhibitionId: string): Promise<ExhibitionDetail | null> {
 	try {
-		console.log(
-			"호출 URL:",
-			`${process.env.NEXT_PUBLIC_API_URL}/exhibitions/${exhibitionId}/details`,
-		);
 		return await apiClient<ExhibitionDetail>(`/exhibitions/${exhibitionId}/details`);
-	} catch (error) {
-		console.error("getExhibitionDetail 에러:", error);
+	} catch {
 		return null;
 	}
 }
@@ -112,8 +107,7 @@ export async function getExhibitionDetail(exhibitionId: string): Promise<Exhibit
 export async function getExhibitionHost(exhibitionId: string): Promise<ExhibitionHost | null> {
 	try {
 		return await apiClient<ExhibitionHost>(`/exhibitions/${exhibitionId}/host`);
-	} catch (error) {
-		console.error("getExhibitionHost 에러:", error);
+	} catch {
 		return null;
 	}
 }
@@ -121,8 +115,7 @@ export async function getExhibitionHost(exhibitionId: string): Promise<Exhibitio
 export async function getHostSns(exhibitionId: string): Promise<HostSns[]> {
 	try {
 		return await apiClient<HostSns[]>(`/exhibitions/${exhibitionId}/host/sns`);
-	} catch (error) {
-		console.error("getHostSNS 에러:", error);
+	} catch {
 		return [];
 	}
 }

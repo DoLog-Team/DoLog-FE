@@ -11,7 +11,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 export const buttonVariants = cva(
 	// 공통 기본 스타일
-	"inline-flex items-center justify-center hover:scale-101 cursor-pointer",
+	"inline-flex items-center justify-center cursor-pointer",
 	{
 		variants: {
 			variant: {

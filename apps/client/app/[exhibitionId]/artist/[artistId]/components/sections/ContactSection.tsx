@@ -1,7 +1,7 @@
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
 import type { LinkItem } from "@/components/common/Card/LinkCard/LinkCard.types";
-import type { ArtistContact } from "@/lib/api/artists/artist-detail.types";
 import { Title } from "@/components/common/Title/Title";
+import type { ArtistContact } from "@/lib/api/artists/artist-detail.types";
 
 export function ContactSection({ contact }: { contact: ArtistContact }) {
 	const items: LinkItem[] = [
@@ -14,10 +14,5 @@ export function ContactSection({ contact }: { contact: ArtistContact }) {
 		})),
 	];
 
-	return (
-		<>
-			<Title title="연락처" size="head2" />
-			<LinkCard items={items} />
-		</>
-	);
+	return <LinkCard items={items} />;
 }

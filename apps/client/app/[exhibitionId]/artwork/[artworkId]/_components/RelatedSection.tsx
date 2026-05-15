@@ -1,6 +1,5 @@
 import { CardGrid } from "@/components/common/Card/CardGrid";
 import { Title } from "@/components/common/Title/Title";
-import { MOCK_WORK_DATA } from "@/constants/work";
 import type { RelatedArtwork } from "@/lib/api/artwork";
 
 interface RelatedSectionProps {
@@ -19,7 +18,7 @@ export const RelatedSection = ({ artworks }: RelatedSectionProps) => {
 
 	return (
 		<section className="flex flex-col px-4 pb-6">
-			<Title title="동일한 카테고리 작품" />
+			<Title title="동일한 카테고리 작품" margin="compact" />
 			<CardGrid items={items} getHref={(item) => `${item.id}`} limit={2} />
 		</section>
 	);
