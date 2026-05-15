@@ -68,6 +68,8 @@ export default function Banner({ banners }: { banners: BannerItem[] }) {
 							key={banner.id}
 							href={banner.linkUrl}
 							className="relative min-w-full h-full block"
+							target="_blank"
+							rel="noopener noreferrer"
 						>
 							{banner.imageUrl && (
 								<Image

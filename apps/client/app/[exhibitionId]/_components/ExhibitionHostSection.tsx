@@ -8,8 +8,6 @@ interface ExhibitionHostProps {
 }
 
 export function ExhibitionHostSection({ hostInfo, sns }: ExhibitionHostProps) {
-	const paragraphs = hostInfo.description.split("\n\n").filter(Boolean);
-
 	return (
 		<section className="flex flex-col px-4 pb-6">
 			<Title title="주최 기관" />
@@ -22,11 +20,7 @@ export function ExhibitionHostSection({ hostInfo, sns }: ExhibitionHostProps) {
 			<span className="text-body1-bold mt-5 mb-4">{hostInfo.hostName}</span>
 
 			{/* 기관 소개 */}
-			{paragraphs.map((paragraph, index) => (
-				<p key={index} className="text-body1 leading-relaxed mb-7">
-					{paragraph}
-				</p>
-			))}
+			<p className="text-body1 leading-relaxed mb-7 whitespace-pre-line">{hostInfo.description}</p>
 
 			{/* 소셜 링크 */}
 			{sns.length > 0 && (
@@ -46,10 +40,18 @@ interface SocialLinkProps {
 }
 
 function SocialLink({ label, href }: SocialLinkProps) {
+	const isUrl = href.startsWith("http://") || href.startsWith("https://");
+
 	return (
 		<div className="flex flex-wrap items-center gap-1">
 			<span className="min-w-19 text-body2-bold shrink-0">{label}</span>
-			<span className="text-body2">{href}</span>
+			{isUrl ? (
+				<a href={href} target="_blank" rel="noopener noreferrer" className="text-body2">
+					{href}
+				</a>
+			) : (
+				<span className="text-body2">{href}</span>
+			)}
 		</div>
 	);
 }

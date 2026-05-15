@@ -6,16 +6,21 @@ import type { RowCardProps } from "./RowCard.types";
 export const RowCard = ({ name, engName, email, imageUrl }: RowCardProps) => {
 	return (
 		<article className={s.wrapper}>
-			{/* 이미지 -  TODO: default 이미지 임시로 넣어둠*/}
 			<div className={s.imageWrapper}>
-				<Image
-					src={imageUrl ?? "/images/artists/artist2.png"}
-					alt={`${name} ${engName}`}
-					width={72}
-					height={96}
-					className={s.image}
-					unoptimized
-				/>
+				{imageUrl ? (
+					<Image
+						src={imageUrl}
+						alt={`${name} ${engName}`}
+						width={72}
+						height={96}
+						className={s.image}
+						unoptimized
+					/>
+				) : (
+					<div className="w-full h-full bg-fg-lighter flex items-center justify-center">
+						<Image src="/icons/empty-image.svg" alt="이미지 없음" width={32} height={32} />
+					</div>
+				)}
 			</div>
 
 			{/* 텍스트 */}
