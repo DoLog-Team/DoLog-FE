@@ -13,6 +13,7 @@ export interface ExhibitionItem {
 	title: string;
 	univName: string;
 	deptName: string;
+	exhibitionType: string | null;
 	imageUrl: string | null;
 	logoImg: string;
 	startDate: string | null;

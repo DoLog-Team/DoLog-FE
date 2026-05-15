@@ -7,7 +7,10 @@ export default async function ArtworksPage() {
 	const [artworks, exhibitions] = await Promise.all([getArtworks(), getExhibitions()]);
 
 	const exhibitionMap = Object.fromEntries(
-		exhibitions.map((e) => [e.id, { univName: e.univName, deptName: e.deptName }]),
+		exhibitions.map((e) => [
+			e.id,
+			{ univName: e.univName, deptName: e.deptName, exhibitionType: e.exhibitionType },
+		]),
 	);
 
 	const displayArtworks =
@@ -21,6 +24,7 @@ export default async function ArtworksPage() {
 					exhibitionTitle: a.exhibitionTitle,
 					univName: exhibitionMap[a.exhibitionId]?.univName,
 					deptName: exhibitionMap[a.exhibitionId]?.deptName,
+					exhibitionType: exhibitionMap[a.exhibitionId]?.exhibitionType ?? undefined,
 				}))
 			: [
 					...new Map(
