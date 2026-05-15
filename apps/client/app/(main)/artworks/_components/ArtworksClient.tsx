@@ -10,27 +10,23 @@ import MainFooter from "@/components/common/Footer/MainFooter";
 
 interface ArtworksClientProps {
 	artworks: CardItem[];
-	exhibitions: string[];
-	categories: string[];
 	slugMap?: Record<string, string>;
 }
 
-export default function ArtworksClient({
-	artworks,
-	exhibitions,
-	categories,
-	slugMap,
-}: ArtworksClientProps) {
+export default function ArtworksClient({ artworks, slugMap }: ArtworksClientProps) {
 	const [searchQuery, setSearchQuery] = useState("");
-	const [selectedExhibition, setSelectedExhibition] = useState<string | null>(null);
-	const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+	const [selectedUniv, setSelectedUniv] = useState<string | null>(null);
+	const [selectedDept, setSelectedDept] = useState<string | null>(null);
+
+	const univs = [...new Set(artworks.map((a) => a.univName).filter(Boolean))] as string[];
+	const depts = [...new Set(artworks.map((a) => a.deptName).filter(Boolean))] as string[];
 
 	const filtered = artworks.filter((item) => {
-		const matchExhibition = !selectedExhibition || item.exhibitionTitle === selectedExhibition;
-		const matchCategory = !selectedCategory || item.category === selectedCategory;
+		const matchUniv = !selectedUniv || item.univName === selectedUniv;
+		const matchDept = !selectedDept || item.deptName === selectedDept;
 		const matchSearch =
 			!searchQuery || item.title.includes(searchQuery) || item.author.includes(searchQuery);
-		return matchExhibition && matchCategory && matchSearch;
+		return matchUniv && matchDept && matchSearch;
 	});
 
 	return (
@@ -42,16 +38,16 @@ export default function ArtworksClient({
 				searchPlaceholder="작품명, 작가 명을 검색해요."
 			>
 				<FilterChip
-					label="전시"
-					options={exhibitions}
-					selected={selectedExhibition}
-					onSelect={setSelectedExhibition}
+					label="대학"
+					options={univs}
+					selected={selectedUniv}
+					onSelect={setSelectedUniv}
 				/>
 				<FilterChip
-					label="카테고리"
-					options={categories}
-					selected={selectedCategory}
-					onSelect={setSelectedCategory}
+					label="학과"
+					options={depts}
+					selected={selectedDept}
+					onSelect={setSelectedDept}
 				/>
 			</CollapsingHeader>
 
