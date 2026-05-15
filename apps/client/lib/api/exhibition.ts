@@ -87,6 +87,7 @@ export interface ExhibitionDetail {
 	exhibitionId: string;
 	univName: string;
 	deptName: string;
+	exhibitionType: string;
 	title: string;
 	exhibitionImg: string;
 	startDate: string;
