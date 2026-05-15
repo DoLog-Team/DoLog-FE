@@ -13,6 +13,7 @@ export interface ExhibitionItem {
 	title: string;
 	univName: string;
 	deptName: string;
+	exhibitionType?: string | null;
 	imageUrl: string | null;
 	logoImg: string;
 	startDate: string | null;
@@ -62,10 +63,10 @@ export async function resolveExhibitionSlug(slug: string): Promise<{ uuid: strin
  ************************/
 
 export interface ExhibitionLocation {
-	address: string;
+	address: string; // 기본 주소
 	latitude: string;
 	longitude: string;
-	detail_location: string | null;
+	detail_location: string | null; // 상세 주소
 	location_description: string | null; // 찾아오는 길 설명
 }
 
@@ -86,6 +87,7 @@ export interface ExhibitionDetail {
 	exhibitionId: string;
 	univName: string;
 	deptName: string;
+	exhibitionType?: string | null;
 	title: string;
 	exhibitionImg: string;
 	startDate: string;

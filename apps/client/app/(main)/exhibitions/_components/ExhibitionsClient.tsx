@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { FilterChip } from "@/components/common/FilterChip/FilterChip";
 import MainFooter from "@/components/common/Footer/MainFooter";
 import type { ExhibitionItem } from "@/lib/api/exhibition";
+import { EXHIBITION_TYPE_LABEL } from "@/lib/constants/exhibition";
 import ExhibitionCard from "../../_components/ExhibitionCard";
 
 interface ExhibitionsClientProps {
@@ -17,24 +18,35 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedUniv, setSelectedUniv] = useState<string | null>(null);
 	const [selectedDept, setSelectedDept] = useState<string | null>(null);
+	const [selectedType, setSelectedType] = useState<string | null>(null);
 
 	const univs = [...new Set(exhibitions.map((e) => e.univName))];
 	const depts = [...new Set(exhibitions.map((e) => e.deptName))];
+	const types = [
+		...new Set(
+			exhibitions
+				.map((e) => e.exhibitionType)
+				.filter((t): t is string => t !== null)
+				.map((t) => EXHIBITION_TYPE_LABEL[t] ?? t),
+		),
+	];
 
 	const filtered = exhibitions.filter((e) => {
 		const matchSearch = e.title.includes(searchQuery);
 		const matchUniv = !selectedUniv || e.univName === selectedUniv;
 		const matchDept = !selectedDept || e.deptName === selectedDept;
-		return matchSearch && matchUniv && matchDept;
+		const typeLabel = EXHIBITION_TYPE_LABEL[e.exhibitionType ?? ""] ?? e.exhibitionType;
+		const matchType = !selectedType || typeLabel === selectedType;
+		return matchSearch && matchUniv && matchDept && matchType;
 	});
 
 	return (
 		<div className="flex flex-col min-h-screen">
 			<CollapsingHeader
-				title="전체 전시회"
+				title="전체 전시"
 				searchQuery={searchQuery}
 				onSearchChange={setSearchQuery}
-				searchPlaceholder="전시회 제목을 검색해요."
+				searchPlaceholder="전시 제목을 검색해요."
 			>
 				<FilterChip
 					label="대학"
@@ -47,6 +59,12 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 					options={depts}
 					selected={selectedDept}
 					onSelect={setSelectedDept}
+				/>
+				<FilterChip
+					label="유형"
+					options={types}
+					selected={selectedType}
+					onSelect={setSelectedType}
 				/>
 			</CollapsingHeader>
 

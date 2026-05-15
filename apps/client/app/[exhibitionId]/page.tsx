@@ -1,8 +1,6 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { Divider } from "@/components/common/Divider/Divider";
 import { getExhibitionDetail, getExhibitionHost, getHostSns } from "@/lib/api/exhibition";
-import { getExhibitionMeta } from "./_api/getExhibitionMeta";
 import { resolveExhibitionId } from "./_api/resolveExhibitionId";
 import { ExhibitionDetailSection } from "./_components/ExhibitionDetailSection";
 import { ExhibitionHostSection } from "./_components/ExhibitionHostSection";
@@ -15,28 +13,12 @@ interface ExhibitionDetailPageProps {
 	params: Promise<{ exhibitionId: string }>;
 }
 
-export async function generateMetadata({ params }: ExhibitionDetailPageProps): Promise<Metadata> {
-	const { exhibitionId } = await params;
-	const uuid = await resolveExhibitionId(exhibitionId);
-	const meta = uuid ? await getExhibitionMeta(uuid) : null;
-
-	return {
-		title: meta?.title,
-		description: meta?.description,
-		openGraph: {
-			title: meta?.title,
-			description: meta?.description ?? undefined,
-			images: meta?.image ? [{ url: meta.image }] : [],
-		},
-	};
-}
-
 export default async function ExhibitionDetailPage({ params }: ExhibitionDetailPageProps) {
 	const { exhibitionId } = await params;
 	const uuid = await resolveExhibitionId(exhibitionId);
 
 	if (!uuid) {
-		return <div>전시회를 찾을 수 없습니다.</div>;
+		return <div>전시를 찾을 수 없습니다.</div>;
 	}
 
 	const [exhibition, host, sns] = await Promise.all([

@@ -18,7 +18,9 @@ export function useArtworkFilter(zones: ZoneGroup[], searchQuery: string = "") {
 				.flatMap((cat) => cat.artworks)
 				.filter(
 					(a) =>
-						!searchQuery || a.title.includes(searchQuery) || a.artistName.includes(searchQuery),
+						!searchQuery ||
+						a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+						a.artistName.toLowerCase().includes(searchQuery.toLowerCase()),
 				),
 		}))
 		.sort((a, b) => a.zoneOrderId - b.zoneOrderId);

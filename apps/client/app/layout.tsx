@@ -3,10 +3,13 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
 	title: "두록",
-	description: "졸업전시 아카이빙 플랫폼 두록",
+	description: "우리의 졸업 전시, 더 오래 기록하는 방법",
+	metadataBase: new URL("https://dolog.kr"),
 	openGraph: {
+		type: "website",
+		url: "https://dolog.kr",
 		title: "두록",
-		description: "졸업전시 아카이빙 플랫폼 두록",
+		description: "우리의 졸업 전시, 더 오래 기록하는 방법",
 		images: [{ url: "/images/og-default.png" }],
 	},
 };

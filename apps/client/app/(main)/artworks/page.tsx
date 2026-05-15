@@ -1,9 +1,17 @@
 import { getArtworks } from "@/lib/api/artwork";
+import { getExhibitions } from "@/lib/api/exhibition";
 import { CATEGORIES, MOCK_ARTWORKS } from "../_mocks/artwork";
 import ArtworksClient from "./_components/ArtworksClient";
 
 export default async function ArtworksPage() {
-	const artworks = await getArtworks();
+	const [artworks, exhibitions] = await Promise.all([getArtworks(), getExhibitions()]);
+
+	const exhibitionMap = Object.fromEntries(
+		exhibitions.map((e) => [
+			e.id,
+			{ univName: e.univName, deptName: e.deptName, exhibitionType: e.exhibitionType },
+		]),
+	);
 
 	const displayArtworks =
 		artworks.length > 0
@@ -13,6 +21,10 @@ export default async function ArtworksPage() {
 					imageUrl: a.imageUrl,
 					author: a.artistName,
 					category: a.category,
+					exhibitionTitle: a.exhibitionTitle,
+					univName: exhibitionMap[a.exhibitionId]?.univName,
+					deptName: exhibitionMap[a.exhibitionId]?.deptName,
+					exhibitionType: exhibitionMap[a.exhibitionId]?.exhibitionType ?? undefined,
 				}))
 			: [
 					...new Map(
@@ -22,15 +34,7 @@ export default async function ArtworksPage() {
 					).values(),
 				];
 
-	const categories = [
-		...new Set(
-			artworks.length > 0
-				? artworks.map((a) => a.category).filter((c): c is string => !!c)
-				: CATEGORIES.filter((c) => c !== "전체"),
-		),
-	];
-
 	const slugMap = Object.fromEntries(artworks.map((a) => [a.id, a.slug]));
 
-	return <ArtworksClient artworks={displayArtworks} categories={categories} slugMap={slugMap} />;
+	return <ArtworksClient artworks={displayArtworks} slugMap={slugMap} />;
 }

@@ -7,22 +7,38 @@ import { CollapsingHeader } from "@/components/common/CollapsingHeader/Collapsin
 import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { FilterChip } from "@/components/common/FilterChip/FilterChip";
 import MainFooter from "@/components/common/Footer/MainFooter";
+import { EXHIBITION_TYPE_LABEL } from "@/lib/constants/exhibition";
 
 interface ArtworksClientProps {
 	artworks: CardItem[];
-	categories: string[];
 	slugMap?: Record<string, string>;
 }
 
-export default function ArtworksClient({ artworks, categories, slugMap }: ArtworksClientProps) {
+export default function ArtworksClient({ artworks, slugMap }: ArtworksClientProps) {
 	const [searchQuery, setSearchQuery] = useState("");
-	const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+	const [selectedUniv, setSelectedUniv] = useState<string | null>(null);
+	const [selectedDept, setSelectedDept] = useState<string | null>(null);
+	const [selectedType, setSelectedType] = useState<string | null>(null);
+
+	const univs = [...new Set(artworks.map((a) => a.univName).filter(Boolean))] as string[];
+	const depts = [...new Set(artworks.map((a) => a.deptName).filter(Boolean))] as string[];
+	const types = [
+		...new Set(
+			artworks
+				.map((a) => a.exhibitionType)
+				.filter((t): t is string => t !== null && t !== undefined)
+				.map((t) => EXHIBITION_TYPE_LABEL[t] ?? t),
+		),
+	];
 
 	const filtered = artworks.filter((item) => {
-		const matchCategory = !selectedCategory || item.category === selectedCategory;
+		const matchUniv = !selectedUniv || item.univName === selectedUniv;
+		const matchDept = !selectedDept || item.deptName === selectedDept;
+		const typeLabel = EXHIBITION_TYPE_LABEL[item.exhibitionType ?? ""] ?? item.exhibitionType;
+		const matchType = !selectedType || typeLabel === selectedType;
 		const matchSearch =
 			!searchQuery || item.title.includes(searchQuery) || item.author.includes(searchQuery);
-		return matchCategory && matchSearch;
+		return matchUniv && matchDept && matchType && matchSearch;
 	});
 
 	return (
@@ -34,10 +50,22 @@ export default function ArtworksClient({ artworks, categories, slugMap }: Artwor
 				searchPlaceholder="작품명, 작가 명을 검색해요."
 			>
 				<FilterChip
-					label="카테고리"
-					options={categories}
-					selected={selectedCategory}
-					onSelect={setSelectedCategory}
+					label="대학"
+					options={univs}
+					selected={selectedUniv}
+					onSelect={setSelectedUniv}
+				/>
+				<FilterChip
+					label="학과"
+					options={depts}
+					selected={selectedDept}
+					onSelect={setSelectedDept}
+				/>
+				<FilterChip
+					label="유형"
+					options={types}
+					selected={selectedType}
+					onSelect={setSelectedType}
 				/>
 			</CollapsingHeader>
 
