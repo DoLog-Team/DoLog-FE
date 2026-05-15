@@ -11,10 +11,15 @@ interface ExhibitionIntroProps {
 }
 
 export function ExhibitionIntroSection({ exhibition, exhibitionId }: ExhibitionIntroProps) {
+	const typeLabel =
+		exhibition.exhibitionType != null
+			? (EXHIBITION_TYPE_LABEL[exhibition.exhibitionType] ?? exhibition.exhibitionType)
+			: null;
+
 	const rows = [
 		{ label: "주최 대학", value: exhibition.univName },
 		{ label: "학과", value: exhibition.deptName },
-		{ label: "유형", value: EXHIBITION_TYPE_LABEL[exhibition.exhibitionType]},
+		...(typeLabel ? [{ label: "유형", value: typeLabel }] : []),
 	];
 
 	return (

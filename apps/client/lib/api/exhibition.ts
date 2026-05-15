@@ -13,7 +13,7 @@ export interface ExhibitionItem {
 	title: string;
 	univName: string;
 	deptName: string;
-	exhibitionType: string | null;
+	exhibitionType?: string | null;
 	imageUrl: string | null;
 	logoImg: string;
 	startDate: string | null;
@@ -87,7 +87,7 @@ export interface ExhibitionDetail {
 	exhibitionId: string;
 	univName: string;
 	deptName: string;
-	exhibitionType: string;
+	exhibitionType?: string | null;
 	title: string;
 	exhibitionImg: string;
 	startDate: string;
