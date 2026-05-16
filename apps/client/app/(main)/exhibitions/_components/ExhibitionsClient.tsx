@@ -32,7 +32,7 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 	];
 
 	const filtered = exhibitions.filter((e) => {
-		const matchSearch = e.title.includes(searchQuery);
+		const matchSearch = e.title.toLowerCase().includes(searchQuery.toLowerCase());
 		const matchUniv = !selectedUniv || e.univName === selectedUniv;
 		const matchDept = !selectedDept || e.deptName === selectedDept;
 		const typeLabel = EXHIBITION_TYPE_LABEL[e.exhibitionType ?? ""] ?? e.exhibitionType;
