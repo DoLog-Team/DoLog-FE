@@ -38,9 +38,10 @@ export const InfoSection = ({ data }: InfoSectionProps) => {
 					</p>
 				)}
 			</div>
-			<div className="mt-2.5">
+			{/* TODO : 추후 개선 논의 필요 (이번 전시에서만 [이름-역할] 영역 제외)  */}
+			{/* <div className="mt-2.5">
 				<RowList rows={artistRows} />
-			</div>
+			</div> */}
 		</section>
 	);
 };
