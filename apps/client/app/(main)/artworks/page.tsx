@@ -20,7 +20,7 @@ export default async function ArtworksPage() {
 					title: a.title,
 					imageUrl: a.imageUrl,
 					author: a.artistName,
-					category: a.category,
+					category: exhibitionMap[a.exhibitionId]?.deptName ?? a.category,
 					exhibitionTitle: a.exhibitionTitle,
 					univName: exhibitionMap[a.exhibitionId]?.univName,
 					deptName: exhibitionMap[a.exhibitionId]?.deptName,
