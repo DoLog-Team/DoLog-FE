@@ -12,8 +12,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 export const buttonVariants = cva(
 	// 공통 기본 스타일
 	"inline-flex items-center justify-center cursor-pointer relative overflow-hidden " +
-    "after:absolute after:inset-0 after:bg-black after:opacity-0 after:pointer-events-none hover:after:opacity-20 " +
-	"transition-all active:scale-[0.98]",
+		"after:absolute after:inset-0 after:bg-black after:opacity-0 after:pointer-events-none hover:after:opacity-20 " +
+		"transition-all active:scale-[0.98]",
 	{
 		variants: {
 			variant: {
@@ -41,25 +41,29 @@ export const buttonVariants = cva(
 		compoundVariants: [
 			// variant 별 스타일 클래스 정의
 			{
-                variant: "primary",
-                class: "bg-fg-inverse text-inverse disabled:bg-lighter disabled:text-disable disabled:after:hidden",
-            },
-            {
-                variant: "assistive",
-                class: "bg-fg-lighter text-light disabled:bg-lighter disabled:text-disable disabled:after:hidden",
-            },
-            { 
-                variant: "outline", 
-                class: "border-stroke-lighter text-lighter disabled:text-disable disabled:after:hidden" 
-            },
-            {
-                variant: "main",
-                class: "bg-btn-bg text-btn-text disabled:bg-lighter disabled:text-disable disabled:after:hidden",
-            },
-            {
-                variant: "cta",
-                class: "bg-cta-bg text-cta-text disabled:bg-lighter disabled:text-disable disabled:after:hidden",
-            },
+				variant: "primary",
+				class:
+					"bg-fg-inverse text-inverse disabled:bg-lighter disabled:text-disable disabled:after:hidden",
+			},
+			{
+				variant: "assistive",
+				class:
+					"bg-fg-lighter text-light disabled:bg-lighter disabled:text-disable disabled:after:hidden",
+			},
+			{
+				variant: "outline",
+				class: "border-stroke-lighter text-lighter disabled:text-disable disabled:after:hidden",
+			},
+			{
+				variant: "main",
+				class:
+					"bg-btn-bg text-btn-text disabled:bg-lighter disabled:text-disable disabled:after:hidden",
+			},
+			{
+				variant: "cta",
+				class:
+					"bg-cta-bg text-cta-text disabled:bg-lighter disabled:text-disable disabled:after:hidden",
+			},
 
 			// icon만 있을 경우 스타일 클래스 정의
 			{ iconOnly: true, size: "lg", class: "p-3 w-12 h-12" },
