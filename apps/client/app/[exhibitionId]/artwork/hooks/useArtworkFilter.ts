@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { ZoneGroup } from "@/lib/api/artwork";
 import { matchesQuery } from "utils";
+import type { ZoneGroup } from "@/lib/api/artwork";
 
 export function useArtworkFilter(zones: ZoneGroup[], searchQuery: string = "") {
 	const [selected, setSelected] = useState("전체");
@@ -18,9 +18,7 @@ export function useArtworkFilter(zones: ZoneGroup[], searchQuery: string = "") {
 				.filter((cat) => selected === "전체" || cat.categoryName === selected)
 				.flatMap((cat) => cat.artworks)
 				.filter(
-					(a) =>
-						matchesQuery(a.title, searchQuery) ||
-						matchesQuery(a.artistName, searchQuery),
+					(a) => matchesQuery(a.title, searchQuery) || matchesQuery(a.artistName, searchQuery),
 				),
 		}))
 		.sort((a, b) => a.zoneOrderId - b.zoneOrderId);
