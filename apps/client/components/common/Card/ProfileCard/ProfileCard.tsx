@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { EmptyArtistIcon } from "../../icons/EmptyArtistIcon";
 import { profileCardStyles as s } from "./ProfileCard.styles";
 import type { ProfileCardProps } from "./ProfileCard.types";
 
@@ -10,8 +11,11 @@ export const ProfileCard = ({ imageUrl, name, engName, bio }: ProfileCardProps) 
 				{imageUrl ? (
 					<Image src={imageUrl} alt={name} width={150} height={200} className={s.image} />
 				) : (
-					<div className="h-[212.1px] aspect-[1/1.414] shrink-0 bg-fg-lighter flex items-center justify-center">
-						<Image src="/icons/empty-image.svg" alt="이미지 없음" width={32} height={32} />
+					<div
+						className="h-[212.1px] aspect-[1/1.414] shrink-0 flex items-center justify-center"
+						style={{ backgroundColor: "color-mix(in srgb, var(--btn-text) 10%, transparent)" }}
+					>
+						<EmptyArtistIcon />
 					</div>
 				)}
 
