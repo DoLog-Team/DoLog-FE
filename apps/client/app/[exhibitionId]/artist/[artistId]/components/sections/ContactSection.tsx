@@ -1,6 +1,5 @@
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
 import type { LinkItem } from "@/components/common/Card/LinkCard/LinkCard.types";
-import { Title } from "@/components/common/Title/Title";
 import type { ArtistContact } from "@/lib/api/artists/artist-detail.types";
 
 export function ContactSection({ contact }: { contact: ArtistContact }) {
@@ -13,6 +12,8 @@ export function ContactSection({ contact }: { contact: ArtistContact }) {
 			type: "url" as const,
 		})),
 	];
+
+	if (items.length === 0) return null;
 
 	return <LinkCard items={items} />;
 }

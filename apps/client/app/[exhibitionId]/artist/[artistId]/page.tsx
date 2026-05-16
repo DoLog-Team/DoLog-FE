@@ -55,7 +55,9 @@ export default async function ArtistDetailPage({ params }: Props) {
 			<div className="flex flex-col px-4 w-full mx-auto">
 				<ProfileSection artist={artist} />
 
-				<ContactSection contact={artist.contact} />
+				{(!!artist.contact.email || (artist.contact.snsList?.length ?? 0) > 0) && (
+					<ContactSection contact={artist.contact} />
+				)}
 
 				<Divider />
 
