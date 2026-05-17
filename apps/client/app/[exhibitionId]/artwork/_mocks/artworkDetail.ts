@@ -79,6 +79,7 @@ export const MOCK_ARTWORK_DETAIL: ArtworkDetail = {
 			category: "생활 도자기",
 			artistName: "강슬기",
 			mainImage: "/images/artwork/artwork.png",
+			type: "prev",
 		},
 		{
 			id: "5",
@@ -86,6 +87,7 @@ export const MOCK_ARTWORK_DETAIL: ArtworkDetail = {
 			category: "생활 도자기",
 			artistName: "손승완",
 			mainImage: "/images/artwork/artwork.png",
+			type: "next",
 		},
 	],
 };

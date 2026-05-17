@@ -27,6 +27,7 @@ interface ArtworkListSectionProps {
 	categories: string[];
 	selected: string;
 	onSelect: (value: string) => void;
+	hideFilter?: boolean;
 }
 
 // [임시] Artwork → CardItem 변환
@@ -71,6 +72,7 @@ export function ArtworkListSection({
 	categories,
 	selected,
 	onSelect,
+	hideFilter,
 }: ArtworkListSectionProps) {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 	const { ref: titleRef, isVisible: isTitleVisible } = useIntersectionObserver();
@@ -93,7 +95,7 @@ export function ArtworkListSection({
 					onChange={onSearchChange}
 				/>
 				<div className="flex items-center justify-between">
-					<Filter categories={categories} selected={selected} onSelect={onSelect} />
+					{!hideFilter && <Filter categories={categories} selected={selected} onSelect={onSelect} />}
 					{!isTitleVisible && <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />}
 				</div>
 			</div>
