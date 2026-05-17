@@ -36,8 +36,9 @@ export default function ArtworksClient({ artworks, slugMap }: ArtworksClientProp
 		const matchDept = !selectedDept || item.deptName === selectedDept;
 		const typeLabel = EXHIBITION_TYPE_LABEL[item.exhibitionType ?? ""] ?? item.exhibitionType;
 		const matchType = !selectedType || typeLabel === selectedType;
+		const q = searchQuery.toLowerCase();
 		const matchSearch =
-			!searchQuery || item.title.includes(searchQuery) || item.author.includes(searchQuery);
+			!searchQuery || item.title.toLowerCase().includes(q) || item.author.toLowerCase().includes(q);
 		return matchUniv && matchDept && matchType && matchSearch;
 	});
 

@@ -12,5 +12,5 @@ export const profileCardStyles = {
 	name: "text-head3 text-strong",
 	engName: "text-body2 text-light mt-[4px]",
 
-	bio: "text-body1 text-light leading-[24px]",
+	bio: "text-body1 text-light leading-[24px] mb-6",
 };

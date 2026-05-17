@@ -1,6 +1,6 @@
 export const linkCardStyles = {
-	wrapper: "w-full",
-	list: "flex flex-col gap-[4px] w-full",
+	wrapper: "w-full mb-6",
+	list: "flex flex-col gap-[4px] w-full mb-5",
 
 	row: "flex items-start w-full gap-[4px]",
 

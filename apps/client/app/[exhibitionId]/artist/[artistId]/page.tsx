@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Divider } from "@/components/common/Divider/Divider";
 import { resolveExhibitionSlug } from "@/lib/api/exhibition";
 import { getArtistDetail } from "../../../../lib/api/artists/artist-detail";
 import { getExhibitionMeta } from "../../_api/getExhibitionMeta";
@@ -54,7 +55,11 @@ export default async function ArtistDetailPage({ params }: Props) {
 			<div className="flex flex-col px-4 w-full mx-auto">
 				<ProfileSection artist={artist} />
 
-				<ContactSection contact={artist.contact} />
+				{(!!artist.contact.email || (artist.contact.snsList?.length ?? 0) > 0) && (
+					<ContactSection contact={artist.contact} />
+				)}
+
+				<Divider />
 
 				<BTSSection exhibitionId={exhibitionId} artist={artist} />
 
