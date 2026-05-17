@@ -151,6 +151,7 @@ export interface RelatedArtwork {
 	category: string;
 	artistName: string;
 	mainImage: string;
+	type?: "prev" | "next";
 }
 
 // 작품 상세 전체 응답

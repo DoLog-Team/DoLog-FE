@@ -18,13 +18,13 @@ export default async function ArtworkListPage({ params }: ArtworkListPageProps) 
 		? ((await getArtworksList(uuid)) ?? MOCK_ARTWORK_LIST)
 		: MOCK_ARTWORK_LIST;
 
-	// const exhibition =
-	// 	MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId) ?? MOCK_EXHIBITION_DATA[0];
+	const HIDE_FILTER_EXHIBITION_IDS = new Set(["5918413e-3bb4-4237-ae4d-c55d8f025f34"]);
+	const hideFilter = uuid ? HIDE_FILTER_EXHIBITION_IDS.has(uuid) : false;
 
 	return (
 		<main>
 			<Header />
-			<ArtworksClient maps={artworkData.maps} zones={artworkData.zones} />
+			<ArtworksClient maps={artworkData.maps} zones={artworkData.zones} hideFilter={hideFilter} />
 		</main>
 	);
 }
