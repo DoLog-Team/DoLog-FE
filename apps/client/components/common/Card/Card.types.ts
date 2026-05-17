@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export interface CardItem {
 	id: number | string;
 	imageUrl?: string;
@@ -8,6 +10,7 @@ export interface CardItem {
 	univName?: string;
 	deptName?: string;
 	exhibitionType?: string;
+	emptyIcon?: ReactNode;
 }
 
 export interface CardProps extends Omit<CardItem, "id"> {}

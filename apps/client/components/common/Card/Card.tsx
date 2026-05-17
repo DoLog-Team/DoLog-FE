@@ -9,6 +9,7 @@ export const Card = ({
 	category,
 	author,
 	href,
+	emptyIcon,
 }: CardProps & { href?: string }) => {
 	const content = (
 		<article className={s.wrapper}>
@@ -24,8 +25,17 @@ export const Card = ({
 						loading="lazy"
 					/>
 				) : (
-					<div className="w-full h-full bg-fg-lighter flex items-center justify-center">
-						<Image src="/icons/empty-image.svg" alt="이미지 없음" width={32} height={32} />
+					<div
+						className="w-full h-full flex items-center justify-center"
+						style={
+							emptyIcon
+								? { backgroundColor: "color-mix(in srgb, var(--btn-text) 10%, transparent)" }
+								: { backgroundColor: "var(--color-fg-lighter)" }
+						}
+					>
+						{emptyIcon ?? (
+							<Image src="/icons/empty-image.svg" alt="이미지 없음" width={32} height={32} />
+						)}
 					</div>
 				)}
 			</div>

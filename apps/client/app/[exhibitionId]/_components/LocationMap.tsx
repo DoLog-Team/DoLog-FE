@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 interface LocationMapProps {
@@ -43,7 +44,13 @@ export function LocationMap({ address, lat, lng }: LocationMapProps) {
 					rel="noopener noreferrer"
 					className="flex-1 flex items-center justify-center gap-0.5"
 				>
-					<div className="w-5 h-5 bg-fg-light" />
+					<Image
+						src="/icons/naverMap.png"
+						alt="네이버 맵"
+						width={20}
+						height={20}
+						className="object-contain"
+					/>
 					<span className="px-1.25 text-body2-bold text-lighter">네이버 맵</span>
 				</a>
 
@@ -56,7 +63,13 @@ export function LocationMap({ address, lat, lng }: LocationMapProps) {
 					rel="noopener noreferrer"
 					className="flex-1 flex items-center justify-center gap-0.5"
 				>
-					<div className="w-5 h-5 bg-fg-light" />
+					<Image
+						src="/icons/kakaoMap.png"
+						alt="카카오 맵"
+						width={20}
+						height={20}
+						className="object-contain"
+					/>
 					<span className="px-1 text-body2-bold text-lighter">카카오 맵</span>
 				</a>
 
@@ -65,9 +78,15 @@ export function LocationMap({ address, lat, lng }: LocationMapProps) {
 				{/* 주소 복사 버튼 */}
 				<button
 					onClick={handleCopyAddress}
-					className="flex-1 flex items-center justify-center gap-0.5"
+					className="flex-1 flex items-center justify-center gap-0.5 cursor-pointer"
 				>
-					<div className="w-5 h-5 bg-fg-light" />
+					<Image
+						src="/icons/link.svg"
+						alt="주소 복사"
+						width={20}
+						height={20}
+						className="object-contain"
+					/>
 					<span className="px-1 text-body2-bold text-lighter">주소 복사</span>
 				</button>
 			</div>

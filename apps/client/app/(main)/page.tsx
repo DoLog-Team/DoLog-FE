@@ -4,7 +4,7 @@ import { Divider } from "@/components/common/Divider/Divider";
 import MainFooter from "@/components/common/Footer/MainFooter";
 import { Title } from "@/components/common/Title/Title";
 import { getMainArtworks } from "@/lib/api/artwork";
-import { getBanners, getMainExhibitions } from "@/lib/api/exhibition";
+import { getBanners, getExhibitions, getMainExhibitions } from "@/lib/api/exhibition";
 import Banner from "./_components/Banner";
 import CategorySection from "./_components/CategorySection";
 import ExhibitionCard from "./_components/ExhibitionCard";
@@ -14,20 +14,22 @@ import { MOCK_EXHIBITIONS } from "./_mocks/exhibition";
 import { MOCK_SECTIONS } from "./_mocks/section";
 
 export default async function MainPage() {
-	const [banners, mainExhibitions, mainArtworks] = await Promise.all([
+	const [banners, mainExhibitions, mainArtworks, allExhibitions] = await Promise.all([
 		getBanners(),
 		getMainExhibitions(),
 		getMainArtworks(),
+		getExhibitions(),
 	]);
 	const displayBanners = banners.length > 0 ? banners : MOCK_BANNERS;
 	const displayExhibitions = mainExhibitions.length > 0 ? mainExhibitions : MOCK_EXHIBITIONS;
+	const exhibitionMap = Object.fromEntries(allExhibitions.map((e) => [e.id, e.deptName]));
 	const allArtworks = mainArtworks.flatMap((cat) =>
 		cat.artworks.map((a) => ({
 			id: a.id,
 			title: a.title,
 			imageUrl: a.imageUrl,
 			author: a.artistName,
-			category: cat.categoryName,
+			category: exhibitionMap[a.exhibitionId] ?? cat.categoryName,
 		})),
 	);
 	const artworkSlugMap = Object.fromEntries(
