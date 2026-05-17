@@ -36,7 +36,7 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 			</div>
 
 			{/* 소개글 */}
-			{author.bio && <p className="text-body1 pt-4 pb-6">{author.bio}</p>}
+			{author.bio && <p className="text-body1 pt-4">{author.bio}</p>}
 
 			{/* 연락처 - 선택값 */}
 			{(!!author.email || (author.sns ?? []).length > 0) && (
