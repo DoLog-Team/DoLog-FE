@@ -1,6 +1,7 @@
 import { Button } from "components";
 import Image from "next/image";
 import Link from "next/link";
+import { EmptyArtistIcon } from "@/components/common/icons/EmptyArtistIcon";
 import RowList from "@/components/common/RowList/RowList";
 import type { ArtworkParticipant } from "@/lib/api/artwork";
 
@@ -19,8 +20,11 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 					{author.profileImg ? (
 						<Image src={author.profileImg} alt={author.nameKo} fill className="object-cover" />
 					) : (
-						<div className="w-full h-full bg-fg-lighter flex items-center justify-center">
-							<Image src="/icons/empty-image.svg" alt="이미지 없음" width={32} height={32} />
+						<div
+							className="w-full h-full flex items-center justify-center"
+							style={{ backgroundColor: "color-mix(in srgb, var(--btn-text) 10%, transparent)" }}
+						>
+							<EmptyArtistIcon />
 						</div>
 					)}
 				</div>
