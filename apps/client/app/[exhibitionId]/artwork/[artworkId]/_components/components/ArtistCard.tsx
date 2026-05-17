@@ -43,29 +43,37 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 				<div className="flex flex-col pb-5 pt-6">
 					<RowList
 						rows={[
-							...(author.email ? [{
-								label: "email",
-								value: <a href={`mailto:${author.email}`} className="underline">{author.email}</a>,
-							}] : []),
+							...(author.email
+								? [
+										{
+											label: "email",
+											value: (
+												<a href={`mailto:${author.email}`} className="underline">
+													{author.email}
+												</a>
+											),
+										},
+									]
+								: []),
 							...(author.sns ?? []).map((sns) => {
-							const isInstagram = sns.platformName.toLowerCase() === "instagram";
-							const isUrl = sns.url.startsWith("http://") || sns.url.startsWith("https://");
-							const href = isInstagram
-								? `https://www.instagram.com/${sns.url.startsWith("@") ? sns.url.slice(1) : sns.url}/`
-								: isUrl
-									? sns.url
-									: null;
-							return {
-								label: sns.platformName,
-								value: href ? (
-									<a href={href} target="_blank" rel="noopener noreferrer" className="underline">
-										{sns.url}
-									</a>
-								) : (
-									sns.url
-								),
-							};
-						}),
+								const isInstagram = sns.platformName.toLowerCase() === "instagram";
+								const isUrl = sns.url.startsWith("http://") || sns.url.startsWith("https://");
+								const href = isInstagram
+									? `https://www.instagram.com/${sns.url.startsWith("@") ? sns.url.slice(1) : sns.url}/`
+									: isUrl
+										? sns.url
+										: null;
+								return {
+									label: sns.platformName,
+									value: href ? (
+										<a href={href} target="_blank" rel="noopener noreferrer" className="underline">
+											{sns.url}
+										</a>
+									) : (
+										sns.url
+									),
+								};
+							}),
 						]}
 					/>
 				</div>

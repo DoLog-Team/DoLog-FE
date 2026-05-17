@@ -35,7 +35,6 @@ export default async function ArtworkDetailPage({ params }: ArtworkDetailPagePro
 	const data = uuid
 		? ((await getArtworkDetail(uuid, artworkId)) ?? MOCK_ARTWORK_DETAIL)
 		: MOCK_ARTWORK_DETAIL;
-	console.log("[ArtworkDetailPage] data:", JSON.stringify(data, null, 2));
 
 	return <ArtworkDetailClient data={data} />;
 }
