@@ -8,12 +8,8 @@ export interface ArtworkItem {
 	exhibitionTitle: string;
 	exhibitionId: string;
 	slug: string;
+	deptName: string;
 	artistName: string;
-}
-
-export interface MainArtworkCategory {
-	categoryName: string;
-	artworks: ArtworkItem[];
 }
 
 export async function getArtworks(): Promise<ArtworkItem[]> {
@@ -24,10 +20,9 @@ export async function getArtworks(): Promise<ArtworkItem[]> {
 	}
 }
 
-export async function getMainArtworks(): Promise<MainArtworkCategory[]> {
+export async function getMainArtworks(): Promise<ArtworkItem[]> {
 	try {
-		const data = await apiClient<{ categories: MainArtworkCategory[] }>("/artworks?main=true");
-		return data.categories;
+		return await apiClient<ArtworkItem[]>("/artworks?main=true");
 	} catch {
 		return [];
 	}
