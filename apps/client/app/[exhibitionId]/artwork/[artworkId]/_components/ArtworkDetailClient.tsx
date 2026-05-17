@@ -48,7 +48,7 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 						priority
 					/>
 				) : (
-					<div className="w-full h-full bg-fg-lighter flex items-center justify-center">
+					<div className="w-full aspect-video bg-fg-lighter flex items-center justify-center">
 						<Image src="/icons/empty-image.svg" alt="이미지 없음" width={32} height={32} />
 					</div>
 				)}
