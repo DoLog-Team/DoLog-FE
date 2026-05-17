@@ -95,8 +95,7 @@ export async function getArtworksList(
 		const path = `/exhibitions/${exhibitionId}/artworks${queryString ? `?${queryString}` : ""}`;
 
 		return await apiClient<ArtworkListResponse>(path);
-	} catch (error) {
-		console.error("[getArtworkList] 에러:", error);
+	} catch {
 		return null;
 	}
 }
@@ -173,8 +172,7 @@ export async function getArtworkDetail(
 ): Promise<ArtworkDetail | null> {
 	try {
 		return await apiClient<ArtworkDetail>(`/exhibitions/${exhibitionId}/artworks/${artworkId}`);
-	} catch (error) {
-		console.error("[getArtworkDetail] 에러:", error);
+	} catch {
 		return null;
 	}
 }

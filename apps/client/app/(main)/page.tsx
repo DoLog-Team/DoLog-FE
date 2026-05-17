@@ -30,8 +30,6 @@ export default async function MainPage() {
 	}));
 	const artworkSlugMap = Object.fromEntries(mainArtworks.map((a) => [a.id, a.slug]));
 
-	console.log("[MainPage] mainArtworks", JSON.stringify(mainArtworks, null, 2));
-
 	return (
 		<div className="flex flex-col">
 			<Header />
