@@ -22,7 +22,8 @@ export async function getArtworks(): Promise<ArtworkItem[]> {
 
 export async function getMainArtworks(): Promise<ArtworkItem[]> {
 	try {
-		return await apiClient<ArtworkItem[]>("/artworks?main=true");
+		const data = await apiClient<ArtworkItem[] | null>("/artworks?main=true");
+		return Array.isArray(data) ? data : [];
 	} catch {
 		return [];
 	}
