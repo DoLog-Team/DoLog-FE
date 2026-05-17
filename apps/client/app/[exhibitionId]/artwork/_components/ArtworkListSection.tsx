@@ -95,7 +95,9 @@ export function ArtworkListSection({
 					onChange={onSearchChange}
 				/>
 				<div className="flex items-center justify-between">
-					{!hideFilter && <Filter categories={categories} selected={selected} onSelect={onSelect} />}
+					{!hideFilter && (
+						<Filter categories={categories} selected={selected} onSelect={onSelect} />
+					)}
 					{!isTitleVisible && <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />}
 				</div>
 			</div>

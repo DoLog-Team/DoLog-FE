@@ -36,9 +36,9 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 			<Header variant="back" />
 
 			{/* 대표 이미지 */}
-			<div className="relative aspect-video w-full">
+			<div className="w-full h-auto">
 				{data.mainImage ? (
-					<Image src={data.mainImage} alt={data.title} fill className="object-cover" priority />
+					<Image src={data.mainImage} alt={data.title} width={0} height={0} sizes="100vw" className="w-full h-auto" priority />
 				) : (
 					<div className="w-full h-full bg-fg-lighter flex items-center justify-center">
 						<Image src="/icons/empty-image.svg" alt="이미지 없음" width={32} height={32} />
