@@ -17,7 +17,7 @@ export const ScrollTabBar = ({ tabs, activeTab, onTabClick, className }: ScrollT
 	return (
 		<div
 			className={cn(
-				"fixed bottom-0 w-full max-w-135 z-20 bg-normal",
+				"fixed bottom-0 w-full max-w-135 z-20 flex border-t border-stroke-lightest bg-normal",
 				className,
 			)}
 		>
