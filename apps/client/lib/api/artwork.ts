@@ -8,12 +8,8 @@ export interface ArtworkItem {
 	exhibitionTitle: string;
 	exhibitionId: string;
 	slug: string;
+	deptName: string;
 	artistName: string;
-}
-
-export interface MainArtworkCategory {
-	categoryName: string;
-	artworks: ArtworkItem[];
 }
 
 export async function getArtworks(): Promise<ArtworkItem[]> {
@@ -24,10 +20,9 @@ export async function getArtworks(): Promise<ArtworkItem[]> {
 	}
 }
 
-export async function getMainArtworks(): Promise<MainArtworkCategory[]> {
+export async function getMainArtworks(): Promise<ArtworkItem[]> {
 	try {
-		const data = await apiClient<{ categories: MainArtworkCategory[] }>("/artworks?main=true");
-		return data.categories ?? [];
+		return await apiClient<ArtworkItem[]>("/artworks?main=true");
 	} catch {
 		return [];
 	}
@@ -100,8 +95,7 @@ export async function getArtworksList(
 		const path = `/exhibitions/${exhibitionId}/artworks${queryString ? `?${queryString}` : ""}`;
 
 		return await apiClient<ArtworkListResponse>(path);
-	} catch (error) {
-		console.error("[getArtworkList] 에러:", error);
+	} catch {
 		return null;
 	}
 }
@@ -126,6 +120,7 @@ export interface ArtworkParticipant {
 	profileImg: string | null;
 	role?: string;
 	bio?: string;
+	email?: string | null;
 	sns?: ArtistSns[];
 }
 
@@ -177,8 +172,7 @@ export async function getArtworkDetail(
 ): Promise<ArtworkDetail | null> {
 	try {
 		return await apiClient<ArtworkDetail>(`/exhibitions/${exhibitionId}/artworks/${artworkId}`);
-	} catch (error) {
-		console.error("[getArtworkDetail] 에러:", error);
+	} catch {
 		return null;
 	}
 }
