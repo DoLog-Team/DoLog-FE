@@ -94,11 +94,15 @@ export function ArtworkListSection({
 					value={searchQuery}
 					onChange={onSearchChange}
 				/>
-				<div className="flex items-center justify-between">
+				<div className="flex items-center">
 					{!hideFilter && (
 						<Filter categories={categories} selected={selected} onSelect={onSelect} />
 					)}
-					{!isTitleVisible && <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />}
+					{!isTitleVisible && (
+						<div className="ml-auto">
+							<ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+						</div>
+					)}
 				</div>
 			</div>
 
@@ -125,6 +129,7 @@ export function ArtworkListSection({
 							{isMultiZone && <Title title={zone.zoneName} />}
 							{items.length === 0 ? (
 								<EmptyState
+									searchQuery={searchQuery || undefined}
 									message={"선택한 카테고리에 해당되는\n작품이 없어요"}
 									className="w-full pb-16 pt-10 px-2.5"
 								/>
