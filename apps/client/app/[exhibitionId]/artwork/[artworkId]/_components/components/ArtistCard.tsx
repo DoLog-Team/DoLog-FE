@@ -42,10 +42,25 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 			{(author.sns ?? []).length > 0 && (
 				<div className="flex flex-col pb-5">
 					<RowList
-						rows={(author.sns ?? []).map((sns) => ({
-							label: sns.platformName,
-							value: sns.url,
-						}))}
+						rows={(author.sns ?? []).map((sns) => {
+							const isInstagram = sns.platformName.toLowerCase() === "instagram";
+							const isUrl = sns.url.startsWith("http://") || sns.url.startsWith("https://");
+							const href = isInstagram
+								? `https://www.instagram.com/${sns.url.startsWith("@") ? sns.url.slice(1) : sns.url}/`
+								: isUrl
+									? sns.url
+									: null;
+							return {
+								label: sns.platformName,
+								value: href ? (
+									<a href={href} target="_blank" rel="noopener noreferrer">
+										{sns.url}
+									</a>
+								) : (
+									sns.url
+								),
+							};
+						})}
 					/>
 				</div>
 			)}

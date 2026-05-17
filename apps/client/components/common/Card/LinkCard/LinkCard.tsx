@@ -10,6 +10,10 @@ export const LinkCard = ({ items, className }: LinkCardProps) => {
 
 	const getHref = (item: LinkCardProps["items"][number]) => {
 		if (item.type === "email") return `mailto:${item.value}`;
+		if (item.label.toLowerCase() === "instagram") {
+			const username = item.value.startsWith("@") ? item.value.slice(1) : item.value;
+			return `https://www.instagram.com/${username}/`;
+		}
 		if (item.type === "url") return item.value;
 		return null;
 	};
