@@ -18,7 +18,6 @@ export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigati
 					<div className="flex items-center justify-between py-2.5 gap-4">
 						<div className="flex items-center gap-2 flex-1 min-w-0">
 							{prevArtwork.mainImage ? (
-								/* 16:9 비율 유지를 위해 80x45 크기 지정 및 object-cover 설정 */
 								<div className="w-20 h-[45px] shrink-0 relative overflow-hidden">
 									<Image
 										src={prevArtwork.mainImage}
