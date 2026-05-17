@@ -126,6 +126,7 @@ export interface ArtworkParticipant {
 	profileImg: string | null;
 	role?: string;
 	bio?: string;
+	email?: string | null;
 	sns?: ArtistSns[];
 }
 

@@ -15,7 +15,7 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 	return (
 		<div className="flex flex-col">
 			{/* 프로필 이미지 + 이름 */}
-			<div className="flex pb-4">
+			<div className="flex">
 				<div className="relative shrink-0 w-32 aspect-[1/1.414]">
 					{author.profileImg ? (
 						<Image src={author.profileImg} alt={author.nameKo} fill className="object-cover" />
@@ -36,13 +36,18 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 			</div>
 
 			{/* 소개글 */}
-			<p className="text-body1 pb-6">{author.bio}</p>
+			{author.bio && <p className="text-body1 pt-4 pb-6">{author.bio}</p>}
 
-			{/* SNS 링크 - 선택값 */}
-			{(author.sns ?? []).length > 0 && (
-				<div className="flex flex-col pb-5">
+			{/* 연락처 - 선택값 */}
+			{(!!author.email || (author.sns ?? []).length > 0) && (
+				<div className="flex flex-col pb-5 pt-6">
 					<RowList
-						rows={(author.sns ?? []).map((sns) => {
+						rows={[
+							...(author.email ? [{
+								label: "email",
+								value: <a href={`mailto:${author.email}`} className="underline">{author.email}</a>,
+							}] : []),
+							...(author.sns ?? []).map((sns) => {
 							const isInstagram = sns.platformName.toLowerCase() === "instagram";
 							const isUrl = sns.url.startsWith("http://") || sns.url.startsWith("https://");
 							const href = isInstagram
@@ -60,7 +65,8 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 									sns.url
 								),
 							};
-						})}
+						}),
+						]}
 					/>
 				</div>
 			)}
