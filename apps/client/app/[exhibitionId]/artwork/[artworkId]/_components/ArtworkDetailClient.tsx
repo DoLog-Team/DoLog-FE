@@ -28,22 +28,27 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 	}, [data.relatedBts]);
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(TABS.map((t) => t.id));
 
-	// 둘러보기 목록(prev,next 정의)
-	const alphabetical = data.alphabeticalArtworks;
-	const currentTitle = data.title;
-	const prevArtwork = alphabetical.find((a) => a.title < currentTitle);
-	const nextArtwork = alphabetical.find((a) => a.title > currentTitle);
+	const prevArtwork = data.alphabeticalArtworks.find((a) => a.type === "prev");
+	const nextArtwork = data.alphabeticalArtworks.find((a) => a.type === "next");
 
 	return (
 		<div className="flex flex-col">
 			<Header variant="back" />
 
 			{/* 대표 이미지 */}
-			<div className="relative aspect-video w-full">
+			<div className="w-full h-auto">
 				{data.mainImage ? (
-					<Image src={data.mainImage} alt={data.title} fill className="object-cover" priority />
+					<Image
+						src={data.mainImage}
+						alt={data.title}
+						width={0}
+						height={0}
+						sizes="100vw"
+						className="w-full h-auto"
+						priority
+					/>
 				) : (
-					<div className="w-full h-full bg-fg-lighter flex items-center justify-center">
+					<div className="w-full aspect-video bg-fg-lighter flex items-center justify-center">
 						<Image src="/icons/empty-image.svg" alt="이미지 없음" width={32} height={32} />
 					</div>
 				)}

@@ -40,13 +40,24 @@ interface SocialLinkProps {
 }
 
 function SocialLink({ label, href }: SocialLinkProps) {
+	const isInstagram = label.toLowerCase() === "instagram";
 	const isUrl = href.startsWith("http://") || href.startsWith("https://");
+	const resolvedHref = isInstagram
+		? `https://www.instagram.com/${href.startsWith("@") ? href.slice(1) : href}/`
+		: isUrl
+			? href
+			: null;
 
 	return (
 		<div className="flex flex-wrap items-center gap-1">
 			<span className="min-w-19 text-body2-bold shrink-0">{label}</span>
-			{isUrl ? (
-				<a href={href} target="_blank" rel="noopener noreferrer" className="text-body2">
+			{resolvedHref ? (
+				<a
+					href={resolvedHref}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="text-body2 underline"
+				>
 					{href}
 				</a>
 			) : (
