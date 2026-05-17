@@ -27,7 +27,7 @@ export async function getArtworks(): Promise<ArtworkItem[]> {
 export async function getMainArtworks(): Promise<MainArtworkCategory[]> {
 	try {
 		const data = await apiClient<{ categories: MainArtworkCategory[] }>("/artworks?main=true");
-		return data.categories;
+		return data.categories ?? [];
 	} catch {
 		return [];
 	}
