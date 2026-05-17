@@ -33,11 +33,16 @@ export const LinkCard = ({ items, className }: LinkCardProps) => {
 							<div className={s.valueBox}>
 								{href ? (
 									href.startsWith("http") ? (
-										<a href={href} target="_blank" rel="noopener noreferrer" className={s.value}>
+										<a
+											href={href}
+											target="_blank"
+											rel="noopener noreferrer"
+											className={`${s.value} underline`}
+										>
 											{item.value}
 										</a>
 									) : (
-										<a href={href} className={s.value}>
+										<a href={href} className={`${s.value} underline`}>
 											{item.value}
 										</a>
 									)

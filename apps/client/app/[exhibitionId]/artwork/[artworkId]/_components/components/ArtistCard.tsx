@@ -53,7 +53,7 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 							return {
 								label: sns.platformName,
 								value: href ? (
-									<a href={href} target="_blank" rel="noopener noreferrer">
+									<a href={href} target="_blank" rel="noopener noreferrer" className="underline">
 										{sns.url}
 									</a>
 								) : (
