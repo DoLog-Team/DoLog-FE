@@ -1,11 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { CollapsingHeader } from "@/components/common/CollapsingHeader/CollapsingHeader";
 import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { FilterChip } from "@/components/common/FilterChip/FilterChip";
 import MainFooter from "@/components/common/Footer/MainFooter";
+import { PageTracker } from "@/components/common/PageTracker";
+import { TrackedLink } from "@/components/common/TrackedLink";
+import { track } from "@/lib/amplitude";
 import type { ExhibitionItem } from "@/lib/api/exhibition";
 import { EXHIBITION_TYPE_LABEL } from "@/lib/constants/exhibition";
 import ExhibitionCard from "../../_components/ExhibitionCard";
@@ -42,6 +44,7 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 
 	return (
 		<div className="flex flex-col min-h-screen">
+			<PageTracker pageName="exhibitions_list" />
 			<CollapsingHeader
 				title="전체 전시"
 				searchQuery={searchQuery}
@@ -52,29 +55,61 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 					label="대학"
 					options={univs}
 					selected={selectedUniv}
-					onSelect={setSelectedUniv}
+					onSelect={(val) => {
+						setSelectedUniv(val);
+						if (val)
+							track("Filter Selected", {
+								filter_type: "univ",
+								value: val,
+								page: "exhibitions_list",
+							});
+					}}
 				/>
 				<FilterChip
 					label="학과"
 					options={depts}
 					selected={selectedDept}
-					onSelect={setSelectedDept}
+					onSelect={(val) => {
+						setSelectedDept(val);
+						if (val)
+							track("Filter Selected", {
+								filter_type: "dept",
+								value: val,
+								page: "exhibitions_list",
+							});
+					}}
 				/>
 				<FilterChip
 					label="유형"
 					options={types}
 					selected={selectedType}
-					onSelect={setSelectedType}
+					onSelect={(val) => {
+						setSelectedType(val);
+						if (val)
+							track("Filter Selected", {
+								filter_type: "type",
+								value: val,
+								page: "exhibitions_list",
+							});
+					}}
 				/>
 			</CollapsingHeader>
 
-			{/* 전시회 목록 */}
 			<section className="flex flex-col flex-1 px-4 gap-4">
 				{filtered.length > 0 ? (
 					filtered.map((exhibition) => (
-						<Link key={exhibition.id} href={`/${exhibition.slug || exhibition.id}`}>
+						<TrackedLink
+							key={exhibition.id}
+							href={`/${exhibition.slug || exhibition.id}`}
+							eventName="Exhibition Card Clicked"
+							eventProps={{
+								exhibition_id: exhibition.id,
+								exhibition_title: exhibition.title,
+								page: "exhibitions_list",
+							}}
+						>
 							<ExhibitionCard {...exhibition} />
-						</Link>
+						</TrackedLink>
 					))
 				) : (
 					<EmptyState searchQuery={searchQuery} />

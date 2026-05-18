@@ -6,6 +6,7 @@ import { useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { Title } from "@/components/common/Title/Title";
 import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
+import { track } from "@/lib/amplitude";
 import { MOCK_BEHIND_THE_SCENE } from "../bts/_mocks/behind-the-scene";
 
 interface SidebarProps {
@@ -65,7 +66,10 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 							<Link
 								key={item.label}
 								href={`${baseUrl}${item.path}`}
-								onClick={onClose}
+								onClick={() => {
+									track("GNB Nav Clicked", { label: item.label, from_page: pathname });
+									onClose();
+								}}
 								className={`py-1 cursor-pointer transition-colors ${
 									isActive(item.path) ? "text-body1-bold text-light" : "text-body1 text-lightest"
 								}`}
@@ -77,6 +81,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
 					<Button
 						onClick={() => {
+							track("GNB Nav Clicked", { label: "dolog 홈에서 전시 보기", from_page: pathname });
 							window.open("/", "_blank", "noopener,noreferrer");
 							onClose();
 						}}

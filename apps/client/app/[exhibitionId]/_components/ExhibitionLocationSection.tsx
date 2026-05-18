@@ -8,7 +8,7 @@ interface ExhibitionLocationProps {
 
 export function ExhibitionLocationSection({ location }: ExhibitionLocationProps) {
 	return (
-		<section className="flex flex-col px-4 pb-6">
+		<section className="flex flex-col px-4 pb-6" data-section="location">
 			<Title title="장소" />
 			<LocationMap address={location.address} lat={location.latitude} lng={location.longitude} />
 			<p className="text-body1">{location.address}</p>

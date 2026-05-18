@@ -7,6 +7,7 @@ import type { CardItem } from "@/components/common/Card/Card.types";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 // import { Chip } from "@/components/common/Chip/Chip";
 import { Title } from "@/components/common/Title/Title";
+import { track } from "@/lib/amplitude";
 
 interface Props {
 	title: string;
@@ -48,6 +49,13 @@ export default function CategorySection({ title, categories, artworks, slugMap }
 								}
 							: undefined
 					}
+					onItemClick={(item) =>
+						track("Artwork Card Clicked", {
+							artwork_id: item.id,
+							artwork_title: item.title,
+							page: "main",
+						})
+					}
 				/>
 			</div>
 
@@ -57,6 +65,7 @@ export default function CategorySection({ title, categories, artworks, slugMap }
 					variant: "assistive",
 					className: "mt-7 mb-6 w-full",
 				})}
+				onClick={() => track("More Button Clicked", { target: "artworks", page: "main" })}
 			>
 				더보기
 			</Link>

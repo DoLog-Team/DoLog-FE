@@ -10,7 +10,8 @@ export const Card = ({
 	author,
 	href,
 	emptyIcon,
-}: CardProps & { href?: string }) => {
+	onClick,
+}: CardProps & { href?: string; onClick?: () => void }) => {
 	const content = (
 		<article className={s.wrapper}>
 			<div className={s.imageWrapper}>
@@ -47,5 +48,11 @@ export const Card = ({
 		</article>
 	);
 
-	return href ? <Link href={href}>{content}</Link> : content;
+	return href ? (
+		<Link href={href} onClick={onClick}>
+			{content}
+		</Link>
+	) : (
+		content
+	);
 };

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ExhibitionPageTracker } from "@/components/common/ExhibitionPageTracker";
 import MainFooter from "@/components/common/Footer/MainFooter";
 import SchoolFooter from "@/components/common/Footer/SchoolFooter";
 import { getExhibitions } from "@/lib/api/exhibition";
@@ -83,6 +84,7 @@ export default async function ExhibitionLayout({
 				}}
 			>
 				<div className="bg-normal text-strong min-h-dvh flex flex-col" style={colorVars}>
+					<ExhibitionPageTracker />
 					<div className="min-h-dvh flex flex-col w-full max-w-135 mx-auto">{children}</div>
 
 					{footer ? (

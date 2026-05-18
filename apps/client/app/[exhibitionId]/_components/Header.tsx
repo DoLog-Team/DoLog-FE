@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { track } from "@/lib/amplitude";
 import { useExhibition } from "../_context/ExhibitionContext";
 import { Sidebar } from "./Sidebar";
 
@@ -15,6 +16,7 @@ interface HeaderProps {
 
 export const Header = ({ variant = "logo", title }: HeaderProps) => {
 	const router = useRouter();
+	const pathname = usePathname();
 	const { slug, logoImg } = useExhibition();
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -69,7 +71,11 @@ export const Header = ({ variant = "logo", title }: HeaderProps) => {
 				)}
 				<button
 					type="button"
-					onClick={() => setIsSidebarOpen((prev) => !prev)}
+					onClick={() => {
+						const next = !isSidebarOpen;
+						setIsSidebarOpen(next);
+						if (next) track("GNB Hamburger Clicked", { from_page: pathname });
+					}}
 					className="cursor-pointer"
 					aria-label={isSidebarOpen ? "메뉴 닫기" : "메뉴 열기"}
 				>

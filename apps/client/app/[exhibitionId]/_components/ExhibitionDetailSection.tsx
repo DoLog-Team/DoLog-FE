@@ -23,7 +23,7 @@ export function ExhibitionDetailSection({ exhibition }: ExhibitionDetailProps) {
 	];
 
 	return (
-		<section className="flex flex-col px-4 pb-6">
+		<section className="flex flex-col px-4 pb-6" data-section="detail">
 			<Title title="전시 소개" />
 			<div className="flex flex-col gap-2 mb-4">
 				<RowList rows={rows} />

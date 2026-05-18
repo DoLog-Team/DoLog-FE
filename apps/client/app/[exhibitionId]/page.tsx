@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Divider } from "@/components/common/Divider/Divider";
+import { SectionTimeTracker } from "@/components/common/SectionTimeTracker";
 import { getExhibitionDetail, getExhibitionHost, getHostSns } from "@/lib/api/exhibition";
 import { resolveExhibitionId } from "./_api/resolveExhibitionId";
 import { ExhibitionDetailSection } from "./_components/ExhibitionDetailSection";
@@ -34,6 +35,10 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 
 	return (
 		<main>
+			<SectionTimeTracker
+				pageName="exhibition_intro"
+				sections={["intro", "detail", "location", "host"]}
+			/>
 			<Header />
 			{/* 대표 이미지 */}
 			<div className="relative w-full aspect-[1/1.414]">

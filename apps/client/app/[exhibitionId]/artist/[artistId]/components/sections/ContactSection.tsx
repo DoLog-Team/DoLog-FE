@@ -1,11 +1,17 @@
-import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
-import type { LinkItem } from "@/components/common/Card/LinkCard/LinkCard.types";
+"use client";
+
+import { track } from "@/lib/amplitude";
 import type { ArtistContact } from "@/lib/api/artists/artist-detail.types";
 
-export function ContactSection({ contact }: { contact: ArtistContact }) {
-	const items: LinkItem[] = [
-		...(contact.email ? [{ label: "email", value: contact.email, type: "email" as const }] : []),
+interface ContactItem {
+	label: string;
+	value: string;
+	type: "email" | "url";
+}
 
+export function ContactSection({ contact }: { contact: ArtistContact }) {
+	const items: ContactItem[] = [
+		...(contact.email ? [{ label: "email", value: contact.email, type: "email" as const }] : []),
 		...(contact.snsList ?? []).map((s) => ({
 			label: s.platformName,
 			value: s.url,
@@ -15,5 +21,33 @@ export function ContactSection({ contact }: { contact: ArtistContact }) {
 
 	if (items.length === 0) return null;
 
-	return <LinkCard items={items} />;
+	return (
+		<div className="flex flex-col gap-1 py-4" data-section="contact">
+			{items.map((item) => (
+				<div key={item.label} className="flex flex-wrap items-center gap-1">
+					<span className="min-w-19 text-body2-bold shrink-0">{item.label}</span>
+					{item.type === "url" ? (
+						<a
+							href={item.value}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="text-body2 underline"
+							onClick={() =>
+								track("Artist SNS Clicked", {
+									platform: item.label,
+									page: "artist_detail",
+								})
+							}
+						>
+							{item.value}
+						</a>
+					) : (
+						<a href={`mailto:${item.value}`} className="text-body2 underline">
+							{item.value}
+						</a>
+					)}
+				</div>
+			))}
+		</div>
+	);
 }
