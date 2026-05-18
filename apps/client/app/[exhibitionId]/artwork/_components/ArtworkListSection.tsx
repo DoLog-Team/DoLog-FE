@@ -113,57 +113,59 @@ export function ArtworkListSection({
 			</div>
 
 			<div className="flex flex-col px-4 gap-6">
-				{zones.map((zone) => {
-					const items = zone.artworks.map(toCardItem);
-					return (
-						<div
-							key={zone.zoneName}
-							className={!isMultiZone ? "pt-4" : ""}
-							ref={(el) => {
-								if (sectionRefs[zone.zoneName]) {
-									(
-										sectionRefs[zone.zoneName] as unknown as React.RefObject<HTMLElement | null>
-									).current = el;
-								}
-							}}
-						>
-							{isMultiZone && <Title title={zone.zoneName} />}
-							{items.length === 0 ? (
-								<EmptyState
-									searchQuery={searchQuery || undefined}
-									message={"선택한 카테고리에 해당되는\n작품이 없어요"}
-									className="w-full pb-16 pt-10 px-2.5"
-								/>
-							) : viewMode === "grid" ? (
-								<CardGrid
-									items={items}
-									getHref={(item) => `artwork/${item.id}`}
-									onItemClick={(item) =>
-										track("Artwork Card Clicked", {
-											artwork_id: item.id,
-											artwork_title: item.title,
-											zone: zone.zoneName,
-											page: "artwork_list",
-										})
+				{zones.length === 0 ? (
+					<EmptyState
+						searchQuery={searchQuery || undefined}
+						message={"선택한 카테고리에 해당되는\n작품이 없어요"}
+						className="w-full pb-16 pt-10 px-2.5"
+					/>
+				) : (
+					zones.map((zone) => {
+						const items = zone.artworks.map(toCardItem);
+						return (
+							<div
+								key={zone.zoneName}
+								className={!isMultiZone ? "pt-4" : ""}
+								ref={(el) => {
+									if (sectionRefs[zone.zoneName]) {
+										(
+											sectionRefs[zone.zoneName] as unknown as React.RefObject<HTMLElement | null>
+										).current = el;
 									}
-								/>
-							) : (
-								<ListCardGrid
-									items={items}
-									getHref={(item) => `artwork/${item.id}`}
-									onItemClick={(item) =>
-										track("Artwork Card Clicked", {
-											artwork_id: item.id,
-											artwork_title: item.title,
-											zone: zone.zoneName,
-											page: "artwork_list",
-										})
-									}
-								/>
-							)}
-						</div>
-					);
-				})}
+								}}
+							>
+								{isMultiZone && <Title title={zone.zoneName} />}
+								{viewMode === "grid" ? (
+									<CardGrid
+										items={items}
+										getHref={(item) => `artwork/${item.id}`}
+										onItemClick={(item) =>
+											track("Artwork Card Clicked", {
+												artwork_id: item.id,
+												artwork_title: item.title,
+												zone: zone.zoneName,
+												page: "artwork_list",
+											})
+										}
+									/>
+								) : (
+									<ListCardGrid
+										items={items}
+										getHref={(item) => `artwork/${item.id}`}
+										onItemClick={(item) =>
+											track("Artwork Card Clicked", {
+												artwork_id: item.id,
+												artwork_title: item.title,
+												zone: zone.zoneName,
+												page: "artwork_list",
+											})
+										}
+									/>
+								)}
+							</div>
+						);
+					})
+				)}
 			</div>
 		</section>
 	);
