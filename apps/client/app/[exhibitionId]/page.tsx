@@ -9,6 +9,7 @@ import { ExhibitionIntroSection } from "./_components/ExhibitionIntroSection";
 import { ExhibitionLocationSection } from "./_components/ExhibitionLocationSection";
 import { Header } from "./_components/Header";
 import { NotFound } from "./_components/NotFound";
+
 // import { MOCK_EXHIBITION_DETAIL, MOCK_EXHIBITION_HOST, MOCK_HOST_SNS } from "./_mocks/exhibition";
 
 interface ExhibitionDetailPageProps {
@@ -22,7 +23,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 	if (!uuid) {
 		return (
 			<main className="flex flex-1 flex-col">
-				<Header variant="back"/>
+				<Header variant="back" />
 				<NotFound message="전시를 찾을 수 없습니다." />
 			</main>
 		);
@@ -37,7 +38,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 	if (!exhibition) {
 		return (
 			<main className="flex flex-1 flex-col">
-				<Header variant="back"/>
+				<Header variant="back" />
 				<NotFound message="전시를 찾을 수 없습니다." />
 			</main>
 		);

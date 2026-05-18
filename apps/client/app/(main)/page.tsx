@@ -11,9 +11,9 @@ import CategorySection from "./_components/CategorySection";
 import ExhibitionCard from "./_components/ExhibitionCard";
 import { Header } from "./_components/Header";
 import { TrackedExhibitionLink } from "./_components/TrackedExhibitionLink";
-import { MOCK_BANNERS } from "./_mocks/banner";
-import { MOCK_EXHIBITIONS } from "./_mocks/exhibition";
-import { MOCK_SECTIONS } from "./_mocks/section";
+// import { MOCK_BANNERS } from "./_mocks/banner";
+// import { MOCK_EXHIBITIONS } from "./_mocks/exhibition";
+// import { MOCK_SECTIONS } from "./_mocks/section";
 
 export default async function MainPage() {
 	const [banners, mainExhibitions, mainArtworks] = await Promise.all([
@@ -21,8 +21,8 @@ export default async function MainPage() {
 		getMainExhibitions(),
 		getMainArtworks(),
 	]);
-	const displayBanners = banners.length > 0 ? banners : MOCK_BANNERS;
-	const displayExhibitions = mainExhibitions.length > 0 ? mainExhibitions : MOCK_EXHIBITIONS;
+	const displayBanners = banners;
+	const displayExhibitions = mainExhibitions;
 	const allArtworks = mainArtworks.map((a) => ({
 		id: a.id,
 		title: a.title,
@@ -68,7 +68,7 @@ export default async function MainPage() {
 				title="전체 작품"
 				categories={["작품"]}
 				artworks={{
-					작품: allArtworks.length > 0 ? allArtworks : MOCK_SECTIONS[0].artworks.전체,
+					작품: allArtworks,
 				}}
 				slugMap={artworkSlugMap}
 			/>

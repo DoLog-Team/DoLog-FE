@@ -4,6 +4,7 @@ import { Header } from "../_components/Header";
 import { NotFound } from "../_components/NotFound";
 // import { DEFAULT_EXHIBITION_CONFIG, MOCK_EXHIBITION_CONFIG } from "../exhibition-config";
 import { ArtworksClient } from "./_components/ArtworksClient";
+
 // import { MOCK_ARTWORK_LIST } from "./_mocks/artworkList";
 
 interface ArtworkListPageProps {
@@ -17,7 +18,7 @@ export default async function ArtworkListPage({ params }: ArtworkListPageProps) 
 	if (!uuid) {
 		return (
 			<main className="flex flex-1 flex-col">
-				<Header variant="back"/>
+				<Header variant="back" />
 				<NotFound message="전시를 찾을 수 없습니다." />
 			</main>
 		);
@@ -28,7 +29,7 @@ export default async function ArtworkListPage({ params }: ArtworkListPageProps) 
 	if (!artworkData) {
 		return (
 			<main className="flex flex-1 flex-col">
-				<Header variant="back"/>
+				<Header variant="back" />
 				<NotFound message="작품 목록을 찾을 수 없습니다." />
 			</main>
 		);
