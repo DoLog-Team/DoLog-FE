@@ -33,7 +33,7 @@ export const InfoSection = ({ data }: InfoSectionProps) => {
 
 				{/* 작품 재료, 작품 사이즈 - 선택값 */}
 				{(data.material || data.size) && (
-					<p className="text-body1 mt-1">
+					<p className="text-body1 mt-1 whitespace-pre-line">
 						{[data.material, data.size].filter(Boolean).join(" | ")}
 					</p>
 				)}
