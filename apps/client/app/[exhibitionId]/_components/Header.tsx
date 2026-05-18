@@ -20,6 +20,21 @@ export const Header = ({ variant = "logo", title }: HeaderProps) => {
 
 	const baseUrl = `/${slug}`;
 
+	const handleBack = () => {
+		const historyLength = window?.history?.length ?? 0;
+		const referrer = document?.referrer ?? "";
+		const host = window?.location?.host ?? "";
+
+		// 이전 기록이 없거나, 이전 페이지가 우리 서비스 도메인이 아닌 경우
+		const hasNoReferrer = !referrer || !referrer.includes(host);
+
+		if (historyLength <= 1 || hasNoReferrer) {
+			router.push(baseUrl);
+		} else {
+			router.back();
+		}
+	};
+
 	return (
 		<>
 			<header className="sticky top-0 z-51 flex items-center justify-between px-4 py-3 h-11 border-b border-stroke-lightest bg-normal">
@@ -27,7 +42,7 @@ export const Header = ({ variant = "logo", title }: HeaderProps) => {
 					<div className="flex items-center gap-2">
 						<button
 							type="button"
-							onClick={() => router.back()}
+							onClick={handleBack}
 							aria-label="뒤로가기"
 							className="cursor-pointer"
 						>
@@ -50,7 +65,6 @@ export const Header = ({ variant = "logo", title }: HeaderProps) => {
 						) : (
 							<Image src="/images/exhibitionLogo.svg" alt="DoLog" width={34} height={24} priority />
 						)}
-						{/* TODO : 기본 로고 fallback 제거 예정 */}
 					</button>
 				)}
 				<button
