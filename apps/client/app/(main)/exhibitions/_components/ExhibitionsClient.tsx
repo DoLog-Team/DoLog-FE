@@ -7,8 +7,8 @@ import { FilterChip } from "@/components/common/FilterChip/FilterChip";
 import MainFooter from "@/components/common/Footer/MainFooter";
 import { PageTracker } from "@/components/common/PageTracker";
 import { TrackedLink } from "@/components/common/TrackedLink";
-import type { ExhibitionItem } from "@/lib/api/exhibition";
 import { track } from "@/lib/amplitude";
+import type { ExhibitionItem } from "@/lib/api/exhibition";
 import { EXHIBITION_TYPE_LABEL } from "@/lib/constants/exhibition";
 import ExhibitionCard from "../../_components/ExhibitionCard";
 
@@ -57,7 +57,12 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 					selected={selectedUniv}
 					onSelect={(val) => {
 						setSelectedUniv(val);
-						if (val) track("Filter Selected", { filter_type: "univ", value: val, page: "exhibitions_list" });
+						if (val)
+							track("Filter Selected", {
+								filter_type: "univ",
+								value: val,
+								page: "exhibitions_list",
+							});
 					}}
 				/>
 				<FilterChip
@@ -66,7 +71,12 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 					selected={selectedDept}
 					onSelect={(val) => {
 						setSelectedDept(val);
-						if (val) track("Filter Selected", { filter_type: "dept", value: val, page: "exhibitions_list" });
+						if (val)
+							track("Filter Selected", {
+								filter_type: "dept",
+								value: val,
+								page: "exhibitions_list",
+							});
 					}}
 				/>
 				<FilterChip
@@ -75,7 +85,12 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 					selected={selectedType}
 					onSelect={(val) => {
 						setSelectedType(val);
-						if (val) track("Filter Selected", { filter_type: "type", value: val, page: "exhibitions_list" });
+						if (val)
+							track("Filter Selected", {
+								filter_type: "type",
+								value: val,
+								page: "exhibitions_list",
+							});
 					}}
 				/>
 			</CollapsingHeader>
@@ -87,7 +102,11 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 							key={exhibition.id}
 							href={`/${exhibition.slug || exhibition.id}`}
 							eventName="Exhibition Card Clicked"
-							eventProps={{ exhibition_id: exhibition.id, exhibition_title: exhibition.title, page: "exhibitions_list" }}
+							eventProps={{
+								exhibition_id: exhibition.id,
+								exhibition_title: exhibition.title,
+								page: "exhibitions_list",
+							}}
 						>
 							<ExhibitionCard {...exhibition} />
 						</TrackedLink>

@@ -59,7 +59,8 @@ export default function ArtworksClient({ artworks, slugMap }: ArtworksClientProp
 					selected={selectedUniv}
 					onSelect={(val) => {
 						setSelectedUniv(val);
-						if (val) track("Filter Selected", { filter_type: "univ", value: val, page: "artworks_list" });
+						if (val)
+							track("Filter Selected", { filter_type: "univ", value: val, page: "artworks_list" });
 					}}
 				/>
 				<FilterChip
@@ -68,7 +69,8 @@ export default function ArtworksClient({ artworks, slugMap }: ArtworksClientProp
 					selected={selectedDept}
 					onSelect={(val) => {
 						setSelectedDept(val);
-						if (val) track("Filter Selected", { filter_type: "dept", value: val, page: "artworks_list" });
+						if (val)
+							track("Filter Selected", { filter_type: "dept", value: val, page: "artworks_list" });
 					}}
 				/>
 				<FilterChip
@@ -77,7 +79,8 @@ export default function ArtworksClient({ artworks, slugMap }: ArtworksClientProp
 					selected={selectedType}
 					onSelect={(val) => {
 						setSelectedType(val);
-						if (val) track("Filter Selected", { filter_type: "type", value: val, page: "artworks_list" });
+						if (val)
+							track("Filter Selected", { filter_type: "type", value: val, page: "artworks_list" });
 					}}
 				/>
 			</CollapsingHeader>

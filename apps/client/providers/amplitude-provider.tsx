@@ -70,7 +70,7 @@ export function AmplitudeProvider({ children }: { children: React.ReactNode }) {
 			utm_medium: params.get("utm_medium") ?? "", // 유입 매체
 			utm_campaign: params.get("utm_campaign") ?? "", // 캠페인명
 			utm_term: params.get("utm_term") ?? "", // 검색 키워드
-			referrer_url: referrer || "direct", 
+			referrer_url: referrer || "direct",
 			landing_page: window.location.href, // 랜딩 페이지 URL
 			entry_time: now, // 유입 시각
 			is_new_user: isNew,
