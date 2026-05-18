@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { track } from "@/lib/amplitude";
 import { navigatorStyles as s } from "./Navigator.styles";
 import type { NavItem } from "./PostNavigation/PostNavigation.types";
 
@@ -18,7 +19,17 @@ export function Navigator({ label, artistName, artistId, direction }: NavItem) {
 	const iconSrc = direction === "prev" ? "/icons/arrowUp.svg" : "/icons/arrowDown.svg";
 
 	return (
-		<Link href={href} className={s.wrapper}>
+		<Link
+			href={href}
+			className={s.wrapper}
+			onClick={() =>
+				track("Artist Navigation Clicked", {
+					direction,
+					artist_id: artistId,
+					artist_name: artistName,
+				})
+			}
+		>
 			<span className={s.left}>{artistName}</span>
 
 			<div className={s.right}>

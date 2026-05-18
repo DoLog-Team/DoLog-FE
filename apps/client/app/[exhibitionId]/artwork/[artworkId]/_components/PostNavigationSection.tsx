@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { track } from "@/lib/amplitude";
 import type { RelatedArtwork } from "@/lib/api/artwork";
 
 interface PostNavigationProps {
@@ -14,7 +17,16 @@ export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigati
 			<hr className="border border-stroke-lighter" />
 
 			{prevArtwork && (
-				<Link href={`../artwork/${prevArtwork.id}`}>
+				<Link
+					href={`../artwork/${prevArtwork.id}`}
+					onClick={() =>
+						track("Artwork Navigation Clicked", {
+							direction: "prev",
+							artwork_id: prevArtwork.id,
+							artwork_title: prevArtwork.title,
+						})
+					}
+				>
 					<div className="flex items-center justify-between py-2.5 gap-4">
 						<div className="flex items-center gap-2 flex-1 min-w-0">
 							{prevArtwork.mainImage ? (
@@ -51,7 +63,16 @@ export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigati
 			<hr className="border border-stroke-lightest" />
 
 			{nextArtwork && (
-				<Link href={`../artwork/${nextArtwork.id}`}>
+				<Link
+					href={`../artwork/${nextArtwork.id}`}
+					onClick={() =>
+						track("Artwork Navigation Clicked", {
+							direction: "next",
+							artwork_id: nextArtwork.id,
+							artwork_title: nextArtwork.title,
+						})
+					}
+				>
 					<div className="flex items-center justify-between py-2.5 gap-4">
 						<div className="flex items-center gap-2 flex-1 min-w-0">
 							{nextArtwork.mainImage ? (

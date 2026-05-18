@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useState } from "react";
 import type { CardItem } from "@/components/common/Card/Card.types";
 import { CardGrid } from "@/components/common/Card/CardGrid";
-// import { Chip } from "@/components/common/Chip/Chip";
 import { Title } from "@/components/common/Title/Title";
+import { track } from "@/lib/amplitude";
 
 interface Props {
 	title: string;
@@ -22,20 +22,6 @@ export default function CategorySection({ title, categories, artworks, slugMap }
 		<section className="flex flex-col px-4 pt-6">
 			<Title title={title} />
 
-			{/* 카테고리 칩 */}
-			{/* <div className="flex gap-2 mt-4 overflow-x-auto pb-1 scrollbar-hide">
-				{categories.map((category) => (
-					<Chip
-						key={category}
-						label={category}
-						selected={selected === category}
-						type="assistive"
-						onClick={() => setSelected(category)}
-					/>
-				))}
-			</div> */}
-
-			{/* 작품 그리드 */}
 			<div className="mt-4">
 				<CardGrid
 					items={artworks[selected] ?? []}
@@ -48,6 +34,13 @@ export default function CategorySection({ title, categories, artworks, slugMap }
 								}
 							: undefined
 					}
+					onItemClick={(item) =>
+						track("Artwork Card Clicked", {
+							artwork_id: item.id,
+							artwork_title: item.title,
+							page: "main",
+						})
+					}
 				/>
 			</div>
 
@@ -57,6 +50,7 @@ export default function CategorySection({ title, categories, artworks, slugMap }
 					variant: "assistive",
 					className: "mt-7 mb-6 w-full",
 				})}
+				onClick={() => track("More Button Clicked", { target: "artworks", page: "main" })}
 			>
 				더보기
 			</Link>

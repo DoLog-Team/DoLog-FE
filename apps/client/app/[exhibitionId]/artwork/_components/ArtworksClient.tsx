@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
+import { track } from "@/lib/amplitude";
 import type { ExhibitionMap, ZoneGroup } from "@/lib/api/artwork";
 import { useArtworkFilter } from "../hooks/useArtworkFilter";
 import { ArtworkListSection } from "./ArtworkListSection";
@@ -53,7 +54,14 @@ export function ArtworksClient({ maps, zones, hideFilter }: ArtworksClientProps)
 				onSelect={setSelected}
 				hideFilter={hideFilter}
 			/>
-			<ScrollTabBar tabs={TABS} activeTab={activeTab} onTabClick={handleTabClick} />
+			<ScrollTabBar
+				tabs={TABS}
+				activeTab={activeTab}
+				onTabClick={(tabId) => {
+					handleTabClick(tabId);
+					track("Zone Tab Clicked", { zone: tabId, page: "artwork_list" });
+				}}
+			/>
 		</>
 	);
 }

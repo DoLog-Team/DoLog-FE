@@ -1,8 +1,11 @@
+"use client";
+
 import { Button } from "components";
 import Image from "next/image";
 import Link from "next/link";
 import { EmptyArtistIcon } from "@/components/common/icons/EmptyArtistIcon";
 import RowList from "@/components/common/RowList/RowList";
+import { track } from "@/lib/amplitude";
 import type { ArtworkParticipant } from "@/lib/api/artwork";
 
 export interface ArtistCardProps {
@@ -11,10 +14,8 @@ export interface ArtistCardProps {
 }
 
 export function ArtistCard({ author, profileHref }: ArtistCardProps) {
-	// artist → author
 	return (
 		<div className="flex flex-col">
-			{/* 프로필 이미지 + 이름 */}
 			<div className="flex">
 				<div className="relative shrink-0 w-32 aspect-[1/1.414]">
 					{author.profileImg ? (
@@ -35,10 +36,8 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 				</div>
 			</div>
 
-			{/* 소개글 */}
 			{author.bio && <p className="text-body1 pt-4 pb-6">{author.bio}</p>}
 
-			{/* 연락처 - 선택값 */}
 			{(!!author.email || (author.sns ?? []).length > 0) && (
 				<div className="flex flex-col pb-5 pt-6">
 					<RowList
@@ -78,9 +77,19 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 					/>
 				</div>
 			)}
-			{/* 프로필 더보기 버튼 */}
 			<Link href={profileHref}>
-				<Button variant="outline" size="sm" className="w-full">
+				<Button
+					variant="outline"
+					size="sm"
+					className="w-full"
+					onClick={() =>
+						track("Profile More Clicked", {
+							artist_id: author.profileId,
+							artist_name: author.nameKo,
+							page: "artwork_detail",
+						})
+					}
+				>
 					프로필 더보기
 				</Button>
 			</Link>

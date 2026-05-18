@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Divider } from "@/components/common/Divider/Divider";
+import { SectionTimeTracker } from "@/components/common/SectionTimeTracker";
 import { resolveExhibitionSlug } from "@/lib/api/exhibition";
 import { getArtistDetail } from "../../../../lib/api/artists/artist-detail";
 import { getExhibitionMeta } from "../../_api/getExhibitionMeta";
@@ -50,10 +51,13 @@ export default async function ArtistDetailPage({ params }: Props) {
 
 	return (
 		<>
+			<SectionTimeTracker pageName="artist_detail" sections={["profile", "contact", "artworks"]} />
 			<Header variant="back" title="작가 상세" />
 
 			<div className="flex flex-col px-4 w-full mx-auto">
-				<ProfileSection artist={artist} />
+				<div data-section="profile">
+					<ProfileSection artist={artist} />
+				</div>
 
 				{(!!artist.contact.email || (artist.contact.snsList?.length ?? 0) > 0) && (
 					<ContactSection contact={artist.contact} />
