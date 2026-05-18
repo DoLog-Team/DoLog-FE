@@ -36,7 +36,8 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 				</div>
 			</div>
 
-			{author.bio && <p className="text-body1 pt-4 pb-6">{author.bio}</p>}
+			{/* 소개글 */}
+			{author.bio && <p className="text-body1 pt-4">{author.bio}</p>}
 
 			{(!!author.email || (author.sns ?? []).length > 0) && (
 				<div className="flex flex-col pb-5 pt-6">
