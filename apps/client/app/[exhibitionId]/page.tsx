@@ -8,7 +8,9 @@ import { ExhibitionHostSection } from "./_components/ExhibitionHostSection";
 import { ExhibitionIntroSection } from "./_components/ExhibitionIntroSection";
 import { ExhibitionLocationSection } from "./_components/ExhibitionLocationSection";
 import { Header } from "./_components/Header";
-import { MOCK_EXHIBITION_DETAIL, MOCK_EXHIBITION_HOST, MOCK_HOST_SNS } from "./_mocks/exhibition";
+import { NotFound } from "./_components/NotFound";
+
+// import { MOCK_EXHIBITION_DETAIL, MOCK_EXHIBITION_HOST, MOCK_HOST_SNS } from "./_mocks/exhibition";
 
 interface ExhibitionDetailPageProps {
 	params: Promise<{ exhibitionId: string }>;
@@ -19,7 +21,12 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 	const uuid = await resolveExhibitionId(exhibitionId);
 
 	if (!uuid) {
-		return <div>전시를 찾을 수 없습니다.</div>;
+		return (
+			<main className="flex flex-1 flex-col">
+				<Header variant="back" />
+				<NotFound message="전시를 찾을 수 없습니다." />
+			</main>
+		);
 	}
 
 	const [exhibition, host, sns] = await Promise.all([
@@ -28,10 +35,18 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 		getHostSns(uuid),
 	]);
 
-	/* 임의 폴백 변수 (TODO : 추후 제거) */
-	const exhibitionData = exhibition ?? MOCK_EXHIBITION_DETAIL;
-	const hostData = host ?? MOCK_EXHIBITION_HOST; // TODO : 고치긴
-	const snsData = sns.length > 0 ? sns : MOCK_HOST_SNS;
+	if (!exhibition) {
+		return (
+			<main className="flex flex-1 flex-col">
+				<Header variant="back" />
+				<NotFound message="전시를 찾을 수 없습니다." />
+			</main>
+		);
+	}
+
+	const exhibitionData = exhibition;
+	const hostData = host;
+	const snsData = sns;
 
 	return (
 		<main>
@@ -58,7 +73,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 			{/* 장소 */}
 			<ExhibitionLocationSection location={exhibitionData.location} />
 			{/* 주최 기관 */}
-			<ExhibitionHostSection hostInfo={hostData} sns={snsData} />
+			{hostData && <ExhibitionHostSection hostInfo={hostData} sns={snsData} />}
 		</main>
 	);
 }

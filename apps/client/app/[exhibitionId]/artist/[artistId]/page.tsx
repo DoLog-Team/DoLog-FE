@@ -6,6 +6,7 @@ import { getArtistDetail } from "../../../../lib/api/artists/artist-detail";
 import { getExhibitionMeta } from "../../_api/getExhibitionMeta";
 import { resolveExhibitionId } from "../../_api/resolveExhibitionId";
 import { Header } from "../../_components/Header";
+import { NotFound } from "../../_components/NotFound";
 import { ArtworkSection } from "./components/sections/ArtworkSection";
 import { BTSSection } from "./components/sections/BTSSection";
 import { ContactSection } from "./components/sections/ContactSection";
@@ -44,10 +45,24 @@ export default async function ArtistDetailPage({ params }: Props) {
 	const { exhibitionId, artistId } = await params;
 
 	const resolved = await resolveExhibitionSlug(exhibitionId);
-	if (!resolved) return null;
+	if (!resolved) {
+		return (
+			<main className="flex flex-1 flex-col">
+				<Header variant="back" title="작가 상세" />
+				<NotFound message="전시를 찾을 수 없습니다." />
+			</main>
+		);
+	}
 
 	const artist = await getArtistDetail(artistId);
-	if (!artist) return <div>작가 없음</div>;
+	if (!artist) {
+		return (
+			<main className="flex flex-1 flex-col">
+				<Header variant="back" title="작가 상세" />
+				<NotFound message="작가를 찾을 수 없습니다." />
+			</main>
+		);
+	}
 
 	return (
 		<>
