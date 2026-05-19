@@ -19,6 +19,15 @@ export function ContactSection({ contact }: { contact: ArtistContact }) {
 		})),
 	];
 
+	const getHref = (item: ContactItem) => {
+		if (item.type === "email") return `mailto:${item.value}`;
+		if (item.label.toLowerCase() === "instagram") {
+			const username = item.value.startsWith("@") ? item.value.slice(1) : item.value;
+			return `https://www.instagram.com/${username}/`;
+		}
+		return item.value;
+	};
+
 	if (items.length === 0) return null;
 
 	return (
@@ -28,7 +37,7 @@ export function ContactSection({ contact }: { contact: ArtistContact }) {
 					<span className="min-w-19 text-body2-bold shrink-0">{item.label}</span>
 					{item.type === "url" ? (
 						<a
-							href={item.value}
+							href={getHref(item)}
 							target="_blank"
 							rel="noopener noreferrer"
 							className="text-body2 underline"
