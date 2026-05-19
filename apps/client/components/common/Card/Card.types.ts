@@ -19,5 +19,6 @@ export interface CardGridProps {
 	items: CardItem[];
 	limit?: number;
 	getHref?: (item: CardItem) => string;
+	onItemClick?: (item: CardItem) => void;
 	className?: string;
 }

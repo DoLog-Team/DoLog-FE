@@ -7,6 +7,8 @@ import { CollapsingHeader } from "@/components/common/CollapsingHeader/Collapsin
 import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { FilterChip } from "@/components/common/FilterChip/FilterChip";
 import MainFooter from "@/components/common/Footer/MainFooter";
+import { PageTracker } from "@/components/common/PageTracker";
+import { track } from "@/lib/amplitude";
 import { EXHIBITION_TYPE_LABEL } from "@/lib/constants/exhibition";
 
 interface ArtworksClientProps {
@@ -44,6 +46,7 @@ export default function ArtworksClient({ artworks, slugMap }: ArtworksClientProp
 
 	return (
 		<div className="flex flex-col min-h-screen">
+			<PageTracker pageName="artworks_list" />
 			<CollapsingHeader
 				title="전체 작품"
 				searchQuery={searchQuery}
@@ -54,19 +57,31 @@ export default function ArtworksClient({ artworks, slugMap }: ArtworksClientProp
 					label="대학"
 					options={univs}
 					selected={selectedUniv}
-					onSelect={setSelectedUniv}
+					onSelect={(val) => {
+						setSelectedUniv(val);
+						if (val)
+							track("Filter Selected", { filter_type: "univ", value: val, page: "artworks_list" });
+					}}
 				/>
 				<FilterChip
 					label="학과"
 					options={depts}
 					selected={selectedDept}
-					onSelect={setSelectedDept}
+					onSelect={(val) => {
+						setSelectedDept(val);
+						if (val)
+							track("Filter Selected", { filter_type: "dept", value: val, page: "artworks_list" });
+					}}
 				/>
 				<FilterChip
 					label="유형"
 					options={types}
 					selected={selectedType}
-					onSelect={setSelectedType}
+					onSelect={(val) => {
+						setSelectedType(val);
+						if (val)
+							track("Filter Selected", { filter_type: "type", value: val, page: "artworks_list" });
+					}}
 				/>
 			</CollapsingHeader>
 
@@ -78,6 +93,13 @@ export default function ArtworksClient({ artworks, slugMap }: ArtworksClientProp
 							const slug = slugMap?.[String(item.id)];
 							return slug ? `/${slug}/artwork/${item.id}` : "#";
 						}}
+						onItemClick={(item) =>
+							track("Artwork Card Clicked", {
+								artwork_id: item.id,
+								artwork_title: item.title,
+								page: "artworks_list",
+							})
+						}
 					/>
 				) : (
 					<EmptyState searchQuery={searchQuery} message="해당하는 작품이 없어요." />

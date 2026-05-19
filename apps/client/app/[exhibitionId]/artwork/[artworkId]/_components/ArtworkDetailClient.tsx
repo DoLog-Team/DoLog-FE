@@ -4,7 +4,9 @@ import { useMemo } from "react";
 import { Divider } from "@/components/common/Divider/Divider";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
+import { track } from "@/lib/amplitude";
 import type { ArtworkDetail } from "@/lib/api/artwork";
+import { useSectionTime } from "@/lib/hooks/useSectionTime";
 import { Header } from "../../../_components/Header";
 import { ArtistSection } from "../_components/ArtistSection";
 import { BtsSection } from "../_components/BtsSection";
@@ -17,7 +19,6 @@ import { RelatedSection } from "../_components/RelatedSection";
 import { YoutubeSection } from "../_components/YoutubeSection";
 
 export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
-	// ScrollTabBar 탭 목록 [ 작품 소개, 작가 소개, 비하인드(선택) ]
 	const TABS = useMemo(() => {
 		const base = [
 			{ id: "detail", label: "작품 소개" },
@@ -26,7 +27,11 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 		if (data.relatedBts?.length) base.push({ id: "behind", label: "비하인드" });
 		return base;
 	}, [data.relatedBts]);
+
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(TABS.map((t) => t.id));
+
+	const sectionNames = useMemo(() => TABS.map((t) => t.id), [TABS]);
+	useSectionTime("artwork_detail", sectionNames);
 
 	const prevArtwork = data.alphabeticalArtworks.find((a) => a.type === "prev");
 	const nextArtwork = data.alphabeticalArtworks.find((a) => a.type === "next");
@@ -35,7 +40,6 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 		<div className="flex flex-col">
 			<Header variant="back" />
 
-			{/* 대표 이미지 */}
 			<div className="w-full h-auto">
 				{data.mainImage ? (
 					<Image
@@ -53,24 +57,20 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 					</div>
 				)}
 			</div>
-			{/* 작품 제목 및 정보 섹션 */}
 			<InfoSection data={data} />
-			{/* 작품 위치 섹션 */}
 			<LocationSection locationImageUrl={data.locationMap} />
-			{/* 상세 소개 섹션 */}
 			<section
+				data-section="detail"
 				ref={(el) => {
 					sectionRefs.detail.current = el;
 				}}
 			>
 				<DescriptionSection content={data.description} />
 			</section>
-			{/*  유튜브 섹션  */}
 			<YoutubeSection youtubeUrl={data.youtubeUrl} />
-			{/* 상세 이미지 섹션*/}
 			<PhotoSection data={data} />
-			{/* 참여자 섹션 */}
 			<section
+				data-section="artist"
 				ref={(el) => {
 					sectionRefs.artist.current = el;
 				}}
@@ -78,11 +78,11 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 				<ArtistSection authors={data.participants} />
 			</section>
 
-			{/* BTS 섹션 - 선택값 */}
 			{data.relatedBts && data.relatedBts.length > 0 && (
 				<>
 					<Divider />
 					<section
+						data-section="behind"
 						ref={(el) => {
 							sectionRefs.behind.current = el;
 						}}
@@ -91,15 +91,19 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 					</section>
 				</>
 			)}
-			{/* 동일한 카테고리 작품 섹션 */}
 			{data.sameCategoryArtworks && data.sameCategoryArtworks.length > 0 && (
-				<RelatedSection artworks={data.sameCategoryArtworks} />
+				<RelatedSection artworks={data.sameCategoryArtworks} artworkTitle={data.title} />
 			)}
-			{/* 둘러보기 섹션 */}
 			<PostNavigationSection prevArtwork={prevArtwork} nextArtwork={nextArtwork} />
 
-			{/* 하단 스크롤탭바 */}
-			<ScrollTabBar tabs={TABS} activeTab={activeTab} onTabClick={handleTabClick} />
+			<ScrollTabBar
+				tabs={TABS}
+				activeTab={activeTab}
+				onTabClick={(tabId) => {
+					handleTabClick(tabId);
+					track("Artwork Tab Clicked", { tab: tabId, artwork_title: data.title });
+				}}
+			/>
 		</div>
 	);
 }

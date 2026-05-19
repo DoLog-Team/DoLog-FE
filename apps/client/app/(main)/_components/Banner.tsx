@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
+import { track } from "@/lib/amplitude";
 import type { BannerItem } from "@/lib/api/exhibition";
 
 const MAX_BANNERS = 20;
@@ -20,7 +21,6 @@ export default function Banner({ banners }: { banners: BannerItem[] }) {
 
 	return (
 		<section aria-label="배너 슬라이드" className="flex flex-col overflow-hidden">
-			{/* slide */}
 			{/* biome-ignore lint/a11y/noNoninteractiveElementInteractions: carousel swipe */}
 			{/* biome-ignore lint/a11y/noStaticElementInteractions: carousel swipe */}
 			<div
@@ -70,6 +70,14 @@ export default function Banner({ banners }: { banners: BannerItem[] }) {
 							className="relative min-w-full h-full block"
 							target="_blank"
 							rel="noopener noreferrer"
+							onClick={() =>
+								track("Banner Clicked", {
+									banner_id: banner.id,
+									banner_index: banner.orderIndex,
+									banner_url: banner.linkUrl,
+									position: i,
+								})
+							}
 						>
 							{banner.imageUrl && (
 								<Image

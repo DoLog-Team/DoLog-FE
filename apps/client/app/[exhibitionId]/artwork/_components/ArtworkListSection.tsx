@@ -6,6 +6,7 @@ import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
 import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { Title } from "@/components/common/Title/Title";
+import { track } from "@/lib/amplitude";
 import type { ArtworkListItem } from "@/lib/api/artwork";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import { AlbumIcon } from "./components/AlbumIcon";
@@ -23,17 +24,12 @@ interface ArtworkListSectionProps {
 	zones: FilteredZone[];
 	searchQuery: string;
 	onSearchChange: (value: string) => void;
-	/* useArtworkFilter 중복 호출을 제거하고 props로 받고자 함 */
 	categories: string[];
 	selected: string;
 	onSelect: (value: string) => void;
 	hideFilter?: boolean;
 }
 
-// [임시] Artwork → CardItem 변환
-// 현재 백엔드 스펙에 맞춰 Artwork 타입으로 목데이터를 구성했습니다.
-// Card 컴포넌트들이 현재 CardItem 타입을 받고 있고 여러 곳에서 쓰이고 있어 임시로 변환했습니다.
-// 추후 백엔드 연동 시 Card 컴포넌트 타입을 Artwork 기준으로 수정하면 이 변환 로직은 제거할 예정입니다!
 const toCardItem = (artwork: ArtworkListItem): CardItem => ({
 	id: artwork.id,
 	imageUrl: artwork.imageUrl,
@@ -41,7 +37,6 @@ const toCardItem = (artwork: ArtworkListItem): CardItem => ({
 	author: artwork.artistName || "",
 });
 
-// 보기 방식 토글 버튼
 const ViewToggle = ({
 	viewMode,
 	setViewMode,
@@ -52,13 +47,19 @@ const ViewToggle = ({
 	<div className="flex gap-1 p-1 h-8 rounded-2 border border-stroke-lightest shrink-0">
 		<ListIcon
 			active={viewMode === "list"}
-			onClick={() => setViewMode("list")}
+			onClick={() => {
+				setViewMode("list");
+				track("View Mode Changed", { mode: "list", page: "artwork_list" });
+			}}
 			className="cursor-pointer"
 		/>
 		<div className="w-px h-full border border-stroke-lighter pointer-events-none" />
 		<AlbumIcon
 			active={viewMode === "grid"}
-			onClick={() => setViewMode("grid")}
+			onClick={() => {
+				setViewMode("grid");
+				track("View Mode Changed", { mode: "grid", page: "artwork_list" });
+			}}
 			className="cursor-pointer"
 		/>
 	</div>
@@ -80,13 +81,11 @@ export function ArtworkListSection({
 
 	return (
 		<section className="flex flex-col">
-			{/* 스크롤 전 (Title + 토글버튼) */}
 			<div ref={titleRef} className="flex justify-between items-center px-4">
 				<Title title="작품 목록" />
 				<ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
 			</div>
 
-			{/* sticky 영역 */}
 			<div className="sticky top-11 bg-normal z-10 px-4 pb-2">
 				<SearchBar
 					placeholder="작품명, 작가명을 검색하세요"
@@ -96,7 +95,14 @@ export function ArtworkListSection({
 				/>
 				<div className="flex items-center">
 					{!hideFilter && (
-						<Filter categories={categories} selected={selected} onSelect={onSelect} />
+						<Filter
+							categories={categories}
+							selected={selected}
+							onSelect={(val) => {
+								onSelect(val);
+								track("Category Filter Selected", { category: val, page: "artwork_list" });
+							}}
+						/>
 					)}
 					{!isTitleVisible && (
 						<div className="ml-auto">
@@ -106,41 +112,60 @@ export function ArtworkListSection({
 				</div>
 			</div>
 
-			{/* 작품 목록 */}
-			{/* 
-			구역이 1개일 경우 작품 목록만
-			구역이 2개 이상일 경우 구역 Title과 함께 작품 목록을
-			렌더링 합니다 */}
 			<div className="flex flex-col px-4 gap-6">
-				{zones.map((zone) => {
-					const items = zone.artworks.map(toCardItem);
-					return (
-						<div
-							key={zone.zoneName}
-							className={!isMultiZone ? "pt-4" : ""}
-							ref={(el) => {
-								if (sectionRefs[zone.zoneName]) {
-									(
-										sectionRefs[zone.zoneName] as unknown as React.RefObject<HTMLElement | null>
-									).current = el;
-								}
-							}}
-						>
-							{isMultiZone && <Title title={zone.zoneName} />}
-							{items.length === 0 ? (
-								<EmptyState
-									searchQuery={searchQuery || undefined}
-									message={"선택한 카테고리에 해당되는\n작품이 없어요"}
-									className="w-full pb-16 pt-10 px-2.5"
-								/>
-							) : viewMode === "grid" ? (
-								<CardGrid items={items} getHref={(item) => `artwork/${item.id}`} />
-							) : (
-								<ListCardGrid items={items} getHref={(item) => `artwork/${item.id}`} />
-							)}
-						</div>
-					);
-				})}
+				{zones.length === 0 ? (
+					<EmptyState
+						searchQuery={searchQuery || undefined}
+						message={"선택한 카테고리에 해당되는\n작품이 없어요"}
+						className="w-full pb-16 pt-10 px-2.5"
+					/>
+				) : (
+					zones.map((zone) => {
+						const items = zone.artworks.map(toCardItem);
+						return (
+							<div
+								key={zone.zoneName}
+								className={!isMultiZone ? "pt-4" : ""}
+								ref={(el) => {
+									if (sectionRefs[zone.zoneName]) {
+										(
+											sectionRefs[zone.zoneName] as unknown as React.RefObject<HTMLElement | null>
+										).current = el;
+									}
+								}}
+							>
+								{isMultiZone && <Title title={zone.zoneName} />}
+								{viewMode === "grid" ? (
+									<CardGrid
+										items={items}
+										getHref={(item) => `artwork/${item.id}`}
+										onItemClick={(item) =>
+											track("Artwork Card Clicked", {
+												artwork_id: item.id,
+												artwork_title: item.title,
+												zone: zone.zoneName,
+												page: "artwork_list",
+											})
+										}
+									/>
+								) : (
+									<ListCardGrid
+										items={items}
+										getHref={(item) => `artwork/${item.id}`}
+										onItemClick={(item) =>
+											track("Artwork Card Clicked", {
+												artwork_id: item.id,
+												artwork_title: item.title,
+												zone: zone.zoneName,
+												page: "artwork_list",
+											})
+										}
+									/>
+								)}
+							</div>
+						);
+					})
+				)}
 			</div>
 		</section>
 	);
