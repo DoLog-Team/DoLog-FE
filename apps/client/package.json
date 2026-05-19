@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@amplitude/analytics-browser": "^2.42.3",
+    "@next/third-parties": "^16.2.6",
     "@radix-ui/react-dialog": "^1.1.15",
     "api": "workspace:*",
     "class-variance-authority": "^0.7.1",
