@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { Title } from "@/components/common/Title/Title";
 import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
 import { track } from "@/lib/amplitude";
-import { MOCK_BEHIND_THE_SCENE } from "../bts/_mocks/behind-the-scene";
+import { MOCK_BTS_LIST } from "../bts/_mocks/behind-the-scene";
 
 interface SidebarProps {
 	isOpen: boolean;
@@ -30,7 +30,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 		: params.exhibitionId;
 
 	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
-	const hasBts = MOCK_BEHIND_THE_SCENE.length > 0;
+	const hasBts = MOCK_BTS_LIST.length > 0;
 	const baseUrl = `/${exhibitionId}`;
 
 	useEffect(() => {

@@ -17,7 +17,7 @@ export function BTSSection({
 
 			<BTSCardGrid
 				items={artist.behindTheScenes.map((bts) => ({
-					id: Number(bts.btsId),
+					id: bts.btsId,
 					title: bts.title,
 					imageUrl: bts.mainImg,
 					author: artist.nameKo,

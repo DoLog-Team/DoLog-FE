@@ -6,11 +6,11 @@ import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
 import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { Title } from "@/components/common/Title/Title";
+import type { BtsListItem } from "@/lib/api/bts";
 import { Header } from "../../_components/Header";
-import type { BehindTheSceneItem } from "../_mocks/behind-the-scene";
 
 interface BehindTheSceneClientProps {
-	items: BehindTheSceneItem[];
+	items: BtsListItem[];
 }
 
 const COLLAPSE_THRESHOLD = 150;
@@ -39,7 +39,10 @@ export default function BehindTheSceneClient({ items }: BehindTheSceneClientProp
 	}, []);
 
 	const filtered = items.filter(
-		(item) => !searchQuery || item.title.includes(searchQuery) || item.author.includes(searchQuery),
+		(item) =>
+			!searchQuery ||
+			item.title.includes(searchQuery) ||
+			item.artistNames?.some((name) => name.includes(searchQuery)),
 	);
 
 	return (
@@ -71,7 +74,12 @@ export default function BehindTheSceneClient({ items }: BehindTheSceneClientProp
 			<section className="flex flex-col flex-1 px-4 pt-4 pb-6">
 				{filtered.length > 0 ? (
 					<ListCardGrid
-						items={filtered}
+						items={filtered.map((item) => ({
+							id: item.btsId,
+							title: item.title,
+							imageUrl: item.thumbnail ?? undefined,
+							author: item.artistNames?.join(", ") ?? "",
+						}))}
 						getHref={(item) => `/${exhibitionId}/bts/${item.id}`}
 						className="gap-y-10"
 					/>

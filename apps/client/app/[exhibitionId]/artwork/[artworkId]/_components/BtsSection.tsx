@@ -1,5 +1,5 @@
 import { useExhibition } from "@/app/[exhibitionId]/_context/ExhibitionContext";
-import { BTSCardGrid, type BTSCardGridProps } from "@/components/common/Card/BTSCard/BTSCardGrid";
+import { BTSCardGrid } from "@/components/common/Card/BTSCard/BTSCardGrid";
 import { Title } from "@/components/common/Title/Title";
 import type { ArtworkBts } from "@/lib/api/artwork";
 
@@ -15,7 +15,7 @@ export const BtsSection = ({ bts }: BtsSectionProps) => {
 			<Title title="Behind The Scene" />
 			<BTSCardGrid
 				items={bts.map((b) => ({
-					id: Number(b.id),
+					id: b.id,
 					title: b.title,
 					author: b.author,
 					imageUrl: b.mainImg,
