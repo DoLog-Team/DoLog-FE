@@ -6,7 +6,7 @@ export const CardGrid = ({ items, limit, getHref, onItemClick, className }: Card
 
 	return (
 		<div
-			className={`grid grid-cols-2 gap-x-4 gap-y-6 w-full min-[721px]:grid-cols-4 ${className ?? ""}`}
+			className={`grid grid-cols-2 gap-x-4 gap-y-6 w-full min-[721px]:grid-cols-4 min-[721px]:gap-x-5 min-[721px]:gap-y-[60px] ${className ?? ""}`}
 		>
 			{displayedItems.map((item) => (
 				<Card
