@@ -9,9 +9,9 @@ import { Title } from "@/components/common/Title/Title";
 import { track } from "@/lib/amplitude";
 import type { ArtworkListItem } from "@/lib/api/artwork";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
-import { AlbumIcon } from "./components/AlbumIcon";
-import Filter from "./components/Filter";
-import { ListIcon } from "./components/ListIcon";
+import { AlbumIcon } from "./AlbumIcon";
+import Filter from "./Filter";
+import { ListIcon } from "./ListIcon";
 
 interface FilteredZone {
 	zoneName: string;
