@@ -39,27 +39,54 @@ export default async function MainPage() {
 			<Banner banners={displayBanners} />
 
 			<section className="flex flex-col px-4 pt-6 pb-6 ">
-				<Title title="진행 중인 전시" />
-				<div className="flex flex-col gap-4 mt-4">
-					{displayExhibitions.slice(0, 3).map((exhibition) => (
-						<TrackedExhibitionLink
-							key={exhibition.id}
-							href={`/${exhibition.slug ?? exhibition.id}`}
-							exhibitionId={exhibition.id}
-							exhibitionTitle={exhibition.title}
+				{displayExhibitions.length > 0 ? (
+					<>
+						<Title title="진행 중인 전시" />
+						<div className="flex flex-col gap-4 mt-4">
+							{displayExhibitions.slice(0, 3).map((exhibition) => (
+								<TrackedExhibitionLink
+									key={exhibition.id}
+									href={`/${exhibition.slug ?? exhibition.id}`}
+									exhibitionId={exhibition.id}
+									exhibitionTitle={exhibition.title}
+								>
+									<ExhibitionCard {...exhibition} />
+								</TrackedExhibitionLink>
+							))}
+						</div>
+						<TrackedLink
+							href="/exhibitions"
+							eventName="More Button Clicked"
+							eventProps={{ target: "exhibitions", page: "main" }}
+							className={buttonVariants({ variant: "assistive", className: "mt-7 w-full" })}
 						>
-							<ExhibitionCard {...exhibition} />
-						</TrackedExhibitionLink>
-					))}
-				</div>
-				<TrackedLink
-					href="/exhibitions"
-					eventName="More Button Clicked"
-					eventProps={{ target: "exhibitions", page: "main" }}
-					className={buttonVariants({ variant: "assistive", className: "mt-7 w-full" })}
-				>
-					더보기
-				</TrackedLink>
+							더보기
+						</TrackedLink>
+					</>
+				) : (
+					<>
+						<div className="flex flex-col gap-4 mt-4">
+							{displayExhibitions.slice(0, 3).map((exhibition) => (
+								<TrackedExhibitionLink
+									key={exhibition.id}
+									href={`/${exhibition.slug ?? exhibition.id}`}
+									exhibitionId={exhibition.id}
+									exhibitionTitle={exhibition.title}
+								>
+									<ExhibitionCard {...exhibition} />
+								</TrackedExhibitionLink>
+							))}
+						</div>
+						<TrackedLink
+							href="/exhibitions"
+							eventName="More Button Clicked"
+							eventProps={{ target: "exhibitions", page: "main" }}
+							className={buttonVariants({ variant: "assistive", className: "mt-7 w-full" })}
+						>
+							전체 전시 보러가기
+						</TrackedLink>
+					</>
+				)}
 			</section>
 
 			<Divider fullBleed={false} />
