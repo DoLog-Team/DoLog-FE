@@ -3,7 +3,7 @@
 import { Button } from "components";
 import Image from "next/image";
 import Link from "next/link";
-import { type RefObject, useState } from "react";
+import { useState } from "react";
 import { BTSCardGrid } from "@/components/common/Card/BTSCard/BTSCardGrid";
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
 import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
@@ -31,6 +31,13 @@ export function BtsDetailClient({ btsItem, exhibitionId }: BtsDetailClientProps)
 	const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(["artist", "related"]);
 	const firstSns = btsItem.artists?.[0]?.snsList?.[0];
+
+	const setArtistRef = (el: HTMLElement | null) => {
+		(sectionRefs.artist as { current: HTMLElement | null }).current = el;
+	};
+	const setRelatedRef = (el: HTMLElement | null) => {
+		(sectionRefs.related as { current: HTMLElement | null }).current = el;
+	};
 
 	const relatedArtworkItems = (btsItem.relatedArtworks ?? []).map((a) => ({
 		id: a.artworkId,
@@ -104,11 +111,7 @@ export function BtsDetailClient({ btsItem, exhibitionId }: BtsDetailClientProps)
 				)}
 
 				{/* 작가 소개 */}
-				<section
-					ref={(el) => {
-						(sectionRefs.artist as RefObject<HTMLElement | null>).current = el;
-					}}
-				>
+				<section ref={setArtistRef}>
 					<Title title="작가 소개" size="head2" />
 					{btsItem.artists?.map((artist) => (
 						<div key={artist.profileId} className="mb-6">
@@ -138,18 +141,16 @@ export function BtsDetailClient({ btsItem, exhibitionId }: BtsDetailClientProps)
 					))}
 				</section>
 
-				<Divider />
-
-				{/* 연관 작품 */}
-				<section
-					ref={(el) => {
-						(sectionRefs.related as RefObject<HTMLElement | null>).current = el;
-					}}
-					className="pb-6"
-				>
-					<Title title="연관 작품" size="head2" className="mt-4 mb-4" />
-					{relatedArtworkItems.length > 0 && <ListCardGrid items={relatedArtworkItems} limit={3} />}
-				</section>
+				{/* 연관 작품 — 데이터 있을 때만 렌더링 */}
+				{relatedArtworkItems.length > 0 && (
+					<>
+						<Divider />
+						<section ref={setRelatedRef} className="pb-6">
+							<Title title="연관 작품" size="head2" className="mt-4 mb-4" />
+							<ListCardGrid items={relatedArtworkItems} limit={3} />
+						</section>
+					</>
+				)}
 
 				<Divider />
 
