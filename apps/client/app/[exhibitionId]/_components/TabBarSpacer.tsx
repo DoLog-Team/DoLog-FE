@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 
-const TAB_BAR_ROUTES = ["/artwork", "/artist"];
+const TAB_BAR_ROUTES = ["/artwork", "/artist", "/bts"];
 
 export function TabBarSpacer() {
 	const pathname = usePathname();
