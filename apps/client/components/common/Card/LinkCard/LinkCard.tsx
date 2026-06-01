@@ -18,6 +18,28 @@ export const LinkCard = ({ items, className, onItemClick }: LinkCardProps) => {
 		return null;
 	};
 
+	const renderLink = (href: string | null, item: LinkCardProps["items"][number]) => {
+		if (!href) return <span className={s.value}>{item.value}</span>;
+		if (href.startsWith("http")) {
+			return (
+				<a
+					href={href}
+					target="_blank"
+					rel="noopener noreferrer"
+					className={`${s.value} underline`}
+					onClick={() => onItemClick?.(item)}
+				>
+					{item.value}
+				</a>
+			);
+		}
+		return (
+			<a href={href} className={`${s.value} underline`} onClick={() => onItemClick?.(item)}>
+				{item.value}
+			</a>
+		);
+	};
+
 	return (
 		<section className={`${s.wrapper} ${className ?? ""}`}>
 			<div className={s.list}>
@@ -30,31 +52,7 @@ export const LinkCard = ({ items, className, onItemClick }: LinkCardProps) => {
 								<span className={s.label}>{item.label}</span>
 							</div>
 
-							<div className={s.valueBox}>
-								{href ? (
-									href.startsWith("http") ? (
-										<a
-											href={href}
-											target="_blank"
-											rel="noopener noreferrer"
-											className={`${s.value} underline`}
-											onClick={() => onItemClick?.(item)}
-										>
-											{item.value}
-										</a>
-									) : (
-										<a
-											href={href}
-											className={`${s.value} underline`}
-											onClick={() => onItemClick?.(item)}
-										>
-											{item.value}
-										</a>
-									)
-								) : (
-									<span className={s.value}>{item.value}</span>
-								)}
-							</div>
+							<div className={s.valueBox}>{renderLink(href, item)}</div>
 						</div>
 					);
 				})}
