@@ -1,6 +1,6 @@
 import "./globals.css";
-import type { Metadata } from "next";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import type { Metadata } from "next";
 import { AmplitudeProvider } from "@/providers/amplitude-provider";
 
 export const metadata: Metadata = {
@@ -20,11 +20,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<html lang="ko" suppressHydrationWarning>
 			<body className="flex justify-center">
-				<GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID!} />
+				{process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+					<GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+				)}
 				<AmplitudeProvider>
 					<main
 						className="
-						w-full max-w-135
+						w-full
 						min-h-dvh
 						shadow-xl
 						relative

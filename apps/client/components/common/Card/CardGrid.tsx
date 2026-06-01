@@ -5,7 +5,9 @@ export const CardGrid = ({ items, limit, getHref, onItemClick, className }: Card
 	const displayedItems = limit ? items.slice(0, limit) : items;
 
 	return (
-		<div className={`grid grid-cols-2 gap-x-4 gap-y-6 w-full ${className ?? ""}`}>
+		<div
+			className={`grid grid-cols-2 gap-x-4 gap-y-6 w-full min-[721px]:grid-cols-4 ${className ?? ""}`}
+		>
 			{displayedItems.map((item) => (
 				<Card
 					key={item.id}

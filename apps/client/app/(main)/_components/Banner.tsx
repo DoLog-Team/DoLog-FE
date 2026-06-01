@@ -24,7 +24,7 @@ export default function Banner({ banners }: { banners: BannerItem[] }) {
 			{/* biome-ignore lint/a11y/noNoninteractiveElementInteractions: carousel swipe */}
 			{/* biome-ignore lint/a11y/noStaticElementInteractions: carousel swipe */}
 			<div
-				className="relative w-full aspect-3/1 overflow-hidden"
+				className="relative w-full overflow-hidden"
 				onTouchStart={(e) => {
 					touchStartX.current = e.touches[0].clientX;
 				}}
@@ -59,39 +59,56 @@ export default function Banner({ banners }: { banners: BannerItem[] }) {
 						}, 500);
 				}}
 			>
-				<div
-					className="flex h-full transition-transform duration-300 ease-in-out select-none"
-					style={{ transform: `translateX(-${current * 100}%)` }}
-				>
-					{slicedBanners.map((banner, i) => (
-						<Link
-							key={banner.id}
-							href={banner.linkUrl}
-							className="relative min-w-full h-full block"
-							target="_blank"
-							rel="noopener noreferrer"
-							onClick={() =>
-								track("Banner Clicked", {
-									banner_id: banner.id,
-									banner_index: banner.orderIndex,
-									banner_url: banner.linkUrl,
-									position: i,
-								})
-							}
-						>
-							{banner.imageUrl && (
-								<Image
-									src={banner.imageUrl}
-									alt={`배너 ${banner.orderIndex}번 이미지`}
-									fill
-									draggable={false}
-									sizes="(max-width: 540px) 100vw, 540px"
-									className="object-cover"
-									priority={i === 0}
-								/>
-							)}
-						</Link>
-					))}
+				{/* 데스크탑 블러 배경 */}
+				{slicedBanners[current]?.imageUrl && (
+					<div className="absolute inset-0 hidden min-[721px]:block overflow-hidden" aria-hidden>
+						<Image
+							src={slicedBanners[current].imageUrl}
+							alt=""
+							fill
+							className="object-cover scale-110"
+							style={{ filter: "blur(20px)" }}
+						/>
+						<div className="absolute inset-0" style={{ background: "rgba(0, 0, 0, 0.40)" }} />
+					</div>
+				)}
+
+				{/* 실제 배너 슬라이더 */}
+				<div className="relative min-[721px]:max-w-285 min-[721px]:mx-auto aspect-3/1">
+					<div
+						className="flex h-full transition-transform duration-300 ease-in-out select-none"
+						style={{ transform: `translateX(-${current * 100}%)` }}
+					>
+						{slicedBanners.map((banner, i) => (
+							<Link
+								key={banner.id}
+								href={banner.linkUrl}
+								className="relative min-w-full h-full block"
+								target="_blank"
+								rel="noopener noreferrer"
+								onClick={() =>
+									track("Banner Clicked", {
+										banner_id: banner.id,
+										banner_index: banner.orderIndex,
+										banner_url: banner.linkUrl,
+										position: i,
+									})
+								}
+							>
+								{banner.imageUrl && (
+									<Image
+										src={banner.imageUrl}
+										alt={`배너 ${banner.orderIndex}번 이미지`}
+										fill
+										draggable={false}
+										sizes="(max-width: 540px) 100vw, 1060px"
+										className="object-cover"
+										priority={i === 0}
+									/>
+								)}
+							</Link>
+						))}
+					</div>
 				</div>
 			</div>
 
