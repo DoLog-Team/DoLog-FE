@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { EmptyImageFallback } from "../../EmptyImageFallback/EmptyImageFallback";
 import type { CardProps } from "../Card.types";
 import { listCardStyles as s } from "./ListCard.styles";
 
@@ -24,9 +25,7 @@ export const ListCard = ({
 						loading="lazy"
 					/>
 				) : (
-					<div className="w-full h-full bg-fg-lighter flex items-center justify-center">
-						<Image src="/icons/empty-image.svg" alt="이미지 없음" width={32} height={32} />
-					</div>
+					<EmptyImageFallback className="w-full h-full" />
 				)}
 			</div>
 			<div className={s.info}>
