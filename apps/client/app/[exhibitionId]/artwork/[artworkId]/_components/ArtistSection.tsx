@@ -1,7 +1,7 @@
 import { useExhibition } from "@/app/[exhibitionId]/_context/ExhibitionContext";
 import { Title } from "@/components/common/Title/Title";
 import type { ArtworkParticipant } from "@/lib/api/artwork";
-import { ArtistCard } from "./components/ArtistCard";
+import { ArtistCard } from "./ArtistCard";
 
 interface ArtistSectionProps {
 	authors: ArtworkParticipant[];

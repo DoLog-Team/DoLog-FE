@@ -1,18 +1,12 @@
 import { apiClient } from "api";
+import type { ExhibitionFooter } from "./layout.types";
+
+export type * from "./layout.types";
 
 /*******************
  * Footer 정보 조회
  * GET exhibition/{id}/footer-info
  *******************/
-
-export interface ExhibitionFooter {
-	title: string;
-	department: string;
-	address: string | null;
-	detail_location: string | null;
-	email: string;
-	copyright: string | null;
-}
 
 export async function getExhibitionFooter(exhibitionId: string): Promise<ExhibitionFooter | null> {
 	try {

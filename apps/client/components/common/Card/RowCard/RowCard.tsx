@@ -1,5 +1,7 @@
 "use client";
+
 import Image from "next/image";
+import { EmptyImageFallback } from "../../EmptyImageFallback/EmptyImageFallback";
 import { rowCardStyles as s } from "./RowCard.styles";
 import type { RowCardProps } from "./RowCard.types";
 
@@ -17,9 +19,7 @@ export const RowCard = ({ name, engName, email, imageUrl }: RowCardProps) => {
 						unoptimized
 					/>
 				) : (
-					<div className="w-full h-full bg-fg-lighter flex items-center justify-center">
-						<Image src="/icons/empty-image.svg" alt="이미지 없음" width={32} height={32} />
-					</div>
+					<EmptyImageFallback className="w-full h-full" />
 				)}
 			</div>
 
