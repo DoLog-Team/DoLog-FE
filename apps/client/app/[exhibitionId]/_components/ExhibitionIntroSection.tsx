@@ -29,24 +29,26 @@ export function ExhibitionIntroSection({ exhibition, exhibitionId }: ExhibitionI
 	];
 
 	return (
-		<section className="flex flex-col px-4 pb-6" data-section="intro">
-			<Title title={exhibition.title} />
+		<section className="flex flex-col pb-6 pt-4 min-[721px]:pt-0" data-section="intro">
+			<Title title={exhibition.title} className="min-[721px]:mt-8 min-[721px]:mb-5" />
 			<RowList rows={rows} />
-			<Link href={`/${exhibitionId}/artwork`}>
-				<Button
-					variant="main"
-					className="w-full mt-7"
-					onClick={() => {
-						const elapsedSec = Math.round((Date.now() - entryTime.current) / 1000);
-						track("Exhibition CTA Clicked", {
-							exhibition_id: exhibitionId,
-							time_to_click_sec: elapsedSec,
-						});
-					}}
-				>
-					전시물 감상하기
-				</Button>
-			</Link>
+			<div className="min-[721px]:hidden">
+				<Link href={`/${exhibitionId}/artwork`}>
+					<Button
+						variant="main"
+						className="w-full mt-7"
+						onClick={() => {
+							const elapsedSec = Math.round((Date.now() - entryTime.current) / 1000);
+							track("Exhibition CTA Clicked", {
+								exhibition_id: exhibitionId,
+								time_to_click_sec: elapsedSec,
+							});
+						}}
+					>
+						전시물 감상하기
+					</Button>
+				</Link>
+			</div>
 		</section>
 	);
 }

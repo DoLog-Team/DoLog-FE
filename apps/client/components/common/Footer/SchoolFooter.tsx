@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 
 interface SchoolFooterProps {
 	logoSrc?: string;
@@ -21,7 +22,7 @@ export default function SchoolFooter({
 }: SchoolFooterProps) {
 	return (
 		<footer className="w-full pb-8 flex flex-col mt-12 bg-fg-lighter">
-			<div className="flex pt-6 flex-col px-4">
+			<DesktopContainer className="flex pt-6 flex-col">
 				<div className="flex flex-col gap-1">
 					<h3 className="text-body1-bold text-light">{title}</h3>
 					<div className="h-5 w-full" />
@@ -39,7 +40,7 @@ export default function SchoolFooter({
 				</p>
 				<div className="h-7 w-full" />
 				<Image src={logoSrc || "/images/logo.svg"} alt={`${title} Logo`} width={60} height={18} />
-			</div>
+			</DesktopContainer>
 		</footer>
 	);
 }

@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { Title } from "@/components/common/Title/Title";
-import { track } from "@/lib/amplitude";
 import type { ExhibitionHost, HostSns } from "@/lib/api/exhibition";
 
 interface ExhibitionHostProps {
@@ -12,7 +11,7 @@ interface ExhibitionHostProps {
 
 export function ExhibitionHostSection({ hostInfo, sns }: ExhibitionHostProps) {
 	return (
-		<section className="flex flex-col px-4 pb-6" data-section="host">
+		<section className="flex flex-col pb-6" data-section="host">
 			<Title title="주최 기관" />
 
 			<div className="relative w-full aspect-video overflow-hidden">
