@@ -1,7 +1,7 @@
 import { linkCardStyles as s } from "./LinkCard.styles";
 import type { LinkCardProps } from "./LinkCard.types";
 
-export const LinkCard = ({ items, className }: LinkCardProps) => {
+export const LinkCard = ({ items, className, onItemClick }: LinkCardProps) => {
 	const sortedItems = [...items].sort((a, b) => {
 		if (a.label === "email") return -1;
 		if (b.label === "email") return 1;
@@ -38,11 +38,16 @@ export const LinkCard = ({ items, className }: LinkCardProps) => {
 											target="_blank"
 											rel="noopener noreferrer"
 											className={`${s.value} underline`}
+											onClick={() => onItemClick?.(item)}
 										>
 											{item.value}
 										</a>
 									) : (
-										<a href={href} className={`${s.value} underline`}>
+										<a
+											href={href}
+											className={`${s.value} underline`}
+											onClick={() => onItemClick?.(item)}
+										>
 											{item.value}
 										</a>
 									)
