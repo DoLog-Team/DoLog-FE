@@ -13,7 +13,7 @@ import ExhibitionCard from "./_components/ExhibitionCard";
 import { Header } from "./_components/Header";
 import { TrackedExhibitionLink } from "./_components/TrackedExhibitionLink";
 // import { MOCK_BANNERS } from "./_mocks/banner";
-import { MOCK_EXHIBITIONS } from "./_mocks/exhibition";
+// import { MOCK_EXHIBITIONS } from "./_mocks/exhibition";
 // import { MOCK_SECTIONS } from "./_mocks/section";
 
 export default async function MainPage() {
@@ -23,8 +23,7 @@ export default async function MainPage() {
 		getMainArtworks(),
 	]);
 	const displayBanners = banners;
-	// TODO: 테스트용 mock, 배포 전 제거
-	const displayExhibitions = mainExhibitions.length > 0 ? mainExhibitions : MOCK_EXHIBITIONS;
+	const displayExhibitions = mainExhibitions;
 	const allArtworks = mainArtworks.map((a) => ({
 		id: a.id,
 		title: a.title,
