@@ -122,6 +122,13 @@ export function ArtworkListSection({
 				) : (
 					zones.map((zone) => {
 						const items = zone.artworks.map(toCardItem);
+						const handleArtworkClick = (item: CardItem) =>
+							track("Artwork Card Clicked", {
+								artwork_id: item.id,
+								artwork_title: item.title,
+								zone: zone.zoneName,
+								page: "artwork_list",
+							});
 						return (
 							<div
 								key={zone.zoneName}
@@ -139,27 +146,13 @@ export function ArtworkListSection({
 									<CardGrid
 										items={items}
 										getHref={(item) => `artwork/${item.id}`}
-										onItemClick={(item) =>
-											track("Artwork Card Clicked", {
-												artwork_id: item.id,
-												artwork_title: item.title,
-												zone: zone.zoneName,
-												page: "artwork_list",
-											})
-										}
+										onItemClick={handleArtworkClick}
 									/>
 								) : (
 									<ListCardGrid
 										items={items}
 										getHref={(item) => `artwork/${item.id}`}
-										onItemClick={(item) =>
-											track("Artwork Card Clicked", {
-												artwork_id: item.id,
-												artwork_title: item.title,
-												zone: zone.zoneName,
-												page: "artwork_list",
-											})
-										}
+										onItemClick={handleArtworkClick}
 									/>
 								)}
 							</div>
