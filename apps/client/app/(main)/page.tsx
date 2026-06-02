@@ -19,7 +19,7 @@ import { TrackedExhibitionLink } from "./_components/TrackedExhibitionLink";
 export const metadata: Metadata = {
 	title: "두록(Dolog) | 대학 전시 웹사이트 제작 및 작품 아카이빙 플랫폼",
 	description:
-		"두록(Dolog)은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다. 졸업 전시, 과제전 및 기타 예술 창작 계열 대학 전시를 온라인으로 기록할 수 있습니다.",
+		"두록은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다. 졸업 전시, 과제전 및 기타 예술 창작 계열 대학 전시를 온라인으로 기록할 수 있습니다.",
 	alternates: {
 		canonical: "https://dolog.kr",
 	},
@@ -30,14 +30,14 @@ export const metadata: Metadata = {
 		locale: "ko_KR",
 		title: "두록(Dolog) | 대학 전시 웹사이트 제작 및 작품 아카이빙 플랫폼",
 		description:
-			"두록(Dolog)은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다. 졸업 전시, 과제전 및 기타 예술 창작 계열 대학 전시를 온라인으로 기록할 수 있습니다.",
+			"두록은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다. 졸업 전시, 과제전 및 기타 예술 창작 계열 대학 전시를 온라인으로 기록할 수 있습니다.",
 		images: [{ url: "/images/og-default.png" }],
 	},
 	twitter: {
 		card: "summary_large_image",
 		title: "두록(Dolog) | 대학 전시 웹사이트 제작 및 작품 아카이빙 플랫폼",
 		description:
-			"두록(Dolog)은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다. 졸업 전시, 과제전 및 기타 예술 창작 계열 대학 전시를 온라인으로 기록할 수 있습니다.",
+			"두록은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다. 졸업 전시, 과제전 및 기타 예술 창작 계열 대학 전시를 온라인으로 기록할 수 있습니다.",
 		images: ["/images/og-default.png"],
 	},
 };
@@ -50,7 +50,7 @@ const organizationJsonLd = {
 	url: "https://dolog.kr/",
 	logo: "https://dolog.kr/logo.svg",
 	description:
-		"두록(Dolog)은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다. 졸업 전시, 과제전 및 기타 예술 창작 계열 대학 전시를 온라인으로 기록할 수 있습니다.",
+		"두록은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다. 졸업 전시, 과제전 및 기타 예술 창작 계열 대학 전시를 온라인으로 기록할 수 있습니다.",
 	sameAs: ["https://www.instagram.com/dolog.archive"],
 };
 
