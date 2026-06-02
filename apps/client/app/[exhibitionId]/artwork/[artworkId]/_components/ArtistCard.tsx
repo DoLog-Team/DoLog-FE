@@ -14,10 +14,59 @@ export interface ArtistCardProps {
 }
 
 export function ArtistCard({ author, profileHref }: ArtistCardProps) {
+	const nameSection = (
+		<>
+			<span className="text-head3 text-strong">{author.nameKo}</span>
+			<span className="text-body2 text-light pt-1">{author.nameEn}</span>
+			{author.role && <span className="text-body2 text-lighter pt-2">{author.role}</span>}
+		</>
+	);
+
+	const snsSection = (!!author.email || (author.sns ?? []).length > 0) && (
+		<div className="flex flex-col pb-5 pt-3">
+			<RowList
+				rows={[
+					...(author.email
+						? [
+								{
+									label: "email",
+									value: (
+										<a href={`mailto:${author.email}`} className="underline">
+											{author.email}
+										</a>
+									),
+								},
+							]
+						: []),
+					...(author.sns ?? []).map((sns) => {
+						const isInstagram = sns.platformName.toLowerCase() === "instagram";
+						const isUrl = sns.url.startsWith("http://") || sns.url.startsWith("https://");
+						const href = isInstagram
+							? `https://www.instagram.com/${sns.url.startsWith("@") ? sns.url.slice(1) : sns.url}/`
+							: isUrl
+								? sns.url
+								: null;
+						return {
+							label: sns.platformName,
+							value: href ? (
+								<a href={href} target="_blank" rel="noopener noreferrer" className="underline">
+									{sns.url}
+								</a>
+							) : (
+								sns.url
+							),
+						};
+					}),
+				]}
+			/>
+		</div>
+	);
+
 	return (
-		<div className="flex flex-col">
-			<div className="flex">
-				<div className="relative shrink-0 w-32 aspect-[1/1.414]">
+		<div className="flex flex-col min-[721px]:flex-row min-[721px]:gap-8">
+			{/* 이미지 + 모바일 이름 (같은 행) */}
+			<div className="flex gap-4 shrink-0 min-[721px]:block">
+				<div className="relative shrink-0 w-32 aspect-[1/1.414] min-[721px]:w-[180px]">
 					{author.profileImg ? (
 						<Image src={author.profileImg} alt={author.nameKo} fill className="object-cover" />
 					) : (
@@ -29,60 +78,41 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 						</div>
 					)}
 				</div>
-				<div className="flex flex-col justify-end px-4">
-					<span className="text-head3 text-strong">{author.nameKo}</span>
-					<span className="text-body2 text-light pt-1">{author.nameEn}</span>
-					{author.role && <span className="text-body2 text-lighter pt-2">{author.role}</span>}
-				</div>
+				{/* 이름: 모바일에서만 이미지 옆에 표시 */}
+				<div className="flex flex-col justify-end min-[721px]:hidden">{nameSection}</div>
 			</div>
 
-			{/* 소개글 */}
-			{author.bio && <p className="text-body1 pt-4">{author.bio}</p>}
+			{/* 우측 컬럼 (데스크탑) / 하단 컨텐츠 (모바일) */}
+			<div className="flex flex-col flex-1">
+				{/* 이름: 데스크탑에서만 우측 컬럼 상단에 표시 */}
+				<div className="hidden min-[721px]:flex flex-col">{nameSection}</div>
 
-			{(!!author.email || (author.sns ?? []).length > 0) && (
-				<div className="flex flex-col pb-5 pt-6">
-					<RowList
-						rows={[
-							...(author.email
-								? [
-										{
-											label: "email",
-											value: (
-												<a href={`mailto:${author.email}`} className="underline">
-													{author.email}
-												</a>
-											),
-										},
-									]
-								: []),
-							...(author.sns ?? []).map((sns) => {
-								const isInstagram = sns.platformName.toLowerCase() === "instagram";
-								const isUrl = sns.url.startsWith("http://") || sns.url.startsWith("https://");
-								const href = isInstagram
-									? `https://www.instagram.com/${sns.url.startsWith("@") ? sns.url.slice(1) : sns.url}/`
-									: isUrl
-										? sns.url
-										: null;
-								return {
-									label: sns.platformName,
-									value: href ? (
-										<a href={href} target="_blank" rel="noopener noreferrer" className="underline">
-											{sns.url}
-										</a>
-									) : (
-										sns.url
-									),
-								};
-							}),
-						]}
-					/>
-				</div>
-			)}
-			<Link href={profileHref}>
-				<Button
-					variant="outline"
-					size="sm"
-					className="w-full"
+				{/* 소개글 */}
+				{author.bio && <p className="text-body1 pt-4">{author.bio}</p>}
+
+				{snsSection}
+
+				{/* 모바일: 버튼 */}
+				<Link href={profileHref} className="min-[721px]:hidden">
+					<Button
+						variant="outline"
+						size="sm"
+						className="w-full"
+						onClick={() =>
+							track("Profile More Clicked", {
+								artist_id: author.profileId,
+								artist_name: author.nameKo,
+								page: "artwork_detail",
+							})
+						}
+					>
+						프로필 더보기
+					</Button>
+				</Link>
+				{/* 데스크탑: 텍스트 링크 */}
+				<Link
+					href={profileHref}
+					className="hidden min-[721px]:inline mt-auto text-body1 text-lightest underline underline-offset-2 w-fit"
 					onClick={() =>
 						track("Profile More Clicked", {
 							artist_id: author.profileId,
@@ -91,9 +121,9 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 						})
 					}
 				>
-					프로필 더보기
-				</Button>
-			</Link>
+					프로필 더보기 →
+				</Link>
+			</div>
 		</div>
 	);
 }

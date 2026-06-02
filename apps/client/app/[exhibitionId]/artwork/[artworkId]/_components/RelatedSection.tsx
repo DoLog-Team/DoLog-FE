@@ -1,6 +1,7 @@
 "use client";
 
 import { CardGrid } from "@/components/common/Card/CardGrid";
+import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Title } from "@/components/common/Title/Title";
 import { track } from "@/lib/amplitude";
 import type { RelatedArtwork } from "@/lib/api/artwork";
@@ -20,21 +21,23 @@ export const RelatedSection = ({ artworks, artworkTitle }: RelatedSectionProps) 
 	}));
 
 	return (
-		<section className="flex flex-col px-4 pb-6">
-			<Title title="동일한 카테고리 작품" margin="compact" />
-			<CardGrid
-				items={items}
-				getHref={(item) => `${item.id}`}
-				limit={2}
-				onItemClick={(item) =>
-					track("Related Artwork Clicked", {
-						clicked_artwork_id: item.id,
-						clicked_artwork_title: item.title,
-						from_artwork: artworkTitle,
-						page: "artwork_detail",
-					})
-				}
-			/>
+		<section className="flex flex-col pb-6">
+			<DesktopContainer>
+				<Title title="동일한 카테고리 작품" margin="compact" />
+				<CardGrid
+					items={items}
+					getHref={(item) => `${item.id}`}
+					limit={2}
+					onItemClick={(item) =>
+						track("Related Artwork Clicked", {
+							clicked_artwork_id: item.id,
+							clicked_artwork_title: item.title,
+							from_artwork: artworkTitle,
+							page: "artwork_detail",
+						})
+					}
+				/>
+			</DesktopContainer>
 		</section>
 	);
 };

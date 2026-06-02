@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { track } from "@/lib/amplitude";
 import type { RelatedArtwork } from "@/lib/api/artwork";
 
@@ -60,12 +61,14 @@ function ArtworkNavItem({ artwork, direction }: ArtworkNavItemProps) {
 
 export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigationProps) {
 	return (
-		<section className="flex flex-col px-4 pb-6 w-full">
-			<span className="text-body1-bold text-lighter pt-7 pb-2.5">작품 둘러보기</span>
-			<hr className="border border-stroke-lighter" />
-			{prevArtwork && <ArtworkNavItem artwork={prevArtwork} direction="prev" />}
-			<hr className="border border-stroke-lightest" />
-			{nextArtwork && <ArtworkNavItem artwork={nextArtwork} direction="next" />}
+		<section className="flex flex-col pb-6 w-full">
+			<DesktopContainer>
+				<span className="text-body1-bold text-lighter pt-7 pb-2.5">작품 둘러보기</span>
+				<hr className="border border-stroke-lighter" />
+				{prevArtwork && <ArtworkNavItem artwork={prevArtwork} direction="prev" />}
+				<hr className="border border-stroke-lightest" />
+				{nextArtwork && <ArtworkNavItem artwork={nextArtwork} direction="next" />}
+			</DesktopContainer>
 		</section>
 	);
 }
