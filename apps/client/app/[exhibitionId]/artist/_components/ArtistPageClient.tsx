@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef } from "react";
+import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
@@ -46,7 +47,7 @@ export function ArtistPageClient({ exhibitionId, partners, artists }: ArtistPage
 				}}
 			/>
 
-			<div className="flex flex-col w-full px-4">
+			<DesktopContainer className="flex flex-col">
 				<section
 					ref={(el) => {
 						sectionRefs.artists.current = el;
@@ -76,7 +77,7 @@ export function ArtistPageClient({ exhibitionId, partners, artists }: ArtistPage
 				>
 					<PartnerSection partners={partners} />
 				</section>
-			</div>
+			</DesktopContainer>
 		</>
 	);
 }
