@@ -48,7 +48,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 						className="
 						w-full
 						min-h-dvh
-						shadow-xl
 						relative
 						flex flex-col
 						"
