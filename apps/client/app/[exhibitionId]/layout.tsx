@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ExhibitionPageTracker } from "@/components/common/ExhibitionPageTracker";
 import MainFooter from "@/components/common/Footer/MainFooter";
 import SchoolFooter from "@/components/common/Footer/SchoolFooter";
-import { getExhibitions } from "@/lib/api/exhibition";
+import { getExhibitionDetail, getExhibitions } from "@/lib/api/exhibition";
 import { getExhibitionFooter } from "@/lib/api/layout";
 import { ThemeProvider } from "@/providers/theme-providers";
 import { getExhibitionCustom } from "./_api/getExhibitionCustom";
@@ -19,14 +19,28 @@ export async function generateMetadata({
 }): Promise<Metadata> {
 	const { exhibitionId } = await params;
 	const uuid = await resolveExhibitionId(exhibitionId);
-	const meta = uuid ? await getExhibitionMeta(uuid) : null;
+	const [meta, detail] = await Promise.all([
+		uuid ? getExhibitionMeta(uuid) : null,
+		uuid ? getExhibitionDetail(uuid) : null,
+	]);
+
+	const titleParts = [
+		meta?.title ?? detail?.title,
+		detail && `${detail.univName} ${detail.deptName}`,
+	].filter(Boolean);
+	const title = titleParts.length > 0 ? titleParts.join(" | ") : "두록";
+
+	const autoDescription = detail
+		? `${detail.univName} ${detail.deptName}${detail.exhibitionType ? ` ${detail.exhibitionType}` : ""} 전시 ${detail.title}. 두록(DOLOG)에서 확인하세요.`
+		: "우리의 졸업 전시, 더 오래 기록하는 방법";
+	const description = meta?.description ?? autoDescription;
 
 	const canonicalUrl = `https://dolog.kr/${exhibitionId}`;
 	const ogImage = meta?.image ? [{ url: meta.image }] : [{ url: "/images/og-default.png" }];
 
 	return {
-		title: meta?.title ?? "두록",
-		description: meta?.description ?? "우리의 졸업 전시, 더 오래 기록하는 방법",
+		title,
+		description,
 		icons: { icon: meta?.favicon ?? "/favicon.ico" },
 		alternates: {
 			canonical: canonicalUrl,
@@ -34,14 +48,14 @@ export async function generateMetadata({
 		openGraph: {
 			type: "website",
 			url: canonicalUrl,
-			title: meta?.title ?? "두록",
-			description: meta?.description ?? "우리의 졸업 전시, 더 오래 기록하는 방법",
+			title,
+			description,
 			images: ogImage,
 		},
 		twitter: {
 			card: "summary_large_image",
-			title: meta?.title ?? "두록",
-			description: meta?.description ?? "우리의 졸업 전시, 더 오래 기록하는 방법",
+			title,
+			description,
 			images: ogImage.map((img) => img.url),
 		},
 	};
@@ -57,9 +71,6 @@ export default async function ExhibitionLayout({
 	const { exhibitionId } = await params;
 	const uuid = await resolveExhibitionId(exhibitionId);
 	const custom = uuid ? await getExhibitionCustom(uuid) : null;
-
-	// TODO : /{slug} 또는 uuid 단건 조회 api get 가능할지 물어보기
-	// 예상 : const exhibition = await getExhibitionBySlug(exhibitionId);
 	const exhibitions = await getExhibitions();
 	const exhibition = exhibitions.find((e) => e.slug === exhibitionId);
 	exhibitions.find((e) => e.id === uuid);
