@@ -30,7 +30,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 		: params.exhibitionId;
 
 	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
-	const hasBts = MOCK_BTS_LIST.length > 0;
+	const hasBts = false;
 	const baseUrl = `/${exhibitionId}`;
 
 	useEffect(() => {
