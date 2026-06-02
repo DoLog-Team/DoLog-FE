@@ -3,7 +3,7 @@ import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopCo
 
 export default function MainFooter() {
 	return (
-		<footer className="w-full pt-12 pb-12 bg-fg-lighter mt-12">
+		<footer className="w-full pt-12 pb-20 bg-fg-lighter mt-12">
 			<DesktopContainer>
 				<div className="flex flex-col">
 					<Image src="/images/logo.svg" alt="DoLog Logo" width={50} height={25} />

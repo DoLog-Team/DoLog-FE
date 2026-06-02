@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { CardItem } from "@/components/common/Card/Card.types";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
@@ -77,6 +77,16 @@ export function ArtworkListSection({
 	hideFilter,
 }: ArtworkListSectionProps) {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+
+	useEffect(() => {
+		const mq = window.matchMedia("(min-width: 721px)");
+		const handler = (e: MediaQueryListEvent) => {
+			if (e.matches) setViewMode("grid");
+		};
+		mq.addEventListener("change", handler);
+		return () => mq.removeEventListener("change", handler);
+	}, []);
+
 	const { ref: titleRef, isVisible: isTitleVisible } = useIntersectionObserver();
 	const isMultiZone = zones.length > 1;
 
@@ -85,7 +95,9 @@ export function ArtworkListSection({
 			<DesktopContainer>
 				<div ref={titleRef} className="flex justify-between items-center">
 					<Title title="작품 목록" />
-					<ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+					<div className="min-[721px]:hidden">
+						<ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+					</div>
 				</div>
 			</DesktopContainer>
 
@@ -109,7 +121,7 @@ export function ArtworkListSection({
 							/>
 						)}
 						{!isTitleVisible && (
-							<div className="ml-auto">
+							<div className="ml-auto min-[721px]:hidden">
 								<ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
 							</div>
 						)}
