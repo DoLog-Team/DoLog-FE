@@ -51,8 +51,43 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 	const hostData = host;
 	const snsData = sns;
 
+	const jsonLd = {
+		"@context": "https://schema.org",
+		"@type": "Event",
+		name: `${exhibitionData.univName} ${exhibitionData.deptName}${exhibitionData.exhibitionType ? ` ${exhibitionData.exhibitionType}` : ""} ${exhibitionData.title}`,
+		description: `${exhibitionData.univName} ${exhibitionData.deptName}${exhibitionData.exhibitionType ? ` ${exhibitionData.exhibitionType}` : ""} ${exhibitionData.title}의 온라인 전시 아카이브입니다. 전시, 작품 정보와 참여 작가를 두록(Dolog)에서 확인할 수 있습니다.`,
+		startDate: exhibitionData.startDate,
+		endDate: exhibitionData.endDate,
+		image: exhibitionData.exhibitionImg,
+		eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
+		eventStatus: "https://schema.org/EventScheduled",
+		location: {
+			"@type": "Place",
+			address: {
+				"@type": "PostalAddress",
+				streetAddress: exhibitionData.location.address,
+			},
+		},
+		organizer: {
+			"@type": "Organization",
+			name: `${exhibitionData.univName} ${exhibitionData.deptName}`,
+		},
+		publisher: {
+			"@type": "Organization",
+			name: "두록",
+			alternateName: "Dolog",
+			url: "https://dolog.kr/",
+			sameAs: ["https://www.instagram.com/dolog.archive"],
+		},
+		url: `https://dolog.kr/${exhibitionId}`,
+	};
+
 	return (
 		<main>
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+			/>
 			<SectionTimeTracker
 				pageName="exhibition_intro"
 				sections={["intro", "detail", "location", "host"]}

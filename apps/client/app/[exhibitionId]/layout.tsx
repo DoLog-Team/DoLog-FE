@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { ExhibitionPageTracker } from "@/components/common/ExhibitionPageTracker";
 import MainFooter from "@/components/common/Footer/MainFooter";
 import SchoolFooter from "@/components/common/Footer/SchoolFooter";
-import { getExhibitions } from "@/lib/api/exhibition";
+import { getExhibitionDetail, getExhibitions } from "@/lib/api/exhibition";
 import { getExhibitionFooter } from "@/lib/api/layout";
+import { EXHIBITION_TYPE_LABEL } from "@/lib/constants/exhibition";
 import { ThemeProvider } from "@/providers/theme-providers";
 import { getExhibitionCustom } from "./_api/getExhibitionCustom";
 import { getExhibitionMeta } from "./_api/getExhibitionMeta";
@@ -19,16 +20,50 @@ export async function generateMetadata({
 }): Promise<Metadata> {
 	const { exhibitionId } = await params;
 	const uuid = await resolveExhibitionId(exhibitionId);
-	const meta = uuid ? await getExhibitionMeta(uuid) : null;
+	const [meta, detail] = await Promise.all([
+		uuid ? getExhibitionMeta(uuid) : null,
+		uuid ? getExhibitionDetail(uuid) : null,
+	]);
+
+	const exhibitionName = meta?.title ?? detail?.title ?? "";
+	const orgName = detail ? `${detail.univName} ${detail.deptName}` : "";
+	const exhibitionType = detail?.exhibitionType
+		? (EXHIBITION_TYPE_LABEL[detail.exhibitionType] ?? detail.exhibitionType)
+		: "";
+
+	const titleBase = [orgName, exhibitionType, exhibitionName].filter(Boolean).join(" ");
+	const title = titleBase ? `${titleBase} | 두록(Dolog)` : "두록(Dolog)";
+	const ogTitle = exhibitionName || "두록(Dolog)";
+
+	const autoDescription = detail
+		? `${orgName}${exhibitionType ? ` ${exhibitionType}` : ""} ${exhibitionName}의 온라인 전시 아카이브입니다. 전시, 작품 정보와 참여 작가를 두록(Dolog)에서 확인할 수 있습니다.`
+		: "두록은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다. 졸업 전시, 과제전 및 기타 예술 창작 계열 대학 전시를 온라인으로 기록할 수 있습니다.";
+	const description = meta?.description ?? autoDescription;
+
+	const canonicalUrl = `https://dolog.kr/${exhibitionId}`;
+	const ogImage = meta?.image ? [{ url: meta.image }] : [{ url: "/images/og-default.png" }];
 
 	return {
-		title: meta?.title ?? "두록",
-		description: meta?.description ?? "우리의 졸업 전시, 더 오래 기록하는 방법",
+		title,
+		description,
 		icons: { icon: meta?.favicon ?? "/favicon.ico" },
+		alternates: {
+			canonical: canonicalUrl,
+		},
 		openGraph: {
-			title: meta?.title ?? "두록",
-			description: meta?.description ?? "우리의 졸업 전시, 더 오래 기록하는 방법",
-			images: meta?.image ? [{ url: meta.image }] : [{ url: "/images/og-default.png" }],
+			type: "website",
+			url: canonicalUrl,
+			siteName: "두록(Dolog)",
+			locale: "ko_KR",
+			title: ogTitle,
+			description,
+			images: ogImage,
+		},
+		twitter: {
+			card: "summary_large_image",
+			title: ogTitle,
+			description,
+			images: ogImage.map((img) => img.url),
 		},
 	};
 }
@@ -43,9 +78,6 @@ export default async function ExhibitionLayout({
 	const { exhibitionId } = await params;
 	const uuid = await resolveExhibitionId(exhibitionId);
 	const custom = uuid ? await getExhibitionCustom(uuid) : null;
-
-	// TODO : /{slug} 또는 uuid 단건 조회 api get 가능할지 물어보기
-	// 예상 : const exhibition = await getExhibitionBySlug(exhibitionId);
 	const exhibitions = await getExhibitions();
 	const exhibition = exhibitions.find((e) => e.slug === exhibitionId);
 	exhibitions.find((e) => e.id === uuid);
