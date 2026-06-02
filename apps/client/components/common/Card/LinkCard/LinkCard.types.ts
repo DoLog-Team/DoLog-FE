@@ -7,4 +7,5 @@ export interface LinkItem {
 export interface LinkCardProps {
 	items: LinkItem[];
 	className?: string;
+	onItemClick?: (item: LinkItem) => void;
 }

@@ -1,4 +1,4 @@
-import { PostNavigation } from "@/app/[exhibitionId]/artist/[artistId]/components/Navigation/PostNavigation/PostNavigation";
+import { PostNavigation } from "@/app/[exhibitionId]/artist/[artistId]/_components/Navigation/PostNavigation/PostNavigation";
 import type { ArtistDetail } from "@/lib/api/artists/artist-detail.types";
 
 export function NavigationSection({ artist }: { artist: ArtistDetail }) {

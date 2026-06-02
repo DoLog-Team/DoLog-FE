@@ -7,11 +7,11 @@ import { getExhibitionMeta } from "../../_api/getExhibitionMeta";
 import { resolveExhibitionId } from "../../_api/resolveExhibitionId";
 import { Header } from "../../_components/Header";
 import { NotFound } from "../../_components/NotFound";
-import { ArtworkSection } from "./components/sections/ArtworkSection";
-import { BTSSection } from "./components/sections/BTSSection";
-import { ContactSection } from "./components/sections/ContactSection";
-import { NavigationSection } from "./components/sections/NavigationSection";
-import { ProfileSection } from "./components/sections/ProfileSection";
+import { ArtworkSection } from "./_components/sections/ArtworkSection";
+import { BTSSection } from "./_components/sections/BTSSection";
+import { ContactSection } from "./_components/sections/ContactSection";
+import { NavigationSection } from "./_components/sections/NavigationSection";
+import { ProfileSection } from "./_components/sections/ProfileSection";
 
 interface Props {
 	params: Promise<{

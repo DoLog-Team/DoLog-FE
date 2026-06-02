@@ -14,6 +14,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 export const useScrollSpy = (tabIds: string[], offset: number = 44) => {
 	const [activeTab, setActiveTab] = useState(tabIds[0]);
 	const isScrollingByClick = useRef(false);
+	const SCROLL_LOCK_DURATION_MS = 1000;
 
 	// 1. 각 섹션(tabId)에 대응하는 객체 배열 생성
 	// 2. 각 객체에 refs를 담음 (할당)
@@ -38,7 +39,7 @@ export const useScrollSpy = (tabIds: string[], offset: number = 44) => {
 			setActiveTab(tabId);
 			setTimeout(() => {
 				isScrollingByClick.current = false;
-			}, 1000);
+			}, SCROLL_LOCK_DURATION_MS);
 		}
 	};
 

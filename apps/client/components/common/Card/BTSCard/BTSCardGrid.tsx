@@ -2,8 +2,8 @@ import Link from "next/link";
 import { BTSCard } from "./BTSCard";
 
 export interface BTSCardGridProps {
-	items: { id: number; title: string; author: string; imageUrl: string }[];
-	getHref?: (item: { id: number }) => string;
+	items: { id: string; title: string; author?: string; imageUrl: string }[];
+	getHref?: (item: { id: string }) => string;
 }
 
 export const BTSCardGrid = ({ items, getHref }: BTSCardGridProps) => {
@@ -12,10 +12,15 @@ export const BTSCardGrid = ({ items, getHref }: BTSCardGridProps) => {
 			{items.map((item) =>
 				getHref ? (
 					<Link key={item.id} href={getHref(item)}>
-						<BTSCard title={item.title} author={item.author} imageUrl={item.imageUrl} />
+						<BTSCard title={item.title} author={item.author ?? ""} imageUrl={item.imageUrl} />
 					</Link>
 				) : (
-					<BTSCard key={item.id} title={item.title} author={item.author} imageUrl={item.imageUrl} />
+					<BTSCard
+						key={item.id}
+						title={item.title}
+						author={item.author ?? ""}
+						imageUrl={item.imageUrl}
+					/>
 				),
 			)}
 		</div>

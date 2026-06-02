@@ -9,9 +9,9 @@ import { Title } from "@/components/common/Title/Title";
 import { track } from "@/lib/amplitude";
 import type { ArtworkListItem } from "@/lib/api/artwork";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
-import { AlbumIcon } from "./components/AlbumIcon";
-import Filter from "./components/Filter";
-import { ListIcon } from "./components/ListIcon";
+import { AlbumIcon } from "./AlbumIcon";
+import Filter from "./Filter";
+import { ListIcon } from "./ListIcon";
 
 interface FilteredZone {
 	zoneName: string;
@@ -122,6 +122,13 @@ export function ArtworkListSection({
 				) : (
 					zones.map((zone) => {
 						const items = zone.artworks.map(toCardItem);
+						const handleArtworkClick = (item: CardItem) =>
+							track("Artwork Card Clicked", {
+								artwork_id: item.id,
+								artwork_title: item.title,
+								zone: zone.zoneName,
+								page: "artwork_list",
+							});
 						return (
 							<div
 								key={zone.zoneName}
@@ -139,27 +146,13 @@ export function ArtworkListSection({
 									<CardGrid
 										items={items}
 										getHref={(item) => `artwork/${item.id}`}
-										onItemClick={(item) =>
-											track("Artwork Card Clicked", {
-												artwork_id: item.id,
-												artwork_title: item.title,
-												zone: zone.zoneName,
-												page: "artwork_list",
-											})
-										}
+										onItemClick={handleArtworkClick}
 									/>
 								) : (
 									<ListCardGrid
 										items={items}
 										getHref={(item) => `artwork/${item.id}`}
-										onItemClick={(item) =>
-											track("Artwork Card Clicked", {
-												artwork_id: item.id,
-												artwork_title: item.title,
-												zone: zone.zoneName,
-												page: "artwork_list",
-											})
-										}
+										onItemClick={handleArtworkClick}
 									/>
 								)}
 							</div>

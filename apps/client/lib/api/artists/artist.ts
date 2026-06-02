@@ -1,5 +1,3 @@
-// api/artist.ts
-
 import { apiClient } from "api";
 
 export interface ArtistProfile {
@@ -12,16 +10,8 @@ export interface ArtistProfile {
 
 export async function getArtistProfiles(exhibitionId: string): Promise<ArtistProfile[]> {
 	try {
-		const response = await apiClient<ArtistProfile[]>(
-			`/exhibitions/${exhibitionId}/artists?sort=NAME`,
-		);
-
-		if (Array.isArray(response)) {
-			return response;
-		}
-
-		return [];
-	} catch (_error) {
+		return await apiClient<ArtistProfile[]>(`/exhibitions/${exhibitionId}/artists?sort=NAME`);
+	} catch {
 		return [];
 	}
 }
