@@ -24,15 +24,16 @@ export async function generateMetadata({
 		uuid ? getExhibitionDetail(uuid) : null,
 	]);
 
-	const titleParts = [
-		meta?.title ?? detail?.title,
-		detail && `${detail.univName} ${detail.deptName}`,
-	].filter(Boolean);
-	const title = titleParts.length > 0 ? titleParts.join(" | ") : "두록";
+	const exhibitionName = meta?.title ?? detail?.title ?? "";
+	const orgName = detail ? `${detail.univName} ${detail.deptName}` : "";
+	const exhibitionType = detail?.exhibitionType ?? "";
+
+	const titleBase = [orgName, exhibitionType, exhibitionName].filter(Boolean).join(" ");
+	const title = titleBase ? `${titleBase} | 두록(Dolog)` : "두록(Dolog)";
 
 	const autoDescription = detail
-		? `${detail.univName} ${detail.deptName}${detail.exhibitionType ? ` ${detail.exhibitionType}` : ""} 전시 ${detail.title}. 두록(DOLOG)에서 확인하세요.`
-		: "우리의 졸업 전시, 더 오래 기록하는 방법";
+		? `${orgName}${exhibitionType ? ` ${exhibitionType}` : ""} ${exhibitionName}의 온라인 전시 아카이브입니다. 전시, 작품 정보와 참여 작가를 두록(Dolog)에서 확인할 수 있습니다.`
+		: "두록(Dolog)은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다.";
 	const description = meta?.description ?? autoDescription;
 
 	const canonicalUrl = `https://dolog.kr/${exhibitionId}`;
@@ -48,6 +49,8 @@ export async function generateMetadata({
 		openGraph: {
 			type: "website",
 			url: canonicalUrl,
+			siteName: "두록(Dolog)",
+			locale: "ko_KR",
 			title,
 			description,
 			images: ogImage,
