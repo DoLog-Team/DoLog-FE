@@ -21,14 +21,28 @@ export async function generateMetadata({
 	const uuid = await resolveExhibitionId(exhibitionId);
 	const meta = uuid ? await getExhibitionMeta(uuid) : null;
 
+	const canonicalUrl = `https://dolog.kr/${exhibitionId}`;
+	const ogImage = meta?.image ? [{ url: meta.image }] : [{ url: "/images/og-default.png" }];
+
 	return {
 		title: meta?.title ?? "두록",
 		description: meta?.description ?? "우리의 졸업 전시, 더 오래 기록하는 방법",
 		icons: { icon: meta?.favicon ?? "/favicon.ico" },
+		alternates: {
+			canonical: canonicalUrl,
+		},
 		openGraph: {
+			type: "website",
+			url: canonicalUrl,
 			title: meta?.title ?? "두록",
 			description: meta?.description ?? "우리의 졸업 전시, 더 오래 기록하는 방법",
-			images: meta?.image ? [{ url: meta.image }] : [{ url: "/images/og-default.png" }],
+			images: ogImage,
+		},
+		twitter: {
+			card: "summary_large_image",
+			title: meta?.title ?? "두록",
+			description: meta?.description ?? "우리의 졸업 전시, 더 오래 기록하는 방법",
+			images: ogImage.map((img) => img.url),
 		},
 	};
 }

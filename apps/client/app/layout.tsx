@@ -7,12 +7,25 @@ export const metadata: Metadata = {
 	title: "두록",
 	description: "우리의 졸업 전시, 더 오래 기록하는 방법",
 	metadataBase: new URL("https://dolog.kr"),
+	alternates: {
+		canonical: "https://dolog.kr",
+	},
 	openGraph: {
 		type: "website",
 		url: "https://dolog.kr",
 		title: "두록",
 		description: "우리의 졸업 전시, 더 오래 기록하는 방법",
 		images: [{ url: "/images/og-default.png" }],
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "두록",
+		description: "우리의 졸업 전시, 더 오래 기록하는 방법",
+		images: ["/images/og-default.png"],
+	},
+	verification: {
+		google: "y8A4PmZMH-PpvOKHTtdyybamDdFzYf6VS-LTFWfA0RA",
+		other: { "naver-site-verification": "d88474d58d7d9e08cdc8098c00e6e4cb9edc1c59" },
 	},
 };
 
