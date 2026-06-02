@@ -1,4 +1,5 @@
 import { buttonVariants } from "components";
+import type { Metadata } from "next";
 import { Divider } from "@/components/common/Divider/Divider";
 import MainFooter from "@/components/common/Footer/MainFooter";
 import { PageTracker } from "@/components/common/PageTracker";
@@ -14,6 +15,27 @@ import { TrackedExhibitionLink } from "./_components/TrackedExhibitionLink";
 // import { MOCK_BANNERS } from "./_mocks/banner";
 // import { MOCK_EXHIBITIONS } from "./_mocks/exhibition";
 // import { MOCK_SECTIONS } from "./_mocks/section";
+
+export const metadata: Metadata = {
+	title: "두록 | 대학 전시 웹사이트 제작 및 작품 아카이빙 플랫폼",
+	description: "두록은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다.",
+	alternates: {
+		canonical: "https://dolog.kr",
+	},
+	openGraph: {
+		type: "website",
+		url: "https://dolog.kr",
+		title: "두록 | 대학 전시 웹사이트 제작 및 작품 아카이빙 플랫폼",
+		description: "두록은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다.",
+		images: [{ url: "/images/og-default.png" }],
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "두록 | 대학 전시 웹사이트 제작 및 작품 아카이빙 플랫폼",
+		description: "두록은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다.",
+		images: ["/images/og-default.png"],
+	},
+};
 
 export default async function MainPage() {
 	const [banners, mainExhibitions, mainArtworks] = await Promise.all([

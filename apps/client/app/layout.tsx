@@ -23,6 +23,10 @@ export const metadata: Metadata = {
 		description: "우리의 졸업 전시, 더 오래 기록하는 방법",
 		images: ["/images/og-default.png"],
 	},
+	robots: {
+		index: true,
+		follow: true,
+	},
 	verification: {
 		google: "y8A4PmZMH-PpvOKHTtdyybamDdFzYf6VS-LTFWfA0RA",
 		other: { "naver-site-verification": "d88474d58d7d9e08cdc8098c00e6e4cb9edc1c59" },
