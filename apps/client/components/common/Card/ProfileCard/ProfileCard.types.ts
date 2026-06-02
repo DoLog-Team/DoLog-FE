@@ -3,4 +3,5 @@ export interface ProfileCardProps {
 	name: string;
 	engName?: string;
 	bio?: string;
+	bottomSlot?: React.ReactNode;
 }
