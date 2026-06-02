@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { track } from "@/lib/amplitude";
@@ -21,17 +21,15 @@ export function ArtworksClient({ maps, zones, hideFilter }: ArtworksClientProps)
 	const { selected, setSelected, categories, filteredZones } = useArtworkFilter(zones, searchQuery);
 
 	// ScrollTabBar 탭 [관람 안내(선택값), zone(고유값)]
-	const TABS = [
-		...(hasGuide ? [{ id: "guide", label: "관람 안내" }] : []),
-		...filteredZones.map((z) => ({
-			id: z.zoneName,
-			label: z.zoneName,
-		})),
-	];
-	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(
-		TABS.map((t) => t.id),
-		142,
+	const TABS = useMemo(
+		() => [
+			...(hasGuide ? [{ id: "guide", label: "관람 안내" }] : []),
+			...filteredZones.map((z) => ({ id: z.zoneName, label: z.zoneName })),
+		],
+		[hasGuide, filteredZones],
 	);
+	const tabIds = useMemo(() => TABS.map((t) => t.id), [TABS]);
+	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(tabIds, 120);
 
 	return (
 		<>
