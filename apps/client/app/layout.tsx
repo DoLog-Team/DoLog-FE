@@ -1,6 +1,6 @@
 import "./globals.css";
-import type { Metadata } from "next";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import type { Metadata } from "next";
 import { AmplitudeProvider } from "@/providers/amplitude-provider";
 
 export const metadata: Metadata = {

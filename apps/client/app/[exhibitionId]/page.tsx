@@ -48,8 +48,34 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 	const hostData = host;
 	const snsData = sns;
 
+	const jsonLd = {
+		"@context": "https://schema.org",
+		"@type": "ExhibitionEvent",
+		name: exhibitionData.title,
+		description: exhibitionData.description,
+		startDate: exhibitionData.startDate,
+		endDate: exhibitionData.endDate,
+		image: exhibitionData.exhibitionImg,
+		location: {
+			"@type": "Place",
+			address: {
+				"@type": "PostalAddress",
+				streetAddress: exhibitionData.location.address,
+			},
+		},
+		organizer: {
+			"@type": "Organization",
+			name: `${exhibitionData.univName} ${exhibitionData.deptName}`,
+		},
+		url: `https://dolog.kr/${exhibitionId}`,
+	};
+
 	return (
 		<main>
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+			/>
 			<SectionTimeTracker
 				pageName="exhibition_intro"
 				sections={["intro", "detail", "location", "host"]}
