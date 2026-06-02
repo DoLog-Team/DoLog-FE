@@ -81,9 +81,11 @@ export default async function ArtistDetailPage({ params }: Props) {
 						}
 					/>
 				</div>
+			</DesktopContainer>
 
-				<Divider />
+			<Divider />
 
+			<DesktopContainer className="flex flex-col">
 				<BTSSection exhibitionId={exhibitionId} artist={artist} />
 
 				<ArtworkSection artist={artist} exhibitionId={exhibitionId} />

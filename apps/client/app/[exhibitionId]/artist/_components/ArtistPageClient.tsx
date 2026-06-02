@@ -67,9 +67,11 @@ export function ArtistPageClient({ exhibitionId, partners, artists }: ArtistPage
 						}}
 					/>
 				</section>
+			</DesktopContainer>
 
-				<Divider />
+			<Divider />
 
+			<DesktopContainer className="flex flex-col">
 				<section
 					ref={(el) => {
 						sectionRefs.partners.current = el;
