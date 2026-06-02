@@ -119,9 +119,11 @@ export default async function MainPage() {
 						더보기
 					</TrackedLink>
 				</section>
+			</DesktopContainer>
 
-				<Divider fullBleed={false} />
+			<Divider />
 
+			<DesktopContainer>
 				<CategorySection
 					title="전체 작품"
 					categories={["작품"]}
