@@ -4,6 +4,7 @@ import MainFooter from "@/components/common/Footer/MainFooter";
 import SchoolFooter from "@/components/common/Footer/SchoolFooter";
 import { getExhibitionDetail, getExhibitions } from "@/lib/api/exhibition";
 import { getExhibitionFooter } from "@/lib/api/layout";
+import { EXHIBITION_TYPE_LABEL } from "@/lib/constants/exhibition";
 import { ThemeProvider } from "@/providers/theme-providers";
 import { getExhibitionCustom } from "./_api/getExhibitionCustom";
 import { getExhibitionMeta } from "./_api/getExhibitionMeta";
@@ -26,10 +27,13 @@ export async function generateMetadata({
 
 	const exhibitionName = meta?.title ?? detail?.title ?? "";
 	const orgName = detail ? `${detail.univName} ${detail.deptName}` : "";
-	const exhibitionType = detail?.exhibitionType ?? "";
+	const exhibitionType = detail?.exhibitionType
+		? (EXHIBITION_TYPE_LABEL[detail.exhibitionType] ?? detail.exhibitionType)
+		: "";
 
 	const titleBase = [orgName, exhibitionType, exhibitionName].filter(Boolean).join(" ");
 	const title = titleBase ? `${titleBase} | 두록(Dolog)` : "두록(Dolog)";
+	const ogTitle = exhibitionName || "두록(Dolog)";
 
 	const autoDescription = detail
 		? `${orgName}${exhibitionType ? ` ${exhibitionType}` : ""} ${exhibitionName}의 온라인 전시 아카이브입니다. 전시, 작품 정보와 참여 작가를 두록(Dolog)에서 확인할 수 있습니다.`
@@ -51,13 +55,13 @@ export async function generateMetadata({
 			url: canonicalUrl,
 			siteName: "두록(Dolog)",
 			locale: "ko_KR",
-			title,
+			title: ogTitle,
 			description,
 			images: ogImage,
 		},
 		twitter: {
 			card: "summary_large_image",
-			title,
+			title: ogTitle,
 			description,
 			images: ogImage.map((img) => img.url),
 		},
