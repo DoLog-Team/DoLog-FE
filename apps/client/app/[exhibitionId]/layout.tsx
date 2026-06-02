@@ -33,7 +33,7 @@ export async function generateMetadata({
 
 	const autoDescription = detail
 		? `${orgName}${exhibitionType ? ` ${exhibitionType}` : ""} ${exhibitionName}의 온라인 전시 아카이브입니다. 전시, 작품 정보와 참여 작가를 두록(Dolog)에서 확인할 수 있습니다.`
-		: "두록(Dolog)은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다.";
+		: "두록은 대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼입니다. 졸업 전시, 과제전 및 기타 예술 창작 계열 대학 전시를 온라인으로 기록할 수 있습니다.";
 	const description = meta?.description ?? autoDescription;
 
 	const canonicalUrl = `https://dolog.kr/${exhibitionId}`;
