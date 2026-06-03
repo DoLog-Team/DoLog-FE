@@ -115,7 +115,7 @@ export function BtsDetailClient({ btsItem, exhibitionId }: BtsDetailClientProps)
 								engName={artist.nameEn ?? undefined}
 								bio={artist.bio ?? undefined}
 								bottomSlot={
-									<div className="flex flex-col">
+									<div className="flex flex-col min-[721px]:flex-1">
 										{(artist.snsList?.length ?? 0) > 0 && (
 											<LinkCard
 												items={(artist.snsList ?? []).map((s) => ({
