@@ -42,7 +42,7 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 		<div className="flex flex-col">
 			<Header variant="back" />
 
-			<div className="w-full h-auto min-[721px]:flex min-[721px]:justify-center min-[721px]:max-h-[80vh] min-[721px]:overflow-hidden">
+			<div className="w-full h-auto min-[721px]:flex min-[721px]:justify-center min-[721px]:max-h-[70vh] min-[721px]:overflow-hidden">
 				{data.mainImage ? (
 					<Image
 						src={data.mainImage}
@@ -50,7 +50,7 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 						width={0}
 						height={0}
 						sizes="100vw"
-						className="w-full h-auto min-[721px]:w-auto min-[721px]:max-h-[80vh] min-[721px]:object-contain"
+						className="w-full h-auto min-[721px]:w-auto min-[721px]:max-h-[70vh] min-[721px]:object-contain"
 						priority
 					/>
 				) : (
