@@ -17,11 +17,11 @@ export const ScrollTabBar = ({ tabs, activeTab, onTabClick, className }: ScrollT
 	return (
 		<div
 			className={cn(
-				"fixed bottom-0 w-full max-w-135 z-20 flex border-t border-stroke-lightest bg-normal",
+				"fixed bottom-0 w-full z-20 flex border-t border-stroke-lightest bg-normal min-[721px]:max-w-full",
 				className,
 			)}
 		>
-			<div className="flex overflow-x-auto scrollbar-hide px-4">
+			<div className="flex overflow-x-auto scrollbar-hide px-4 min-[721px]:overflow-x-visible min-[721px]:w-full min-[721px]:max-w-285 min-[721px]:mx-auto min-[721px]:px-10">
 				{tabs.map((tab) => (
 					<button
 						type="button"

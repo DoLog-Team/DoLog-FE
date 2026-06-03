@@ -13,8 +13,8 @@ export default function ExhibitionCard({
 	endDate,
 }: Omit<ExhibitionItem, "id">) {
 	return (
-		<article className="flex gap-4">
-			<div className="relative self-stretch h-40 aspect-[1/1.414] shrink-0 overflow-hidden">
+		<article className="flex gap-4 min-[721px]:flex-col min-[721px]:gap-3">
+			<div className="relative self-stretch h-40 aspect-[1/1.414] shrink-0 overflow-hidden min-[721px]:h-auto min-[721px]:w-full">
 				{imageUrl && <Image src={imageUrl} alt={title} fill className="object-cover" />}
 			</div>
 			<div className="flex flex-col gap-1">

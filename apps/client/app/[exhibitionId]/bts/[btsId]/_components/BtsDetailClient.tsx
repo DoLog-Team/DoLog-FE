@@ -4,10 +4,10 @@ import { Button } from "components";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { BTSCardGrid } from "@/components/common/Card/BTSCard/BTSCardGrid";
+import { CardGrid } from "@/components/common/Card/CardGrid";
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
-import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
 import { ProfileCard } from "@/components/common/Card/ProfileCard/ProfileCard";
+import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { Modal } from "@/components/common/Modal/Modal";
@@ -46,18 +46,12 @@ export function BtsDetailClient({ btsItem, exhibitionId }: BtsDetailClientProps)
 		author: "",
 	}));
 
-	const recommendedBtsItems = (btsItem.recommendedBts ?? []).map((b) => ({
-		id: b.btsId,
-		title: b.title,
-		imageUrl: b.mainImg ?? "",
-	}));
-
 	return (
 		<div className="flex flex-col">
 			<Header variant="back" title="Behind The Scene 상세" />
 
 			{/* 대표 이미지 */}
-			<div className="relative aspect-video w-full">
+			<div className="relative aspect-video w-full min-[721px]:max-h-[400px]">
 				{btsItem.mainImg ? (
 					<Image src={btsItem.mainImg} alt={btsItem.title} fill className="object-cover" priority />
 				) : (
@@ -65,7 +59,7 @@ export function BtsDetailClient({ btsItem, exhibitionId }: BtsDetailClientProps)
 				)}
 			</div>
 
-			<div className="flex flex-col px-4">
+			<DesktopContainer className="flex flex-col">
 				<Title title={btsItem.title} size="head1" />
 
 				{/* 외부 링크 */}
@@ -120,51 +114,80 @@ export function BtsDetailClient({ btsItem, exhibitionId }: BtsDetailClientProps)
 								name={artist.nameKo}
 								engName={artist.nameEn ?? undefined}
 								bio={artist.bio ?? undefined}
+								bottomSlot={
+									<div className="flex flex-col min-[721px]:flex-1">
+										{(artist.snsList?.length ?? 0) > 0 && (
+											<LinkCard
+												items={(artist.snsList ?? []).map((s) => ({
+													label: s.platformName,
+													value: s.url,
+													type: "url" as const,
+												}))}
+											/>
+										)}
+										{/* 모바일: 버튼 */}
+										<Link
+											href={`/${exhibitionId}/artist/${artist.profileId}`}
+											className="min-[721px]:hidden"
+										>
+											<Button variant="outline" size="sm" className="w-full mt-5 mb-4">
+												프로필 더보기
+											</Button>
+										</Link>
+										{/* 데스크탑: 텍스트 링크 */}
+										<Link
+											href={`/${exhibitionId}/artist/${artist.profileId}`}
+											className="hidden min-[721px]:inline mt-auto text-body1 text-lightest underline underline-offset-2 w-fit"
+										>
+											프로필 더보기 →
+										</Link>
+									</div>
+								}
 							/>
-							{(artist.snsList?.length ?? 0) > 0 && (
-								<div className="mt-4">
-									<LinkCard
-										items={(artist.snsList ?? []).map((s) => ({
-											label: s.platformName,
-											value: s.url,
-											type: "url" as const,
-										}))}
-									/>
-								</div>
-							)}
-							<Link href={`/${exhibitionId}/artist/${artist.profileId}`}>
-								<Button variant="outline" size="sm" className="w-full mt-5 mb-4">
-									프로필 더보기
-								</Button>
-							</Link>
 						</div>
 					))}
 				</section>
+			</DesktopContainer>
 
-				{/* 연관 작품 — 데이터 있을 때만 렌더링 */}
-				{relatedArtworkItems.length > 0 && (
-					<>
-						<Divider />
+			{/* 연관 작품 — 데이터 있을 때만 렌더링 */}
+			{relatedArtworkItems.length > 0 && (
+				<>
+					<Divider />
+					<DesktopContainer>
 						<section ref={setRelatedRef} className="pb-6">
 							<Title title="연관 작품" size="head2" className="mt-4 mb-4" />
-							<ListCardGrid items={relatedArtworkItems} limit={3} />
+							<CardGrid items={relatedArtworkItems} limit={3} className="min-[721px]:grid-cols-2" />
 						</section>
-					</>
-				)}
+					</DesktopContainer>
+				</>
+			)}
 
-				<Divider />
+			<Divider />
 
-				{/* 추천 BTS */}
-				{recommendedBtsItems.length > 0 && (
+			{/* 추천 BTS */}
+			{(btsItem.recommendedBts ?? []).length > 0 && (
+				<DesktopContainer>
 					<section className="mb-6">
 						<Title title="추천 Behind The Scene" size="head2" className="mt-4 mb-4" />
-						<BTSCardGrid
-							items={recommendedBtsItems}
-							getHref={(item) => `/${exhibitionId}/bts/${item.id}`}
-						/>
+						<div className="grid grid-cols-1 gap-y-4 min-[721px]:grid-cols-2 min-[721px]:gap-x-5">
+							{(btsItem.recommendedBts ?? []).map((b) => (
+								<Link key={b.btsId} href={`/${exhibitionId}/bts/${b.btsId}`}>
+									<article className="w-full flex flex-col gap-3">
+										<div className="relative w-full aspect-video overflow-hidden">
+											{b.mainImg ? (
+												<Image src={b.mainImg} alt={b.title} fill className="object-cover" />
+											) : (
+												<div className="w-full h-full bg-fg-lighter" />
+											)}
+										</div>
+										<h3 className="text-head3 text-strong">{b.title}</h3>
+									</article>
+								</Link>
+							))}
+						</div>
 					</section>
-				)}
-			</div>
+				</DesktopContainer>
+			)}
 
 			<ScrollTabBar tabs={TABS} activeTab={activeTab} onTabClick={handleTabClick} />
 		</div>

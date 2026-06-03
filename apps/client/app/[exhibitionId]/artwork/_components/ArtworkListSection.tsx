@@ -1,8 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { CardItem } from "@/components/common/Card/Card.types";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
+import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { Title } from "@/components/common/Title/Title";
@@ -76,90 +77,108 @@ export function ArtworkListSection({
 	hideFilter,
 }: ArtworkListSectionProps) {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+
+	useEffect(() => {
+		const mq = window.matchMedia("(min-width: 721px)");
+		const handler = (e: MediaQueryListEvent) => {
+			if (e.matches) setViewMode("grid");
+		};
+		mq.addEventListener("change", handler);
+		return () => mq.removeEventListener("change", handler);
+	}, []);
+
 	const { ref: titleRef, isVisible: isTitleVisible } = useIntersectionObserver();
 	const isMultiZone = zones.length > 1;
 
 	return (
 		<section className="flex flex-col">
-			<div ref={titleRef} className="flex justify-between items-center px-4">
-				<Title title="작품 목록" />
-				<ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+			<DesktopContainer>
+				<div ref={titleRef} className="flex justify-between items-center">
+					<Title title="작품 목록" />
+					<div className="min-[721px]:hidden">
+						<ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+					</div>
+				</div>
+			</DesktopContainer>
+
+			<div className="sticky top-11 bg-normal z-10 pb-2">
+				<DesktopContainer>
+					<SearchBar
+						placeholder="작품명, 작가명을 검색하세요"
+						className="mb-2.5"
+						value={searchQuery}
+						onChange={onSearchChange}
+					/>
+					<div className="flex items-center">
+						{!hideFilter && (
+							<Filter
+								categories={categories}
+								selected={selected}
+								onSelect={(val) => {
+									onSelect(val);
+									track("Category Filter Selected", { category: val, page: "artwork_list" });
+								}}
+							/>
+						)}
+						{!isTitleVisible && (
+							<div className="ml-auto min-[721px]:hidden">
+								<ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+							</div>
+						)}
+					</div>
+				</DesktopContainer>
 			</div>
 
-			<div className="sticky top-11 bg-normal z-10 px-4 pb-2">
-				<SearchBar
-					placeholder="작품명, 작가명을 검색하세요"
-					className="mb-2.5"
-					value={searchQuery}
-					onChange={onSearchChange}
-				/>
-				<div className="flex items-center">
-					{!hideFilter && (
-						<Filter
-							categories={categories}
-							selected={selected}
-							onSelect={(val) => {
-								onSelect(val);
-								track("Category Filter Selected", { category: val, page: "artwork_list" });
-							}}
+			<DesktopContainer>
+				<div className="flex flex-col gap-6">
+					{zones.length === 0 ? (
+						<EmptyState
+							searchQuery={searchQuery || undefined}
+							message={"선택한 카테고리에 해당되는\n작품이 없어요"}
+							className="w-full pb-16 pt-10 px-2.5"
 						/>
-					)}
-					{!isTitleVisible && (
-						<div className="ml-auto">
-							<ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
-						</div>
+					) : (
+						zones.map((zone) => {
+							const items = zone.artworks.map(toCardItem);
+							const handleArtworkClick = (item: CardItem) =>
+								track("Artwork Card Clicked", {
+									artwork_id: item.id,
+									artwork_title: item.title,
+									zone: zone.zoneName,
+									page: "artwork_list",
+								});
+							return (
+								<div
+									key={zone.zoneName}
+									className={!isMultiZone ? "pt-4" : ""}
+									ref={(el) => {
+										if (sectionRefs[zone.zoneName]) {
+											(
+												sectionRefs[zone.zoneName] as unknown as React.RefObject<HTMLElement | null>
+											).current = el;
+										}
+									}}
+								>
+									{isMultiZone && <Title title={zone.zoneName} />}
+									{viewMode === "grid" ? (
+										<CardGrid
+											items={items}
+											getHref={(item) => `artwork/${item.id}`}
+											onItemClick={handleArtworkClick}
+										/>
+									) : (
+										<ListCardGrid
+											items={items}
+											getHref={(item) => `artwork/${item.id}`}
+											onItemClick={handleArtworkClick}
+										/>
+									)}
+								</div>
+							);
+						})
 					)}
 				</div>
-			</div>
-
-			<div className="flex flex-col px-4 gap-6">
-				{zones.length === 0 ? (
-					<EmptyState
-						searchQuery={searchQuery || undefined}
-						message={"선택한 카테고리에 해당되는\n작품이 없어요"}
-						className="w-full pb-16 pt-10 px-2.5"
-					/>
-				) : (
-					zones.map((zone) => {
-						const items = zone.artworks.map(toCardItem);
-						const handleArtworkClick = (item: CardItem) =>
-							track("Artwork Card Clicked", {
-								artwork_id: item.id,
-								artwork_title: item.title,
-								zone: zone.zoneName,
-								page: "artwork_list",
-							});
-						return (
-							<div
-								key={zone.zoneName}
-								className={!isMultiZone ? "pt-4" : ""}
-								ref={(el) => {
-									if (sectionRefs[zone.zoneName]) {
-										(
-											sectionRefs[zone.zoneName] as unknown as React.RefObject<HTMLElement | null>
-										).current = el;
-									}
-								}}
-							>
-								{isMultiZone && <Title title={zone.zoneName} />}
-								{viewMode === "grid" ? (
-									<CardGrid
-										items={items}
-										getHref={(item) => `artwork/${item.id}`}
-										onItemClick={handleArtworkClick}
-									/>
-								) : (
-									<ListCardGrid
-										items={items}
-										getHref={(item) => `artwork/${item.id}`}
-										onItemClick={handleArtworkClick}
-									/>
-								)}
-							</div>
-						);
-					})
-				)}
-			</div>
+			</DesktopContainer>
 		</section>
 	);
 }

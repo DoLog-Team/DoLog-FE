@@ -117,7 +117,7 @@ export default async function ExhibitionLayout({
 			>
 				<div className="bg-normal text-strong min-h-dvh flex flex-col" style={colorVars}>
 					<ExhibitionPageTracker />
-					<div className="min-h-dvh flex flex-col w-full max-w-135 mx-auto">{children}</div>
+					<div className="flex-1 flex flex-col w-full">{children}</div>
 
 					{footer ? (
 						<SchoolFooter

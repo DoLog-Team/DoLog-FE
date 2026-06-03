@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import { SectionTimeTracker } from "@/components/common/SectionTimeTracker";
 import { resolveExhibitionSlug } from "@/lib/api/exhibition";
@@ -69,23 +70,28 @@ export default async function ArtistDetailPage({ params }: Props) {
 			<SectionTimeTracker pageName="artist_detail" sections={["profile", "contact", "artworks"]} />
 			<Header variant="back" title="작가 상세" />
 
-			<div className="flex flex-col px-4 w-full mx-auto">
+			<DesktopContainer className="flex flex-col">
 				<div data-section="profile">
-					<ProfileSection artist={artist} />
+					<ProfileSection
+						artist={artist}
+						bottomSlot={
+							!!artist.contact.email || (artist.contact.snsList?.length ?? 0) > 0 ? (
+								<ContactSection contact={artist.contact} />
+							) : undefined
+						}
+					/>
 				</div>
+			</DesktopContainer>
 
-				{(!!artist.contact.email || (artist.contact.snsList?.length ?? 0) > 0) && (
-					<ContactSection contact={artist.contact} />
-				)}
+			<Divider />
 
-				<Divider />
-
+			<DesktopContainer className="flex flex-col">
 				<BTSSection exhibitionId={exhibitionId} artist={artist} />
 
 				<ArtworkSection artist={artist} exhibitionId={exhibitionId} />
 
 				<NavigationSection artist={artist} />
-			</div>
+			</DesktopContainer>
 		</>
 	);
 }

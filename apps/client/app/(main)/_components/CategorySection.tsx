@@ -20,7 +20,7 @@ export default function CategorySection({ title, categories, artworks, slugMap }
 	const [selected] = useState(categories[0]);
 
 	return (
-		<section className="flex flex-col px-4 pt-6">
+		<section className="flex flex-col pt-6">
 			<Title title={title} />
 
 			{/* 카테고리 칩 */}
