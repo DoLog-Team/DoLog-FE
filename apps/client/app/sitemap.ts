@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { getExhibitions } from "@/lib/api/exhibition";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-	const exhibitions = await getExhibitions();
+	const exhibitions = await getExhibitions(true);
 
 	const exhibitionUrls = exhibitions.map((e) => ({
 		url: `https://dolog.kr/${e.slug ?? e.id}`,

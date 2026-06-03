@@ -26,9 +26,10 @@ export async function getBanners(): Promise<BannerItem[]> {
 	}
 }
 
-export async function getExhibitions(): Promise<ExhibitionItem[]> {
+export async function getExhibitions(isPublic?: boolean): Promise<ExhibitionItem[]> {
 	try {
-		return await apiClient<ExhibitionItem[]>("/exhibitions");
+		const params = isPublic !== undefined ? `?is_public=${isPublic}` : "";
+		return await apiClient<ExhibitionItem[]>(`/exhibitions${params}`);
 	} catch {
 		return [];
 	}
