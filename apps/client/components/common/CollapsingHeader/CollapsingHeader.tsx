@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Header } from "@/app/(main)/_components/Header";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { Title } from "@/components/common/Title/Title";
@@ -42,10 +43,13 @@ export const CollapsingHeader = ({
 
 	return (
 		<div className="sticky top-0 z-10 bg-normal">
+			<div className="hidden md:block">
+				<Header />
+			</div>
 			{/* 뒤로가기 + 스크롤 시 compact 타이틀 */}
 			<DesktopContainer>
 				<div
-					className={`flex items-center gap-3 py-2.5 border-b ${
+					className={`flex md:hidden items-center gap-3 py-2.5 border-b ${
 						isScrolled ? "border-transparent" : "border-stroke-lightest"
 					}`}
 				>
