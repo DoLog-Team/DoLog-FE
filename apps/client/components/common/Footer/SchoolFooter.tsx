@@ -40,7 +40,9 @@ export default function SchoolFooter({
 					대학 전시 웹사이트 제작 및 작품 아카이빙 플랫폼
 				</p>
 				<div className="h-7 w-full" />
-				<Image src={logoSrc || "/images/logo.svg"} alt={`${title} Logo`} width={60} height={18} />
+				<a href="https://dolog.kr/" rel="noopener noreferrer" className="w-max">
+					<Image src="/images/logo.svg" alt={`${title} Logo`} width={60} height={18} />
+				</a>
 			</DesktopContainer>
 		</footer>
 	);
