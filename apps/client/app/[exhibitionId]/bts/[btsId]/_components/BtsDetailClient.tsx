@@ -67,18 +67,12 @@ export function BtsDetailClient({ btsItem, exhibitionId }: BtsDetailClientProps)
 					<>
 						<Button
 							type="button"
-							variant="assistive"
+							variant="main"
 							size="md"
 							className="w-full gap-2 text-element2 mt-2.5 mb-6"
 							onClick={() => setIsLinkModalOpen(true)}
 						>
-							<Image
-								src="/images/bts/instagram.png"
-								alt={firstSns.platformName}
-								width={24}
-								height={24}
-							/>
-							{firstSns.platformName}에서 확인하기
+							{firstSns.platformName}에서 자세히 보기
 						</Button>
 						<Modal
 							open={isLinkModalOpen}
