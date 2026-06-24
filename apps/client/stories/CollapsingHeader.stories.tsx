@@ -15,6 +15,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+	args: {
+		title: "전시물",
+		searchQuery: "",
+		onSearchChange: () => {},
+		searchPlaceholder: "전시물 검색",
+	},
 	render: () => {
 		const [query, setQuery] = useState("");
 		return (

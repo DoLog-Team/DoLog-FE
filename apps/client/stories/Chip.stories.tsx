@@ -27,6 +27,7 @@ export const Selected: Story = {
 };
 
 export const AllTypes: Story = {
+	args: { label: "칩", type: "default", selected: false },
 	render: () => (
 		<div className="flex flex-wrap gap-3">
 			{(["default", "primary", "assistive"] as const).map((type) => (
