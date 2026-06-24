@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "components";
+import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -30,7 +31,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 		: params.exhibitionId;
 
 	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
-	const hasBts = false;
+	const hasBts = MOCK_BTS_LIST.length > 0;
 	const baseUrl = `/${exhibitionId}`;
 
 	useEffect(() => {
@@ -78,18 +79,20 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 							</Link>
 						))}
 					</nav>
-
 					<Button
 						onClick={() => {
-							track("GNB Nav Clicked", { label: "dolog 홈에서 전시 보기", from_page: pathname });
-							window.open("/", "_blank", "noopener,noreferrer");
-							onClose();
+							track("GNB Nav Clicked", {
+								label: "dolog 홈에서 전시 보기",
+								from_page: pathname,
+							});
+							window.open("/", "noopener,noreferrer");
 						}}
 						size="sm"
-						variant="main"
-						className="w-full cursor-pointer"
+						variant="outline"
+						className="w-full cursor-pointer flex gap-1.5"
 					>
-						dolog 홈에서 전시 보기
+						<Image src="/images/logo.svg" alt="DoLog" width={40} height={14} />
+						홈에서 전시 보기
 					</Button>
 				</div>
 			</div>
