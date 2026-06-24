@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "components";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -105,13 +106,29 @@ export const Header = ({ variant = "logo", title }: HeaderProps) => {
 										onClick={() =>
 											track("GNB Nav Clicked", { label: item.label, from_page: pathname })
 										}
-										className={`text-body2 transition-colors ${
+										className={`text-body2 whitespace-nowrap transition-colors ${
 											isActive(item.path) ? "text-body2-bold text-strong" : "text-lighter"
 										}`}
 									>
 										{item.label}
 									</Link>
 								))}
+								<Button
+									onClick={() => {
+										track("GNB Nav Clicked", {
+											label: "dolog 홈에서 전시 보기",
+											from_page: pathname,
+										});
+										window.open("/", "noopener,noreferrer");
+									}}
+									size="sm"
+									variant="outline"
+									className="text-body2 text-lighter whitespace-nowrap flex items-center 
+  gap-2 cursor-pointer"
+								>
+									<Image src="/images/logo.svg" alt="DoLog" width={40} height={14} />
+									홈에서 전시 보기
+								</Button>
 							</nav>
 						)}
 
