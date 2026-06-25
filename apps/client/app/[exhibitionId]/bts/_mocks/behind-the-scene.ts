@@ -38,7 +38,11 @@ export const MOCK_BTS_DETAILS: BtsDetail[] = [
 		mainImg: "/images/bts/bts1.png",
 		linkLabel: "인스타그램",
 		linkUrl: "https://instagram.com",
-		content: null,
+		content: `**Q1. 작업을 시작하게 된 계기는 무엇인가요?**
+일상에서 자주 쓰는 그릇을 만들며 손에 닿는 감정을 담고 싶었어요.
+
+**Q2. 가장 기억에 남는 순간은?**
+완벽함보다 사용하며 생기는 흔적을 좋아합니다.`,
 		artists: [
 			{
 				participantId: "1",

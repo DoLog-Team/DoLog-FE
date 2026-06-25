@@ -4,6 +4,8 @@ import { Button } from "components";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkBreaks from "remark-breaks";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
 import { ProfileCard } from "@/components/common/Card/ProfileCard/ProfileCard";
@@ -51,16 +53,23 @@ export function BtsDetailClient({ btsItem, exhibitionId }: BtsDetailClientProps)
 			<Header variant="back" title="Behind The Scene 상세" />
 
 			{/* 대표 이미지 */}
-			<div className="relative aspect-video w-full min-[721px]:max-h-[400px]">
+			<div className="relative aspect-video w-full min-[721px]:max-h-[400px] overflow-hidden">
 				{btsItem.mainImg ? (
 					<Image src={btsItem.mainImg} alt={btsItem.title} fill className="object-cover" priority />
 				) : (
-					<EmptyImageFallback className="w-full aspect-video" />
+					<EmptyImageFallback className="absolute inset-0" />
 				)}
 			</div>
 
 			<DesktopContainer className="flex flex-col">
 				<Title title={btsItem.title} size="head1" />
+
+				{/* 본문 */}
+				{btsItem.content && (
+					<div className="prose prose-sm max-w-none text-light mb-5 [&_p]:my-0 [&_p:not(:last-child)]:mb-[1em] [&_strong]:text-light">
+						<ReactMarkdown remarkPlugins={[remarkBreaks]}>{btsItem.content}</ReactMarkdown>
+					</div>
+				)}
 
 				{/* 외부 링크 */}
 				{hasLink && (
@@ -89,7 +98,7 @@ export function BtsDetailClient({ btsItem, exhibitionId }: BtsDetailClientProps)
 									text: "이동하기",
 									variant: "primary",
 									onClick: () => {
-										window.open(btsItem.linkUrl!, "_blank", "noopener,noreferrer");
+										window.open(btsItem.linkUrl ?? "", "_blank", "noopener,noreferrer");
 										setIsLinkModalOpen(false);
 									},
 								},
