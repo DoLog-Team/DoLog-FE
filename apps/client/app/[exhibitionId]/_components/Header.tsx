@@ -106,7 +106,7 @@ export const Header = ({ variant = "logo", title }: HeaderProps) => {
 											track("GNB Nav Clicked", { label: item.label, from_page: pathname })
 										}
 										className={`text-body2 transition-colors ${
-											isActive(item.path) ? "text-body2-bold text-strong" : "text-lighter"
+											isActive(item.path) ? "text-body2-bold text-strong" : "text-lighter hover:text-light"
 										}`}
 									>
 										{item.label}

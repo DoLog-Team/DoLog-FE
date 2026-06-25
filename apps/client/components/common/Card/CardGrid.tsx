@@ -1,7 +1,7 @@
 import { Card } from "./Card";
 import type { CardGridProps } from "./Card.types";
 
-export const CardGrid = ({ items, limit, getHref, onItemClick, className }: CardGridProps) => {
+export const CardGrid = ({ items, limit, getHref, onItemClick, className, disableHover }: CardGridProps) => {
 	const displayedItems = limit ? items.slice(0, limit) : items;
 
 	return (
@@ -14,6 +14,7 @@ export const CardGrid = ({ items, limit, getHref, onItemClick, className }: Card
 					{...item}
 					href={getHref?.(item)}
 					onClick={onItemClick ? () => onItemClick(item) : undefined}
+					disableHover={disableHover}
 				/>
 			))}
 		</div>
