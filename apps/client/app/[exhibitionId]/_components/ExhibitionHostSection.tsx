@@ -17,7 +17,12 @@ export function ExhibitionHostSection({ hostInfo, sns }: ExhibitionHostProps) {
 
 			<div className="relative w-full aspect-video overflow-hidden">
 				{hostInfo.hostImageUrl ? (
-					<Image src={hostInfo.hostImageUrl} alt={hostInfo.hostName} fill className="object-cover" />
+					<Image
+						src={hostInfo.hostImageUrl}
+						alt={hostInfo.hostName}
+						fill
+						className="object-cover"
+					/>
 				) : (
 					<EmptyImageFallback className="absolute inset-0" />
 				)}

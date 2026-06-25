@@ -1,8 +1,8 @@
 import { buttonVariants } from "components";
 import Image from "next/image";
-import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
+import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { SectionTimeTracker } from "@/components/common/SectionTimeTracker";
 import { TrackedLink } from "@/components/common/TrackedLink";
 import { getExhibitionDetail, getExhibitionHost, getHostSns } from "@/lib/api/exhibition";
