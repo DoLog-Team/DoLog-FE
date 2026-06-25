@@ -85,7 +85,7 @@ export function GuideSection({ maps, sectionRef }: GuideSectionProps) {
 			<div className="hidden min-[721px]:block">
 				<DesktopContainer>
 					{displayMaps.length === 1 ? (
-						/* 이미지 1장일 때: 불필요한 인디케이터 코드를 깔끔하게 제거 */
+						/* 이미지 1장일 때*/
 						<div className="relative w-[45%] aspect-video">
 							<Image
 								src={displayMaps[0].imageUrl}
