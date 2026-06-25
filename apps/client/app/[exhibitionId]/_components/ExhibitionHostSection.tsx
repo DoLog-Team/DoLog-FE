@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { Title } from "@/components/common/Title/Title";
 import type { ExhibitionHost, HostSns } from "@/lib/api/exhibition";
 
@@ -15,7 +16,11 @@ export function ExhibitionHostSection({ hostInfo, sns }: ExhibitionHostProps) {
 			<Title title="주최 기관" />
 
 			<div className="relative w-full aspect-video overflow-hidden">
-				<Image src={hostInfo.hostImageUrl} alt={hostInfo.hostName} fill className="object-cover" />
+				{hostInfo.hostImageUrl ? (
+					<Image src={hostInfo.hostImageUrl} alt={hostInfo.hostName} fill className="object-cover" />
+				) : (
+					<EmptyImageFallback className="absolute inset-0" />
+				)}
 			</div>
 			<span className="text-body1-bold mt-5 mb-4">{hostInfo.hostName}</span>
 			<p className="text-body1 leading-relaxed mb-7 whitespace-pre-line">{hostInfo.description}</p>
