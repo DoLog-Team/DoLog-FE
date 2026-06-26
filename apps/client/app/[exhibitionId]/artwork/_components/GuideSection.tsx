@@ -85,6 +85,7 @@ export function GuideSection({ maps, sectionRef }: GuideSectionProps) {
 			<div className="hidden min-[721px]:block">
 				<DesktopContainer>
 					{displayMaps.length === 1 ? (
+						/* 이미지 1장일 때*/
 						<div className="relative w-[45%] aspect-video">
 							<Image
 								src={displayMaps[0].imageUrl}
@@ -95,95 +96,99 @@ export function GuideSection({ maps, sectionRef }: GuideSectionProps) {
 							/>
 						</div>
 					) : (
-						<div className="relative">
-							{desktopMax > 0 && (
-								<button
-									type="button"
-									onClick={() => setCurrent((prev) => Math.max(0, prev - 1))}
-									className="absolute -left-2.5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-fg-inverse/40 flex items-center justify-center text-bg-normal cursor-pointer"
-									aria-label="이전"
-								>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="20"
-										height="17"
-										viewBox="0 0 20 17"
-										fill="none"
-										aria-hidden="true"
+						/* 이미지 2장 이상일 때만 캐러셀 + 인디케이터 노출 */
+						<>
+							<div className="relative">
+								{desktopMax > 0 && (
+									<button
+										type="button"
+										onClick={() => setCurrent((prev) => Math.max(0, prev - 1))}
+										className="absolute -left-2.5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-fg-inverse/40 flex items-center justify-center text-bg-normal cursor-pointer"
+										aria-label="이전"
 									>
-										<path
-											d="M8.74828 17L10.2889 15.5566L4.12655 9.56918H20V7.45755H4.12655L10.2889 1.47013L8.74828 0L0 8.5L8.74828 17Z"
-											fill="currentColor"
-										/>
-									</svg>
-								</button>
-							)}
-							<div className="overflow-hidden">
-								<div
-									className="flex transition-transform duration-300"
-									style={{ transform: `translateX(-${desktopCurrent * 100}%)` }}
-								>
-									{desktopPages.map((pageItems, pageIndex) => (
-										<div
-											key={pageItems[0]?.imageUrl ?? pageIndex}
-											className="w-full shrink-0 flex gap-5"
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="20"
+											height="17"
+											viewBox="0 0 20 17"
+											fill="none"
+											aria-hidden="true"
 										>
-											{pageItems.map((map, i) => (
-												<div
-													key={map.imageUrl}
-													className="shrink-0 aspect-video relative"
-													style={{ width: "calc(50% - 10px)" }}
-												>
-													<Image
-														src={map.imageUrl}
-														alt={map.description ?? `관람 안내 이미지 ${pageIndex * 2 + i + 1}`}
-														fill
-														className="object-cover"
-														priority={pageIndex === 0}
-													/>
-												</div>
-											))}
-										</div>
-									))}
-								</div>
-							</div>
-							{desktopMax > 0 && (
-								<button
-									type="button"
-									onClick={() => setCurrent((prev) => Math.min(desktopMax, prev + 1))}
-									className="absolute -right-2.5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-fg-inverse/40 flex items-center justify-center text-bg-normal cursor-pointer"
-									aria-label="다음"
-								>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="20"
-										height="17"
-										viewBox="0 0 20 17"
-										fill="none"
-										aria-hidden="true"
-										className="scale-x-[-1]"
+											<path
+												d="M8.74828 17L10.2889 15.5566L4.12655 9.56918H20V7.45755H4.12655L10.2889 1.47013L8.74828 0L0 8.5L8.74828 17Z"
+												fill="currentColor"
+											/>
+										</svg>
+									</button>
+								)}
+								<div className="overflow-hidden">
+									<div
+										className="flex transition-transform duration-300"
+										style={{ transform: `translateX(-${desktopCurrent * 100}%)` }}
 									>
-										<path
-											d="M8.74828 17L10.2889 15.5566L4.12655 9.56918H20V7.45755H4.12655L10.2889 1.47013L8.74828 0L0 8.5L8.74828 17Z"
-											fill="currentColor"
-										/>
-									</svg>
-								</button>
-							)}
-						</div>
+										{desktopPages.map((pageItems, pageIndex) => (
+											<div
+												key={pageItems[0]?.imageUrl ?? pageIndex}
+												className="w-full shrink-0 flex gap-5"
+											>
+												{pageItems.map((map, i) => (
+													<div
+														key={map.imageUrl}
+														className="shrink-0 aspect-video relative"
+														style={{ width: "calc(50% - 10px)" }}
+													>
+														<Image
+															src={map.imageUrl}
+															alt={map.description ?? `관람 안내 이미지 ${pageIndex * 2 + i + 1}`}
+															fill
+															className="object-cover"
+															priority={pageIndex === 0}
+														/>
+													</div>
+												))}
+											</div>
+										))}
+									</div>
+								</div>
+								{desktopMax > 0 && (
+									<button
+										type="button"
+										onClick={() => setCurrent((prev) => Math.min(desktopMax, prev + 1))}
+										className="absolute -right-2.5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-fg-inverse/40 flex items-center justify-center text-bg-normal cursor-pointer"
+										aria-label="다음"
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="20"
+											height="17"
+											viewBox="0 0 20 17"
+											fill="none"
+											aria-hidden="true"
+											className="scale-x-[-1]"
+										>
+											<path
+												d="M8.74828 17L10.2889 15.5566L4.12655 9.56918H20V7.45755H4.12655L10.2889 1.47013L8.74828 0L0 8.5L8.74828 17Z"
+												fill="currentColor"
+											/>
+										</svg>
+									</button>
+								)}
+							</div>
+
+							<div className="flex gap-2 justify-start mt-3">
+								{desktopPages.map((pageItems, index) => (
+									<button
+										type="button"
+										key={pageItems[0]?.imageUrl ?? index}
+										onClick={() => setCurrent(index)}
+										className={`w-1.25 h-1.25 rounded-full transition-colors ${
+											index === desktopCurrent ? "bg-fg-inverse" : "bg-fg-light"
+										}`}
+									/>
+								))}
+							</div>
+						</>
 					)}
-					<div className="flex gap-2 justify-start mt-3">
-						{desktopPages.map((pageItems, index) => (
-							<button
-								type="button"
-								key={pageItems[0]?.imageUrl ?? index}
-								onClick={() => setCurrent(index)}
-								className={`w-1.25 h-1.25 rounded-full transition-colors ${
-									index === desktopCurrent ? "bg-fg-inverse" : "bg-fg-light"
-								}`}
-							/>
-						))}
-					</div>
 				</DesktopContainer>
 			</div>
 		</section>

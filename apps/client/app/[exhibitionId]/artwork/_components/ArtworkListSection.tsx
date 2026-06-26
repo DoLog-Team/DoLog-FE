@@ -17,6 +17,7 @@ import { ListIcon } from "./ListIcon";
 interface FilteredZone {
 	zoneName: string;
 	zoneOrderId: number;
+	description?: string;
 	artworks: ArtworkListItem[];
 }
 
@@ -160,6 +161,9 @@ export function ArtworkListSection({
 									}}
 								>
 									{isMultiZone && <Title title={zone.zoneName} />}
+									{isMultiZone && zone.description && (
+										<p className="text-body2 text-light mb-4">{zone.description}</p>
+									)}
 									{viewMode === "grid" ? (
 										<CardGrid
 											items={items}

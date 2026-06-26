@@ -11,9 +11,10 @@ export const Card = ({
 	href,
 	emptyIcon,
 	onClick,
-}: CardProps & { href?: string; onClick?: () => void }) => {
+	disableHover,
+}: CardProps & { href?: string; onClick?: () => void; disableHover?: boolean }) => {
 	const content = (
-		<article className={s.wrapper}>
+		<article className={`${s.wrapper}${disableHover ? "" : ` ${s.wrapperHover}`}`}>
 			<div className={s.imageWrapper}>
 				{imageUrl ? (
 					<Image

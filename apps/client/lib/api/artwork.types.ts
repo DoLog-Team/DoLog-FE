@@ -41,6 +41,7 @@ export interface CategoryGroup {
 export interface ZoneGroup {
 	zoneName: string;
 	zoneOrderId: number;
+	description?: string;
 	categories: CategoryGroup[];
 }
 

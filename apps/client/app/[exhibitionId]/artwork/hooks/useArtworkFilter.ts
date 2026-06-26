@@ -16,6 +16,7 @@ export function useArtworkFilter(zones: ZoneGroup[], searchQuery: string = "") {
 				.map((zone) => ({
 					zoneName: zone.zoneName,
 					zoneOrderId: zone.zoneOrderId,
+					description: zone.description,
 					artworks: zone.categories
 						.filter((cat) => selected === "전체" || cat.categoryName === selected)
 						.flatMap((cat) => cat.artworks)
