@@ -28,7 +28,9 @@ export async function getBanners(): Promise<BannerItem[]> {
 
 export async function getExhibitions(): Promise<ExhibitionItem[]> {
 	try {
-		return await apiClient<ExhibitionItem[]>("/exhibitions");
+		const isPreview = process.env.NEXT_PUBLIC_IS_PREVIEW === "true";
+		const path = isPreview ? "/exhibitions" : "/exhibitions?is_public=true";
+		return await apiClient<ExhibitionItem[]>(path);
 	} catch {
 		return [];
 	}

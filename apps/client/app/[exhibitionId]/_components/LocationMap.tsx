@@ -30,7 +30,7 @@ export function LocationMap({ address, lat, lng }: LocationMapProps) {
 				<img
 					src={`/api/map-image?lat=${lat}&lng=${lng}`}
 					alt={address}
-					className="aspect-video border border-black w-full object-cover"
+					className="aspect-video w-full object-cover"
 					onError={() => setIsMapFailed(true)}
 				/>
 			)}

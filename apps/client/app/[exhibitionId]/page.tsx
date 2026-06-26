@@ -2,6 +2,7 @@ import { buttonVariants } from "components";
 import Image from "next/image";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
+import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { SectionTimeTracker } from "@/components/common/SectionTimeTracker";
 import { TrackedLink } from "@/components/common/TrackedLink";
 import { getExhibitionDetail, getExhibitionHost, getHostSns } from "@/lib/api/exhibition";
@@ -98,14 +99,18 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 				{/* 대표 이미지 + 제목/기본 정보 + 전시 소개: 데스크탑에서 flex row */}
 				<div className="flex flex-col min-[721px]:flex-row min-[721px]:items-start min-[721px]:gap-5">
 					{/* 이미지: 모바일 full-width, 데스크탑 fixed width */}
-					<div className="relative -mx-4 w-[calc(100%+2rem)] aspect-[1/1.414] min-[721px]:mx-0 min-[721px]:w-[30%] min-[721px]:shrink-0 min-[721px]:mt-8">
-						<Image
-							src={exhibitionData.exhibitionImg}
-							alt={exhibitionData.title}
-							fill
-							className="object-cover"
-							priority
-						/>
+					<div className="relative -mx-4 w-[calc(100%+2rem)] aspect-[1/1.414] min-[721px]:mx-0 min-[721px]:w-[30%] min-[721px]:shrink-0 min-[721px]:mt-8 overflow-hidden">
+						{exhibitionData.exhibitionImg ? (
+							<Image
+								src={exhibitionData.exhibitionImg}
+								alt={exhibitionData.title ?? ""}
+								fill
+								className="object-cover"
+								priority
+							/>
+						) : (
+							<EmptyImageFallback className="absolute inset-0" />
+						)}
 					</div>
 					{/* 오른쪽: 제목/기본 정보 + 전시 소개 */}
 					<div className="flex flex-col min-[721px]:flex-1">
