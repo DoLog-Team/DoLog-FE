@@ -116,6 +116,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 					<div className="flex flex-col min-[721px]:flex-1">
 						<ExhibitionIntroSection exhibition={exhibitionData} exhibitionId={exhibitionId} />
 						<ExhibitionDetailSection exhibition={exhibitionData} />
+						{/* 데스크탑 전용 CTA — ExhibitionDetailSection 아래 배치를 위해 page.tsx에서 분리 관리 */}
 						<div className="hidden min-[721px]:flex flex-col justify-center items-center pb-6 min-[721px]:items-start">
 							<TrackedLink
 								href={`/${exhibitionId}/artwork`}

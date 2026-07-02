@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRef } from "react";
 import RowList from "@/components/common/RowList/RowList";
 import { Title } from "@/components/common/Title/Title";
+import { TrackedLink } from "@/components/common/TrackedLink";
 import { track } from "@/lib/amplitude";
 import type { ExhibitionDetail } from "@/lib/api/exhibition";
 import { EXHIBITION_TYPE_LABEL } from "@/lib/constants/exhibition";
@@ -32,22 +33,20 @@ export function ExhibitionIntroSection({ exhibition, exhibitionId }: ExhibitionI
 		<section className="flex flex-col pb-6 pt-4 min-[721px]:pt-0" data-section="intro">
 			<Title title={exhibition.title} className="min-[721px]:mt-8 min-[721px]:mb-5" />
 			<RowList rows={rows} />
+			{/* 모바일 전용 CTA — 데스크탑은 page.tsx의 ExhibitionDetailSection 아래에 위치 */}
 			<div className="min-[721px]:hidden">
-				<Link href={`/${exhibitionId}/artwork`}>
-					<Button
-						variant="main"
-						className="w-full mt-7"
-						onClick={() => {
-							const elapsedSec = Math.round((Date.now() - entryTime.current) / 1000);
-							track("Exhibition CTA Clicked", {
-								exhibition_id: exhibitionId,
-								time_to_click_sec: elapsedSec,
-							});
-						}}
-					>
+				<TrackedLink
+					href={`/${exhibitionId}/artwork`}
+					eventName="Exhibition CTA Clicked"
+					eventProps={{
+						exhibition_id: exhibitionId,
+						time_to_click_sec: Math.round((Date.now() - entryTime.current) / 1000),
+					}}
+				>
+					<Button variant="main" className="w-full mt-7">
 						전시물 감상하기
 					</Button>
-				</Link>
+				</TrackedLink>
 			</div>
 		</section>
 	);
