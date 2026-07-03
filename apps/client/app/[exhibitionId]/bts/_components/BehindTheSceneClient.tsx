@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
+import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { Title } from "@/components/common/Title/Title";
@@ -93,7 +94,7 @@ export default function BehindTheSceneClient({ items }: BehindTheSceneClientProp
 													className="object-cover"
 												/>
 											) : (
-												<div className="w-full h-full bg-fg-lighter" />
+												<EmptyImageFallback className="w-full h-full" />
 											)}
 										</div>
 										<div className="flex flex-col gap-1">
