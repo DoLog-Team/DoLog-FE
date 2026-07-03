@@ -36,19 +36,27 @@ export const MOCK_BTS_DETAILS: BtsDetail[] = [
 		btsId: "1",
 		title: "내 졸업 전시 이야기",
 		mainImg: "/images/bts/bts1.png",
-		contentUrl: "https://instagram.com",
+		linkLabel: "인스타그램",
+		linkUrl: "https://instagram.com",
+		content: `**Q1. 작업을 시작하게 된 계기는 무엇인가요?**
+일상에서 자주 쓰는 그릇을 만들며 손에 닿는 감정을 담고 싶었어요.
+
+**Q2. 가장 기억에 남는 순간은?**
+완벽함보다 사용하며 생기는 흔적을 좋아합니다.`,
 		artists: [
 			{
-				profileId: "1",
+				participantId: "1",
 				nameKo: "강슬기",
 				nameEn: "KANG SEULGI",
-				profileImg: "/images/artists/artist4.png",
+				profileImage: "/images/artists/artist4.png",
 				bio: "일상에서 자주 쓰는 그릇을 만들며 '손에 닿는 감정'을 담고 싶었어요.",
-				email: null,
-				snsList: [
-					{ snsId: "1", platformName: "Instagram", url: "https://instagram.com" },
-					{ snsId: "2", platformName: "Behance", url: "https://behance.net" },
-				],
+				contact: {
+					email: null,
+					sns: [
+						{ snsId: "1", platformName: "Instagram", url: "https://instagram.com" },
+						{ snsId: "2", platformName: "Behance", url: "https://behance.net" },
+					],
+				},
 			},
 		],
 		relatedArtworks: null,
