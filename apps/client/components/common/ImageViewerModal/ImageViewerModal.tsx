@@ -50,7 +50,10 @@ export const ImageViewerModal = ({
 		<Dialog.Root open={open} onOpenChange={onOpenChange}>
 			<Dialog.Portal>
 				<Dialog.Overlay className={imageViewerModalStyles.overlay} />
-				<Dialog.Content className={imageViewerModalStyles.content}>
+				<Dialog.Content
+					className={imageViewerModalStyles.content}
+					onOpenAutoFocus={(e) => e.preventDefault()}
+				>
 					<Dialog.Title className="sr-only">{alt}</Dialog.Title>
 					<Header
 						variant="back"

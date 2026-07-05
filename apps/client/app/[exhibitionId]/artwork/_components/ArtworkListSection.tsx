@@ -162,7 +162,7 @@ export function ArtworkListSection({
 								>
 									{isMultiZone && <Title title={zone.zoneName} />}
 									{isMultiZone && zone.description && (
-										<p className="text-body2 mb-4">{zone.description}</p>
+										<p className="text-body2 mb-4 whitespace-pre-wrap">{zone.description}</p>
 									)}
 									{viewMode === "grid" ? (
 										<CardGrid
