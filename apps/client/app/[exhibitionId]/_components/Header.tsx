@@ -51,7 +51,8 @@ export const Header = ({
 	// 실제 앱 내 이동 여부를 반영하지 못한다. 세션 내 실제 페이지 이동 여부를 직접 추적한다.
 	// biome-ignore lint/correctness/useExhaustiveDependencies: pathname이 바뀔 때마다 다시 실행되어야 함
 	useEffect(() => {
-		sessionStorage.setItem(HAS_INTERNAL_HISTORY_KEY, "true");
+		const hasEnteredBefore = sessionStorage.getItem(HAS_INTERNAL_HISTORY_KEY) !== null;
+		sessionStorage.setItem(HAS_INTERNAL_HISTORY_KEY, hasEnteredBefore ? "true" : "false");
 	}, [pathname]);
 
 	const handleDefaultBack = () => {
