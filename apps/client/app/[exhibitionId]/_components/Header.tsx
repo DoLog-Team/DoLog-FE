@@ -47,9 +47,9 @@ export const Header = ({
 		return path === "" ? pathname === fullPath : pathname.startsWith(fullPath);
 	};
 
-	// 브라우저 진입 시점의 document.referrer는 앱 내 클라이언트 라우팅 이후에도 갱신되지 않아
-	// 실제 앱 내 이동 여부를 반영하지 못한다. 세션 내 실제 페이지 이동 여부를 직접 추적한다.
-	// biome-ignore lint/correctness/useExhaustiveDependencies: pathname이 바뀔 때마다 다시 실행되어야 함
+	// 세션 스토리지에 내부 이동 기록 여부를 저장 (back 버튼 정상 동작을 위함)
+	// pathname이 바뀔 때마다 실행되어야 하므로 useEffect에 pathname을 의존성으로 추가함
+	// biome-ignore lint/correctness/useExhaustiveDependencies: pathname이 바뀔 때마다 다시 실행되어야 함 (해당 주석 삭제 금지 !!)
 	useEffect(() => {
 		const hasEnteredBefore = sessionStorage.getItem(HAS_INTERNAL_HISTORY_KEY) !== null;
 		sessionStorage.setItem(HAS_INTERNAL_HISTORY_KEY, hasEnteredBefore ? "true" : "false");
@@ -135,8 +135,7 @@ export const Header = ({
 									}}
 									size="sm"
 									variant="outline"
-									className="text-body2 text-lighter whitespace-nowrap flex items-center 
-  gap-2 cursor-pointer"
+									className="text-body2 text-lighter whitespace-nowrap flex items-center gap-2 cursor-pointer"
 								>
 									<Image src="/images/logo.svg" alt="DoLog" width={40} height={14} />
 									홈에서 전시 보기
