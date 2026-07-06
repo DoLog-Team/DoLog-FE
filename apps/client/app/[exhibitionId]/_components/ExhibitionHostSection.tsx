@@ -4,6 +4,7 @@ import Image from "next/image";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { Title } from "@/components/common/Title/Title";
 import type { ExhibitionHost, HostSns } from "@/lib/api/exhibition";
+import { resolveSnsHref } from "@/lib/utils/sns";
 
 interface ExhibitionHostProps {
 	hostInfo: ExhibitionHost;
@@ -59,13 +60,7 @@ interface SocialLinkProps {
 }
 
 function SocialLink({ label, href }: SocialLinkProps) {
-	const isInstagram = label.toLowerCase() === "instagram";
-	const isUrl = href.startsWith("http://") || href.startsWith("https://");
-	const resolvedHref = isInstagram
-		? `https://www.instagram.com/${href.startsWith("@") ? href.slice(1) : href}/`
-		: isUrl
-			? href
-			: null;
+	const resolvedHref = resolveSnsHref(label, href);
 
 	return (
 		<div className="flex flex-wrap items-center gap-1">
