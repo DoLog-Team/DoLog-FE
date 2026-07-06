@@ -14,10 +14,11 @@ import type { ArtworkDetail } from "@/lib/api/artwork";
 
 interface InfoSectionProps {
 	data: ArtworkDetail;
+	hideArtistRole?: boolean;
 }
 
 // RowList를 위한 작가정보 map
-export const InfoSection = ({ data }: InfoSectionProps) => {
+export const InfoSection = ({ data, hideArtistRole }: InfoSectionProps) => {
 	const categories = data.category ? [data.category] : [];
 	const artistRows = data.participants.map((participant) => ({
 		label: participant.nameKo,
@@ -40,10 +41,11 @@ export const InfoSection = ({ data }: InfoSectionProps) => {
 						</p>
 					)}
 				</div>
-				{/* TODO : 추후 개선 논의 필요 (이번 전시에서만 [이름-역할] 영역 제외)  */}
-				{/* <div className="mt-2.5">
-				<RowList rows={artistRows} />
-			</div> */}
+				{!hideArtistRole && (
+					<div className="mt-2.5">
+						<RowList rows={artistRows} />
+					</div>
+				)}
 			</DesktopContainer>
 		</section>
 	);

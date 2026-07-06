@@ -1,6 +1,6 @@
 import Image from "next/image";
-import type { ExhibitionItem } from "@/lib/api/exhibition";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
+import type { ExhibitionItem } from "@/lib/api/exhibition";
 
 const formatDate = (date: string) => date.replace(/-/g, ".");
 

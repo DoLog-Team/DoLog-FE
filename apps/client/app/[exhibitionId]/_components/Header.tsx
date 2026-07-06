@@ -4,7 +4,7 @@ import { Button } from "components";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { track } from "@/lib/amplitude";
 import { useExhibition } from "../_context/ExhibitionContext";
@@ -22,10 +22,17 @@ interface HeaderProps {
 	variant?: "logo" | "back";
 	title?: string;
 	onBackClick?: () => void;
-	onMenuClick?: () => void;
+	showHamburger?: boolean;
 }
 
-export const Header = ({ variant = "logo", title }: HeaderProps) => {
+const HAS_INTERNAL_HISTORY_KEY = "dolog:has-internal-history";
+
+export const Header = ({
+	variant = "logo",
+	title,
+	onBackClick,
+	showHamburger = true,
+}: HeaderProps) => {
 	const router = useRouter();
 	const pathname = usePathname();
 	const { slug, logoImg } = useExhibition();
@@ -40,20 +47,25 @@ export const Header = ({ variant = "logo", title }: HeaderProps) => {
 		return path === "" ? pathname === fullPath : pathname.startsWith(fullPath);
 	};
 
-	const handleBack = () => {
-		const historyLength = window?.history?.length ?? 0;
-		const referrer = document?.referrer ?? "";
-		const host = window?.location?.host ?? "";
+	// 세션 스토리지에 내부 이동 기록 여부를 저장 (back 버튼 정상 동작을 위함)
+	// pathname이 바뀔 때마다 실행되어야 하므로 useEffect에 pathname을 의존성으로 추가함
+	// biome-ignore lint/correctness/useExhaustiveDependencies: pathname이 바뀔 때마다 다시 실행되어야 함 (해당 주석 삭제 금지 !!)
+	useEffect(() => {
+		const hasEnteredBefore = sessionStorage.getItem(HAS_INTERNAL_HISTORY_KEY) !== null;
+		sessionStorage.setItem(HAS_INTERNAL_HISTORY_KEY, hasEnteredBefore ? "true" : "false");
+	}, [pathname]);
 
-		// 이전 기록이 없거나, 이전 페이지가 우리 서비스 도메인이 아닌 경우
-		const hasNoReferrer = !referrer || !referrer.includes(host);
+	const handleDefaultBack = () => {
+		const hasInternalHistory = sessionStorage.getItem(HAS_INTERNAL_HISTORY_KEY) === "true";
 
-		if (historyLength <= 1 || hasNoReferrer) {
-			router.push(baseUrl);
-		} else {
+		if (hasInternalHistory) {
 			router.back();
+		} else {
+			router.push(baseUrl);
 		}
 	};
+
+	const handleBack = onBackClick ?? handleDefaultBack;
 
 	return (
 		<>
@@ -61,16 +73,16 @@ export const Header = ({ variant = "logo", title }: HeaderProps) => {
 				<DesktopContainer>
 					<div className="flex items-center justify-between py-3 h-11">
 						{variant === "back" ? (
-							<div className="flex items-center gap-2">
+							<div className="flex items-center gap-2 min-w-0">
 								<button
 									type="button"
 									onClick={handleBack}
 									aria-label="뒤로가기"
-									className="cursor-pointer"
+									className="cursor-pointer shrink-0"
 								>
 									<Image src="/icons/backBtn.svg" alt="뒤로가기" width={24} height={24} />
 								</button>
-								{title && <span className="text-body1-bold text-strong">{title}</span>}
+								{title && <span className="text-body1-bold text-strong truncate">{title}</span>}
 							</div>
 						) : (
 							<button type="button" onClick={() => router.push(baseUrl)} className="cursor-pointer">
@@ -123,8 +135,7 @@ export const Header = ({ variant = "logo", title }: HeaderProps) => {
 									}}
 									size="sm"
 									variant="outline"
-									className="text-body2 text-lighter whitespace-nowrap flex items-center 
-  gap-2 cursor-pointer"
+									className="text-body2 text-lighter whitespace-nowrap flex items-center gap-2 cursor-pointer"
 								>
 									<Image src="/images/logo.svg" alt="DoLog" width={40} height={14} />
 									홈에서 전시 보기
@@ -133,26 +144,28 @@ export const Header = ({ variant = "logo", title }: HeaderProps) => {
 						)}
 
 						{/* 햄버거 (모바일만) */}
-						<button
-							type="button"
-							onClick={() => {
-								const next = !isSidebarOpen;
-								setIsSidebarOpen(next);
-								if (next) track("GNB Hamburger Clicked", { from_page: pathname });
-							}}
-							className="cursor-pointer min-[721px]:hidden"
-							aria-label={isSidebarOpen ? "메뉴 닫기" : "메뉴 열기"}
-						>
-							{isSidebarOpen ? (
-								<Image src="/icons/close.svg" alt="닫기" width={24} height={24} />
-							) : (
-								<Image src="/icons/leadingBtn.svg" alt="메뉴" width={24} height={24} />
-							)}
-						</button>
+						{showHamburger && (
+							<button
+								type="button"
+								onClick={() => {
+									const next = !isSidebarOpen;
+									setIsSidebarOpen(next);
+									if (next) track("GNB Hamburger Clicked", { from_page: pathname });
+								}}
+								className="cursor-pointer min-[721px]:hidden"
+								aria-label={isSidebarOpen ? "메뉴 닫기" : "메뉴 열기"}
+							>
+								{isSidebarOpen ? (
+									<Image src="/icons/close.svg" alt="닫기" width={24} height={24} />
+								) : (
+									<Image src="/icons/leadingBtn.svg" alt="메뉴" width={24} height={24} />
+								)}
+							</button>
+						)}
 					</div>
 				</DesktopContainer>
 			</header>
-			<Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+			{showHamburger && <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />}
 		</>
 	);
 };

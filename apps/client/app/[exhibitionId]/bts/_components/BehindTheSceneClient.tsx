@@ -84,14 +84,14 @@ export default function BehindTheSceneClient({ items }: BehindTheSceneClientProp
 						<div className="grid grid-cols-1 gap-y-10 w-full min-[721px]:grid-cols-3 min-[721px]:gap-x-5 min-[721px]:gap-y-6">
 							{filtered.map((item) => (
 								<Link key={item.btsId} href={`/${exhibitionId}/bts/${item.btsId}`}>
-									<article className="w-full flex flex-col gap-3 transition-transform duration-200 hover:-translate-y-1">
+									<article className="w-full flex flex-col gap-3 group">
 										<div className="relative w-full aspect-video overflow-hidden">
 											{item.thumbnail ? (
 												<Image
 													src={item.thumbnail}
 													alt={item.title}
 													fill
-													className="object-cover"
+													className="object-cover transition-transform duration-300 group-hover:scale-105"
 												/>
 											) : (
 												<EmptyImageFallback className="w-full h-full" />
