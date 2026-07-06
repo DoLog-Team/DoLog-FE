@@ -94,6 +94,7 @@ export default async function ExhibitionLayout({
 	};
 
 	const footer = uuid ? await getExhibitionFooter(uuid) : null;
+	// console.log("[ExhibitionFooter]", JSON.stringify(footer, null, 2));
 
 	const colorVars = {
 		...(config.btnBg && { "--btn-bg": config.btnBg }),
@@ -121,10 +122,10 @@ export default async function ExhibitionLayout({
 
 					{footer ? (
 						<SchoolFooter
-							logoSrc={config.footerInfo.logoSrc}
 							title={footer.title}
 							department={footer.department}
 							address={footer.address ?? ""}
+							univ_name={footer.univ_name ?? ""}
 							detail_location={footer.detail_location ?? ""}
 							email={footer.email}
 							copyright={footer.copyright ?? ""}
