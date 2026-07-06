@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { Title } from "@/components/common/Title/Title";
 import type { ExhibitionHost, HostSns } from "@/lib/api/exhibition";
 import { resolveSnsHref } from "@/lib/utils/sns";
@@ -17,18 +16,16 @@ export function ExhibitionHostSection({ hostInfo, sns }: ExhibitionHostProps) {
 			<Title title="주최 기관" />
 
 			<div className="flex flex-col min-[721px]:flex-row min-[721px]:gap-5">
-				<div className="relative w-full min-[721px]:w-[40%] min-[721px]:shrink-0 aspect-video overflow-hidden">
-					{hostInfo.hostImageUrl ? (
+				{hostInfo.hostImageUrl && (
+					<div className="relative w-full min-[721px]:w-[40%] min-[721px]:shrink-0 aspect-video overflow-hidden">
 						<Image
 							src={hostInfo.hostImageUrl}
 							alt={hostInfo.hostName}
 							fill
 							className="object-cover"
 						/>
-					) : (
-						<EmptyImageFallback className="absolute inset-0" />
-					)}
-				</div>
+					</div>
+				)}
 				<div className="flex flex-col text-light">
 					<span className="text-body1-bold mt-5 min-[721px]:mt-0 mb-4">{hostInfo.hostName}</span>
 					<p className="text-body1 leading-relaxed mb-7 whitespace-pre-line">
