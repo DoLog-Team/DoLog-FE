@@ -35,6 +35,7 @@ export default async function ArtworkListPage({ params }: ArtworkListPageProps) 
 		);
 	}
 
+	// 특정 전시에서만 필터 영역 숨김 처리 [동국대 서양화과]
 	const HIDE_FILTER_EXHIBITION_IDS = new Set(["5918413e-3bb4-4237-ae4d-c55d8f025f34"]);
 	const hideFilter = HIDE_FILTER_EXHIBITION_IDS.has(uuid);
 

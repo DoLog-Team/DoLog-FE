@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
+import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { Title } from "@/components/common/Title/Title";
@@ -83,17 +84,17 @@ export default function BehindTheSceneClient({ items }: BehindTheSceneClientProp
 						<div className="grid grid-cols-1 gap-y-10 w-full min-[721px]:grid-cols-3 min-[721px]:gap-x-5 min-[721px]:gap-y-6">
 							{filtered.map((item) => (
 								<Link key={item.btsId} href={`/${exhibitionId}/bts/${item.btsId}`}>
-									<article className="w-full flex flex-col gap-3 transition-transform duration-200 hover:-translate-y-1">
+									<article className="w-full flex flex-col gap-3 group">
 										<div className="relative w-full aspect-video overflow-hidden">
 											{item.thumbnail ? (
 												<Image
 													src={item.thumbnail}
 													alt={item.title}
 													fill
-													className="object-cover"
+													className="object-cover transition-transform duration-300 group-hover:scale-105"
 												/>
 											) : (
-												<div className="w-full h-full bg-fg-lighter" />
+												<EmptyImageFallback className="w-full h-full" />
 											)}
 										</div>
 										<div className="flex flex-col gap-1">

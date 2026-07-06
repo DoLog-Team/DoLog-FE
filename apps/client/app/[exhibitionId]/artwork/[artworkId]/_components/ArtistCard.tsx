@@ -23,7 +23,7 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 	);
 
 	const snsSection = (!!author.email || (author.sns ?? []).length > 0) && (
-		<div className="flex flex-col pb-5 pt-3">
+		<div className="flex flex-col pt-3">
 			<RowList
 				rows={[
 					...(author.email
@@ -93,7 +93,7 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 				{snsSection}
 
 				{/* 모바일: 버튼 */}
-				<Link href={profileHref} className="min-[721px]:hidden">
+				<Link href={profileHref} className="min-[721px]:hidden pt-5">
 					<Button
 						variant="outline"
 						size="sm"
