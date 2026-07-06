@@ -37,6 +37,8 @@ export interface BtsRelatedArtwork {
 	artworkId: string;
 	title: string;
 	image: string | null;
+	category: string | null;
+	artistNames: string[] | null;
 }
 
 export interface BtsRecommendedItem {
