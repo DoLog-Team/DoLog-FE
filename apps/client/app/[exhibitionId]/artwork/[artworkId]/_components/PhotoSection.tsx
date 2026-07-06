@@ -20,6 +20,7 @@ export const PhotoSection = ({ data }: PhotoSectionProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [viewerImage, setViewerImage] = useState<{ src: string; alt: string } | null>(null);
 
+	// 작품 상세 이미지 상세보기 모달 (모바일/데스크탑 분기처리)
 	const handleImageClick = (src: string, alt: string) => {
 		if (window.matchMedia("(max-width: 720px)").matches) {
 			setViewerImage({ src, alt });
