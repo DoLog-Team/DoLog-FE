@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "components";
-import Link from "next/link";
 import { useRef } from "react";
 import RowList from "@/components/common/RowList/RowList";
 import { Title } from "@/components/common/Title/Title";

@@ -7,6 +7,7 @@ import { EmptyArtistIcon } from "@/components/common/icons/EmptyArtistIcon";
 import RowList from "@/components/common/RowList/RowList";
 import { track } from "@/lib/amplitude";
 import type { ArtworkParticipant } from "@/lib/api/artwork";
+import { resolveSnsHref } from "@/lib/utils/sns";
 
 export interface ArtistCardProps {
 	author: ArtworkParticipant;
@@ -39,13 +40,7 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 							]
 						: []),
 					...(author.sns ?? []).map((sns) => {
-						const isInstagram = sns.platformName.toLowerCase() === "instagram";
-						const isUrl = sns.url.startsWith("http://") || sns.url.startsWith("https://");
-						const href = isInstagram
-							? `https://www.instagram.com/${sns.url.startsWith("@") ? sns.url.slice(1) : sns.url}/`
-							: isUrl
-								? sns.url
-								: null;
+						const href = resolveSnsHref(sns.platformName, sns.url);
 						return {
 							label: sns.platformName,
 							value: href ? (
