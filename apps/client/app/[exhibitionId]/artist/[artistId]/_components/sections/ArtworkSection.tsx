@@ -12,6 +12,8 @@ export function ArtworkSection({
 	artist: ArtistDetail;
 	exhibitionId: string;
 }) {
+	if (!artist.artworks.length) return null;
+
 	const items = artist.artworks.map((a) => ({
 		id: a.artworkId,
 		title: a.title,
