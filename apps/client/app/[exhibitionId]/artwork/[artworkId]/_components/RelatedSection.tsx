@@ -28,7 +28,6 @@ export const RelatedSection = ({ artworks, artworkTitle }: RelatedSectionProps) 
 					items={items}
 					getHref={(item) => `${item.id}`}
 					limit={2}
-					disableHover
 					onItemClick={(item) =>
 						track("Related Artwork Clicked", {
 							clicked_artwork_id: item.id,
