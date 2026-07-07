@@ -6,7 +6,7 @@ import { track } from "@/lib/amplitude";
 interface Props {
 	href: string;
 	eventName: string;
-	eventProps?: Record<string, unknown>;
+	eventProps?: Record<string, unknown> | (() => Record<string, unknown>);
 	className?: string;
 	children: React.ReactNode;
 	target?: string;
@@ -28,7 +28,7 @@ export function TrackedLink({
 			className={className}
 			target={target}
 			rel={rel}
-			onClick={() => track(eventName, eventProps)}
+			onClick={() => track(eventName, typeof eventProps === "function" ? eventProps() : eventProps)}
 		>
 			{children}
 		</Link>

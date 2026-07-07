@@ -1,3 +1,4 @@
+import { resolveSnsHref } from "@/lib/utils/sns";
 import { linkCardStyles as s } from "./LinkCard.styles";
 import type { LinkCardProps } from "./LinkCard.types";
 
@@ -10,11 +11,7 @@ export const LinkCard = ({ items, className, onItemClick }: LinkCardProps) => {
 
 	const getHref = (item: LinkCardProps["items"][number]) => {
 		if (item.type === "email") return `mailto:${item.value}`;
-		if (item.label.toLowerCase() === "instagram") {
-			const username = item.value.startsWith("@") ? item.value.slice(1) : item.value;
-			return `https://www.instagram.com/${username}/`;
-		}
-		if (item.type === "url") return item.value;
+		if (item.type === "url") return resolveSnsHref(item.label, item.value);
 		return null;
 	};
 

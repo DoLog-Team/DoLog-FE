@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { Title } from "@/components/common/Title/Title";
 import type { ExhibitionHost, HostSns } from "@/lib/api/exhibition";
+import { resolveSnsHref } from "@/lib/utils/sns";
 
 interface ExhibitionHostProps {
 	hostInfo: ExhibitionHost;
@@ -15,33 +15,37 @@ export function ExhibitionHostSection({ hostInfo, sns }: ExhibitionHostProps) {
 		<section className="flex flex-col pb-6" data-section="host">
 			<Title title="주최 기관" />
 
-			<div className="relative w-full aspect-video overflow-hidden">
-				{hostInfo.hostImageUrl ? (
-					<Image
-						src={hostInfo.hostImageUrl}
-						alt={hostInfo.hostName}
-						fill
-						className="object-cover"
-					/>
-				) : (
-					<EmptyImageFallback className="absolute inset-0" />
-				)}
-			</div>
-			<span className="text-body1-bold mt-5 mb-4">{hostInfo.hostName}</span>
-			<p className="text-body1 leading-relaxed mb-7 whitespace-pre-line">{hostInfo.description}</p>
-
-			{sns.length > 0 && (
-				<div className="flex flex-col gap-1">
-					{sns.map((link) => (
-						<SocialLink
-							key={link.snsId}
-							label={link.platformName}
-							href={link.url}
-							hostName={hostInfo.hostName}
+			<div className="flex flex-col min-[721px]:flex-row min-[721px]:gap-5">
+				{hostInfo.hostImageUrl && (
+					<div className="relative w-full min-[721px]:w-[40%] min-[721px]:shrink-0 aspect-video overflow-hidden">
+						<Image
+							src={hostInfo.hostImageUrl}
+							alt={hostInfo.hostName}
+							fill
+							className="object-cover"
 						/>
-					))}
+					</div>
+				)}
+				<div className="flex flex-col text-light">
+					<span className="text-body1-bold mt-5 min-[721px]:mt-0 mb-4">{hostInfo.hostName}</span>
+					<p className="text-body1 leading-relaxed mb-7 whitespace-pre-line">
+						{hostInfo.description}
+					</p>
+
+					{sns.length > 0 && (
+						<div className="flex flex-col gap-1">
+							{sns.map((link) => (
+								<SocialLink
+									key={link.snsId}
+									label={link.platformName}
+									href={link.url}
+									hostName={hostInfo.hostName}
+								/>
+							))}
+						</div>
+					)}
 				</div>
-			)}
+			</div>
 		</section>
 	);
 }
@@ -53,17 +57,11 @@ interface SocialLinkProps {
 }
 
 function SocialLink({ label, href }: SocialLinkProps) {
-	const isInstagram = label.toLowerCase() === "instagram";
-	const isUrl = href.startsWith("http://") || href.startsWith("https://");
-	const resolvedHref = isInstagram
-		? `https://www.instagram.com/${href.startsWith("@") ? href.slice(1) : href}/`
-		: isUrl
-			? href
-			: null;
+	const resolvedHref = resolveSnsHref(label, href);
 
 	return (
 		<div className="flex flex-wrap items-center gap-1">
-			<span className="min-w-19 text-body2-bold shrink-0">{label}</span>
+			<span className="min-w-19 text-strong text-body2-bold shrink-0">{label}</span>
 			{resolvedHref ? (
 				<a
 					href={resolvedHref}

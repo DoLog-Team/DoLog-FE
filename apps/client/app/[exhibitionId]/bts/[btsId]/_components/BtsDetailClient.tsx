@@ -45,7 +45,8 @@ export function BtsDetailClient({ btsItem, exhibitionId }: BtsDetailClientProps)
 		id: a.artworkId,
 		title: a.title,
 		imageUrl: a.image ?? undefined,
-		author: "",
+		category: a.category ?? undefined,
+		author: (a.artistNames ?? []).join(", "),
 	}));
 
 	return (
@@ -159,7 +160,12 @@ export function BtsDetailClient({ btsItem, exhibitionId }: BtsDetailClientProps)
 					<DesktopContainer>
 						<section ref={setRelatedRef} className="pb-6">
 							<Title title="연관 작품" size="head2" className="mt-4 mb-4" />
-							<CardGrid items={relatedArtworkItems} limit={3} className="min-[721px]:grid-cols-2" />
+							<CardGrid
+								items={relatedArtworkItems}
+								limit={3}
+								className="min-[721px]:grid-cols-2"
+								getHref={(item) => `/${exhibitionId}/artwork/${item.id}`}
+							/>
 						</section>
 					</DesktopContainer>
 				</>

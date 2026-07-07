@@ -27,6 +27,8 @@ export function LocationMap({ address, lat, lng }: LocationMapProps) {
 					지도를 불러오지 못했습니다
 				</div>
 			) : (
+				// biome-ignore lint/performance/noImgElement: onError로 지도 로드 실패를 감지해야 하므로 img 사용
+				// biome-ignore lint/a11y/noNoninteractiveElementInteractions: onError 핸들러가 필요함
 				<img
 					src={`/api/map-image?lat=${lat}&lng=${lng}`}
 					alt={address}
@@ -36,7 +38,7 @@ export function LocationMap({ address, lat, lng }: LocationMapProps) {
 			)}
 
 			{/* 하단 버튼바 컨테이너 */}
-			<div className="flex items-center p-3 bg-fg-lighter rounded-b-[10px]">
+			<div className="min-[721px]:hidden flex items-center p-3 bg-fg-lighter rounded-b-[10px]">
 				{/* 네이버 맵 버튼 */}
 				<a
 					href={naverMapSearchUrl}
@@ -54,7 +56,7 @@ export function LocationMap({ address, lat, lng }: LocationMapProps) {
 					<span className="px-1.25 text-body2-bold text-lighter">네이버 맵</span>
 				</a>
 
-				<div className="w-[1px] h-4 border border-stroke-lighter" />
+				<div className="w-px h-4 border border-stroke-lighter" />
 
 				{/* 카카오 맵 버튼 */}
 				<a
@@ -73,10 +75,11 @@ export function LocationMap({ address, lat, lng }: LocationMapProps) {
 					<span className="px-1 text-body2-bold text-lighter">카카오 맵</span>
 				</a>
 
-				<div className="w-[1px] h-4 border border-stroke-lighter" />
+				<div className="w-px h-4 border border-stroke-lighter" />
 
 				{/* 주소 복사 버튼 */}
 				<button
+					type="button"
 					onClick={handleCopyAddress}
 					className="flex-1 flex items-center justify-center gap-0.5 cursor-pointer"
 				>

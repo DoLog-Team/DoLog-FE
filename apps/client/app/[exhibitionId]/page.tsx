@@ -99,7 +99,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 				{/* 대표 이미지 + 제목/기본 정보 + 전시 소개: 데스크탑에서 flex row */}
 				<div className="flex flex-col min-[721px]:flex-row min-[721px]:items-start min-[721px]:gap-5">
 					{/* 이미지: 모바일 full-width, 데스크탑 fixed width */}
-					<div className="relative -mx-4 w-[calc(100%+2rem)] aspect-[1/1.414] min-[721px]:mx-0 min-[721px]:w-[30%] min-[721px]:shrink-0 min-[721px]:mt-8 overflow-hidden">
+					<div className="relative -mx-4 w-[calc(100%+2rem)] aspect-157/222 min-[721px]:mx-0 min-[721px]:w-[45%] min-[721px]:shrink-0 min-[721px]:mt-8 overflow-hidden">
 						{exhibitionData.exhibitionImg ? (
 							<Image
 								src={exhibitionData.exhibitionImg}
@@ -116,6 +116,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 					<div className="flex flex-col min-[721px]:flex-1">
 						<ExhibitionIntroSection exhibition={exhibitionData} exhibitionId={exhibitionId} />
 						<ExhibitionDetailSection exhibition={exhibitionData} />
+						{/* 데스크탑 전용 CTA — ExhibitionDetailSection 아래 배치를 위해 page.tsx에서 분리 관리 */}
 						<div className="hidden min-[721px]:flex flex-col justify-center items-center pb-6 min-[721px]:items-start">
 							<TrackedLink
 								href={`/${exhibitionId}/artwork`}
