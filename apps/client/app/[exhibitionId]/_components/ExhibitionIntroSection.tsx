@@ -5,6 +5,7 @@ import { useRef } from "react";
 import RowList from "@/components/common/RowList/RowList";
 import { Title } from "@/components/common/Title/Title";
 import { TrackedLink } from "@/components/common/TrackedLink";
+import { track } from "@/lib/amplitude";
 import type { ExhibitionDetail } from "@/lib/api/exhibition";
 import { EXHIBITION_TYPE_LABEL } from "@/lib/constants/exhibition";
 
