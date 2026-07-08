@@ -62,21 +62,40 @@ export function ArtworkDetailClient({
 
 			<div className="w-full">
 				{data.mainImage ? (
-					<button
-						type="button"
-						onClick={handleMainImageClick}
-						className="relative block w-full aspect-video cursor-pointer overflow-hidden min-[721px]:max-h-[400px]"
-						aria-label="작품 대표 이미지 전체보기"
-					>
-						<Image
-							src={data.mainImage}
-							alt={data.title}
-							fill
-							sizes="100vw"
-							className="object-cover"
-							priority
-						/>
-					</button>
+					<>
+						<button
+							type="button"
+							onClick={handleMainImageClick}
+							className="relative block w-full cursor-pointer overflow-hidden min-[721px]:hidden"
+							aria-label="작품 대표 이미지 전체보기"
+						>
+							<Image
+								src={data.mainImage}
+								alt={data.title}
+								width={0}
+								height={0}
+								sizes="100vw"
+								style={{ width: "100%", height: "auto" }}
+								priority
+							/>
+						</button>
+						<button
+							type="button"
+							onClick={handleMainImageClick}
+							className="relative hidden w-full cursor-pointer overflow-hidden min-[721px]:flex min-[721px]:items-center min-[721px]:justify-center"
+							aria-label="작품 대표 이미지 전체보기"
+						>
+							<Image
+								src={data.mainImage}
+								alt={data.title}
+								width={0}
+								height={0}
+								sizes="100vw"
+								style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: "400px" }}
+								priority
+							/>
+						</button>
+					</>
 				) : (
 					<EmptyImageFallback className="w-full aspect-video min-[721px]:max-h-[400px]" />
 				)}
