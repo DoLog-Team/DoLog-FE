@@ -47,13 +47,8 @@ export function ArtworkDetailClient({
 
 	const [isMainImageViewerOpen, setIsMainImageViewerOpen] = useState(false);
 
-	// 작품 대표 이미지 상세보기 모달 (모바일/데스크탑 분기처리)
 	const handleMainImageClick = () => {
-		if (window.matchMedia("(max-width: 720px)").matches) {
-			setIsMainImageViewerOpen(true);
-			return;
-		}
-		// TODO: PC 상세보기 모달 구현 예정
+		setIsMainImageViewerOpen(true);
 	};
 
 	return (
