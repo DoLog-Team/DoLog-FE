@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { track } from "@/lib/amplitude";
 import { useExhibition } from "../_context/ExhibitionContext";
-import { MOCK_BTS_LIST } from "../bts/_mocks/behind-the-scene";
 import { Sidebar } from "./Sidebar";
 
 const NAV_ITEMS = [
@@ -35,11 +34,10 @@ export const Header = ({
 }: HeaderProps) => {
 	const router = useRouter();
 	const pathname = usePathname();
-	const { slug, logoImg } = useExhibition();
+	const { slug, logoImg, hasBts } = useExhibition();
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
 	const baseUrl = `/${slug}`;
-	const hasBts = MOCK_BTS_LIST.length > 0;
 	const visibleNavItems = NAV_ITEMS.filter((item) => item.label !== "Behind The Scene" || hasBts);
 
 	const isActive = (path: string) => {
