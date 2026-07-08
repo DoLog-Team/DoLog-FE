@@ -9,5 +9,5 @@ export function TabBarSpacer() {
 	const hasTabBar = TAB_BAR_ROUTES.some((route) => pathname.includes(route));
 
 	if (!hasTabBar) return null;
-	return <div className="h-11" />;
+	return <div className="h-12" />;
 }

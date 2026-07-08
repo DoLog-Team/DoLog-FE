@@ -19,20 +19,26 @@ export interface BtsArtistSns {
 	url: string;
 }
 
+export interface BtsArtistContact {
+	email: string | null;
+	sns: BtsArtistSns[] | null;
+}
+
 export interface BtsArtist {
-	profileId: string;
+	participantId: string;
 	nameKo: string;
 	nameEn: string | null;
-	profileImg: string | null;
+	profileImage: string | null;
 	bio: string | null;
-	email: string | null;
-	snsList: BtsArtistSns[] | null;
+	contact: BtsArtistContact | null;
 }
 
 export interface BtsRelatedArtwork {
 	artworkId: string;
 	title: string;
 	image: string | null;
+	category: string | null;
+	artistNames: string[] | null;
 }
 
 export interface BtsRecommendedItem {
@@ -45,7 +51,9 @@ export interface BtsDetail {
 	btsId: string;
 	title: string;
 	mainImg: string | null;
-	contentUrl: string | null;
+	linkLabel: string | null;
+	linkUrl: string | null;
+	content: string | null;
 	artists: BtsArtist[] | null;
 	relatedArtworks: BtsRelatedArtwork[] | null;
 	recommendedBts: BtsRecommendedItem[] | null;

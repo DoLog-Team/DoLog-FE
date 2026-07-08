@@ -1,8 +1,11 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ListCardGrid } from "@/components/common/Card/ListCard/ListCardGrid";
+import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
+import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { Title } from "@/components/common/Title/Title";
@@ -52,40 +55,60 @@ export default function BehindTheSceneClient({ items }: BehindTheSceneClientProp
 
 				{/* 스크롤 전에만 보이는 타이틀 + 서브타이틀 */}
 				<div
-					className={`px-4 overflow-hidden transition-all duration-200 mb-3 ${
+					className={`overflow-hidden transition-all duration-200 mb-3 ${
 						isScrolled ? "max-h-0 opacity-0" : "max-h-32 opacity-100"
 					}`}
 				>
-					<Title title="Behind The Scene" />
-					<p className="text-body2 text-light">작품의 제작 과정을 확인할 수 있습니다.</p>
+					<DesktopContainer>
+						<Title title="Behind The Scene" />
+						<p className="text-body2 text-light">작품의 제작 과정을 확인할 수 있습니다.</p>
+					</DesktopContainer>
 				</div>
 
 				{/* 검색바 */}
-				<div className="px-4 pb-2">
-					<SearchBar
-						placeholder="제목 혹은 작가명을 검색해요."
-						value={searchQuery}
-						onChange={setSearchQuery}
-					/>
+				<div className="pb-2">
+					<DesktopContainer>
+						<SearchBar
+							placeholder="제목 혹은 작가명을 검색해요."
+							value={searchQuery}
+							onChange={setSearchQuery}
+						/>
+					</DesktopContainer>
 				</div>
 			</div>
 
 			{/* 카드 목록 */}
-			<section className="flex flex-col flex-1 px-4 pt-4 pb-6">
-				{filtered.length > 0 ? (
-					<ListCardGrid
-						items={filtered.map((item) => ({
-							id: item.btsId,
-							title: item.title,
-							imageUrl: item.thumbnail ?? undefined,
-							author: item.artistNames?.join(", ") ?? "",
-						}))}
-						getHref={(item) => `/${exhibitionId}/bts/${item.id}`}
-						className="gap-y-10"
-					/>
-				) : (
-					<EmptyState searchQuery={searchQuery} message="등록된 Behind The Scene이 없어요." />
-				)}
+			<section className="flex flex-col flex-1 pt-4 pb-6">
+				<DesktopContainer>
+					{filtered.length > 0 ? (
+						<div className="grid grid-cols-1 gap-y-10 w-full min-[721px]:grid-cols-3 min-[721px]:gap-x-5 min-[721px]:gap-y-6">
+							{filtered.map((item) => (
+								<Link key={item.btsId} href={`/${exhibitionId}/bts/${item.btsId}`}>
+									<article className="w-full flex flex-col gap-3 group">
+										<div className="relative w-full aspect-video overflow-hidden">
+											{item.thumbnail ? (
+												<Image
+													src={item.thumbnail}
+													alt={item.title}
+													fill
+													className="object-cover transition-transform duration-300 group-hover:scale-105"
+												/>
+											) : (
+												<EmptyImageFallback className="w-full h-full" />
+											)}
+										</div>
+										<div className="flex flex-col gap-1">
+											<h3 className="text-head3 text-strong">{item.title}</h3>
+											<p className="text-body2 text-light">{item.artistNames?.join(", ") ?? ""}</p>
+										</div>
+									</article>
+								</Link>
+							))}
+						</div>
+					) : (
+						<EmptyState searchQuery={searchQuery} message="등록된 Behind The Scene이 없어요." />
+					)}
+				</DesktopContainer>
 			</section>
 		</div>
 	);

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ExhibitionPageTracker } from "@/components/common/ExhibitionPageTracker";
 import MainFooter from "@/components/common/Footer/MainFooter";
 import SchoolFooter from "@/components/common/Footer/SchoolFooter";
+import { getBtsList } from "@/lib/api/bts";
 import { getExhibitionDetail, getExhibitions } from "@/lib/api/exhibition";
 import { getExhibitionFooter } from "@/lib/api/layout";
 import { EXHIBITION_TYPE_LABEL } from "@/lib/constants/exhibition";
@@ -93,7 +94,11 @@ export default async function ExhibitionLayout({
 		}),
 	};
 
-	const footer = uuid ? await getExhibitionFooter(uuid) : null;
+	const [footer, btsList] = await Promise.all([
+		uuid ? getExhibitionFooter(uuid) : null,
+		uuid ? getBtsList(uuid) : null,
+	]);
+	const hasBts = (btsList?.totalElements ?? 0) > 0;
 
 	const colorVars = {
 		...(config.btnBg && { "--btn-bg": config.btnBg }),
@@ -103,7 +108,7 @@ export default async function ExhibitionLayout({
 	} as React.CSSProperties;
 
 	return (
-		<ExhibitionProvider slug={exhibition?.slug ?? exhibitionId} logoImg={exhibition?.logoImg ?? ""}>
+		<ExhibitionProvider slug={exhibition?.slug ?? exhibitionId} logoImg={exhibition?.logoImg ?? ""} hasBts={hasBts}>
 			<ThemeProvider
 				attribute="class"
 				forcedTheme={config.themeMode}
@@ -117,14 +122,14 @@ export default async function ExhibitionLayout({
 			>
 				<div className="bg-normal text-strong min-h-dvh flex flex-col" style={colorVars}>
 					<ExhibitionPageTracker />
-					<div className="min-h-dvh flex flex-col w-full max-w-135 mx-auto">{children}</div>
+					<div className="flex-1 flex flex-col w-full">{children}</div>
 
 					{footer ? (
 						<SchoolFooter
-							logoSrc={config.footerInfo.logoSrc}
 							title={footer.title}
 							department={footer.department}
 							address={footer.address ?? ""}
+							univ_name={footer.univ_name ?? ""}
 							detail_location={footer.detail_location ?? ""}
 							email={footer.email}
 							copyright={footer.copyright ?? ""}

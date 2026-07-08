@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { CardItem } from "@/components/common/Card/Card.types";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 import { CollapsingHeader } from "@/components/common/CollapsingHeader/CollapsingHeader";
+import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { FilterChip } from "@/components/common/FilterChip/FilterChip";
 import MainFooter from "@/components/common/Footer/MainFooter";
@@ -85,26 +86,28 @@ export default function ArtworksClient({ artworks, slugMap }: ArtworksClientProp
 				/>
 			</CollapsingHeader>
 
-			<section className="flex flex-col flex-1 px-4 pt-4 pb-6">
-				{filtered.length > 0 ? (
-					<CardGrid
-						items={filtered}
-						getHref={(item) => {
-							const slug = slugMap?.[String(item.id)];
-							return slug ? `/${slug}/artwork/${item.id}` : "#";
-						}}
-						onItemClick={(item) =>
-							track("Artwork Card Clicked", {
-								artwork_id: item.id,
-								artwork_title: item.title,
-								page: "artworks_list",
-							})
-						}
-					/>
-				) : (
-					<EmptyState searchQuery={searchQuery} message="해당하는 작품이 없어요." />
-				)}
-			</section>
+			<DesktopContainer className="flex-1 pt-4 pb-6">
+				<section className="flex flex-col flex-1">
+					{filtered.length > 0 ? (
+						<CardGrid
+							items={filtered}
+							getHref={(item) => {
+								const slug = slugMap?.[String(item.id)];
+								return slug ? `/${slug}/artwork/${item.id}` : "#";
+							}}
+							onItemClick={(item) =>
+								track("Artwork Card Clicked", {
+									artwork_id: item.id,
+									artwork_title: item.title,
+									page: "artworks_list",
+								})
+							}
+						/>
+					) : (
+						<EmptyState searchQuery={searchQuery} message="해당하는 작품이 없어요." />
+					)}
+				</section>
+			</DesktopContainer>
 
 			<MainFooter />
 		</div>

@@ -1,5 +1,6 @@
 import { buttonVariants } from "components";
 import type { Metadata } from "next";
+import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import MainFooter from "@/components/common/Footer/MainFooter";
 import { PageTracker } from "@/components/common/PageTracker";
@@ -94,40 +95,44 @@ export default async function MainPage() {
 			<Header />
 			<Banner banners={displayBanners} />
 
-			<section className="flex flex-col px-4 pt-6 pb-6 ">
-				<Title title="진행 중인 전시" />
-				<div className="flex flex-col gap-4 mt-4">
-					{displayExhibitions.slice(0, 3).map((exhibition) => (
-						<TrackedExhibitionLink
-							key={exhibition.id}
-							href={`/${exhibition.slug ?? exhibition.id}`}
-							exhibitionId={exhibition.id}
-							exhibitionTitle={exhibition.title}
-						>
-							<ExhibitionCard {...exhibition} />
-						</TrackedExhibitionLink>
-					))}
-				</div>
-				<TrackedLink
-					href="/exhibitions"
-					eventName="More Button Clicked"
-					eventProps={{ target: "exhibitions", page: "main" }}
-					className={buttonVariants({ variant: "assistive", className: "mt-7 w-full" })}
-				>
-					더보기
-				</TrackedLink>
-			</section>
+			<DesktopContainer>
+				<section className="flex flex-col pt-6 pb-6">
+					<Title title="진행 중인 전시" />
+					<div className="flex flex-col gap-4 mt-4 min-[721px]:grid min-[721px]:grid-cols-3">
+						{displayExhibitions.slice(0, 3).map((exhibition) => (
+							<TrackedExhibitionLink
+								key={exhibition.id}
+								href={`/${exhibition.slug ?? exhibition.id}`}
+								exhibitionId={exhibition.id}
+								exhibitionTitle={exhibition.title}
+							>
+								<ExhibitionCard {...exhibition} />
+							</TrackedExhibitionLink>
+						))}
+					</div>
+					<TrackedLink
+						href="/exhibitions"
+						eventName="More Button Clicked"
+						eventProps={{ target: "exhibitions", page: "main" }}
+						className={buttonVariants({ variant: "assistive", className: "mt-7 w-full" })}
+					>
+						더보기
+					</TrackedLink>
+				</section>
+			</DesktopContainer>
 
-			<Divider fullBleed={false} />
+			<Divider />
 
-			<CategorySection
-				title="전체 작품"
-				categories={["작품"]}
-				artworks={{
-					작품: allArtworks,
-				}}
-				slugMap={artworkSlugMap}
-			/>
+			<DesktopContainer>
+				<CategorySection
+					title="전체 작품"
+					categories={["작품"]}
+					artworks={{
+						작품: allArtworks,
+					}}
+					slugMap={artworkSlugMap}
+				/>
+			</DesktopContainer>
 			<MainFooter />
 		</div>
 	);

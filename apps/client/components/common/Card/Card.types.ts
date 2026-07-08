@@ -21,4 +21,5 @@ export interface CardGridProps {
 	getHref?: (item: CardItem) => string;
 	onItemClick?: (item: CardItem) => void;
 	className?: string;
+	disableHover?: boolean;
 }

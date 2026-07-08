@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Divider } from "@/components/common/Divider/Divider";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
+import { ImageViewerModal } from "@/components/common/ImageViewerModal/ImageViewerModal";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { track } from "@/lib/amplitude";
@@ -20,7 +21,13 @@ import { PostNavigationSection } from "../_components/PostNavigationSection";
 import { RelatedSection } from "../_components/RelatedSection";
 import { YoutubeSection } from "../_components/YoutubeSection";
 
-export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
+export function ArtworkDetailClient({
+	data,
+	hideArtistRole,
+}: {
+	data: ArtworkDetail;
+	hideArtistRole?: boolean;
+}) {
 	const TABS = useMemo(() => {
 		const base = [
 			{ id: "detail", label: "작품 소개" },
@@ -38,26 +45,71 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 	const prevArtwork = data.alphabeticalArtworks.find((a) => a.type === "prev");
 	const nextArtwork = data.alphabeticalArtworks.find((a) => a.type === "next");
 
+	const [isMainImageViewerOpen, setIsMainImageViewerOpen] = useState(false);
+
+	// 작품 대표 이미지 상세보기 모달 (모바일/데스크탑 분기처리)
+	const handleMainImageClick = () => {
+		if (window.matchMedia("(max-width: 720px)").matches) {
+			setIsMainImageViewerOpen(true);
+			return;
+		}
+		// TODO: PC 상세보기 모달 구현 예정
+	};
+
 	return (
 		<div className="flex flex-col">
 			<Header variant="back" />
 
-			<div className="w-full h-auto">
+			<div className="w-full">
 				{data.mainImage ? (
-					<Image
-						src={data.mainImage}
-						alt={data.title}
-						width={0}
-						height={0}
-						sizes="100vw"
-						className="w-full h-auto"
-						priority
-					/>
+					<>
+						<button
+							type="button"
+							onClick={handleMainImageClick}
+							className="relative block w-full cursor-pointer overflow-hidden min-[721px]:hidden"
+							aria-label="작품 대표 이미지 전체보기"
+						>
+							<Image
+								src={data.mainImage}
+								alt={data.title}
+								width={0}
+								height={0}
+								sizes="100vw"
+								style={{ width: "100%", height: "auto" }}
+								priority
+							/>
+						</button>
+						<button
+							type="button"
+							onClick={handleMainImageClick}
+							className="relative hidden w-full cursor-pointer overflow-hidden min-[721px]:flex min-[721px]:items-center min-[721px]:justify-center"
+							aria-label="작품 대표 이미지 전체보기"
+						>
+							<Image
+								src={data.mainImage}
+								alt={data.title}
+								width={0}
+								height={0}
+								sizes="100vw"
+								style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: "400px" }}
+								priority
+							/>
+						</button>
+					</>
 				) : (
-					<EmptyImageFallback className="w-full aspect-video" />
+					<EmptyImageFallback className="w-full aspect-video min-[721px]:max-h-[400px]" />
 				)}
 			</div>
-			<InfoSection data={data} />
+			{data.mainImage && (
+				<ImageViewerModal
+					open={isMainImageViewerOpen}
+					onOpenChange={setIsMainImageViewerOpen}
+					src={data.mainImage}
+					alt={data.title}
+					title={data.title}
+				/>
+			)}
+			<InfoSection data={data} hideArtistRole={hideArtistRole} />
 			<LocationSection locationImageUrl={data.locationMap} />
 			<section
 				data-section="detail"
@@ -94,7 +146,9 @@ export function ArtworkDetailClient({ data }: { data: ArtworkDetail }) {
 			{data.sameCategoryArtworks && data.sameCategoryArtworks.length > 0 && (
 				<RelatedSection artworks={data.sameCategoryArtworks} artworkTitle={data.title} />
 			)}
-			<PostNavigationSection prevArtwork={prevArtwork} nextArtwork={nextArtwork} />
+			{(prevArtwork || nextArtwork) && (
+				<PostNavigationSection prevArtwork={prevArtwork} nextArtwork={nextArtwork} />
+			)}
 
 			<ScrollTabBar
 				tabs={TABS}

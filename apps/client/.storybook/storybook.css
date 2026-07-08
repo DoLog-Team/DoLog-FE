@@ -1,0 +1,5 @@
+.sbdocs-wrapper,
+.docs-story {
+  background: var(--color-bg-normal) !important;
+  color: var(--color-text-strong) !important;
+}

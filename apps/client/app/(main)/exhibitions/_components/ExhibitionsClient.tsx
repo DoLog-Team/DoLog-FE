@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CollapsingHeader } from "@/components/common/CollapsingHeader/CollapsingHeader";
+import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { EmptyState } from "@/components/common/EmptyState/EmptyState";
 import { FilterChip } from "@/components/common/FilterChip/FilterChip";
 import MainFooter from "@/components/common/Footer/MainFooter";
@@ -95,26 +96,34 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 				/>
 			</CollapsingHeader>
 
-			<section className="flex flex-col flex-1 px-4 gap-4">
-				{filtered.length > 0 ? (
-					filtered.map((exhibition) => (
-						<TrackedLink
-							key={exhibition.id}
-							href={`/${exhibition.slug || exhibition.id}`}
-							eventName="Exhibition Card Clicked"
-							eventProps={{
-								exhibition_id: exhibition.id,
-								exhibition_title: exhibition.title,
-								page: "exhibitions_list",
-							}}
-						>
-							<ExhibitionCard {...exhibition} />
-						</TrackedLink>
-					))
-				) : (
-					<EmptyState searchQuery={searchQuery} />
-				)}
-			</section>
+			<DesktopContainer className="flex-1 py-4">
+				<section
+					className={
+						filtered.length > 0
+							? "flex flex-col gap-4 min-[721px]:inline-grid min-[721px]:grid-cols-4 min-[721px]:grid-rows-[repeat(2,fit-content(100%))] min-[721px]:gap-x-5 min-[721px]:gap-y-[60px] min-[721px]:self-stretch"
+							: "flex flex-col"
+					}
+				>
+					{filtered.length > 0 ? (
+						filtered.map((exhibition) => (
+							<TrackedLink
+								key={exhibition.id}
+								href={`/${exhibition.slug || exhibition.id}`}
+								eventName="Exhibition Card Clicked"
+								eventProps={{
+									exhibition_id: exhibition.id,
+									exhibition_title: exhibition.title,
+									page: "exhibitions_list",
+								}}
+							>
+								<ExhibitionCard {...exhibition} />
+							</TrackedLink>
+						))
+					) : (
+						<EmptyState searchQuery={searchQuery} />
+					)}
+				</section>
+			</DesktopContainer>
 
 			<MainFooter />
 		</div>

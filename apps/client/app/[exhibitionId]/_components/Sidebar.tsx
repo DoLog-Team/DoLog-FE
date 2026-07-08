@@ -1,13 +1,14 @@
 "use client";
 
 import { Button } from "components";
+import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { Title } from "@/components/common/Title/Title";
 import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
 import { track } from "@/lib/amplitude";
-import { MOCK_BTS_LIST } from "../bts/_mocks/behind-the-scene";
+import { useExhibition } from "../_context/ExhibitionContext";
 
 interface SidebarProps {
 	isOpen: boolean;
@@ -30,7 +31,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 		: params.exhibitionId;
 
 	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
-	const hasBts = false;
+	const { hasBts } = useExhibition();
 	const baseUrl = `/${exhibitionId}`;
 
 	useEffect(() => {
@@ -50,7 +51,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 	return (
 		<>
 			<div
-				className={`fixed top-11 left-0 right-0 mx-auto w-full max-w-135 z-50 transition-all duration-300 ease-in-out overflow-hidden ${
+				className={`fixed top-11 left-0 right-0 z-50 transition-all duration-300 ease-in-out overflow-hidden ${
 					isOpen ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
 				} ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
 			>
@@ -78,24 +79,26 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 							</Link>
 						))}
 					</nav>
-
 					<Button
 						onClick={() => {
-							track("GNB Nav Clicked", { label: "dolog 홈에서 전시 보기", from_page: pathname });
-							window.open("/", "_blank", "noopener,noreferrer");
-							onClose();
+							track("GNB Nav Clicked", {
+								label: "dolog 홈에서 전시 보기",
+								from_page: pathname,
+							});
+							window.open("/", "noopener,noreferrer");
 						}}
 						size="sm"
-						variant="main"
-						className="w-full cursor-pointer"
+						variant="outline"
+						className="w-full cursor-pointer flex gap-1.5"
 					>
-						dolog 홈에서 전시 보기
+						<Image src="/images/logo.svg" alt="DoLog" width={40} height={14} />
+						홈에서 전시 보기
 					</Button>
 				</div>
 			</div>
 
 			<div
-				className={`fixed inset-0 top-11 left-0 right-0 mx-auto z-49 bg-[#070707]/20 transition-opacity duration-300 max-w-135 ${
+				className={`fixed inset-0 top-11 left-0 right-0 z-49 bg-[#070707]/20 transition-opacity duration-300 ${
 					isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
 				}`}
 				onClick={onClose}

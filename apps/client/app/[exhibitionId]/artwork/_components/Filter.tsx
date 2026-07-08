@@ -1,4 +1,3 @@
-import type { Category } from "@/app/(main)/_mocks/artwork";
 import { Chip } from "@/components/common/Chip/Chip";
 
 interface FilterProps {
