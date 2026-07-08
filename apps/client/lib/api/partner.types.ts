@@ -4,6 +4,7 @@ export interface PartnerMember {
 	member_name_en?: string;
 	member_email?: string;
 	member_image_url?: string;
+	member_order?: number | null;
 }
 
 export interface PartnerPart {
