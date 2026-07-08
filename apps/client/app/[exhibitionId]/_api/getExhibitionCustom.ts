@@ -8,6 +8,7 @@ export interface ExhibitionCustom {
 	btn_text: string | null;
 	cta_bg: string | null;
 	cta_text: string | null;
+	logo_img: string | null;
 }
 
 export async function getExhibitionCustom(exhibitionId: string): Promise<ExhibitionCustom | null> {
