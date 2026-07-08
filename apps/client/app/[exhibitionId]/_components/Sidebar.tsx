@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { Title } from "@/components/common/Title/Title";
 import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
 import { track } from "@/lib/amplitude";
-import { MOCK_BTS_LIST } from "../bts/_mocks/behind-the-scene";
+import { useExhibition } from "../_context/ExhibitionContext";
 
 interface SidebarProps {
 	isOpen: boolean;
@@ -31,7 +31,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 		: params.exhibitionId;
 
 	const exhibition = MOCK_EXHIBITION_DATA.find((e) => e.id === exhibitionId);
-	const hasBts = MOCK_BTS_LIST.length > 0;
+	const { hasBts } = useExhibition();
 	const baseUrl = `/${exhibitionId}`;
 
 	useEffect(() => {
