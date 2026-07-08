@@ -108,7 +108,11 @@ export default async function ExhibitionLayout({
 	} as React.CSSProperties;
 
 	return (
-		<ExhibitionProvider slug={exhibition?.slug ?? exhibitionId} logoImg={exhibition?.logoImg ?? ""} hasBts={hasBts}>
+		<ExhibitionProvider
+			slug={exhibition?.slug ?? exhibitionId}
+			logoImg={custom?.logo_img ?? ""}
+			hasBts={hasBts}
+		>
 			<ThemeProvider
 				attribute="class"
 				forcedTheme={config.themeMode}
