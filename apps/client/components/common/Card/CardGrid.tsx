@@ -8,6 +8,7 @@ export const CardGrid = ({
 	onItemClick,
 	className,
 	disableHover,
+	imageObjectFit,
 }: CardGridProps) => {
 	const displayedItems = limit ? items.slice(0, limit) : items;
 
@@ -22,6 +23,7 @@ export const CardGrid = ({
 					href={getHref?.(item)}
 					onClick={onItemClick ? () => onItemClick(item) : undefined}
 					disableHover={disableHover}
+					imageObjectFit={imageObjectFit}
 				/>
 			))}
 		</div>

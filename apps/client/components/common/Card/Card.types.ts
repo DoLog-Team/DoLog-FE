@@ -22,4 +22,5 @@ export interface CardGridProps {
 	onItemClick?: (item: CardItem) => void;
 	className?: string;
 	disableHover?: boolean;
+	imageObjectFit?: "cover" | "contain";
 }
