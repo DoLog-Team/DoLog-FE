@@ -12,7 +12,13 @@ export const Card = ({
 	emptyIcon,
 	onClick,
 	disableHover,
-}: CardProps & { href?: string; onClick?: () => void; disableHover?: boolean }) => {
+	imageObjectFit = "cover",
+}: CardProps & {
+	href?: string;
+	onClick?: () => void;
+	disableHover?: boolean;
+	imageObjectFit?: "cover" | "contain";
+}) => {
 	const content = (
 		<article className={`${s.wrapper}${disableHover ? "" : ` ${s.wrapperHover}`}`}>
 			<div className={s.imageWrapper}>
@@ -23,7 +29,7 @@ export const Card = ({
 						width={0}
 						height={0}
 						sizes="100vw"
-						className={s.image}
+						className={`${s.image} ${imageObjectFit === "contain" ? "object-contain" : "object-cover"}`}
 						loading="lazy"
 					/>
 				) : (

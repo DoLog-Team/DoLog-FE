@@ -6,7 +6,9 @@ export interface RowCardItem {
 	imageUrl?: string;
 }
 
-export interface RowCardProps extends Omit<RowCardItem, "id"> {}
+export interface RowCardProps extends Omit<RowCardItem, "id"> {
+	showImage?: boolean;
+}
 
 export interface RowCardGridProps {
 	items: RowCardItem[];

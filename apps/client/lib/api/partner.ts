@@ -14,9 +14,9 @@ export async function getPartners(exhibitionId: string): Promise<PartnerPart[]> 
 		const sortedParts = (response?.parts ?? []).map((part) => ({
 			...part,
 			members: [...part.members].sort((a, b) => {
-				const nameA = (a.member_name ?? "").toLowerCase();
-				const nameB = (b.member_name ?? "").toLowerCase();
-				return nameA.localeCompare(nameB, "ko");
+				const orderA = a.member_order ?? Number.MAX_SAFE_INTEGER;
+				const orderB = b.member_order ?? Number.MAX_SAFE_INTEGER;
+				return orderA - orderB;
 			}),
 		}));
 

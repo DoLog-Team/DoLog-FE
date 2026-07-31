@@ -56,6 +56,7 @@ export default function CategorySection({ title, categories, artworks, slugMap }
 							page: "main",
 						})
 					}
+					imageObjectFit="contain"
 				/>
 			</div>
 
