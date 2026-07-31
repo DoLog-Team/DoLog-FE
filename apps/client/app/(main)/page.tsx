@@ -93,7 +93,7 @@ export default async function MainPage() {
 			/>
 			<PageTracker pageName="main" />
 			<Header />
-			<Banner banners={displayBanners} />
+			{/* <Banner banners={displayBanners} /> */}
 
 			<DesktopContainer>
 				<section className="flex flex-col pt-6 pb-6">
