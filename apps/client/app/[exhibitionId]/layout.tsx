@@ -6,6 +6,7 @@ import { getBtsList } from "@/lib/api/bts";
 import { getExhibitionDetail, getExhibitions } from "@/lib/api/exhibition";
 import { getExhibitionFooter } from "@/lib/api/layout";
 import { EXHIBITION_TYPE_LABEL } from "@/lib/constants/exhibition";
+import { ClientShell } from "@/providers/client-shell";
 import { ThemeProvider } from "@/providers/theme-providers";
 import { getExhibitionCustom } from "./_api/getExhibitionCustom";
 import { getExhibitionMeta } from "./_api/getExhibitionMeta";
@@ -108,42 +109,44 @@ export default async function ExhibitionLayout({
 	} as React.CSSProperties;
 
 	return (
-		<ExhibitionProvider
-			slug={exhibition?.slug ?? exhibitionId}
-			logoImg={custom?.logo_img ?? ""}
-			hasBts={hasBts}
-		>
-			<ThemeProvider
-				attribute="class"
-				forcedTheme={config.themeMode}
-				enableColorScheme={true}
-				colors={{
-					btnBg: config.btnBg,
-					btnText: config.btnText,
-					ctaBg: config.ctaBg,
-					ctaText: config.ctaText,
-				}}
+		<ClientShell>
+			<ExhibitionProvider
+				slug={exhibition?.slug ?? exhibitionId}
+				logoImg={custom?.logo_img ?? ""}
+				hasBts={hasBts}
 			>
-				<div className="bg-normal text-strong min-h-dvh flex flex-col" style={colorVars}>
-					<ExhibitionPageTracker />
-					<div className="flex-1 flex flex-col w-full">{children}</div>
+				<ThemeProvider
+					attribute="class"
+					forcedTheme={config.themeMode}
+					enableColorScheme={true}
+					colors={{
+						btnBg: config.btnBg,
+						btnText: config.btnText,
+						ctaBg: config.ctaBg,
+						ctaText: config.ctaText,
+					}}
+				>
+					<div className="bg-normal text-strong min-h-dvh flex flex-col" style={colorVars}>
+						<ExhibitionPageTracker />
+						<div className="flex-1 flex flex-col w-full">{children}</div>
 
-					{footer ? (
-						<SchoolFooter
-							title={footer.title}
-							department={footer.department}
-							address={footer.address ?? ""}
-							univ_name={footer.univ_name ?? ""}
-							detail_location={footer.detail_location ?? ""}
-							email={footer.email}
-							copyright={footer.copyright ?? ""}
-						/>
-					) : (
-						<MainFooter />
-					)}
-					<TabBarSpacer />
-				</div>
-			</ThemeProvider>
-		</ExhibitionProvider>
+						{footer ? (
+							<SchoolFooter
+								title={footer.title}
+								department={footer.department}
+								address={footer.address ?? ""}
+								univ_name={footer.univ_name ?? ""}
+								detail_location={footer.detail_location ?? ""}
+								email={footer.email}
+								copyright={footer.copyright ?? ""}
+							/>
+						) : (
+							<MainFooter />
+						)}
+						<TabBarSpacer />
+					</div>
+				</ThemeProvider>
+			</ExhibitionProvider>
+		</ClientShell>
 	);
 }
