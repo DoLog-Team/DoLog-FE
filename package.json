@@ -6,7 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "pnpm --filter client",
-    "admin": "pnpm --filter admin",
     "type-check": "turbo run type-check --continue"
   },
   "keywords": [],

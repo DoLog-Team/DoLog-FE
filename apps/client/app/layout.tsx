@@ -1,7 +1,5 @@
 import "./globals.css";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
-import { AmplitudeProvider } from "@/providers/amplitude-provider";
 
 export const metadata: Metadata = {
 	title: "두록(Dolog) | 대학 전시 웹사이트 제작 및 작품 아카이빙 플랫폼",
@@ -39,23 +37,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="ko" suppressHydrationWarning>
-			<body className="flex justify-center">
-				{process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
-					<GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
-				)}
-				<AmplitudeProvider>
-					<main
-						className="
-						w-full
-						min-h-dvh
-						relative
-						flex flex-col
-						"
-					>
-						{children}
-					</main>
-				</AmplitudeProvider>
-			</body>
+			<body className="flex justify-center">{children}</body>
 		</html>
 	);
 }
