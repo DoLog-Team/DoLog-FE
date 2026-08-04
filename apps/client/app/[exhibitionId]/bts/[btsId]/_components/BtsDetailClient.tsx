@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "components";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
+import { Button } from "@/components/common/Button/Button";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
 import { ProfileCard } from "@/components/common/Card/ProfileCard/ProfileCard";

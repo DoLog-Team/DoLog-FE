@@ -1,4 +1,4 @@
-import { apiClient } from "api";
+import { apiClient } from "@/lib/api/instance";
 
 interface ExhibitionMeta {
 	id: string;

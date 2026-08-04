@@ -1,4 +1,4 @@
-import { cn } from "components";
+import { cn } from "@/lib/utils/cn";
 import { scrollTabItemVariants } from "./ScrollTabBar.styles";
 
 export interface ScrollTab {

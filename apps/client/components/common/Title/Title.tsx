@@ -1,4 +1,4 @@
-import { cn } from "components";
+import { cn } from "@/lib/utils/cn";
 import { titleStyles } from "./Title.styles";
 
 interface TitleLayoutProps {

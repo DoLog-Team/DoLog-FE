@@ -1,4 +1,4 @@
-import { apiClient } from "api";
+import { apiClient } from "@/lib/api/instance";
 import type { BtsDetail, BtsListResponse } from "./bts.types";
 
 export type * from "./bts.types";

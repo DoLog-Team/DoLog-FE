@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { matchesQuery } from "utils";
 import type { ZoneGroup } from "@/lib/api/artwork";
+import { matchesQuery } from "@/lib/utils/koreanSearch";
 
 export function useArtworkFilter(zones: ZoneGroup[], searchQuery: string = "") {
 	const [selected, setSelected] = useState("전체");

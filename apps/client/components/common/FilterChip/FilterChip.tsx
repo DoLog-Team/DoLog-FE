@@ -1,5 +1,5 @@
-import { cn } from "components";
 import Image from "next/image";
+import { cn } from "@/lib/utils/cn";
 
 interface FilterChipProps {
 	label: string;
