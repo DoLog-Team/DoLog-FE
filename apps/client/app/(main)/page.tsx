@@ -1,5 +1,5 @@
-import { buttonVariants } from "components";
 import type { Metadata } from "next";
+import { buttonVariants } from "@/components/common/Button/Button.styles";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import MainFooter from "@/components/common/Footer/MainFooter";

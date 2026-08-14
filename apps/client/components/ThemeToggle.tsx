@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "components";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/common/Button/Button";
 
 export const ThemeToggle = () => {
 	const { theme, setTheme } = useTheme();

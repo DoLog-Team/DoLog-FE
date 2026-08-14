@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "components";
 import Image from "next/image";
+import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { track } from "@/lib/amplitude";
 

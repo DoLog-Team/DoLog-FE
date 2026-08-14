@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "components";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { Button } from "@/components/common/Button/Button";
 import { Title } from "@/components/common/Title/Title";
 import { MOCK_EXHIBITION_DATA } from "@/constants/exhibition";
 import { track } from "@/lib/amplitude";

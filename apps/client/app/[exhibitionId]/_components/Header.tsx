@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "components";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { track } from "@/lib/amplitude";
 import { useExhibition } from "../_context/ExhibitionContext";

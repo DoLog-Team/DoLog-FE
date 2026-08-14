@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "components";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/common/Button/Button";
 import { EmptyArtistIcon } from "@/components/common/icons/EmptyArtistIcon";
 import RowList from "@/components/common/RowList/RowList";
 import { track } from "@/lib/amplitude";

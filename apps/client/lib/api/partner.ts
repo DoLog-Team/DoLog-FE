@@ -1,4 +1,4 @@
-import { apiClient } from "api";
+import { apiClient } from "@/lib/api/instance";
 import type { PartnerPart } from "./partner.types";
 
 export type * from "./partner.types";

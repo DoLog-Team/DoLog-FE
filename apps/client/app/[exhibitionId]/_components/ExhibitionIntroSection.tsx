@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "components";
 import { useRef } from "react";
+import { Button } from "@/components/common/Button/Button";
 import RowList from "@/components/common/RowList/RowList";
 import { Title } from "@/components/common/Title/Title";
 import { TrackedLink } from "@/components/common/TrackedLink";

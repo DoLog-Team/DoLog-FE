@@ -1,4 +1,4 @@
-import { cn } from "components";
+import { cn } from "@/lib/utils/cn";
 import { type ChipVariantsProps, chipVariants } from "./Chip.styles";
 
 interface ChipProps extends ChipVariantsProps {

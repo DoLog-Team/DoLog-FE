@@ -1,8 +1,8 @@
 "use client";
 
-import { buttonVariants } from "components";
 import Link from "next/link";
 import { useState } from "react";
+import { buttonVariants } from "@/components/common/Button/Button.styles";
 import type { CardItem } from "@/components/common/Card/Card.types";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 // import { Chip } from "@/components/common/Chip/Chip";

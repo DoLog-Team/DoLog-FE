@@ -1,5 +1,5 @@
-import { buttonVariants } from "components";
 import Image from "next/image";
+import { buttonVariants } from "@/components/common/Button/Button.styles";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";

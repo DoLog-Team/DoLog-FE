@@ -1,11 +1,11 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-@import "../../../packages/components/src/theme.css";
+@import "./theme.css";
 
 @font-face {
   font-family: "Pretendard";
-  src: url("../../../packages/components/src/fonts/PretendardVariable.woff2")
+  src: url("/fonts/PretendardVariable.woff2")
     format("woff2-variations");
   font-weight: 45 920;
   font-style: normal;
@@ -135,7 +135,7 @@
   }
 }
 
-@source "../../../packages/components/src/**/*.{ts,tsx}";
+@source "../components/**/*.{ts,tsx}";
 
 @layer utilities {
   .scrollbar-hide {

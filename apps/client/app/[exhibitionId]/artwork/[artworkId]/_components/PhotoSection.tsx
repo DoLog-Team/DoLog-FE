@@ -1,7 +1,7 @@
 "use client";
-import { Button } from "components";
 import Image from "next/image";
 import { useState } from "react";
+import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { ImageViewerModal } from "@/components/common/ImageViewerModal/ImageViewerModal";
 import { Modal } from "@/components/common/Modal/Modal";
