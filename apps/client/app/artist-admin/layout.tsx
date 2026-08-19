@@ -1,5 +1,5 @@
-import { AdminFooter } from "@/components/common/AdminFooter/AdminFooter";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
+import MainFooter from "@/components/common/Footer/MainFooter";
 import { ArtistAdminHeader } from "./_components/ArtistAdminHeader";
 
 export default function ArtistLayout({ children }: { children: React.ReactNode }) {
@@ -9,7 +9,7 @@ export default function ArtistLayout({ children }: { children: React.ReactNode }
 			<main className="flex-1">
 				<DesktopContainer className="py-8">{children}</DesktopContainer>
 			</main>
-			<AdminFooter className="bg-fg-lighter" />
+			<MainFooter />
 		</div>
 	);
 }

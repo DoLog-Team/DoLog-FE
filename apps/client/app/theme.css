@@ -56,6 +56,11 @@
   --text-body3-bold--font-weight: 500;
   --text-body3-bold--letter-spacing: -0.01em;
 
+  --text-body4-bold: 13px;
+  --text-body4-bold--line-height: 16px;
+  --text-body4-bold--font-weight: 500;
+  --text-body4-bold--letter-spacing: -0.13px;
+
   /* [Element 계열] */
   --text-element1: 16px;
   --text-element1--line-height: 24px;
