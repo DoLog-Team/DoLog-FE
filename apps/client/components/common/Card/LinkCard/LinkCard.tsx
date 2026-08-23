@@ -1,3 +1,5 @@
+"use client";
+
 import { resolveSnsHref } from "@/lib/utils/sns";
 import { linkCardStyles as s } from "./LinkCard.styles";
 import type { LinkCardProps } from "./LinkCard.types";
