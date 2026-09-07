@@ -34,6 +34,10 @@
   --color-icon-light: var(--color-icon-light);
   --color-icon-lighter: var(--color-icon-lighter);
   --color-icon-inverse: var(--color-icon-inverse);
+
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-error: var(--color-error);
 }
 
 :root {
@@ -77,6 +81,10 @@
   --btn-text: #50a2a6;
   --cta-bg: #33b4ba;
   --cta-text: #ffffff;
+
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
 }
 
 .dark {
@@ -106,6 +114,10 @@
   --btn-text: #f40;
   --cta-bg: #f40;
   --cta-text: #fff;
+
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
 }
 
 @layer base {
