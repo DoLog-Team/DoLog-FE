@@ -9,12 +9,14 @@ export interface TextareaProps
 	extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
 		TextareaVariantsProps {
 	wrapperClassName?: string;
+	errorMessage?: string;
 }
 
 export const Textarea = ({
 	className,
 	wrapperClassName,
 	error,
+	errorMessage,
 	maxLength,
 	value,
 	defaultValue,
@@ -42,15 +44,20 @@ export const Textarea = ({
 				}}
 				{...props}
 			/>
-			{maxLength != null && (
-				<span
-					className={cn(
-						"self-end text-body3",
-						length >= maxLength ? "text-error" : "text-lightest",
+			{(errorMessage || maxLength != null) && (
+				<div className="flex items-center justify-between gap-2">
+					{errorMessage && <span className="pl-0.5 text-body3 text-error">{errorMessage}</span>}
+					{maxLength != null && (
+						<span
+							className={cn(
+								"ml-auto text-body3",
+								length >= maxLength ? "text-error" : "text-lightest",
+							)}
+						>
+							{length}/{maxLength}
+						</span>
 					)}
-				>
-					{length}/{maxLength}
-				</span>
+				</div>
 			)}
 		</div>
 	);

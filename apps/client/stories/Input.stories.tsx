@@ -27,6 +27,15 @@ export const ErrorState: Story = {
 	args: { placeholder: "홍길동", error: true, defaultValue: "잘못된 값" },
 };
 
+export const ErrorWithMessage: Story = {
+	args: {
+		placeholder: "입장 코드를 입력해주세요.",
+		error: true,
+		defaultValue: "고로고로만두",
+		errorMessage: "없는 코드입니다.",
+	},
+};
+
 export const Disabled: Story = {
 	args: { placeholder: "홍길동", disabled: true },
 };
@@ -37,6 +46,12 @@ export const AllStates: Story = {
 			<Input placeholder="기본" />
 			<Input placeholder="글자수 카운터" maxLength={10} />
 			<Input placeholder="에러" error defaultValue="잘못된 값" />
+			<Input
+				placeholder="에러 메시지"
+				error
+				defaultValue="고로고로만두"
+				errorMessage="없는 코드입니다."
+			/>
 			<Input placeholder="비활성" disabled />
 		</div>
 	),
