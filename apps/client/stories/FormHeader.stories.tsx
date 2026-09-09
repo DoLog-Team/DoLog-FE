@@ -12,6 +12,7 @@ const meta = {
 		title: "프로필 정보 수정",
 		lastSavedAt: "2026.05.12 19:22",
 		onTempSave: () => {},
+		onBack: () => {},
 	},
 } satisfies Meta<typeof FormHeader>;
 

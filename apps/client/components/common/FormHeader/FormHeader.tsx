@@ -1,7 +1,4 @@
-"use client";
-
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { PencilIcon } from "@/components/common/icons/PencilIcon";
@@ -14,7 +11,7 @@ export interface FormHeaderProps {
 	lastSavedAt?: string;
 	onTempSave?: () => void;
 	saveLabel?: string;
-	onBack?: () => void;
+	onBack: () => void;
 	className?: string;
 }
 
@@ -28,13 +25,11 @@ export const FormHeader = ({
 	onBack,
 	className,
 }: FormHeaderProps) => {
-	const router = useRouter();
-
 	return (
 		<header className={cn("border-b border-stroke-lightest", className)}>
 			<DesktopContainer className="flex items-center justify-between py-3">
 				<div className="flex items-center gap-2">
-					<button type="button" onClick={onBack ?? (() => router.back())} aria-label="뒤로가기">
+					<button type="button" onClick={onBack} aria-label="뒤로가기">
 						<Image src="/icons/backBtn.svg" alt="" width={24} height={24} />
 					</button>
 					<span className="text-body1-bold text-strong">{title}</span>
