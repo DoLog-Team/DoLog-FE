@@ -22,3 +22,6 @@ Thumbs.db
 # IDE 관련
 .vscode/
 .idea/
+
+# AI 참고용 로컬 문서 (추적하지 않음)
+.ai/
