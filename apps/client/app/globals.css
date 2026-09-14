@@ -85,6 +85,9 @@
   --color-bg-normal: var(--color-bg-normal);
   --color-normal: var(--color-bg-normal);
 
+  --color-elevate: var(--color-bg-elevate);
+  --color-deemed: var(--color-bg-deemed);
+
   --color-fg-lighter: var(--color-fg-lighter);
   --color-fg-light: var(--color-fg-light);
   --color-fg-inverse: var(--color-fg-inverse);
@@ -131,6 +134,8 @@
   --color-text-inverse: var(--mono-white);
 
   --color-bg-normal: var(--mono-white);
+  --color-bg-elevate: var(--mono-white);
+  --color-bg-deemed: rgb(0 0 0 / 0.5);
 
   --color-fg-lighter: var(--mono-050);
   --color-fg-light: var(--mono-100);
@@ -164,18 +169,20 @@
   --color-text-inverse: var(--mono-black);
 
   --color-bg-normal: var(--mono-black);
+  --color-bg-elevate: var(--mono-900);
+  --color-bg-deemed: rgb(0 0 0 / 0.8);
 
-  --color-fg-lighter: var(--mono-900);
-  --color-fg-light: var(--mono-800);
+  --color-fg-lighter: var(--mono-800);
+  --color-fg-light: var(--mono-700);
   --color-fg-inverse: var(--mono-white);
 
-  --color-stroke-lightest: var(--mono-900);
-  --color-stroke-lighter: var(--mono-800);
+  --color-stroke-lightest: var(--mono-800);
+  --color-stroke-lighter: var(--mono-700);
   --color-stroke-inverse: var(--mono-050);
 
   --color-icon-strong: var(--mono-white);
   --color-icon-light: var(--mono-500);
-  --color-icon-lighter: var(--mono-800);
+  --color-icon-lighter: var(--mono-700);
   --color-icon-inverse: var(--mono-black);
 
   --btn-bg: #391306;

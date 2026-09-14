@@ -1,10 +1,10 @@
 import { cva } from "class-variance-authority";
 
 export const modalStyles = {
-	overlay: "fixed inset-0 bg-black/50 backdrop-blur-[2px] animate-in fade-in duration-300 z-[100]",
+	overlay: "fixed inset-0 bg-deemed backdrop-blur-[2px] animate-in fade-in duration-300 z-[100]",
 
 	content:
-		"fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-normal p-[16px] pt-[12px] rounded-[16px] shadow-2xl transition-all z-[101] outline-none animate-in zoom-in-95 fade-in duration-300 w-[90%] max-w-[380px]",
+		"fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-elevate p-[16px] pt-[12px] rounded-[16px] shadow-2xl transition-all z-[101] outline-none animate-in zoom-in-95 fade-in duration-300 w-[90%] max-w-[380px]",
 
 	header: "flex items-start justify-between gap-[8px]",
 	title: cva("text-head2", {
@@ -34,7 +34,7 @@ export const modalStyles = {
 
 					neutral: "bg-fg-inverse text-inverse disabled:bg-fg-lighter disabled:text-disable",
 
-					danger: "bg-error text-inverse disabled:bg-fg-lighter disabled:text-disable",
+					danger: "bg-error text-white disabled:bg-fg-lighter disabled:text-disable",
 
 					secondary: "bg-fg-lighter text-light disabled:text-disable",
 				},

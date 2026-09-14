@@ -55,7 +55,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 					isOpen ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
 				} ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
 			>
-				<div className="bg-normal rounded-b-[20px] px-4 pt-4 pb-5">
+				<div className="bg-elevate rounded-b-[20px] px-4 pt-4 pb-5">
 					{exhibition && (
 						<div className="mb-6">
 							<Title title={exhibition.title} size="head2" margin="none" />
