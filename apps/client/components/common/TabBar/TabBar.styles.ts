@@ -1,12 +1,12 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 export const tabItemVariants = cva(
-	"flex items-center gap-[6px] text-body1-bold transition-colors cursor-pointer whitespace-nowrap border-b-2 border-stroke-inverse px-[14px] py-[12px]",
+	"flex items-center gap-[6px] text-body4-bold transition-colors cursor-pointer whitespace-nowrap border-b-2 border-stroke-inverse px-[14px] py-[12px]",
 	{
 		variants: {
 			active: {
-				true: "text-body2-bold text-light",
-				false: "text-body2 text-lightest border-transparent",
+				true: "text-body4-bold text-light",
+				false: "text-body4 text-lightest border-transparent",
 			},
 		},
 		defaultVariants: {
