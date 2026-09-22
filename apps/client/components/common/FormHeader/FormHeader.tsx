@@ -19,7 +19,7 @@ export const FormHeader = ({
 	title,
 	editableTitle,
 	onTitleEditClick,
-	lastSavedAt,
+	lastSavedAt = "2026.05.12 19:22",
 	onTempSave,
 	saveLabel = "임시 저장",
 	onBack,
@@ -47,7 +47,7 @@ export const FormHeader = ({
 
 				<div className="flex items-center gap-3">
 					{lastSavedAt && (
-						<span className="text-body3 text-lightest">{lastSavedAt} 마지막 저장</span>
+						<span className="text-body3 text-lighter">{lastSavedAt} 마지막 저장</span>
 					)}
 					<Button type="button" variant="assistive" size="sm" onClick={onTempSave}>
 						{saveLabel}
