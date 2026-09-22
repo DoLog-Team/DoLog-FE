@@ -6,6 +6,7 @@ import { Divider } from "@/components/common/Divider/Divider";
 import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { TabBar } from "@/components/common/TabBar/TabBar";
+import { ArtworkAdditionalInfoSection } from "./sections/ArtworkAdditionalInfoSection";
 import { ArtworkBasicInfoSection } from "./sections/ArtworkBasicInfoSection";
 import { ArtworkImageSection } from "./sections/ArtworkImageSection";
 import { ArtworkPlaceholderSection } from "./sections/ArtworkPlaceholderSection";
@@ -19,7 +20,6 @@ const TAB_LABELS = [
 ];
 
 const PLACEHOLDER_SECTIONS = [
-	{ id: "additional", title: "작품 부가 정보" },
 	{ id: "purchase", title: "작품 구매 정보" },
 	{ id: "detail", title: "작품 상세 정보" },
 ] as const;
@@ -70,12 +70,26 @@ export const ArtworkForm = ({ title, onBack }: ArtworkFormProps) => {
 				<Divider thickness="thin" fullBleed={true} spacing="md" />
 
 				<section
+					className="pb-7 pt-7"
 					ref={(el) => {
 						sectionRefs.image.current = el;
 					}}
 				>
 					<ArtworkImageSection />
 				</section>
+
+				<Divider thickness="thin" fullBleed={true} spacing="md" />
+
+				<section
+					className="pb-7 pt-7"
+					ref={(el) => {
+						sectionRefs.additional.current = el;
+					}}
+				>
+					<ArtworkAdditionalInfoSection />
+				</section>
+
+				<Divider thickness="thin" fullBleed={true} spacing="md" />
 
 				{PLACEHOLDER_SECTIONS.map(({ id, title }) => (
 					<section

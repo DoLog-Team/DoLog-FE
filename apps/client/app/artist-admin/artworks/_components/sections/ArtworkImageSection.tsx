@@ -15,7 +15,7 @@ export const ArtworkImageSection = () => {
 	return (
 		<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
 			<div className="min-w-0 min-[721px]:w-100">
-				<h2 className="text-body2 text-strong">작품 이미지</h2>
+				<h2 className="text-head3 text-strong">작품 이미지</h2>
 				<span className="text-body2 text-lighter">
 					미리보기 이미지에 표시될 작품의 대표 이미지를 첨부해주세요.
 				</span>

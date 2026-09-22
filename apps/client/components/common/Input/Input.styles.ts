@@ -1,8 +1,8 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 export const inputVariants = cva(
-	"w-full h-11 px-4 py-3 rounded-lg border bg-bg-normal text-body1-bold outline-none transition-colors " +
-		"placeholder:text-lightest disabled:bg-fg-lighter disabled:text-disable",
+	"w-full h-11 px-4 py-3 rounded-lg border bg-bg-normal text-body1 outline-none transition-colors " +
+		"placeholder:text-disable disabled:bg-fg-lighter disabled:text-disable",
 	{
 		variants: {
 			error: {
