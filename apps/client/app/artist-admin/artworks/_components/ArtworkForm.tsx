@@ -2,10 +2,12 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
+import { Divider } from "@/components/common/Divider/Divider";
 import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { TabBar } from "@/components/common/TabBar/TabBar";
 import { ArtworkBasicInfoSection } from "./sections/ArtworkBasicInfoSection";
+import { ArtworkImageSection } from "./sections/ArtworkImageSection";
 import { ArtworkPlaceholderSection } from "./sections/ArtworkPlaceholderSection";
 
 const TAB_LABELS = [
@@ -17,7 +19,6 @@ const TAB_LABELS = [
 ];
 
 const PLACEHOLDER_SECTIONS = [
-	{ id: "image", title: "작품 이미지" },
 	{ id: "additional", title: "작품 부가 정보" },
 	{ id: "purchase", title: "작품 구매 정보" },
 	{ id: "detail", title: "작품 상세 정보" },
@@ -56,13 +57,24 @@ export const ArtworkForm = ({ title, onBack }: ArtworkFormProps) => {
 				<TabBar tabs={tabs} activeTab={activeTab} onTabClick={handleTabClick} />
 			</div>
 
-			<div className="px-10 py-7">
+			<div className="py-7">
 				<section
+					className="pb-7"
 					ref={(el) => {
 						sectionRefs.basic.current = el;
 					}}
 				>
 					<ArtworkBasicInfoSection onMissingCountChange={handleBasicMissingCountChange} />
+				</section>
+
+				<Divider thickness="thin" fullBleed={true} spacing="md" />
+
+				<section
+					ref={(el) => {
+						sectionRefs.image.current = el;
+					}}
+				>
+					<ArtworkImageSection />
 				</section>
 
 				{PLACEHOLDER_SECTIONS.map(({ id, title }) => (

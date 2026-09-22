@@ -1,8 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/common/Button/Button";
-import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { PencilIcon } from "@/components/common/icons/PencilIcon";
-import { cn } from "@/lib/utils/cn";
 
 export interface FormHeaderProps {
 	title: string;
@@ -27,7 +25,7 @@ export const FormHeader = ({
 }: FormHeaderProps) => {
 	return (
 		<header className={className}>
-			<DesktopContainer className="flex items-center justify-between py-3">
+			<div className="flex items-center justify-between py-3">
 				<div className="flex items-center gap-2">
 					<button type="button" onClick={onBack} aria-label="뒤로가기">
 						<Image src="/icons/backBtn.svg" alt="" width={24} height={24} />
@@ -53,7 +51,7 @@ export const FormHeader = ({
 						{saveLabel}
 					</Button>
 				</div>
-			</DesktopContainer>
+			</div>
 		</header>
 	);
 };

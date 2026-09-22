@@ -17,7 +17,7 @@ export const DateSelectField = ({
 	onChange,
 	disabled,
 }: DateSelectFieldProps) => (
-	<div className="flex flex-1 flex-col gap-1">
+	<div className="flex min-w-0 flex-1 flex-col gap-1">
 		<span className="text-body3 text-light">{label}</span>
 		<Select
 			options={options}

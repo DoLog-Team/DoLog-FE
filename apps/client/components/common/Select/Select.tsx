@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { cn } from "@/lib/utils/cn";
 
 export interface SelectOption {
@@ -19,6 +19,8 @@ export interface SelectProps {
 	className?: string;
 	actionLabel?: string;
 	onActionClick?: () => void;
+	id?: string;
+	name?: string;
 }
 
 export const Select = ({
@@ -31,7 +33,11 @@ export const Select = ({
 	className,
 	actionLabel,
 	onActionClick,
+	id,
+	name,
 }: SelectProps) => {
+	const generatedId = useId();
+	const inputId = id ?? generatedId;
 	const [isOpen, setIsOpen] = useState(false);
 	const [query, setQuery] = useState("");
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -71,7 +77,9 @@ export const Select = ({
 				)}
 			>
 				<input
-					className="flex-1 p-3 bg-transparent text-body1 text-light outline-none placeholder:text-disable disabled:text-disable"
+					id={inputId}
+					name={name ?? inputId}
+					className="min-w-0 flex-1 p-3 bg-transparent text-body1 text-light outline-none placeholder:text-disable disabled:text-disable"
 					placeholder={isOpen ? undefined : placeholder}
 					value={isOpen ? query : selectedLabel}
 					onFocus={() => setIsOpen(true)}

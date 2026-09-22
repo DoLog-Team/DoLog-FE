@@ -1,4 +1,3 @@
-import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { cn } from "@/lib/utils/cn";
 import { tabItemVariants } from "./TabBar.styles";
 
@@ -18,7 +17,7 @@ export interface TabBarProps {
 export const TabBar = ({ tabs, activeTab, onTabClick, className }: TabBarProps) => {
 	return (
 		<div className={cn("border-b border-stroke-lightest", className)}>
-			<DesktopContainer className="flex overflow-x-auto">
+			<div className="flex overflow-x-auto">
 				{tabs.map((tab) => (
 					<button
 						type="button"
@@ -39,7 +38,7 @@ export const TabBar = ({ tabs, activeTab, onTabClick, className }: TabBarProps) 
 						)}
 					</button>
 				))}
-			</DesktopContainer>
+			</div>
 		</div>
 	);
 };

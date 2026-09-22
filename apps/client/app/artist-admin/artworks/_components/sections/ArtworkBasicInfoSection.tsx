@@ -59,10 +59,10 @@ export const ArtworkBasicInfoSection = ({ onMissingCountChange }: ArtworkBasicIn
 
 	return (
 		<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
-			<div className="shrink-0 min-[721px]:w-72">
+			<div className="min-w-0 min-[721px]:w-100">
 				<h2 className="text-head3 text-strong">작품 기본 정보</h2>
 			</div>
-			<div className="flex flex-1 flex-col gap-4">
+			<div className="flex min-w-0 flex-1 flex-col gap-4">
 				<FormField label="작품 한줄 소개">
 					<Textarea
 						placeholder="작품을 간단하게 소개해주세요."
