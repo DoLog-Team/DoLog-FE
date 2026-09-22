@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Checkbox } from "@/components/common/Checkbox/Checkbox";
 import { DateSelectField } from "@/components/common/DateSelectField/DateSelectField";
+import { FormField } from "@/components/common/FormField/FormField";
 import { Select } from "@/components/common/Select/Select";
 import { Textarea } from "@/components/common/Textarea/Textarea";
 
@@ -46,7 +48,9 @@ export const ArtworkBasicInfoSection = ({ onMissingCountChange }: ArtworkBasicIn
 	const [endMonth, setEndMonth] = useState<string | undefined>(undefined);
 	const [endDay, setEndDay] = useState<string | undefined>(undefined);
 
-	const isPeriodComplete = Boolean(endYear && endMonth && endDay);
+	const isStartDateComplete = !hasStartDate || Boolean(startYear && startMonth && startDay);
+	const isEndDateComplete = Boolean(endYear && endMonth && endDay);
+	const isPeriodComplete = isStartDateComplete && isEndDateComplete;
 
 	useEffect(() => {
 		const missing = (category ? 0 : 1) + (isPeriodComplete ? 0 : 1);
@@ -59,55 +63,27 @@ export const ArtworkBasicInfoSection = ({ onMissingCountChange }: ArtworkBasicIn
 				<h2 className="text-head3 text-strong">작품 기본 정보</h2>
 			</div>
 			<div className="flex flex-1 flex-col gap-4">
-				<div className="flex flex-col gap-2">
-					<span className="text-body2-bold text-strong">작품 한줄 소개</span>
+				<FormField label="작품 한줄 소개">
 					<Textarea
 						placeholder="작품을 간단하게 소개해주세요."
 						maxLength={200}
 						value={intro}
 						onChange={(e) => setIntro(e.target.value)}
 					/>
-				</div>
-				<div className="flex flex-col gap-2">
-					<span className="text-body2-bold text-strong">
-						카테고리 <span className="text-error">*</span>
-					</span>
+				</FormField>
+
+				<FormField label="카테고리" required>
 					<Select
 						options={CATEGORY_OPTIONS}
 						value={category}
 						onChange={setCategory}
 						placeholder="작품의 카테고리를 선택해주세요."
 					/>
-				</div>
-				<div className="mt-5 flex flex-col gap-2">
-					<span className="text-body2-bold text-strong">
-						제작 기간 <span className="text-error">*</span>
-					</span>
-					<label className="flex items-center gap-2 text-body2 text-light">
-						<span className="relative flex h-5 w-5 items-center justify-center">
-							<input
-								type="checkbox"
-								checked={hasStartDate}
-								onChange={(e) => setHasStartDate(e.target.checked)}
-								className="peer h-5 w-5 appearance-none rounded border-[1.5px] border-stroke-lighter checked:border-strong checked:bg-strong"
-							/>
-							<svg
-								className="pointer-events-none absolute hidden h-3 w-3 text-inverse peer-checked:block"
-								viewBox="0 0 12 12"
-								fill="none"
-								aria-hidden="true"
-							>
-								<path
-									d="M2 6L5 9L10 3"
-									stroke="currentColor"
-									strokeWidth="1.5"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-								/>
-							</svg>
-						</span>
-						시작 날짜 입력하기
-					</label>
+				</FormField>
+
+				<FormField label="제작 기간" required className="mt-5">
+					<Checkbox checked={hasStartDate} onChange={setHasStartDate} label="시작 날짜 입력하기" />
+
 					<div className="flex flex-col gap-6">
 						<div className="flex gap-2">
 							<DateSelectField
@@ -160,7 +136,7 @@ export const ArtworkBasicInfoSection = ({ onMissingCountChange }: ArtworkBasicIn
 							/>
 						</div>
 					</div>
-				</div>
+				</FormField>
 			</div>
 		</div>
 	);
