@@ -1,4 +1,5 @@
 import type React from "react";
+import { useId } from "react";
 import { cn } from "@/lib/utils/cn";
 
 export interface CheckboxProps {
@@ -7,9 +8,22 @@ export interface CheckboxProps {
 	label?: React.ReactNode;
 	disabled?: boolean;
 	className?: string;
+	id?: string;
+	name?: string;
 }
 
-export const Checkbox = ({ checked, onChange, label, disabled, className }: CheckboxProps) => {
+export const Checkbox = ({
+	checked,
+	onChange,
+	label,
+	disabled,
+	className,
+	id,
+	name,
+}: CheckboxProps) => {
+	const generatedId = useId();
+	const inputId = id ?? generatedId;
+
 	return (
 		<label
 			className={cn(
@@ -20,6 +34,8 @@ export const Checkbox = ({ checked, onChange, label, disabled, className }: Chec
 		>
 			<span className="relative flex h-5 w-5 shrink-0 items-center justify-center">
 				<input
+					id={inputId}
+					name={name ?? inputId}
 					type="checkbox"
 					checked={checked}
 					disabled={disabled}

@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { cn } from "@/lib/utils/cn";
 import { type InputVariantsProps, inputVariants } from "./Input.styles";
 
@@ -21,8 +21,12 @@ export const Input = ({
 	value,
 	defaultValue,
 	onChange,
+	id,
+	name,
 	...props
 }: InputProps) => {
+	const generatedId = useId();
+	const inputId = id ?? generatedId;
 	const [length, setLength] = useState(String(value ?? defaultValue ?? "").length);
 
 	useEffect(() => {
@@ -34,6 +38,8 @@ export const Input = ({
 	return (
 		<div className={cn("flex flex-col gap-1", wrapperClassName)}>
 			<input
+				id={inputId}
+				name={name ?? inputId}
 				className={cn(inputVariants({ error }), className)}
 				maxLength={maxLength}
 				value={value}

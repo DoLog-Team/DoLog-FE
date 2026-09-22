@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useId, useRef } from "react";
 import { cn } from "@/lib/utils/cn";
 import { Button } from "../Button/Button";
 import { imageInputBoxVariants } from "./ImageInput.styles";
@@ -14,6 +14,8 @@ export interface ImageInputProps {
 	guideText?: string;
 	accept?: string;
 	className?: string;
+	id?: string;
+	name?: string;
 }
 
 export const ImageInput = ({
@@ -24,7 +26,11 @@ export const ImageInput = ({
 	guideText = "JPG, PNG / 용량 5MB 이하 / 가로 세로 1,000PX",
 	accept = "image/jpeg,image/png",
 	className,
+	id,
+	name,
 }: ImageInputProps) => {
+	const generatedId = useId();
+	const inputId = id ?? generatedId;
 	const inputRef = useRef<HTMLInputElement>(null);
 	const remaining = maxCount - images.length;
 	const canAdd = remaining > 0;
@@ -57,6 +63,8 @@ export const ImageInput = ({
 		<div className={cn("flex w-full flex-col items-center", className)}>
 			<input
 				ref={inputRef}
+				id={inputId}
+				name={name ?? inputId}
 				type="file"
 				accept={accept}
 				onChange={(e) => handleFiles(e.target.files)}
