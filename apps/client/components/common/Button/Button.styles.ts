@@ -43,7 +43,7 @@ export const buttonVariants = cva(
 			{
 				variant: "primary",
 				class:
-					"bg-fg-inverse text-inverse disabled:bg-lighter disabled:text-disable disabled:after:hidden",
+					"bg-fg-inverse text-inverse disabled:bg-fg-lighter disabled:text-disable disabled:after:hidden",
 			},
 			{
 				variant: "assistive",
