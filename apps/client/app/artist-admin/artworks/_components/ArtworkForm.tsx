@@ -31,7 +31,7 @@ export const ArtworkForm = ({ title, onBack }: ArtworkFormProps) => {
 				onBack={onBack}
 			/>
 			<TabBar tabs={TABS} activeTab={activeTab} onTabClick={setActiveTab} />
-			<div className="px-10">준비 중인 탭이에요.</div>
+			<div className="px-10 py-7">준비 중인 탭이에요.</div>
 		</DesktopContainer>
 	);
 };

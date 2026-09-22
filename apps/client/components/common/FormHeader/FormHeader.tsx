@@ -26,7 +26,7 @@ export const FormHeader = ({
 	className,
 }: FormHeaderProps) => {
 	return (
-		<header className={cn("border-b border-stroke-lightest", className)}>
+		<header className={className}>
 			<DesktopContainer className="flex items-center justify-between py-3">
 				<div className="flex items-center gap-2">
 					<button type="button" onClick={onBack} aria-label="뒤로가기">
