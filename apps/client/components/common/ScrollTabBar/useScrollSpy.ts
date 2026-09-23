@@ -33,11 +33,9 @@ export const useScrollSpy = (tabIds: string[], offset: number = 44) => {
 	const handleTabClick = (tabId: string) => {
 		const ref = sectionRefs[tabId];
 		if (ref?.current) {
-			const scrollEl =
-				document.documentElement.scrollTop > 0 ? document.documentElement : document.body;
-			const top = ref.current.getBoundingClientRect().top + scrollEl.scrollTop - offset;
+			const top = ref.current.getBoundingClientRect().top + document.body.scrollTop - offset;
 			isScrollingByClick.current = true;
-			scrollEl.scrollTo({ top, behavior: "smooth" });
+			document.body.scrollTo({ top, behavior: "smooth" });
 			setActiveTab(tabId);
 			setTimeout(() => {
 				isScrollingByClick.current = false;
