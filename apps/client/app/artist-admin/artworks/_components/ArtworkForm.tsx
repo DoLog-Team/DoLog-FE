@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
+import { Fragment, useCallback, useMemo, useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
@@ -46,6 +46,19 @@ export const ArtworkForm = ({ title, onBack }: ArtworkFormProps) => {
 		[basicMissingCount],
 	);
 
+	const formSections = [
+		{
+			id: "basic",
+			className: "pb-7",
+			render: () => (
+				<ArtworkBasicInfoSection onMissingCountChange={handleBasicMissingCountChange} />
+			),
+		},
+		{ id: "image", className: "pb-7 pt-7", render: () => <ArtworkImageSection /> },
+		{ id: "additional", className: "pb-7 pt-7", render: () => <ArtworkAdditionalInfoSection /> },
+		{ id: "purchase", className: "pb-7 pt-7", render: () => <ArtworkPurchaseInfoSection /> },
+	];
+
 	return (
 		<DesktopContainer>
 			<div className="sticky top-0 z-10 bg-bg-normal">
@@ -60,47 +73,22 @@ export const ArtworkForm = ({ title, onBack }: ArtworkFormProps) => {
 			</div>
 
 			<div className="py-7">
-				<section
-					className="pb-7"
-					ref={(el) => {
-						sectionRefs.basic.current = el;
-					}}
-				>
-					<ArtworkBasicInfoSection onMissingCountChange={handleBasicMissingCountChange} />
-				</section>
+				{formSections.map((section, index) => (
+					<Fragment key={section.id}>
+						<section
+							className={section.className}
+							ref={(el) => {
+								sectionRefs[section.id].current = el;
+							}}
+						>
+							{section.render()}
+						</section>
 
-				<Divider thickness="thin" fullBleed={true} spacing="md" />
-
-				<section
-					className="pb-7 pt-7"
-					ref={(el) => {
-						sectionRefs.image.current = el;
-					}}
-				>
-					<ArtworkImageSection />
-				</section>
-
-				<Divider thickness="thin" fullBleed={true} spacing="md" />
-
-				<section
-					className="pb-7 pt-7"
-					ref={(el) => {
-						sectionRefs.additional.current = el;
-					}}
-				>
-					<ArtworkAdditionalInfoSection />
-				</section>
-
-				<Divider thickness="thin" fullBleed={true} spacing="md" />
-
-				<section
-					className="pb-7 pt-7"
-					ref={(el) => {
-						sectionRefs.purchase.current = el;
-					}}
-				>
-					<ArtworkPurchaseInfoSection />
-				</section>
+						{index < formSections.length - 1 && (
+							<Divider thickness="thin" fullBleed={true} spacing="md" />
+						)}
+					</Fragment>
+				))}
 			</div>
 
 			<div className="sticky bottom-0 z-10 flex justify-end border-t border-stroke-lightest bg-bg-normal py-4">
