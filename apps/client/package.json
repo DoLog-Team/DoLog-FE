@@ -16,6 +16,8 @@
     "@amplitude/analytics-browser": "^2.42.3",
     "@next/third-parties": "^16.2.6",
     "@radix-ui/react-dialog": "^1.1.15",
+    "@toast-ui/editor": "^3.2.2",
+    "@toast-ui/react-editor": "^3.2.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "es-hangul": "^2.0.0",
