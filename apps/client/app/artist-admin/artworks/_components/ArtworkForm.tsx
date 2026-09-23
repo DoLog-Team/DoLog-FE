@@ -9,7 +9,7 @@ import { TabBar } from "@/components/common/TabBar/TabBar";
 import { ArtworkAdditionalInfoSection } from "./sections/ArtworkAdditionalInfoSection";
 import { ArtworkBasicInfoSection } from "./sections/ArtworkBasicInfoSection";
 import { ArtworkImageSection } from "./sections/ArtworkImageSection";
-import { ArtworkPlaceholderSection } from "./sections/ArtworkPlaceholderSection";
+import { ArtworkPurchaseInfoSection } from "./sections/ArtworkPurchaseInfoSection";
 
 const TAB_LABELS = [
 	{ id: "basic", label: "기본 정보" },
@@ -18,11 +18,6 @@ const TAB_LABELS = [
 	{ id: "purchase", label: "구매 정보" },
 	{ id: "detail", label: "상세 정보" },
 ];
-
-const PLACEHOLDER_SECTIONS = [
-	{ id: "purchase", title: "작품 구매 정보" },
-	{ id: "detail", title: "작품 상세 정보" },
-] as const;
 
 export interface ArtworkFormProps {
 	title: string;
@@ -91,17 +86,14 @@ export const ArtworkForm = ({ title, onBack }: ArtworkFormProps) => {
 
 				<Divider thickness="thin" fullBleed={true} spacing="md" />
 
-				{PLACEHOLDER_SECTIONS.map(({ id, title }) => (
-					<section
-						key={id}
-						ref={(el) => {
-							sectionRefs[id].current = el;
-						}}
-						className="py-10"
-					>
-						<ArtworkPlaceholderSection title={title} />
-					</section>
-				))}
+				<section
+					className="pb-7 pt-7"
+					ref={(el) => {
+						sectionRefs.purchase.current = el;
+					}}
+				>
+					<ArtworkPurchaseInfoSection />
+				</section>
 			</div>
 		</DesktopContainer>
 	);
