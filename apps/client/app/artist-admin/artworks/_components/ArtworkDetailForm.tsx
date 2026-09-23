@@ -69,7 +69,7 @@ export const ArtworkDetailForm = ({ title, onBack }: ArtworkDetailFormProps) => 
 			</div>
 
 			<div className="flex flex-col gap-4 py-7">
-				<h2 className="text-head3 text-strong">작품 상세 정보</h2>
+				<h2 className="text-head3 text-strong">상세 정보</h2>
 				<Editor
 					previewStyle="tab"
 					height="600px"
