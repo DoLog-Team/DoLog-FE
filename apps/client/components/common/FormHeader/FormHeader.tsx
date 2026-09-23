@@ -36,7 +36,7 @@ export const FormHeader = ({
 							type="button"
 							onClick={onTitleEditClick}
 							aria-label="이름 수정"
-							className="flex items-center justify-center rounded-sm bg-fg-lighter p-[4.5px]"
+							className="flex cursor-pointer items-center justify-center rounded-sm bg-fg-lighter p-[4.5px]"
 						>
 							<PencilIcon className="text-icon-light" />
 						</button>
