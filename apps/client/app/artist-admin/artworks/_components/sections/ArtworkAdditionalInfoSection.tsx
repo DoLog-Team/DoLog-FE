@@ -53,12 +53,7 @@ const SizeInput = ({
 );
 
 export const ArtworkAdditionalInfoSection = () => {
-	const [materials, setMaterials] = useState<string[]>([
-		"캔버스에 아크릴릭",
-		"모델링 페이스트",
-		"쉬폰",
-		"비즈",
-	]);
+	const [materials, setMaterials] = useState<string[]>([]);
 	const [materialQuery, setMaterialQuery] = useState("");
 	const [isMaterialFocused, setIsMaterialFocused] = useState(false);
 
@@ -131,6 +126,7 @@ export const ArtworkAdditionalInfoSection = () => {
 									<li key={option}>
 										<button
 											type="button"
+											onMouseDown={(e) => e.preventDefault()}
 											onClick={() => addMaterial(option)}
 											className="w-full px-3 py-2 text-left text-body2 text-strong"
 										>
@@ -141,6 +137,7 @@ export const ArtworkAdditionalInfoSection = () => {
 								<li>
 									<button
 										type="button"
+										onMouseDown={(e) => e.preventDefault()}
 										onClick={() => addMaterial(materialQuery)}
 										className="flex w-full items-center justify-between px-3 py-2 text-left text-body2 text-lighter"
 									>
