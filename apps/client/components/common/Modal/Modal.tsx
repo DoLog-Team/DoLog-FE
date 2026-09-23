@@ -6,19 +6,10 @@ import { Button } from "@/components/common/Button/Button";
 import type { ButtonVariantsProps } from "@/components/common/Button/Button.styles";
 import { modalStyles } from "./Modal.styles";
 
-type ModalActionVariant = "primary" | "neutral" | "danger" | "secondary";
-
-const ACTION_BUTTON_VARIANT: Record<ModalActionVariant, ButtonVariantsProps["variant"]> = {
-	primary: "cta",
-	neutral: "primary",
-	secondary: "assistive",
-	danger: "danger",
-};
-
 interface ModalAction {
 	text: string;
 	onClick: () => void;
-	variant?: ModalActionVariant;
+	variant?: ButtonVariantsProps["variant"];
 	disabled?: boolean;
 }
 
@@ -70,7 +61,7 @@ export const Modal = ({
 								type="button"
 								onClick={action.onClick}
 								disabled={action.disabled}
-								variant={ACTION_BUTTON_VARIANT[action.variant ?? "primary"]}
+								variant={action.variant ?? "cta"}
 								className="min-h-11 flex-1"
 							>
 								{action.text}

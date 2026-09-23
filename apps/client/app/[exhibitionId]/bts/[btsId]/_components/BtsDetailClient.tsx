@@ -92,12 +92,12 @@ export function BtsDetailClient({ btsItem, exhibitionId }: BtsDetailClientProps)
 							actions={[
 								{
 									text: "되돌리기",
-									variant: "secondary",
+									variant: "assistive",
 									onClick: () => setIsLinkModalOpen(false),
 								},
 								{
 									text: "이동하기",
-									variant: "primary",
+									variant: "cta",
 									onClick: () => {
 										window.open(btsItem.linkUrl ?? "", "_blank", "noopener,noreferrer");
 										setIsLinkModalOpen(false);
