@@ -1,23 +1,18 @@
 "use client";
 
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
+import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { TabBar } from "@/components/common/TabBar/TabBar";
+import { ARTWORK_FORM_TABS } from "./artworkFormTabs";
 import { ArtworkAdditionalInfoSection } from "./sections/ArtworkAdditionalInfoSection";
 import { ArtworkBasicInfoSection } from "./sections/ArtworkBasicInfoSection";
 import { ArtworkImageSection } from "./sections/ArtworkImageSection";
 import { ArtworkPurchaseInfoSection } from "./sections/ArtworkPurchaseInfoSection";
-
-const TAB_LABELS = [
-	{ id: "basic", label: "기본 정보" },
-	{ id: "image", label: "이미지" },
-	{ id: "additional", label: "부가 정보" },
-	{ id: "purchase", label: "구매 정보" },
-	{ id: "detail", label: "상세 정보" },
-];
 
 export interface ArtworkFormProps {
 	title: string;
@@ -25,7 +20,9 @@ export interface ArtworkFormProps {
 }
 
 export const ArtworkForm = ({ title, onBack }: ArtworkFormProps) => {
-	const tabIds = useMemo(() => TAB_LABELS.map((tab) => tab.id), []);
+	const router = useRouter();
+	const pathname = usePathname();
+	const tabIds = useMemo(() => ARTWORK_FORM_TABS.map((tab) => tab.id), []);
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(tabIds, 120);
 	const [basicMissingCount, setBasicMissingCount] = useState(1);
 
@@ -33,9 +30,19 @@ export const ArtworkForm = ({ title, onBack }: ArtworkFormProps) => {
 		setBasicMissingCount(count);
 	}, []);
 
+	const handleTopTabClick = (tabId: string) => {
+		if (tabId === "detail") {
+			router.push(`${pathname}/detail`);
+			return;
+		}
+		handleTabClick(tabId);
+	};
+
 	const tabs = useMemo(
 		() =>
-			TAB_LABELS.map((tab) => (tab.id === "basic" ? { ...tab, badge: basicMissingCount } : tab)),
+			ARTWORK_FORM_TABS.map((tab) =>
+				tab.id === "basic" ? { ...tab, badge: basicMissingCount } : tab,
+			),
 		[basicMissingCount],
 	);
 
@@ -49,7 +56,7 @@ export const ArtworkForm = ({ title, onBack }: ArtworkFormProps) => {
 					onTempSave={() => {}}
 					onBack={onBack}
 				/>
-				<TabBar tabs={tabs} activeTab={activeTab} onTabClick={handleTabClick} />
+				<TabBar tabs={tabs} activeTab={activeTab} onTabClick={handleTopTabClick} />
 			</div>
 
 			<div className="py-7">
@@ -94,6 +101,12 @@ export const ArtworkForm = ({ title, onBack }: ArtworkFormProps) => {
 				>
 					<ArtworkPurchaseInfoSection />
 				</section>
+			</div>
+
+			<div className="sticky bottom-0 z-10 flex justify-end border-t border-stroke-lightest bg-bg-normal py-4">
+				<Button type="button" onClick={() => router.push(`${pathname}/detail`)}>
+					다음으로
+				</Button>
 			</div>
 		</DesktopContainer>
 	);
