@@ -6,11 +6,12 @@ import { Button } from "@/components/common/Button/Button";
 import { Checkbox } from "@/components/common/Checkbox/Checkbox";
 import { FormField } from "@/components/common/FormField/FormField";
 import { Input } from "@/components/common/Input/Input";
+import { Modal } from "@/components/common/Modal/Modal";
 
 export const ArtworkPurchaseInfoSection = () => {
 	const [showPurchaseButton, setShowPurchaseButton] = useState(false);
-	const [openChatUrl, setOpenChatUrl] = useState("");
-	const [isEditing, setIsEditing] = useState(false);
+	const [openChatUrl] = useState("");
+	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
 	return (
 		<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
@@ -46,21 +47,38 @@ export const ArtworkPurchaseInfoSection = () => {
 						<Input
 							wrapperClassName="flex-1"
 							value={openChatUrl}
-							onChange={(e) => setOpenChatUrl(e.target.value)}
 							placeholder="입력된 오픈채팅 주소가 없어요."
-							disabled={!isEditing}
+							disabled
 						/>
 						<Button
 							type="button"
 							variant="assistive"
 							className="w-24"
-							onClick={() => setIsEditing(true)}
+							onClick={() => setIsEditModalOpen(true)}
 						>
 							수정하기
 						</Button>
 					</div>
 				</FormField>
 			</div>
+
+			<Modal
+				open={isEditModalOpen}
+				onOpenChange={setIsEditModalOpen}
+				title="구매 오픈채팅 수정"
+				description="구매 오픈채팅 주소를 수정하기 위해 내 프로필 수정 페이지로 이동해요. 변경 내용을 저장할까요?"
+				showCloseButton
+				actions={[
+					{ text: "취소", variant: "assistive", onClick: () => setIsEditModalOpen(false) },
+					{
+						text: "저장하고 이동",
+						variant: "primary",
+						onClick: () => {
+							// TODO: 추후 프로필 페이지 이동 경로 추가 필요
+						},
+					},
+				]}
+			/>
 		</div>
 	);
 };
