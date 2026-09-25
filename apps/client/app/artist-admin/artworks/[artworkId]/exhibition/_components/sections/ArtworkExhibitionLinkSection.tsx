@@ -36,7 +36,9 @@ export const ArtworkExhibitionLinkSection = ({
 	const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
 	useEffect(() => {
-		getArtworkExhibitionLink(artworkId).then(setLink);
+		getArtworkExhibitionLink(artworkId)
+			.then(setLink)
+			.catch(() => {});
 	}, [artworkId]);
 
 	const notice = link && link.visibility !== "visible" ? VISIBILITY_NOTICE[link.visibility] : null;

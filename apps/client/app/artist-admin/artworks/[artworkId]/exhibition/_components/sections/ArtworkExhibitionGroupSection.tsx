@@ -19,7 +19,9 @@ export const ArtworkExhibitionGroupSection = ({
 	const [group, setGroup] = useState<string | undefined>(undefined);
 
 	useEffect(() => {
-		getArtworkExhibitionGroups(artworkId).then(setGroupOptions);
+		getArtworkExhibitionGroups(artworkId)
+			.then(setGroupOptions)
+			.catch(() => {});
 	}, [artworkId]);
 
 	return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Checkbox } from "@/components/common/Checkbox/Checkbox";
 import { FormField } from "@/components/common/FormField/FormField";
 import { ImageInput } from "@/components/common/ImageInput/ImageInput";
@@ -29,11 +29,13 @@ const SizeInput = ({
 	onChange,
 	placeholder,
 	disabled,
+	ariaLabel,
 }: {
 	value: string;
 	onChange: (value: string) => void;
 	placeholder: string;
 	disabled?: boolean;
+	ariaLabel: string;
 }) => (
 	<div className="relative">
 		<input
@@ -43,6 +45,7 @@ const SizeInput = ({
 			onChange={(e) => onChange(e.target.value)}
 			placeholder={placeholder}
 			disabled={disabled}
+			aria-label={ariaLabel}
 			className={cn(
 				"h-11 w-full rounded-lg border border-stroke-lighter bg-bg-normal py-3 pr-10 pl-4",
 				"text-body1 outline-none transition-colors placeholder:text-disable",
@@ -63,6 +66,34 @@ export const ArtworkExhibitionAdditionalInfoSection = () => {
 	const [hasVolume, setHasVolume] = useState(false);
 	const [depth, setDepth] = useState("");
 	const [locationImages, setLocationImages] = useState<string[]>([]);
+	const locationImagesRef = useRef<string[]>([]);
+
+	useEffect(() => {
+		locationImagesRef.current = locationImages;
+	}, [locationImages]);
+
+	// 언마운트 시 남아있는 blob URL 해제
+	useEffect(() => {
+		return () => {
+			locationImagesRef.current.forEach((url) => {
+				URL.revokeObjectURL(url);
+			});
+		};
+	}, []);
+
+	const handleAddLocationImage = (files: File[]) => {
+		locationImages.forEach((url) => {
+			URL.revokeObjectURL(url);
+		});
+		setLocationImages(files.map((file) => URL.createObjectURL(file)));
+	};
+
+	const handleRemoveLocationImage = () => {
+		locationImages.forEach((url) => {
+			URL.revokeObjectURL(url);
+		});
+		setLocationImages([]);
+	};
 
 	const filteredMaterialOptions = MATERIAL_OPTIONS.filter(
 		(option) =>
@@ -162,11 +193,11 @@ export const ArtworkExhibitionAdditionalInfoSection = () => {
 					<div className="flex gap-2">
 						<div className="flex min-w-0 flex-1 flex-col gap-1">
 							<span className="text-body3 text-light">가로</span>
-							<SizeInput value={width} onChange={setWidth} placeholder="11" />
+							<SizeInput value={width} onChange={setWidth} placeholder="11" ariaLabel="가로" />
 						</div>
 						<div className="flex min-w-0 flex-1 flex-col gap-1">
 							<span className="text-body3 text-light">세로</span>
-							<SizeInput value={height} onChange={setHeight} placeholder="12.5" />
+							<SizeInput value={height} onChange={setHeight} placeholder="12.5" ariaLabel="세로" />
 						</div>
 					</div>
 
@@ -177,15 +208,21 @@ export const ArtworkExhibitionAdditionalInfoSection = () => {
 						label="높이 입력하기 (부피가 있는 경우)"
 					/>
 
-					<SizeInput value={depth} onChange={setDepth} placeholder="200" disabled={!hasVolume} />
+					<SizeInput
+						value={depth}
+						onChange={setDepth}
+						placeholder="200"
+						disabled={!hasVolume}
+						ariaLabel="높이"
+					/>
 				</FormField>
 
 				<FormField label="위치 이미지">
 					<ImageInput
 						images={locationImages}
 						maxCount={1}
-						onAdd={(files) => setLocationImages(files.map((file) => URL.createObjectURL(file)))}
-						onRemove={() => setLocationImages([])}
+						onAdd={handleAddLocationImage}
+						onRemove={handleRemoveLocationImage}
 					/>
 				</FormField>
 			</div>
