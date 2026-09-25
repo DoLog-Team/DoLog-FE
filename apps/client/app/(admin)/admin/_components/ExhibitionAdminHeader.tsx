@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Modal } from "@/components/common/Modal/Modal";
 import { NotificationSidebar } from "@/components/common/NotificationSidebar/NotificationSidebar";
 import { cn } from "@/lib/utils/cn";
@@ -29,7 +29,7 @@ const ARTWORK_MENU: MenuItem[] = [
 const ARTIST_LOGIN_HREF = "/artist-admin/login";
 
 const MENU_ITEM_CLASS =
-	"flex h-12 w-full cursor-pointer items-center gap-2 whitespace-nowrap rounded px-2 text-body1 text-light hover:bg-fg-lighter";
+	"flex h-12 w-full cursor-pointer items-center gap-2 whitespace-nowrap rounded px-3 text-body1-bold text-light hover:bg-fg-lighter";
 
 type OpenMenu = "artists" | "artworks" | "profile" | null;
 
@@ -162,7 +162,7 @@ export function ExhibitionAdminHeader() {
 									>
 										작가 로그인
 									</button>
-									<div className="my-1 h-px bg-stroke-lightest" />
+									<MenuDivider />
 									<button
 										type="button"
 										onClick={handleLogout}
@@ -253,11 +253,14 @@ const NavDropdown = ({ label, items, pathname, isOpen, onToggle, onSelect }: Nav
 				/>
 			</button>
 			{isOpen && (
-				<MenuList className="left-0">
-					{items.map((item) => (
-						<Link key={item.href} href={item.href} onClick={onSelect} className={MENU_ITEM_CLASS}>
-							{item.label}
-						</Link>
+				<MenuList className="right-0 w-45">
+					{items.map((item, index) => (
+						<Fragment key={item.href}>
+							{index > 0 && <MenuDivider />}
+							<Link href={item.href} onClick={onSelect} className={MENU_ITEM_CLASS}>
+								{item.label}
+							</Link>
+						</Fragment>
 					))}
 				</MenuList>
 			)}
@@ -268,10 +271,12 @@ const NavDropdown = ({ label, items, pathname, isOpen, onToggle, onSelect }: Nav
 const MenuList = ({ className, children }: { className?: string; children: React.ReactNode }) => (
 	<div
 		className={cn(
-			"absolute top-full z-10 mt-2 flex flex-col rounded-lg border border-stroke-lighter bg-normal p-2 shadow-[0_4px_4px_0_rgba(0,0,0,0.04)]",
+			"absolute top-full z-10 flex flex-col rounded-lg border border-stroke-lighter bg-normal p-2 shadow-[0_4px_4px_0_rgba(0,0,0,0.04)]",
 			className,
 		)}
 	>
 		{children}
 	</div>
 );
+
+const MenuDivider = () => <div className="my-1 h-px bg-stroke-lightest" />;
