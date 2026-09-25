@@ -6,6 +6,7 @@ import { Button } from "@/components/common/Button/Button";
 import { Input } from "@/components/common/Input/Input";
 import { Modal } from "@/components/common/Modal/Modal";
 import { loginExhibitionAdmin } from "@/lib/api/auth";
+import { MOCK_LOGIN_RESULTS } from "../_mocks/auth";
 
 const MAX_ATTEMPTS = 5;
 const LOCK_DURATION_MS = 10 * 60 * 1000;
@@ -14,6 +15,19 @@ const MESSAGE = {
 	mismatch: "로그인 코드가 일치하지 않아요.",
 	locked: "로그인 코드를 5회 잘못 입력하여 로그인이 10분간 일시적으로 제한되었어요.",
 } as const;
+
+// 로그인 API 연결 후 mock 제거 — 로컬 개발에서 API 가 응답하지 않을 때만 목 코드로 대체
+const getLoginResult = async (code: string) => {
+	const result = await loginExhibitionAdmin(code);
+	if (process.env.NODE_ENV !== "development" || result.ok || result.reason !== "ERROR")
+		return result;
+	return (
+		MOCK_LOGIN_RESULTS[code] ?? {
+			ok: false as const,
+			reason: "INVALID_CODE" as const,
+		}
+	);
+};
 
 type FailureModal = "expired" | "failed" | null;
 
@@ -69,7 +83,7 @@ export const SuperAdminLoginForm = () => {
 		setIsSubmitting(true);
 		setErrorMessage("");
 
-		const result = await loginExhibitionAdmin(code);
+		const result = await getLoginResult(code);
 
 		setIsSubmitting(false);
 
@@ -131,7 +145,13 @@ export const SuperAdminLoginForm = () => {
 				title="사용 기간이 만료되었어요."
 				description="연장 희망 시, 두록에 문의해주세요."
 				showCloseButton
-				actions={[{ text: "확인", variant: "assistive", onClick: () => setFailureModal(null) }]}
+				actions={[
+					{
+						text: "확인",
+						variant: "assistive",
+						onClick: () => setFailureModal(null),
+					},
+				]}
 			/>
 
 			<Modal
@@ -140,7 +160,13 @@ export const SuperAdminLoginForm = () => {
 				title="로그인에 실패했어요."
 				description={"로그인에 실패했어요.\n잠시 뒤 다시 시도해주세요."}
 				showCloseButton
-				actions={[{ text: "확인", variant: "assistive", onClick: () => setFailureModal(null) }]}
+				actions={[
+					{
+						text: "확인",
+						variant: "assistive",
+						onClick: () => setFailureModal(null),
+					},
+				]}
 			/>
 		</>
 	);
