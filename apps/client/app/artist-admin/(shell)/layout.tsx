@@ -7,7 +7,7 @@ export default function ArtistLayout({ children }: { children: React.ReactNode }
 		<div className="w-full flex min-h-dvh flex-col">
 			<ArtistAdminHeader />
 			<main className="flex-1">
-				<DesktopContainer className="py-8">{children}</DesktopContainer>
+				<DesktopContainer>{children}</DesktopContainer>
 			</main>
 			<MainFooter />
 		</div>

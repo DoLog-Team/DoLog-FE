@@ -1,3 +1,6 @@
+import { ProfileSection } from "./_components/ProfileSection";
+import { MOCK_ARTIST_PROFILE } from "./_mocks/profile";
+
 export default function ArtistPage() {
-	return <div>작가 어드민</div>;
+	return <ProfileSection profile={MOCK_ARTIST_PROFILE} />;
 }
