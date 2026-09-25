@@ -105,6 +105,9 @@
   --color-warning: var(--color-warning);
   --color-error: var(--color-error);
 
+  --color-admin1: var(--color-admin1);
+  --color-admin2: var(--color-admin2);
+
   --color-btn-bg: var(--btn-bg);
   --color-btn-text: var(--btn-text);
   --color-cta-bg: var(--cta-bg);
@@ -158,6 +161,9 @@
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
+
+  --color-admin1: #ff6b61;
+  --color-admin2: #ffe2e0;
 }
 
 .dark {
@@ -193,6 +199,9 @@
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
+
+  --color-admin1: #ffffff;
+  --color-admin2: #ffffff;
 }
 
 @layer base {
