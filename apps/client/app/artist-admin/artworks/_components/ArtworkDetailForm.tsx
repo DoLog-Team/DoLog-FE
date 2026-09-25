@@ -37,6 +37,8 @@ const compressImage = (blob: Blob): Promise<string> =>
 				reject(new Error("캔버스 컨텍스트를 가져올 수 없어요."));
 				return;
 			}
+			ctx.fillStyle = "#ffffff";
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
 			ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 			resolve(canvas.toDataURL("image/jpeg", IMAGE_QUALITY));
 			URL.revokeObjectURL(objectUrl);
