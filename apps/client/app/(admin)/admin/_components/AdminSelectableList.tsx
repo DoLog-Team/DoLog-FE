@@ -19,6 +19,7 @@ export interface SelectableListColumn<T> {
 	cell: (item: T) => React.ReactNode;
 	// 표 열 너비 (예: "40%")
 	width: string;
+	cellClassName?: (item: T) => string | undefined;
 }
 
 export interface SelectableListAction {
@@ -32,6 +33,7 @@ interface AdminSelectableListProps<T extends { id: number }> {
 	searchPlaceholder: string;
 	searchValue: string;
 	onSearchChange: (value: string) => void;
+	notice?: React.ReactNode;
 	filters?: React.ReactNode;
 	unit: "명" | "개";
 	// 검색·필터가 적용된 전체 목록
@@ -40,6 +42,7 @@ interface AdminSelectableListProps<T extends { id: number }> {
 	selection: RowSelection<number>;
 	columns: SelectableListColumn<T>[];
 	renderCard: (item: T) => React.ReactNode;
+	cardClassName?: (item: T) => string | undefined;
 	actions: SelectableListAction[];
 	isProcessing?: boolean;
 	getRowHref?: (item: T) => string;
@@ -50,6 +53,7 @@ export const AdminSelectableList = <T extends { id: number }>({
 	searchPlaceholder,
 	searchValue,
 	onSearchChange,
+	notice,
 	filters,
 	unit,
 	items,
@@ -57,13 +61,14 @@ export const AdminSelectableList = <T extends { id: number }>({
 	selection,
 	columns,
 	renderCard,
+	cardClassName,
 	actions,
 	isProcessing,
 	getRowHref,
 }: AdminSelectableListProps<T>) => {
 	const [page, setPage] = useState(1);
 
-	// ponytail: 목록 전체를 받아 클라이언트에서 10개씩 자름 — API 가 페이지 단위로 주면 page 를 밖으로 뺄 것
+	// 목록 전체를 받아 클라이언트에서 10개씩 자름 — API 가 페이지 단위로 주면 page 를 밖으로 뺄 것
 	const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
 	const currentPage = Math.min(page, totalPages);
 	const pageItems = items.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
@@ -73,7 +78,7 @@ export const AdminSelectableList = <T extends { id: number }>({
 	const countLabel = isCountError ? "-" : `${items.length}${unit}`;
 	const isActionDisabled = selection.count === 0 || isProcessing;
 
-	// 페이지를 넘기면 선택을 모두 해제한다 (명세)
+	// 페이지를 넘기면 선택을 모두 해제
 	const changePage = (next: number) => {
 		setPage(next);
 		selection.clear();
@@ -85,6 +90,7 @@ export const AdminSelectableList = <T extends { id: number }>({
 				{title}
 			</h1>
 
+			{notice && <div className="mb-6">{notice}</div>}
 			<SearchBar placeholder={searchPlaceholder} value={searchValue} onChange={onSearchChange} />
 			{filters && <div className="mt-3 flex gap-2">{filters}</div>}
 
@@ -158,7 +164,10 @@ export const AdminSelectableList = <T extends { id: number }>({
 										/>
 									</td>
 									{columns.map((column) => (
-										<td key={column.header} className={cn(CELL_CLASS, "truncate")}>
+										<td
+											key={column.header}
+											className={cn(CELL_CLASS, "truncate", column.cellClassName?.(item))}
+										>
 											{column.cell(item)}
 										</td>
 									))}
@@ -190,9 +199,12 @@ export const AdminSelectableList = <T extends { id: number }>({
 										type="button"
 										onClick={() => selection.toggle(item.id)}
 										aria-pressed={isSelected}
-										className="flex w-full cursor-pointer overflow-hidden rounded-[10px] bg-fg-lighter text-left"
+										className={cn(
+											"flex w-full cursor-pointer overflow-hidden rounded-[10px] bg-fg-lighter text-left",
+											cardClassName?.(item),
+										)}
 									>
-										<div className="min-w-0 flex-1 p-4">{renderCard(item)}</div>
+										<div className="flex min-w-0 flex-1">{renderCard(item)}</div>
 										<div
 											className={cn(
 												"flex items-center border-stroke-lighter border-l px-4",
@@ -237,3 +249,12 @@ export const AdminSelectableList = <T extends { id: number }>({
 
 const CELL_CLASS =
 	"h-12 border-stroke-lightest border-r border-b px-3 text-center align-middle text-body2 text-light last:border-r-0";
+
+export const matchesKeyword = (keyword: string, ...values: string[]) => {
+	const query = keyword.trim().toLowerCase();
+	return values.some((value) => value.toLowerCase().includes(query));
+};
+
+// 모달 설명용 — "홍길동 외 2명의 작가" / "홍길동 작가"
+export const summarizeArtists = (names: string[]) =>
+	names.length > 1 ? `${names[0]} 외 ${names.length - 1}명의 작가` : `${names[0] ?? ""} 작가`;
