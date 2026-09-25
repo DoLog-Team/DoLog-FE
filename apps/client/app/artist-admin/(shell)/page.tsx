@@ -1,7 +1,9 @@
 import { Divider } from "@/components/common/Divider/Divider";
 import { MyArtworkSection } from "./_components/sections/MyArtworkSection";
+import { MyExhibitionSection } from "./_components/sections/MyExhibitionSection";
 import { ProfileSection } from "./_components/sections/ProfileSection";
 import { MOCK_MY_ARTWORKS } from "./_mocks/artworks";
+import { MOCK_MY_EXHIBITIONS } from "./_mocks/exhibitions";
 import { MOCK_ARTIST_PROFILE } from "./_mocks/profile";
 
 export default function ArtistPage() {
@@ -10,6 +12,8 @@ export default function ArtistPage() {
 			<ProfileSection profile={MOCK_ARTIST_PROFILE} />
 			<Divider spacing="md" thickness="thin" />
 			<MyArtworkSection artworks={MOCK_MY_ARTWORKS} />
+			<Divider spacing="md" thickness="thin" />
+			<MyExhibitionSection exhibitions={MOCK_MY_EXHIBITIONS} />
 		</>
 	);
 }

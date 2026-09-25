@@ -55,7 +55,7 @@ export function OverflowMenu({ items, label }: OverflowMenuProps) {
 
 			{open && (
 				<div className="absolute top-full right-0 z-10 flex w-45 flex-col gap-1 rounded-lg border border-stroke-lighter bg-normal p-2 shadow-[0_4px_8px_rgba(0,0,0,0.04)]">
-					{items.map((item) => {
+					{items.map((item, index) => {
 						const className = cn(
 							"flex w-full cursor-pointer items-center gap-3 rounded-sm p-3 text-body1-bold hover:bg-fg-lighter",
 							item.danger ? "text-error" : "text-light",
@@ -69,7 +69,8 @@ export function OverflowMenu({ items, label }: OverflowMenuProps) {
 
 						return (
 							<div key={item.label}>
-								{item.danger && <div className="mb-1 h-px bg-stroke-lightest" />}
+								{/* 위험 항목은 앞 항목들과 구분선으로 분리 (단독 항목이면 생략) */}
+								{item.danger && index > 0 && <div className="mb-1 h-px bg-stroke-lightest" />}
 								{item.href ? (
 									<Link href={item.href} className={className}>
 										{content}
