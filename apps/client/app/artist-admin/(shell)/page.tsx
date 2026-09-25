@@ -1,7 +1,9 @@
 import { Divider } from "@/components/common/Divider/Divider";
+import { AccountSection } from "./_components/sections/AccountSection";
 import { MyArtworkSection } from "./_components/sections/MyArtworkSection";
 import { MyExhibitionSection } from "./_components/sections/MyExhibitionSection";
 import { ProfileSection } from "./_components/sections/ProfileSection";
+import { MOCK_MARKETING_CONSENTS } from "./_mocks/account";
 import { MOCK_MY_ARTWORKS } from "./_mocks/artworks";
 import { MOCK_MY_EXHIBITIONS } from "./_mocks/exhibitions";
 import { MOCK_ARTIST_PROFILE } from "./_mocks/profile";
@@ -14,6 +16,8 @@ export default function ArtistPage() {
 			<MyArtworkSection artworks={MOCK_MY_ARTWORKS} />
 			<Divider spacing="md" thickness="thin" />
 			<MyExhibitionSection exhibitions={MOCK_MY_EXHIBITIONS} />
+			<Divider spacing="md" thickness="thin" />
+			<AccountSection consents={MOCK_MARKETING_CONSENTS} />
 		</>
 	);
 }
