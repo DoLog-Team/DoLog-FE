@@ -1,7 +1,9 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FormField } from "@/components/common/FormField/FormField";
+import { Modal } from "@/components/common/Modal/Modal";
 import { Select } from "@/components/common/Select/Select";
 import {
 	type ArtworkExhibitionLink,
@@ -22,16 +24,27 @@ const VISIBILITY_NOTICE = {
 
 export interface ArtworkExhibitionLinkSectionProps {
 	artworkId: string;
+	artworkTitle: string;
 }
 
-export const ArtworkExhibitionLinkSection = ({ artworkId }: ArtworkExhibitionLinkSectionProps) => {
+export const ArtworkExhibitionLinkSection = ({
+	artworkId,
+	artworkTitle,
+}: ArtworkExhibitionLinkSectionProps) => {
+	const router = useRouter();
 	const [link, setLink] = useState<ArtworkExhibitionLink | null>(null);
+	const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
 	useEffect(() => {
 		getArtworkExhibitionLink(artworkId).then(setLink);
 	}, [artworkId]);
 
 	const notice = link && link.visibility !== "visible" ? VISIBILITY_NOTICE[link.visibility] : null;
+
+	const handleCancelLink = () => {
+		// TODO: 실제 출품 취소 API 연동 필요
+		router.push("/mypage");
+	};
 
 	return (
 		<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
@@ -51,7 +64,7 @@ export const ArtworkExhibitionLinkSection = ({ artworkId }: ArtworkExhibitionLin
 				<div className="flex flex-col gap-9">
 					<button
 						type="button"
-						onClick={() => {}}
+						onClick={() => setIsCancelModalOpen(true)}
 						className="w-fit text-body2-bold text-error underline cursor-pointer"
 					>
 						출품 취소하기
@@ -65,6 +78,23 @@ export const ArtworkExhibitionLinkSection = ({ artworkId }: ArtworkExhibitionLin
 					)}
 				</div>
 			</div>
+
+			<Modal
+				open={isCancelModalOpen}
+				onOpenChange={setIsCancelModalOpen}
+				title="전시 출품 취소하기"
+				titleTone="danger"
+				description={
+					link
+						? `연결을 해제하면 ${artworkTitle}이 ${link.exhibitionName}에 더 이상 표시되지 않아요.`
+						: undefined
+				}
+				showCloseButton
+				actions={[
+					{ text: "취소", variant: "assistive", onClick: () => setIsCancelModalOpen(false) },
+					{ text: "출품 취소하기", variant: "danger", onClick: handleCancelLink },
+				]}
+			/>
 		</div>
 	);
 };

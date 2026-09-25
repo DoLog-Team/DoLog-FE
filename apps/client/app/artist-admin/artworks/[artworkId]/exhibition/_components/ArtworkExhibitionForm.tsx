@@ -25,7 +25,7 @@ export const ArtworkExhibitionForm = ({ artworkId, title, onBack }: ArtworkExhib
 		{
 			id: "link",
 			className: "pb-7",
-			render: () => <ArtworkExhibitionLinkSection artworkId={artworkId} />,
+			render: () => <ArtworkExhibitionLinkSection artworkId={artworkId} artworkTitle={title} />,
 		},
 		{
 			id: "group",
