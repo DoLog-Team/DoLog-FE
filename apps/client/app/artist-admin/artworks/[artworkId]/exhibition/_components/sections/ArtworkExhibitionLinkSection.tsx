@@ -45,7 +45,7 @@ export const ArtworkExhibitionLinkSection = ({
 
 	const handleCancelLink = () => {
 		// TODO: 실제 출품 취소 API 연동 필요
-		router.push("/mypage");
+		router.push("/artist-admin");
 	};
 
 	return (
