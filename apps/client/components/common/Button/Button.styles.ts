@@ -49,7 +49,7 @@ export const buttonVariants = cva(
 			{
 				variant: "assistive",
 				class:
-					"bg-fg-lighter text-light disabled:bg-lighter disabled:text-disable disabled:after:hidden",
+					"bg-fg-lighter text-light disabled:bg-fg-lighter disabled:text-disable disabled:after:hidden",
 			},
 			{
 				variant: "outline",
@@ -58,12 +58,12 @@ export const buttonVariants = cva(
 			{
 				variant: "main",
 				class:
-					"bg-btn-bg text-btn-text disabled:bg-lighter disabled:text-disable disabled:after:hidden",
+					"bg-btn-bg text-btn-text disabled:bg-fg-lighter disabled:text-disable disabled:after:hidden",
 			},
 			{
 				variant: "cta",
 				class:
-					"bg-cta-bg text-cta-text disabled:bg-lighter disabled:text-disable disabled:after:hidden",
+					"bg-cta-bg text-cta-text disabled:bg-fg-lighter disabled:text-disable disabled:after:hidden",
 			},
 			{
 				variant: "danger",
