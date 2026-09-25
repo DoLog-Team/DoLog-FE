@@ -26,7 +26,7 @@ export const Default: Story = {
 		title: "모달입니다.",
 		description: "모달 상세 설명을 작성해주세요.\n두줄까지 작성하면 보기 좋습니다.",
 		actions: [
-			{ text: "취소", onClick: () => {}, variant: "secondary" },
+			{ text: "취소", onClick: () => {}, variant: "assistive" },
 			{ text: "확인", onClick: () => {} },
 		],
 	},
@@ -37,7 +37,7 @@ export const TitleOnly: Story = {
 		open: true,
 		title: "정말 삭제하시겠습니까?",
 		actions: [
-			{ text: "취소", onClick: () => {}, variant: "secondary" },
+			{ text: "취소", onClick: () => {}, variant: "assistive" },
 			{ text: "삭제", onClick: () => {} },
 		],
 	},
@@ -77,11 +77,11 @@ export const WithInput: Story = {
 				open={open}
 				onOpenChange={setOpen}
 				actions={[
-					{ text: "취소", onClick: () => setOpen(false), variant: "secondary" },
+					{ text: "취소", onClick: () => setOpen(false), variant: "assistive" },
 					{
 						text: "입장하기",
 						onClick: () => setOpen(false),
-						variant: "neutral",
+						variant: "primary",
 						disabled: !code.trim(),
 					},
 				]}
@@ -113,8 +113,8 @@ export const WithSelect: Story = {
 				open={open}
 				onOpenChange={setOpen}
 				actions={[
-					{ text: "취소", onClick: () => setOpen(false), variant: "secondary" },
-					{ text: "저장하기", onClick: () => setOpen(false), variant: "neutral", disabled: !zone },
+					{ text: "취소", onClick: () => setOpen(false), variant: "assistive" },
+					{ text: "저장하기", onClick: () => setOpen(false), variant: "primary", disabled: !zone },
 				]}
 			>
 				<Select
@@ -138,7 +138,7 @@ export const SingleAction: Story = {
 		title: "로그인에 실패했어요.",
 		description: "로그인에 실패했어요.\n잠시 뒤 다시 시도해주세요.",
 		showCloseButton: true,
-		actions: [{ text: "확인", onClick: () => {}, variant: "secondary" }],
+		actions: [{ text: "확인", onClick: () => {}, variant: "assistive" }],
 	},
 };
 
@@ -159,11 +159,11 @@ export const RenameArtwork: Story = {
 				open={open}
 				onOpenChange={setOpen}
 				actions={[
-					{ text: "취소", onClick: () => setOpen(false), variant: "secondary" },
+					{ text: "취소", onClick: () => setOpen(false), variant: "assistive" },
 					{
 						text: "변경하기",
 						onClick: () => setOpen(false),
-						variant: "neutral",
+						variant: "primary",
 						disabled: !name.trim() || name === original,
 					},
 				]}
@@ -184,7 +184,7 @@ export const Danger: Story = {
 		titleTone: "danger",
 		showCloseButton: true,
 		actions: [
-			{ text: "취소", onClick: () => {}, variant: "secondary" },
+			{ text: "취소", onClick: () => {}, variant: "assistive" },
 			{ text: "삭제하기", onClick: () => {}, variant: "danger" },
 		],
 	},

@@ -73,11 +73,11 @@ export const PhotoSection = ({ data }: PhotoSectionProps) => {
 							title="개인 채팅으로 이동해요."
 							description="작가와의 연락을 통해 작품을 구매하기 위해 개인 채팅으로 이동합니다."
 							actions={[
-								{ text: "돌아가기", onClick: () => setIsOpen(false), variant: "secondary" },
+								{ text: "돌아가기", onClick: () => setIsOpen(false), variant: "assistive" },
 								{
 									text: "이동하기",
 									onClick: () => window.open(purchaseUrl, "_blank"),
-									variant: "primary",
+									variant: "cta",
 								},
 							]}
 						/>

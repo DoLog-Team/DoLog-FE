@@ -2,12 +2,14 @@
 
 import * as Dialog from "@radix-ui/react-dialog";
 import Image from "next/image";
+import { Button } from "@/components/common/Button/Button";
+import type { ButtonVariantsProps } from "@/components/common/Button/Button.styles";
 import { modalStyles } from "./Modal.styles";
 
 interface ModalAction {
 	text: string;
 	onClick: () => void;
-	variant?: "primary" | "neutral" | "danger" | "secondary";
+	variant?: ButtonVariantsProps["variant"];
 	disabled?: boolean;
 }
 
@@ -54,15 +56,16 @@ export const Modal = ({
 
 					<div className={modalStyles.footer}>
 						{actions.map((action) => (
-							<button
+							<Button
 								key={action.text}
 								type="button"
 								onClick={action.onClick}
 								disabled={action.disabled}
-								className={modalStyles.button({ variant: action.variant })}
+								variant={action.variant ?? "cta"}
+								className="min-h-11 flex-1"
 							>
 								{action.text}
-							</button>
+							</Button>
 						))}
 					</div>
 				</Dialog.Content>

@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 /**
  * Variant Prop 구조
- * variant : primary | assistive | outline | main | cta
+ * variant : primary | assistive | outline | main | cta | danger
  * size : lg | md | sm | xs
  * iconOnly : boolean
  * round : boolean
@@ -22,6 +22,7 @@ export const buttonVariants = cva(
 				outline: "border",
 				main: "",
 				cta: "",
+				danger: "",
 			},
 			size: {
 				lg: "text-element1 px-4 py-3",
@@ -43,12 +44,12 @@ export const buttonVariants = cva(
 			{
 				variant: "primary",
 				class:
-					"bg-fg-inverse text-inverse disabled:bg-lighter disabled:text-disable disabled:after:hidden",
+					"bg-fg-inverse text-inverse disabled:bg-fg-lighter disabled:text-disable disabled:after:hidden",
 			},
 			{
 				variant: "assistive",
 				class:
-					"bg-fg-lighter text-light disabled:bg-lighter disabled:text-disable disabled:after:hidden",
+					"bg-fg-lighter text-light disabled:bg-fg-lighter disabled:text-disable disabled:after:hidden",
 			},
 			{
 				variant: "outline",
@@ -57,12 +58,17 @@ export const buttonVariants = cva(
 			{
 				variant: "main",
 				class:
-					"bg-btn-bg text-btn-text disabled:bg-lighter disabled:text-disable disabled:after:hidden",
+					"bg-btn-bg text-btn-text disabled:bg-fg-lighter disabled:text-disable disabled:after:hidden",
 			},
 			{
 				variant: "cta",
 				class:
-					"bg-cta-bg text-cta-text disabled:bg-lighter disabled:text-disable disabled:after:hidden",
+					"bg-cta-bg text-cta-text disabled:bg-fg-lighter disabled:text-disable disabled:after:hidden",
+			},
+			{
+				variant: "danger",
+				class:
+					"bg-error text-white disabled:bg-fg-lighter disabled:text-disable disabled:after:hidden",
 			},
 
 			// icon만 있을 경우 스타일 클래스 정의

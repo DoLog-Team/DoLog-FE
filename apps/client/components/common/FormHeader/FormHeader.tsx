@@ -1,8 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/common/Button/Button";
-import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { PencilIcon } from "@/components/common/icons/PencilIcon";
-import { cn } from "@/lib/utils/cn";
 
 export interface FormHeaderProps {
 	title: string;
@@ -19,15 +17,15 @@ export const FormHeader = ({
 	title,
 	editableTitle,
 	onTitleEditClick,
-	lastSavedAt,
+	lastSavedAt = "2026.05.12 19:22",
 	onTempSave,
 	saveLabel = "임시 저장",
 	onBack,
 	className,
 }: FormHeaderProps) => {
 	return (
-		<header className={cn("border-b border-stroke-lightest", className)}>
-			<DesktopContainer className="flex items-center justify-between py-3">
+		<header className={className}>
+			<div className="flex items-center justify-between py-3">
 				<div className="flex items-center gap-2">
 					<button type="button" onClick={onBack} aria-label="뒤로가기">
 						<Image src="/icons/backBtn.svg" alt="" width={24} height={24} />
@@ -38,7 +36,7 @@ export const FormHeader = ({
 							type="button"
 							onClick={onTitleEditClick}
 							aria-label="이름 수정"
-							className="flex items-center justify-center rounded-sm bg-fg-lighter p-[4.5px]"
+							className="flex cursor-pointer items-center justify-center rounded-sm bg-fg-lighter p-[4.5px]"
 						>
 							<PencilIcon className="text-icon-light" />
 						</button>
@@ -47,13 +45,13 @@ export const FormHeader = ({
 
 				<div className="flex items-center gap-3">
 					{lastSavedAt && (
-						<span className="text-body3 text-lightest">{lastSavedAt} 마지막 저장</span>
+						<span className="text-body3 text-lighter">{lastSavedAt} 마지막 저장</span>
 					)}
 					<Button type="button" variant="assistive" size="sm" onClick={onTempSave}>
 						{saveLabel}
 					</Button>
 				</div>
-			</DesktopContainer>
+			</div>
 		</header>
 	);
 };

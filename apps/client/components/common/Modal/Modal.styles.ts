@@ -24,24 +24,4 @@ export const modalStyles = {
 
 	body: "mt-[16px]",
 	footer: "flex gap-[8px] mt-[12px]",
-
-	button: cva(
-		"flex-1 p-[8px] text-element1 rounded-[8px] transition-all active:scale-95 flex items-center justify-center cursor-pointer min-h-[44px] disabled:cursor-not-allowed disabled:active:scale-100",
-		{
-			variants: {
-				variant: {
-					primary: "bg-cta-bg text-cta-text disabled:bg-fg-lighter disabled:text-disable",
-
-					neutral: "bg-fg-inverse text-inverse disabled:bg-fg-lighter disabled:text-disable",
-
-					danger: "bg-error text-white disabled:bg-fg-lighter disabled:text-disable",
-
-					secondary: "bg-fg-lighter text-light disabled:text-disable",
-				},
-			},
-			defaultVariants: {
-				variant: "primary",
-			},
-		},
-	),
 };
