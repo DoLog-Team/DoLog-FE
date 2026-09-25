@@ -56,7 +56,7 @@ export const ArtworkDetailForm = ({ title, onBack }: ArtworkDetailFormProps) => 
 	const router = useRouter();
 	const pathname = usePathname();
 	const editorRef = useRef<ToastEditor>(null);
-	const [isImageLimitModalOpen, setIsImageLimitModalOpen] = useState(false);
+	const [notice, setNotice] = useState<{ title: string; description: string } | null>(null);
 
 	const handleTabClick = (tabId: string) => {
 		if (tabId === "detail") return;
@@ -94,24 +94,34 @@ export const ArtworkDetailForm = ({ title, onBack }: ArtworkDetailFormProps) => 
 							const imageCount = (currentMarkdown.match(MARKDOWN_IMAGE_REGEX) ?? []).length;
 
 							if (imageCount >= MAX_IMAGE_COUNT) {
-								setIsImageLimitModalOpen(true);
+								setNotice({
+									title: "이미지 개수 제한",
+									description: `이미지는 최대 ${MAX_IMAGE_COUNT}장까지 첨부할 수 있어요.`,
+								});
 								return;
 							}
 
-							compressImage(blob).then((dataUrl) => callback(dataUrl, "이미지"));
+							compressImage(blob)
+								.then((dataUrl) => callback(dataUrl, "이미지"))
+								.catch(() => {
+									setNotice({
+										title: "이미지 업로드 실패",
+										description: "이미지 파일을 불러오지 못했어요. 다른 파일로 다시 시도해주세요.",
+									});
+								});
 						},
 					}}
 				/>
 			</div>
 
 			<Modal
-				open={isImageLimitModalOpen}
-				onOpenChange={setIsImageLimitModalOpen}
-				title="이미지 개수 제한"
-				description={`이미지는 최대 ${MAX_IMAGE_COUNT}장까지 첨부할 수 있어요.`}
-				actions={[
-					{ text: "확인", variant: "assistive", onClick: () => setIsImageLimitModalOpen(false) },
-				]}
+				open={notice !== null}
+				onOpenChange={(open) => {
+					if (!open) setNotice(null);
+				}}
+				title={notice?.title ?? ""}
+				description={notice?.description}
+				actions={[{ text: "확인", variant: "assistive", onClick: () => setNotice(null) }]}
 			/>
 		</DesktopContainer>
 	);
