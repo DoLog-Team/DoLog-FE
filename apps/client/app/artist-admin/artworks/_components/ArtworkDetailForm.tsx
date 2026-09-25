@@ -1,11 +1,13 @@
 "use client";
 
 import "@toast-ui/editor/dist/toastui-editor.css";
-import type { EditorProps } from "@toast-ui/react-editor";
+import type { EditorProps, Editor as ToastEditor } from "@toast-ui/react-editor";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
+import { useRef, useState } from "react";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { FormHeader } from "@/components/common/FormHeader/FormHeader";
+import { Modal } from "@/components/common/Modal/Modal";
 import { TabBar } from "@/components/common/TabBar/TabBar";
 import { ARTWORK_FORM_TABS } from "./artworkFormTabs";
 
@@ -16,6 +18,8 @@ const Editor = dynamic<EditorProps>(
 
 const MAX_IMAGE_DIMENSION = 1280;
 const IMAGE_QUALITY = 0.7;
+const MAX_IMAGE_COUNT = 5;
+const MARKDOWN_IMAGE_REGEX = /!\[[^\]]*\]\([^)]*\)/g;
 
 const compressImage = (blob: Blob): Promise<string> =>
 	new Promise((resolve, reject) => {
@@ -49,6 +53,8 @@ export interface ArtworkDetailFormProps {
 export const ArtworkDetailForm = ({ title, onBack }: ArtworkDetailFormProps) => {
 	const router = useRouter();
 	const pathname = usePathname();
+	const editorRef = useRef<ToastEditor>(null);
+	const [isImageLimitModalOpen, setIsImageLimitModalOpen] = useState(false);
 
 	const handleTabClick = (tabId: string) => {
 		if (tabId === "detail") return;
@@ -71,6 +77,7 @@ export const ArtworkDetailForm = ({ title, onBack }: ArtworkDetailFormProps) => 
 			<div className="flex flex-col gap-4 py-7">
 				<h2 className="text-head3 text-strong">상세 정보</h2>
 				<Editor
+					ref={editorRef}
 					previewStyle="tab"
 					height="600px"
 					initialEditType="markdown"
@@ -81,11 +88,29 @@ export const ArtworkDetailForm = ({ title, onBack }: ArtworkDetailFormProps) => 
 							blob: Blob | File,
 							callback: (url: string, text?: string) => void,
 						) => {
+							const currentMarkdown = editorRef.current?.getInstance().getMarkdown() ?? "";
+							const imageCount = (currentMarkdown.match(MARKDOWN_IMAGE_REGEX) ?? []).length;
+
+							if (imageCount >= MAX_IMAGE_COUNT) {
+								setIsImageLimitModalOpen(true);
+								return;
+							}
+
 							compressImage(blob).then((dataUrl) => callback(dataUrl, "이미지"));
 						},
 					}}
 				/>
 			</div>
+
+			<Modal
+				open={isImageLimitModalOpen}
+				onOpenChange={setIsImageLimitModalOpen}
+				title="이미지 개수 제한"
+				description={`이미지는 최대 ${MAX_IMAGE_COUNT}장까지 첨부할 수 있어요.`}
+				actions={[
+					{ text: "확인", variant: "assistive", onClick: () => setIsImageLimitModalOpen(false) },
+				]}
+			/>
 		</DesktopContainer>
 	);
 };
