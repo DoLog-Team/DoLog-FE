@@ -38,11 +38,12 @@ export const ProfileBasicInfoSection = ({
 
 	return (
 		<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
-			<div className="min-w-0 min-[721px]:w-100">
+			<div className="min-w-0 px-0.5 min-[721px]:w-100">
 				<h2 className="text-head3 text-strong">기본 정보</h2>
 				<span className="text-body2 text-lighter">작가 소개에 표시될 성함을 적어주세요.</span>
 			</div>
-			<div className="flex min-w-0 flex-1 flex-col gap-9">
+			{/* 글자 수 줄(약 20px)이 입력칸 아래에 붙어 16px + 20px = Figma 36px 간격이 된다 (작품 기본 정보와 동일) */}
+			<div className="flex min-w-0 flex-1 flex-col gap-4">
 				<FormField label="국문 성명" required>
 					<Input
 						placeholder="홍길동"
