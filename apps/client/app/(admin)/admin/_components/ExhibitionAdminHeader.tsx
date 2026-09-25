@@ -5,7 +5,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Modal } from "@/components/common/Modal/Modal";
+import { NotificationSidebar } from "@/components/common/NotificationSidebar/NotificationSidebar";
 import { cn } from "@/lib/utils/cn";
+import { MOCK_NOTIFICATIONS } from "../_mocks/notifications";
 import { ExhibitionAdminSidebar } from "./ExhibitionAdminSidebar";
 
 interface MenuItem {
@@ -38,6 +40,17 @@ export function ExhibitionAdminHeader() {
 	const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const [isSwitchModalOpen, setIsSwitchModalOpen] = useState(false);
+	const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+	// 알림 API 연결 전 임시 데이터
+	const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
+
+	const hasUnread = notifications.some((notification) => !notification.isRead);
+
+	// 알림을 닫으면 확인한 것으로 보고 새 알림 점을 지운다
+	const handleNotificationOpenChange = (open: boolean) => {
+		setIsNotificationOpen(open);
+		if (!open) setNotifications((prev) => prev.map((item) => ({ ...item, isRead: true })));
+	};
 
 	// 메뉴 바깥을 누르면 닫는다
 	useEffect(() => {
@@ -99,7 +112,16 @@ export function ExhibitionAdminHeader() {
 					</div>
 
 					<div className="flex items-center gap-4">
-						<button type="button" aria-label="알림" className="cursor-pointer">
+						<button
+							type="button"
+							onClick={() => {
+								closeMenu();
+								setIsSidebarOpen(false);
+								setIsNotificationOpen(true);
+							}}
+							aria-label={hasUnread ? "알림 (새 알림 있음)" : "알림"}
+							className="relative cursor-pointer"
+						>
 							<Image
 								src="/icons/bell.svg"
 								alt=""
@@ -107,6 +129,9 @@ export function ExhibitionAdminHeader() {
 								height={28}
 								className="size-6 min-[721px]:size-7"
 							/>
+							{hasUnread && (
+								<span className="absolute top-[12.5%] right-[12.5%] size-1 rounded-full bg-error min-[721px]:size-1.5" />
+							)}
 						</button>
 
 						<div className="relative">
@@ -174,6 +199,12 @@ export function ExhibitionAdminHeader() {
 				isOpen={isSidebarOpen}
 				onClose={() => setIsSidebarOpen(false)}
 				onLogout={handleLogout}
+			/>
+
+			<NotificationSidebar
+				open={isNotificationOpen}
+				onOpenChange={handleNotificationOpenChange}
+				notifications={notifications}
 			/>
 
 			<Modal
