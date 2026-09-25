@@ -45,27 +45,51 @@ export const useScrollSpy = (tabIds: string[], offset: number = 44) => {
 
 	// 경우2 : 스크롤을 화면이 감지하여 활성화탭을 변경
 	useEffect(() => {
-		const observer = new IntersectionObserver(
-			(entries) => {
-				if (isScrollingByClick.current) return;
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						const matchedId = Object.keys(sectionRefs).find(
-							(id) => sectionRefs[id].current === entry.target,
-						);
-						if (matchedId) setActiveTab(matchedId);
-					}
-				});
-			},
-			{ rootMargin: `-${offset + 10}px 0px -70% 0px`, threshold: 0 },
-		);
+		const computeActiveTab = () => {
+			if (isScrollingByClick.current) return;
 
-		Object.values(sectionRefs).forEach((ref) => {
-			if (ref.current) observer.observe(ref.current);
-		});
+			const positions = tabIds
+				.map((id) => {
+					const top = sectionRefs[id].current?.getBoundingClientRect().top;
+					return top === undefined ? null : { id, top };
+				})
+				.filter((position): position is { id: string; top: number } => position !== null);
 
-		return () => observer.disconnect();
-	}, [sectionRefs, offset]);
+			if (positions.length === 0) return;
+
+			// 마지막 섹션 뒤에 남은 콘텐츠가 짧으면, 끝까지 스크롤해도 그 섹션의 top이
+			// offset 라인까지 못 올라올 수 있음 -> 스크롤 최대치에 도달하면 마지막 섹션을 강제로 활성화함
+			const isAtBottom =
+				document.body.scrollTop + document.body.clientHeight >= document.body.scrollHeight - 2;
+			if (isAtBottom) {
+				setActiveTab(positions[positions.length - 1].id);
+				return;
+			}
+
+			const passed = [...positions].reverse().find((position) => position.top <= offset + 10);
+			const nextActiveTab = passed?.id ?? positions[0].id;
+			setActiveTab(nextActiveTab);
+		};
+
+		let ticking = false;
+		const handleScroll = () => {
+			if (ticking) return;
+			ticking = true;
+			requestAnimationFrame(() => {
+				computeActiveTab();
+				ticking = false;
+			});
+		};
+
+		computeActiveTab();
+		document.body.addEventListener("scroll", handleScroll, { passive: true });
+		window.addEventListener("resize", handleScroll);
+
+		return () => {
+			document.body.removeEventListener("scroll", handleScroll);
+			window.removeEventListener("resize", handleScroll);
+		};
+	}, [sectionRefs, offset, tabIds]);
 
 	return { activeTab, handleTabClick, sectionRefs };
 };
