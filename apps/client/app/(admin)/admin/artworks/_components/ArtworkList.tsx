@@ -20,10 +20,6 @@ import { type AdminArtwork, MOCK_ARTWORKS, MOCK_GROUPS } from "../../_mocks/artw
 const VISIBILITY_OPTIONS = ["공개", "비공개", "임시저장"];
 const UNGROUPED = "그룹 미지정";
 
-// 피그마 admin/admin-1 · admin-2 — globals.css 에 토큰 없음
-const EXCEEDED_TEXT = "text-[#ff6b61]";
-const EXCEEDED_BG = "bg-[#ffe2e0]";
-
 const MODE = {
 	all: {
 		title: "전체 작품 관리",
@@ -86,7 +82,7 @@ export const ArtworkList = ({ mode }: { mode: Mode }) => {
 						width: "14%",
 						cell: (artwork: AdminArtwork) => (artwork.isExposed ? "O" : "X"),
 						cellClassName: (artwork: AdminArtwork) =>
-							artwork.isExposed ? undefined : cn(EXCEEDED_BG, EXCEEDED_TEXT),
+							artwork.isExposed ? undefined : "bg-admin2 text-admin1",
 					},
 				]
 			: []),
@@ -126,7 +122,7 @@ export const ArtworkList = ({ mode }: { mode: Mode }) => {
 				selection={selection}
 				columns={columns}
 				renderCard={(artwork) => <ArtworkCard artwork={artwork} />}
-				cardClassName={(artwork) => (artwork.isExposed ? undefined : EXCEEDED_BG)}
+				cardClassName={(artwork) => (artwork.isExposed ? undefined : "bg-admin2")}
 				actions={[
 					{
 						label: config.toggleLabel,
@@ -190,7 +186,7 @@ export const ArtworkList = ({ mode }: { mode: Mode }) => {
 };
 
 const ExceededNotice = ({ count }: { count: number }) => (
-	<div className={cn("flex flex-col gap-2.5 rounded-lg p-6", EXCEEDED_BG)}>
+	<div className="flex flex-col gap-2.5 rounded-lg bg-admin2 p-6">
 		<p className="font-semibold text-[19px] text-error leading-7">
 			작품 {count}개가 노출되지 않고 있어요!
 		</p>
@@ -224,7 +220,7 @@ const ArtworkCard = ({ artwork }: { artwork: AdminArtwork }) => (
 		<div className="flex min-w-0 flex-1 flex-col gap-3 p-4">
 			<div className="flex flex-col gap-0.5">
 				{!artwork.isExposed && (
-					<p className={cn("text-[12px] leading-3.5", EXCEEDED_TEXT)}>작품이 표시되지 않아요.</p>
+					<p className="text-[12px] text-admin1 leading-3.5">작품이 표시되지 않아요.</p>
 				)}
 				<p className="text-body1-bold text-strong">{artwork.title}</p>
 			</div>
