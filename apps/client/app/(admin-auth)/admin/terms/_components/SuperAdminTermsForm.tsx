@@ -8,96 +8,81 @@ import { Button, buttonVariants } from "@/components/common/Button/Button";
 import { Checkbox } from "@/components/common/Checkbox/Checkbox";
 import { Divider } from "@/components/common/Divider/Divider";
 import { Modal } from "@/components/common/Modal/Modal";
+import { TermsDocument } from "@/components/common/TermsDocument/TermsDocument";
 import { saveTermsAgreement } from "@/lib/api/terms";
-import { MarketingTerms, PRIVACY_POLICY_HREF, PrivacyTerms, PromotionTerms } from "./TermsContents";
+import { PRIVACY_POLICY_HREF, SERVICE_TERMS_HREF } from "@/lib/constants/terms";
+import { MOCK_SUPER_ADMIN_TERMS } from "../_mocks/terms";
 
-type AgreementKey = "ageOver14" | "service" | "privacy" | "promotion" | "marketing";
-type TermsModalKey = "privacy" | "promotion" | "marketing";
-
-// 이용 약관 페이지는 외주 작업 중이라 경로 미정
-const SERVICE_TERMS_HREF = "#";
+type TermsModalKey = keyof typeof MOCK_SUPER_ADMIN_TERMS;
 
 const TERMS_VERSION = "ver1";
 
-const AGREEMENTS: {
-	key: AgreementKey;
-	title: string;
-	description: string;
-	view?: "page" | TermsModalKey;
-}[] = [
+// 동의 항목은 이 배열 하나로 관리 — 키 타입·초기값·필수 여부 모두 여기서 파생
+const AGREEMENTS = [
 	{
 		key: "ageOver14",
 		title: "(필수) 만 14세 이상입니다",
 		description: "두록은 만 14세 미만 아동의 회원가입을 받지 않습니다.",
+		required: true,
+		view: null,
 	},
 	{
 		key: "service",
 		title: "(필수) 서비스 이용 약관 동의",
 		description: "두록 서비스 이용 조건과 회원의 권리·의무에 관한 사항입니다.",
+		required: true,
 		view: "page",
 	},
 	{
 		key: "privacy",
 		title: "(필수) 개인정보 수집 및 이용 동의",
 		description: "회원 관리와 서비스 제공을 위해 필요한 최소한의 정보를 수집합니다.",
+		required: true,
 		view: "privacy",
 	},
 	{
 		key: "promotion",
 		title: "(선택) 전시 정보의 서비스 홍보 활용 동의",
 		description: "작품이 두록 공식 SNS에 소개될 수 있습니다.",
+		required: false,
 		view: "promotion",
 	},
 	{
 		key: "marketing",
 		title: "(선택) 마케팅 목적 개인정보 수집·이용 동의",
 		description: "할인 소식과 신규 기능 안내를 가장 먼저 받아보세요.",
+		required: false,
 		view: "marketing",
 	},
-];
+] as const satisfies readonly {
+	key: string;
+	title: string;
+	description: string;
+	required: boolean;
+	view: "page" | TermsModalKey | null;
+}[];
 
-const REQUIRED_KEYS: AgreementKey[] = ["ageOver14", "service", "privacy"];
+type AgreementKey = (typeof AGREEMENTS)[number]["key"];
 
-const TERMS_MODALS: Record<TermsModalKey, { title: string; content: React.ReactNode }> = {
-	privacy: { title: "개인정보 수집 및 이용 동의", content: <PrivacyTerms /> },
-	promotion: { title: "전시 정보의 서비스 홍보 활용 동의", content: <PromotionTerms /> },
-	marketing: { title: "마케팅 목적 개인정보 수집·이용 동의", content: <MarketingTerms /> },
-};
-
-const INITIAL_AGREED: Record<AgreementKey, boolean> = {
-	ageOver14: false,
-	service: false,
-	privacy: false,
-	promotion: false,
-	marketing: false,
-};
+const fillAgreed = (checked: boolean) =>
+	Object.fromEntries(AGREEMENTS.map(({ key }) => [key, checked])) as Record<AgreementKey, boolean>;
 
 export const SuperAdminTermsForm = () => {
 	const router = useRouter();
-	const [agreed, setAgreed] = useState(INITIAL_AGREED);
+	const [agreed, setAgreed] = useState(() => fillAgreed(false));
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [openedModal, setOpenedModal] = useState<TermsModalKey | null>(null);
 	const [isFailed, setIsFailed] = useState(false);
 
 	const isAllAgreed = Object.values(agreed).every(Boolean);
-	const canSubmit = REQUIRED_KEYS.every((key) => agreed[key]);
-
-	const toggleAll = (checked: boolean) => {
-		setAgreed({
-			ageOver14: checked,
-			service: checked,
-			privacy: checked,
-			promotion: checked,
-			marketing: checked,
-		});
-	};
+	const canSubmit = AGREEMENTS.every(({ key, required }) => !required || agreed[key]);
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		if (!canSubmit || isSubmitting) return;
 
 		setIsSubmitting(true);
-		const isSaved = await saveTermsAgreement({
+		const result = await saveTermsAgreement({
 			age_over_14: agreed.ageOver14,
 			service_terms: agreed.service,
 			privacy_collection: agreed.privacy,
@@ -107,8 +92,10 @@ export const SuperAdminTermsForm = () => {
 			terms_version: TERMS_VERSION,
 		});
 
-		// 약관 저장 API 연결 후 제거 — 로컬 개발에서는 저장 실패해도 다음 화면으로 넘어간다
-		if (isSaved || process.env.NODE_ENV === "development") {
+		// 약관 저장 API 연결 후 제거 — 로컬 개발에서 API 가 아직 없을 때만 다음 화면으로 넘어간다
+		const isDevWithoutApi =
+			process.env.NODE_ENV === "development" && !result.ok && result.reason === "NO_ENDPOINT";
+		if (result.ok || isDevWithoutApi) {
 			router.replace("/admin");
 			return;
 		}
@@ -117,7 +104,7 @@ export const SuperAdminTermsForm = () => {
 		setIsFailed(true);
 	};
 
-	const modal = openedModal ? TERMS_MODALS[openedModal] : null;
+	const modal = openedModal ? MOCK_SUPER_ADMIN_TERMS[openedModal] : null;
 
 	return (
 		<>
@@ -125,7 +112,7 @@ export const SuperAdminTermsForm = () => {
 				<div className="flex flex-col gap-5">
 					<Checkbox
 						checked={isAllAgreed}
-						onChange={toggleAll}
+						onChange={(checked) => setAgreed(fillAgreed(checked))}
 						label={<span className="text-body1-bold text-strong">전체 동의</span>}
 					/>
 
@@ -214,7 +201,7 @@ export const SuperAdminTermsForm = () => {
 					</Link>
 				)}
 				<div className="max-h-[50dvh] overflow-y-auto break-keep text-body2 text-light">
-					{modal?.content}
+					{modal && <TermsDocument blocks={modal.blocks} />}
 				</div>
 			</Modal>
 
