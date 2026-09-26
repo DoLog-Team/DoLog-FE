@@ -74,7 +74,7 @@ export function ExhibitionAdminHeader() {
 		<>
 			<header
 				ref={headerRef}
-				className="sticky top-0 z-51 w-full border-b border-stroke-lightest bg-normal"
+				className="sticky top-0 z-header w-full border-b border-stroke-lightest bg-normal"
 			>
 				<div className="mx-auto flex h-11 w-full max-w-285 items-center px-4 min-[721px]:h-17 min-[721px]:px-8">
 					<div className="flex flex-1 items-center">
@@ -277,7 +277,7 @@ const NavDropdown = ({ label, items, pathname, isOpen, onToggle, onSelect }: Nav
 const MenuList = ({ className, children }: { className?: string; children: React.ReactNode }) => (
 	<div
 		className={cn(
-			"absolute top-full z-10 flex flex-col rounded-lg border border-stroke-lighter bg-normal p-2 shadow-[0_4px_4px_0_rgba(0,0,0,0.04)]",
+			"absolute top-full z-dropdown flex flex-col rounded-lg border border-stroke-lighter bg-normal p-2 shadow-[0_4px_4px_0_rgba(0,0,0,0.04)]",
 			className,
 		)}
 	>

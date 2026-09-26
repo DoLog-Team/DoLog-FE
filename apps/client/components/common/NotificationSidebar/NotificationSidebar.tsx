@@ -36,10 +36,10 @@ export const NotificationSidebar = ({
 }: NotificationSidebarProps) => (
 	<Dialog.Root open={open} onOpenChange={onOpenChange}>
 		<Dialog.Portal>
-			<Dialog.Overlay className="fixed inset-0 z-100 hidden bg-deemed min-[721px]:block" />
+			<Dialog.Overlay className="fixed inset-0 z-overlay hidden bg-deemed min-[721px]:block" />
 			<Dialog.Content
 				aria-describedby={undefined}
-				className="fixed inset-0 z-101 flex flex-col bg-normal outline-none min-[721px]:inset-y-7 min-[721px]:right-8 min-[721px]:left-auto min-[721px]:w-[38%] min-[721px]:min-w-100 min-[721px]:rounded-3xl min-[721px]:bg-elevate"
+				className="fixed inset-0 z-modal flex flex-col bg-normal outline-none min-[721px]:inset-y-7 min-[721px]:right-8 min-[721px]:left-auto min-[721px]:w-[38%] min-[721px]:min-w-100 min-[721px]:rounded-3xl min-[721px]:bg-elevate"
 			>
 				<div className="flex h-11 shrink-0 items-center gap-2 border-b border-stroke-lightest px-4 min-[721px]:hidden">
 					<Dialog.Close aria-label="뒤로가기" className="cursor-pointer">

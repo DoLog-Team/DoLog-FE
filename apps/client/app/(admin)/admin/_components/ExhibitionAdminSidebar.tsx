@@ -42,7 +42,7 @@ export const ExhibitionAdminSidebar = ({
 		<div className="min-[721px]:hidden">
 			<div
 				className={cn(
-					"fixed inset-x-0 top-11 z-50 transition-all duration-300 ease-in-out",
+					"fixed inset-x-0 top-11 z-sidebar transition-all duration-300 ease-in-out",
 					isOpen
 						? "pointer-events-auto translate-y-0 opacity-100"
 						: "pointer-events-none -translate-y-full opacity-0",
@@ -80,7 +80,7 @@ export const ExhibitionAdminSidebar = ({
 
 			<div
 				className={cn(
-					"fixed inset-x-0 top-11 bottom-0 z-49 bg-deemed transition-opacity duration-300",
+					"fixed inset-x-0 top-11 bottom-0 z-sidebar-backdrop bg-deemed transition-opacity duration-300",
 					isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
 				)}
 				onClick={onClose}
