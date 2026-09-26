@@ -34,6 +34,7 @@ interface AdminSelectableListProps<T extends { id: number }> {
 	searchValue: string;
 	onSearchChange: (value: string) => void;
 	notice?: React.ReactNode;
+	// 필터를 바꿀 때도 selection.clear() 를 같이 호출할 것
 	filters?: React.ReactNode;
 	unit: "명" | "개";
 	// 검색·필터가 적용된 전체 목록
@@ -84,6 +85,13 @@ export const AdminSelectableList = <T extends { id: number }>({
 		selection.clear();
 	};
 
+	// 검색어가 바뀌면 가려진 항목이 선택된 채 남지 않도록 선택 해제 후 첫 페이지로
+	const changeSearch = (value: string) => {
+		onSearchChange(value);
+		selection.clear();
+		setPage(1);
+	};
+
 	return (
 		<section className="flex w-full flex-col">
 			<h1 className="pb-6 font-bold text-[24px] text-strong leading-8 tracking-[-0.02em] min-[721px]:text-[32px] min-[721px]:leading-10.5">
@@ -91,7 +99,7 @@ export const AdminSelectableList = <T extends { id: number }>({
 			</h1>
 
 			{notice && <div className="mb-6">{notice}</div>}
-			<SearchBar placeholder={searchPlaceholder} value={searchValue} onChange={onSearchChange} />
+			<SearchBar placeholder={searchPlaceholder} value={searchValue} onChange={changeSearch} />
 			{filters && <div className="mt-3 flex gap-2">{filters}</div>}
 
 			<div className="mt-5 flex items-center gap-2.5 min-[721px]:mt-6">

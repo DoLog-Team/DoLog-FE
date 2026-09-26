@@ -49,6 +49,12 @@ export const ArtworkList = ({ mode }: { mode: Mode }) => {
 	const [openedModal, setOpenedModal] = useState<"toggle" | "group" | null>(null);
 	const [targetGroup, setTargetGroup] = useState("");
 	const selection = useRowSelection<number>();
+
+	// 필터로 가려진 작품이 선택된 채 남지 않도록 선택 해제
+	const changeFilter = (setFilter: (value: string | null) => void, value: string | null) => {
+		setFilter(value);
+		selection.clear();
+	};
 	const config = MODE[mode];
 
 	const scoped = artworks.filter((artwork) => artwork.isHidden === (mode === "hidden"));
@@ -103,13 +109,13 @@ export const ArtworkList = ({ mode }: { mode: Mode }) => {
 							label="공개 여부"
 							options={VISIBILITY_OPTIONS}
 							selected={visibility}
-							onSelect={setVisibility}
+							onSelect={(value) => changeFilter(setVisibility, value)}
 						/>
 						<FilterChip
 							label="그룹"
 							options={mode === "all" ? [...MOCK_GROUPS, UNGROUPED] : MOCK_GROUPS}
 							selected={group}
-							onSelect={setGroup}
+							onSelect={(value) => changeFilter(setGroup, value)}
 							className={cn(
 								(mode === "all" ? MOCK_GROUPS.length <= 1 : MOCK_GROUPS.length === 0) &&
 									"pointer-events-none opacity-50",
