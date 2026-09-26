@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils/cn";
+import { getActiveHref } from "./getActiveHref";
 
 const SIDEBAR_MENU = [
 	{ label: "작가 관리", href: "/admin/artists" },
@@ -25,6 +26,10 @@ export const ExhibitionAdminSidebar = ({
 	onLogout,
 }: ExhibitionAdminSidebarProps) => {
 	const pathname = usePathname();
+	const activeHref = getActiveHref(
+		pathname,
+		SIDEBAR_MENU.map((item) => item.href),
+	);
 
 	useEffect(() => {
 		document.body.style.overflow = isOpen ? "hidden" : "";
@@ -51,7 +56,9 @@ export const ExhibitionAdminSidebar = ({
 							onClick={onClose}
 							className={cn(
 								"py-1",
-								pathname === item.href ? "text-body1-bold text-light" : "text-body1 text-lightest",
+								item.href === activeHref
+									? "text-body1-bold text-light"
+									: "text-body1 text-lightest",
 							)}
 						>
 							{item.label}

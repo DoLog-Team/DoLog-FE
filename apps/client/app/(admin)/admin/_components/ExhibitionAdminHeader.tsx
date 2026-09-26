@@ -9,6 +9,7 @@ import { NotificationSidebar } from "@/components/common/NotificationSidebar/Not
 import { cn } from "@/lib/utils/cn";
 import { MOCK_NOTIFICATIONS } from "../_mocks/notifications";
 import { ExhibitionAdminSidebar } from "./ExhibitionAdminSidebar";
+import { getActiveHref } from "./getActiveHref";
 
 interface MenuItem {
 	label: string;
@@ -25,7 +26,6 @@ const ARTWORK_MENU: MenuItem[] = [
 	{ label: "숨긴 작품 관리", href: "/admin/artworks/hidden" },
 ];
 
-// 일반 어드민 로그인 페이지(보연님 #168) 경로 확정 전
 const ARTIST_LOGIN_HREF = "/artist-admin/login";
 
 const MENU_ITEM_CLASS =
@@ -179,6 +179,7 @@ export function ExhibitionAdminHeader() {
 							type="button"
 							onClick={() => {
 								closeMenu();
+								setIsNotificationOpen(false);
 								setIsSidebarOpen((prev) => !prev);
 							}}
 							aria-label={isSidebarOpen ? "메뉴 닫기" : "메뉴 열기"}
@@ -230,7 +231,12 @@ interface NavDropdownProps {
 }
 
 const NavDropdown = ({ label, items, pathname, isOpen, onToggle, onSelect }: NavDropdownProps) => {
-	const isActive = items.some((item) => item.href === pathname);
+	const isActive = Boolean(
+		getActiveHref(
+			pathname,
+			items.map((item) => item.href),
+		),
+	);
 
 	return (
 		<div className="relative">
