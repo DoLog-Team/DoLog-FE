@@ -6,6 +6,9 @@ import { FormField } from "@/components/common/FormField/FormField";
 import { Input } from "@/components/common/Input/Input";
 import { cn } from "@/lib/utils/cn";
 
+const MAX_MATERIAL_COUNT = 20;
+const MAX_MATERIAL_LENGTH = 20;
+
 const MATERIAL_OPTIONS = [
 	"캔버스에 아크릴릭",
 	"캔버스에 유화",
@@ -62,6 +65,8 @@ export const ArtworkAdditionalInfoSection = () => {
 	const [hasVolume, setHasVolume] = useState(false);
 	const [depth, setDepth] = useState("");
 
+	const isMaterialLimitReached = materials.length >= MAX_MATERIAL_COUNT;
+
 	const filteredMaterialOptions = MATERIAL_OPTIONS.filter(
 		(option) =>
 			!materials.includes(option) &&
@@ -69,6 +74,7 @@ export const ArtworkAdditionalInfoSection = () => {
 	);
 
 	const addMaterial = (value: string) => {
+		if (isMaterialLimitReached) return;
 		const trimmed = value.trim();
 		if (!trimmed || materials.includes(trimmed)) return;
 		setMaterials((prev) => [...prev, trimmed]);
@@ -109,6 +115,13 @@ export const ArtworkAdditionalInfoSection = () => {
 						<Input
 							placeholder="재료 및 기법을 검색해주세요."
 							value={materialQuery}
+							maxLength={MAX_MATERIAL_LENGTH}
+							error={isMaterialLimitReached && isMaterialFocused}
+							errorMessage={
+								isMaterialLimitReached && isMaterialFocused
+									? "태그 개수가 초과되었어요. 기존 태그를 삭제하고 새로운 태그를 등록해 주세요."
+									: undefined
+							}
 							onChange={(e) => setMaterialQuery(e.target.value)}
 							onFocus={() => setIsMaterialFocused(true)}
 							onBlur={() => setTimeout(() => setIsMaterialFocused(false), 100)}
@@ -120,7 +133,7 @@ export const ArtworkAdditionalInfoSection = () => {
 							}}
 						/>
 
-						{isMaterialFocused && materialQuery.trim() && (
+						{!isMaterialLimitReached && isMaterialFocused && materialQuery.trim() && (
 							<ul className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-stroke-lighter bg-bg-normal shadow-lg divide-y divide-stroke-lighter">
 								{filteredMaterialOptions.map((option) => (
 									<li key={option}>
