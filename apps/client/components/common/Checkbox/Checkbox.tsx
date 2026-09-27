@@ -4,9 +4,12 @@ import { cn } from "@/lib/utils/cn";
 
 export interface CheckboxProps {
 	checked: boolean;
-	onChange: (checked: boolean) => void;
+	// 없으면 읽기 전용 (보통 disabled 와 함께 사용)
+	onChange?: (checked: boolean) => void;
 	label?: React.ReactNode;
 	disabled?: boolean;
+	// sm: 20px 고정, md: 모바일 20px · 데스크탑 24px
+	size?: "sm" | "md";
 	className?: string;
 	id?: string;
 	name?: string;
@@ -17,30 +20,36 @@ export const Checkbox = ({
 	onChange,
 	label,
 	disabled,
+	size = "sm",
 	className,
 	id,
 	name,
 }: CheckboxProps) => {
 	const generatedId = useId();
 	const inputId = id ?? generatedId;
+	const boxSize = size === "md" ? "size-5 min-[721px]:size-6" : "size-5";
 
 	return (
 		<label
 			className={cn(
 				"flex items-center gap-2 text-body2 text-light",
-				disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
+				disabled ? "cursor-not-allowed" : "cursor-pointer",
 				className,
 			)}
 		>
-			<span className="relative flex h-5 w-5 shrink-0 items-center justify-center">
+			<span className={cn("relative flex shrink-0 items-center justify-center", boxSize)}>
 				<input
 					id={inputId}
 					name={name ?? inputId}
 					type="checkbox"
 					checked={checked}
 					disabled={disabled}
-					onChange={(e) => onChange(e.target.checked)}
-					className="peer h-5 w-5 appearance-none rounded border-[1.5px] border-stroke-lighter checked:border-strong checked:bg-strong"
+					onChange={(e) => onChange?.(e.target.checked)}
+					className={cn(
+						"peer appearance-none rounded border-[1.5px] border-stroke-lighter checked:border-fg-inverse checked:bg-fg-inverse",
+						"disabled:border-stroke-lightest disabled:bg-fg-light disabled:checked:bg-disable",
+						boxSize,
+					)}
 				/>
 				<svg
 					className="pointer-events-none absolute hidden h-3 w-3 text-inverse peer-checked:block"

@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils/cn";
+
 interface Row {
 	label: string;
 	value: React.ReactNode;
@@ -5,11 +7,12 @@ interface Row {
 
 interface RowListProps {
 	rows: Row[];
+	className?: string;
 }
 
-export default function RowList({ rows }: RowListProps) {
+export default function RowList({ rows, className }: RowListProps) {
 	return (
-		<div className="flex flex-col">
+		<div className={cn("flex flex-col", className)}>
 			{rows.map((row, index) => (
 				<div
 					key={index}
