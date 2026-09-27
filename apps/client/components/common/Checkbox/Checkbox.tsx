@@ -4,7 +4,8 @@ import { cn } from "@/lib/utils/cn";
 
 export interface CheckboxProps {
 	checked: boolean;
-	onChange: (checked: boolean) => void;
+	// 없으면 읽기 전용 (보통 disabled 와 함께 사용)
+	onChange?: (checked: boolean) => void;
 	label?: React.ReactNode;
 	disabled?: boolean;
 	// sm: 20px 고정, md: 모바일 20px · 데스크탑 24px
@@ -43,7 +44,7 @@ export const Checkbox = ({
 					type="checkbox"
 					checked={checked}
 					disabled={disabled}
-					onChange={(e) => onChange(e.target.checked)}
+					onChange={(e) => onChange?.(e.target.checked)}
 					className={cn(
 						"peer appearance-none rounded border-[1.5px] border-stroke-lighter checked:border-fg-inverse checked:bg-fg-inverse",
 						"disabled:border-stroke-lightest disabled:bg-fg-light disabled:checked:bg-disable",

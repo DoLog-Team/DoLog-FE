@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Checkbox } from "@/components/common/Checkbox/Checkbox";
 import { Title } from "@/components/common/Title/Title";
 import { cn } from "@/lib/utils/cn";
@@ -19,6 +19,10 @@ interface AccountSectionProps {
 export function AccountSection({ consents: initialConsents }: AccountSectionProps) {
 	// TODO: 동의 변경 시 동의 일자·서류 버전 저장 API 연결
 	const [consents, setConsents] = useState(initialConsents);
+
+	useEffect(() => {
+		setConsents(initialConsents);
+	}, [initialConsents]);
 
 	return (
 		<section className="pb-6 min-[721px]:pb-7">
@@ -85,7 +89,7 @@ function ConsentRow({ label, subText, checked, onChange, nested }: ConsentRowPro
 			)}
 			<Checkbox
 				checked={checked}
-				onChange={onChange ?? (() => {})}
+				onChange={onChange}
 				disabled={!onChange}
 				size="md"
 				className="min-w-0 flex-1 items-start text-body2-bold min-[721px]:items-center min-[721px]:text-body1-bold"

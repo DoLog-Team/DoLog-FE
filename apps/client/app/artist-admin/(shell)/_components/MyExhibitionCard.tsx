@@ -1,13 +1,15 @@
 import Image from "next/image";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
+import { cn } from "@/lib/utils/cn";
 import type { MyExhibition } from "../_mocks/exhibitions";
 import { OverflowMenu } from "./OverflowMenu";
+import { STATUS_TONE } from "./StatusBadge";
 
-interface ExhibitionCardProps {
+interface MyExhibitionCardProps {
 	exhibition: MyExhibition;
 }
 
-export function ExhibitionCard({ exhibition }: ExhibitionCardProps) {
+export function MyExhibitionCard({ exhibition }: MyExhibitionCardProps) {
 	const isPending = exhibition.acceptedAt === null;
 
 	return (
@@ -32,7 +34,9 @@ export function ExhibitionCard({ exhibition }: ExhibitionCardProps) {
 					<p className="text-body1 text-lighter">
 						{exhibition.startDate} ~ {exhibition.endDate}
 					</p>
-					{isPending && <p className="text-body1-bold text-admin1">수락 대기중</p>}
+					{isPending && (
+						<p className={cn("text-body1-bold", STATUS_TONE.coral.text)}>수락 대기중</p>
+					)}
 				</div>
 				{/* 수락 대기 전시는 관리 메뉴(overflow menu)를 표시하지 않는다 */}
 				{/* TODO: 전시 나가기 확인 모달 연결 */}

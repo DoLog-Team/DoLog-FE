@@ -1,27 +1,19 @@
 import Image from "next/image";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
-import type { ArtworkStatus, MyArtwork } from "../_mocks/artworks";
+import type { MyArtwork } from "../_mocks/artworks";
 import { Engagement } from "./Engagement";
 import { OverflowMenu, type OverflowMenuItem } from "./OverflowMenu";
-import { StatusBadge } from "./StatusBadge";
+import { ArtworkStatusBadge, StatusBadge } from "./StatusBadge";
 
-const STATUS_BADGE: Record<ArtworkStatus, { label: string; color: "coral" | "light" }> = {
-	draft: { label: "임시저장", color: "coral" },
-	public: { label: "공개", color: "light" },
-	private: { label: "비공개", color: "light" },
-};
-
-interface ArtworkCardProps {
+interface MyArtworkCardProps {
 	artwork: MyArtwork;
 }
 
 /**
  * 작품 카드 컴포넌트
  */
-export function ArtworkCard({ artwork }: ArtworkCardProps) {
-	const badge = STATUS_BADGE[artwork.status];
-
-	// 보연 TODO: 이후 작품 출품 모달 · 작품 삭제 모달 연결
+export function MyArtworkCard({ artwork }: MyArtworkCardProps) {
+	// TODO: 이후 작품 출품 모달 · 작품 삭제 모달 연결
 	const menuItems: OverflowMenuItem[] = [
 		{
 			label: "편집하기",
@@ -73,7 +65,7 @@ export function ArtworkCard({ artwork }: ArtworkCardProps) {
 				</div>
 
 				<div className="mt-3 flex gap-1.5">
-					<StatusBadge label={badge.label} color={badge.color} />
+					<ArtworkStatusBadge status={artwork.status} />
 					{artwork.status === "draft" && <StatusBadge label={`${artwork.completionRate}% 작성`} />}
 				</div>
 			</div>
