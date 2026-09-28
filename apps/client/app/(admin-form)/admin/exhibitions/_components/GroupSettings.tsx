@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/common/Button/Button";
 import { Input } from "@/components/common/Input/Input";
+import { PlusIcon } from "@/components/common/icons/PlusIcon";
 import type { ArtworkGroup } from "../_mocks/exhibitionSettings";
 
 export const MAX_GROUP_COUNT = 30;
@@ -38,7 +39,7 @@ export const GroupSettings = ({ groups, errors, onChange, onAdd }: GroupSettings
 						onClick={() => onChange(groups.filter(({ id }) => id !== group.id))}
 						disabled={groups.length <= 1}
 						aria-label={`${group.name || "그룹"} 삭제`}
-						className="flex w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-fg-lighter disabled:cursor-not-allowed disabled:opacity-40"
+						className="flex w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-fg-lighter disabled:cursor-not-allowed disabled:opacity-40"
 					>
 						<Image src="/icons/close.svg" alt="" width={20} height={20} />
 					</button>
@@ -58,7 +59,7 @@ export const GroupSettings = ({ groups, errors, onChange, onAdd }: GroupSettings
 								errorMessage={errors?.[index]}
 							/>
 						</div>
-						<div className="flex min-w-0 flex-col gap-1 min-[721px]:flex-[1.5]">
+						<div className="flex min-w-0 flex-col gap-1 min-[721px]:flex-1">
 							<label htmlFor={`${group.id}-description`} className="px-0.5 text-body3 text-light">
 								그룹 설명
 							</label>
@@ -81,7 +82,7 @@ export const GroupSettings = ({ groups, errors, onChange, onAdd }: GroupSettings
 				disabled={groups.length >= MAX_GROUP_COUNT}
 				className="gap-1"
 			>
-				<Image src="/icons/plus.svg" alt="" width={20} height={20} />
+				<PlusIcon className="text-icon-light" />
 				그룹 추가
 			</Button>
 		</div>

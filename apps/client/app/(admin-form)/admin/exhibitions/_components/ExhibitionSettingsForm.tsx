@@ -25,6 +25,11 @@ const TABS = [
 	{ id: "hidden", label: "정보 숨기기" },
 ];
 
+// 피그마 입력 제목 아래 12px · 체크박스 줄 높이 44px · 체크박스 문구 Body2 bold
+const FIELD_CLASS = "gap-3";
+const CHECKBOX_CLASS = "min-h-11";
+const CHECKBOX_LABEL_CLASS = "text-body2-bold";
+
 // "2026.09.29 14:05"
 const formatSavedAt = (date: Date) => {
 	const pad = (value: number) => String(value).padStart(2, "0");
@@ -88,7 +93,11 @@ export const ExhibitionSettingsForm = () => {
 			description:
 				"전시 공간의 물리적 위치나 담당 교수 등 다양한 기준으로 출품작을 그룹화 할 수 있습니다.\n그룹화된 작품은 화면에서도 기준에 따라 구분되어 표시됩니다.",
 			content: (
-				<FormField label="그룹 목록" description="그룹이 1개이면 화면에 표시되지 않아요.">
+				<FormField
+					label="그룹 목록"
+					description="그룹이 1개이면 화면에 표시되지 않아요."
+					className={FIELD_CLASS}
+				>
 					<GroupSettings
 						groups={settings.groups}
 						errors={showErrors ? groupErrors : undefined}
@@ -111,11 +120,12 @@ export const ExhibitionSettingsForm = () => {
 			title: "전시 내 작품 필수 값",
 			description: "전시에 들어갈 작품의 필수 값을 설정할 수 있어요.",
 			content: REQUIRED_OPTIONS.map(({ key, title, label }) => (
-				<FormField key={key} label={title}>
+				<FormField key={key} label={title} className={FIELD_CLASS}>
 					<Checkbox
 						checked={settings.required[key]}
 						onChange={(checked) => update({ required: { ...settings.required, [key]: checked } })}
-						label={label}
+						label={<span className={CHECKBOX_LABEL_CLASS}>{label}</span>}
+						className={CHECKBOX_CLASS}
 					/>
 				</FormField>
 			)),
@@ -129,13 +139,15 @@ export const ExhibitionSettingsForm = () => {
 					key={option.key}
 					label={option.title}
 					description={"description" in option ? option.description : undefined}
+					className={FIELD_CLASS}
 				>
 					<Checkbox
 						checked={settings.hidden[option.key]}
 						onChange={(checked) =>
 							update({ hidden: { ...settings.hidden, [option.key]: checked } })
 						}
-						label={option.label}
+						label={<span className={CHECKBOX_LABEL_CLASS}>{option.label}</span>}
+						className={CHECKBOX_CLASS}
 					/>
 				</FormField>
 			)),
@@ -155,14 +167,14 @@ export const ExhibitionSettingsForm = () => {
 				<TabBar tabs={TABS} activeTab={activeTab} onTabClick={handleTabClick} />
 			</div>
 
-			<div className="py-7">
+			<div className="pb-7">
 				{sections.map((section, index) => (
 					<Fragment key={section.id}>
 						<section
 							ref={(el) => {
 								sectionRefs[section.id].current = el;
 							}}
-							className="flex flex-col gap-4 py-7 min-[721px]:flex-row min-[721px]:gap-10"
+							className="flex flex-col gap-5 py-6 min-[721px]:flex-row min-[721px]:gap-10 min-[721px]:py-7"
 						>
 							<div className="flex min-w-0 flex-col gap-2 min-[721px]:w-100">
 								<h2 className="px-0.5 text-head3 text-strong">{section.title}</h2>
