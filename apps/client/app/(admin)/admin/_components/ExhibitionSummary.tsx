@@ -21,7 +21,7 @@ export const ExhibitionSummary = ({ exhibition }: { exhibition: AdminExhibition 
 			>
 				{title ?? "전시 이름을 설정해주세요"}
 			</h1>
-			<div className="flex gap-5">
+			<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-5">
 				<InfoRows
 					className="flex-1"
 					rows={[
@@ -30,9 +30,8 @@ export const ExhibitionSummary = ({ exhibition }: { exhibition: AdminExhibition 
 						{ label: "학과", value: department ?? EMPTY },
 					]}
 				/>
-				{/* 피그마 모바일엔 기간·운영 시간·비고 목록이 없음 */}
 				<InfoRows
-					className="hidden flex-1 min-[721px]:flex"
+					className="flex-1"
 					rows={[
 						{ label: "전시 기간", value: toPeriod(startDate, endDate) },
 						{ label: "운영 시간", value: operatingHours ?? EMPTY },
