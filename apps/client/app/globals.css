@@ -105,10 +105,21 @@
   --color-warning: var(--color-warning);
   --color-error: var(--color-error);
 
+  --color-admin1: var(--color-admin1);
+  --color-admin2: var(--color-admin2);
+
   --color-btn-bg: var(--btn-bg);
   --color-btn-text: var(--btn-text);
   --color-cta-bg: var(--cta-bg);
   --color-cta-text: var(--cta-text);
+
+  /* 레이어 순서 — z-dropdown, z-header 처럼 사용 (숫자 z-index 대신 이 토큰을 쓰기) */
+  --z-index-dropdown: 10;
+  --z-index-sidebar-backdrop: 49;
+  --z-index-sidebar: 50;
+  --z-index-header: 51;
+  --z-index-overlay: 100;
+  --z-index-modal: 101;
 }
 
 :root {
@@ -158,6 +169,9 @@
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
+
+  --color-admin1: #ff6b61;
+  --color-admin2: #ffe2e0;
 }
 
 .dark {
@@ -193,6 +207,9 @@
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
+
+  --color-admin1: #ffffff;
+  --color-admin2: #ffffff;
 }
 
 @layer base {
