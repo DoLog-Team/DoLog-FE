@@ -7,7 +7,9 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { track } from "@/lib/amplitude";
+import { cn } from "@/lib/utils/cn";
 import { useExhibition } from "../_context/ExhibitionContext";
+import { ShareButton } from "./ShareButton";
 import { Sidebar } from "./Sidebar";
 
 const NAV_ITEMS = [
@@ -18,7 +20,10 @@ const NAV_ITEMS = [
 ] as const;
 
 interface HeaderProps {
-	variant?: "logo" | "back";
+	// logo: 전시 홈 (NAV-13)
+	// sub: 전시물·참여한 사람 목록과 작품·작가 상세 (NAV-14) — 모바일은 뒤로가기 + 제목, 데스크탑은 로고 + 메뉴
+	// back: 기기 구분 없이 뒤로가기 + 제목 (BTS 상세, 오류 화면)
+	variant?: "logo" | "sub" | "back";
 	title?: string;
 	onBackClick?: () => void;
 	showHamburger?: boolean;
@@ -69,60 +74,85 @@ export const Header = ({
 		<>
 			<header className="sticky top-0 z-51 border-b border-stroke-lightest bg-normal">
 				<DesktopContainer>
-					<div className="flex items-center justify-between py-3 h-11">
-						{variant === "back" ? (
-							<div className="flex items-center gap-2 min-w-0">
-								<button
-									type="button"
-									onClick={handleBack}
-									aria-label="뒤로가기"
-									className="cursor-pointer shrink-0"
+					<div className="flex items-center justify-between py-3 h-11 min-[721px]:h-17">
+						<div className="flex min-w-0 items-center">
+							{/* 뒤로가기 + 제목 : back은 항상, sub는 모바일만 */}
+							{variant !== "logo" && (
+								<div
+									className={cn(
+										"flex items-center gap-2 min-w-0",
+										variant === "sub" && "min-[721px]:hidden",
+									)}
 								>
-									<Image src="/icons/backBtn.svg" alt="뒤로가기" width={24} height={24} />
-								</button>
-								{title && <span className="text-body1-bold text-strong truncate">{title}</span>}
-							</div>
-						) : (
-							<button type="button" onClick={() => router.push(baseUrl)} className="cursor-pointer">
-								{logoImg ? (
-									<Image
-										src={logoImg}
-										alt="전시 로고"
-										width={0}
-										height={0}
-										sizes="100vw"
-										className="h-6 w-auto"
-										priority
-									/>
-								) : (
-									<Image
-										src="/images/exhibitionLogo.svg"
-										alt="DoLog"
-										width={34}
-										height={24}
-										priority
-									/>
-								)}
-							</button>
-						)}
-
-						{/* 데스크탑 nav */}
-						{variant !== "back" && (
-							<nav className="hidden min-[721px]:flex items-center gap-6">
-								{visibleNavItems.map((item) => (
-									<Link
-										key={item.label}
-										href={`${baseUrl}${item.path}`}
-										onClick={() =>
-											track("GNB Nav Clicked", { label: item.label, from_page: pathname })
-										}
-										className={`text-body1-bold whitespace-nowrap transition-colors ${
-											isActive(item.path) ? "text-light" : "text-lightest hover:text-lighter"
-										}`}
+									<button
+										type="button"
+										onClick={handleBack}
+										aria-label="뒤로가기"
+										className="cursor-pointer shrink-0"
 									>
-										{item.label}
-									</Link>
-								))}
+										<Image src="/icons/backBtn.svg" alt="뒤로가기" width={24} height={24} />
+									</button>
+									{title && <span className="text-body1-bold text-strong truncate">{title}</span>}
+								</div>
+							)}
+
+							{/* 전시 로고 + 메뉴 : logo는 항상, sub는 데스크탑만 */}
+							{variant !== "back" && (
+								<div
+									className={cn(
+										"flex items-center",
+										variant === "sub" && "hidden min-[721px]:flex",
+									)}
+								>
+									<button
+										type="button"
+										onClick={() => router.push(baseUrl)}
+										className="cursor-pointer shrink-0"
+									>
+										{logoImg ? (
+											<Image
+												src={logoImg}
+												alt="전시 로고"
+												width={0}
+												height={0}
+												sizes="100vw"
+												className="h-6 w-auto"
+												priority
+											/>
+										) : (
+											<Image
+												src="/images/exhibitionLogo.svg"
+												alt="DoLog"
+												width={34}
+												height={24}
+												priority
+											/>
+										)}
+									</button>
+
+									{/* 데스크탑 nav */}
+									<nav className="hidden min-[721px]:flex items-center gap-5 pl-8">
+										{visibleNavItems.map((item) => (
+											<Link
+												key={item.label}
+												href={`${baseUrl}${item.path}`}
+												onClick={() =>
+													track("GNB Nav Clicked", { label: item.label, from_page: pathname })
+												}
+												className={`text-body1-bold whitespace-nowrap transition-colors ${
+													isActive(item.path) ? "text-light" : "text-lightest hover:text-lighter"
+												}`}
+											>
+												{item.label}
+											</Link>
+										))}
+									</nav>
+								</div>
+							)}
+						</div>
+
+						<div className="flex shrink-0 items-center gap-4">
+							{variant !== "back" && (
 								<Button
 									onClick={() => {
 										track("GNB Nav Clicked", {
@@ -133,33 +163,35 @@ export const Header = ({
 									}}
 									size="sm"
 									variant="outline"
-									className="text-body2 text-lighter whitespace-nowrap flex items-center gap-2 cursor-pointer"
+									className="hidden min-[721px]:inline-flex text-body2-bold text-lighter whitespace-nowrap cursor-pointer"
 								>
-									<Image src="/images/logo.svg" alt="DoLog" width={40} height={14} />
-									홈에서 전시 보기
+									두록에서 보기
 								</Button>
-							</nav>
-						)}
+							)}
 
-						{/* 햄버거 (모바일만) */}
-						{showHamburger && (
-							<button
-								type="button"
-								onClick={() => {
-									const next = !isSidebarOpen;
-									setIsSidebarOpen(next);
-									if (next) track("GNB Hamburger Clicked", { from_page: pathname });
-								}}
-								className="cursor-pointer min-[721px]:hidden"
-								aria-label={isSidebarOpen ? "메뉴 닫기" : "메뉴 열기"}
-							>
-								{isSidebarOpen ? (
-									<Image src="/icons/close.svg" alt="닫기" width={24} height={24} />
-								) : (
-									<Image src="/icons/leadingBtn.svg" alt="메뉴" width={24} height={24} />
-								)}
-							</button>
-						)}
+							{/* 공유 버튼: sub/back */}
+							{variant !== "logo" && <ShareButton />}
+
+							{/* 햄버거 (모바일만) */}
+							{showHamburger && (
+								<button
+									type="button"
+									onClick={() => {
+										const next = !isSidebarOpen;
+										setIsSidebarOpen(next);
+										if (next) track("GNB Hamburger Clicked", { from_page: pathname });
+									}}
+									className="cursor-pointer min-[721px]:hidden"
+									aria-label={isSidebarOpen ? "메뉴 닫기" : "메뉴 열기"}
+								>
+									{isSidebarOpen ? (
+										<Image src="/icons/close.svg" alt="닫기" width={24} height={24} />
+									) : (
+										<Image src="/icons/leadingBtn.svg" alt="메뉴" width={24} height={24} />
+									)}
+								</button>
+							)}
+						</div>
 					</div>
 				</DesktopContainer>
 			</header>

@@ -23,6 +23,8 @@ interface FilteredZone {
 
 interface ArtworkListSectionProps {
 	sectionRefs: Record<string, React.RefObject<HTMLElement | null>>;
+	// 탭 이동 위치 계산용 (검색바·필터 고정 영역)
+	stickyRef?: React.Ref<HTMLDivElement>;
 	zones: FilteredZone[];
 	searchQuery: string;
 	onSearchChange: (value: string) => void;
@@ -69,6 +71,7 @@ const ViewToggle = ({
 
 export function ArtworkListSection({
 	sectionRefs,
+	stickyRef,
 	zones,
 	searchQuery,
 	onSearchChange,
@@ -95,14 +98,17 @@ export function ArtworkListSection({
 		<section className="flex flex-col">
 			<DesktopContainer>
 				<div ref={titleRef} className="flex justify-between items-center">
-					<Title title="작품 목록" />
+					<Title title="작품 목록" className="min-[721px]:mb-0" />
 					<div className="min-[721px]:hidden">
 						<ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
 					</div>
 				</div>
 			</DesktopContainer>
 
-			<div className="sticky top-11 bg-normal z-10 pb-2">
+			<div
+				ref={stickyRef}
+				className="sticky top-11 min-[721px]:top-17 bg-normal z-10 pb-2 min-[721px]:pt-3"
+			>
 				<DesktopContainer>
 					<SearchBar
 						placeholder="작품명, 작가명을 검색하세요"
