@@ -120,6 +120,7 @@
   --z-index-header: 51;
   --z-index-overlay: 100;
   --z-index-modal: 101;
+  --z-index-toast: 102;
 }
 
 :root {
