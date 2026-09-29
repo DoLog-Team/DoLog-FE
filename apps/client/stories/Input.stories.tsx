@@ -45,6 +45,7 @@ export const AllStates: Story = {
 		<div className="flex flex-col gap-4 w-80">
 			<Input placeholder="기본" />
 			<Input placeholder="글자수 카운터" maxLength={10} />
+			<Input placeholder="글자수 제한만 (카운터 숨김)" maxLength={10} showCount={false} />
 			<Input placeholder="에러" error defaultValue="잘못된 값" />
 			<Input
 				placeholder="에러 메시지"

@@ -51,9 +51,9 @@ export const GroupSettings = ({ groups, errors, onChange, onAdd }: GroupSettings
 							<Input
 								id={`${group.id}-name`}
 								value={group.name}
-								onChange={(e) =>
-									updateGroup(group.id, { name: e.target.value.slice(0, MAX_GROUP_NAME_LENGTH) })
-								}
+								onChange={(e) => updateGroup(group.id, { name: e.target.value })}
+								maxLength={MAX_GROUP_NAME_LENGTH}
+								showCount={false}
 								placeholder="그룹 이름을 입력해주세요"
 								error={Boolean(errors?.[index])}
 								errorMessage={errors?.[index]}

@@ -10,6 +10,8 @@ export interface InputProps
 		InputVariantsProps {
 	wrapperClassName?: string;
 	errorMessage?: string;
+	// false 면 maxLength 로 길이만 제한하고 글자 수 카운터는 숨김
+	showCount?: boolean;
 }
 
 export const Input = ({
@@ -18,6 +20,7 @@ export const Input = ({
 	error,
 	errorMessage,
 	maxLength,
+	showCount = true,
 	value,
 	defaultValue,
 	onChange,
@@ -50,10 +53,10 @@ export const Input = ({
 				}}
 				{...props}
 			/>
-			{(errorMessage || maxLength != null) && (
+			{(errorMessage || (showCount && maxLength != null)) && (
 				<div className="flex items-center justify-between gap-2">
 					{errorMessage && <span className="pl-0.5 text-body3 text-error">{errorMessage}</span>}
-					{maxLength != null && (
+					{showCount && maxLength != null && (
 						<span
 							className={cn(
 								"ml-auto text-body3",
