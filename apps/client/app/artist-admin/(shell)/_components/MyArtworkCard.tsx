@@ -15,15 +15,17 @@ import { ArtworkStatusBadge, StatusBadge } from "./StatusBadge";
 
 interface MyArtworkCardProps {
 	artwork: MyArtwork;
+	onDelete: (artworkId: string) => void;
 }
 
 /**
  * 작품 카드 컴포넌트
  */
-export function MyArtworkCard({ artwork }: MyArtworkCardProps) {
+export function MyArtworkCard({ artwork, onDelete }: MyArtworkCardProps) {
 	const router = useRouter();
 	const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
 	const [selectedExhibitionId, setSelectedExhibitionId] = useState<string | undefined>(undefined);
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
 	// 수락 완료된 전시만 출품 대상으로 선택 가능
 	const acceptedExhibitions = MOCK_MY_EXHIBITIONS.filter((exhibition) => exhibition.acceptedAt);
@@ -34,7 +36,11 @@ export function MyArtworkCard({ artwork }: MyArtworkCardProps) {
 		router.push(`/artist-admin/artworks/${artwork.artworkId}/exhibition`);
 	};
 
-	// TODO: 삭제 모달 연결
+	const handleDelete = () => {
+		setIsDeleteModalOpen(false);
+		onDelete(artwork.artworkId);
+	};
+
 	const menuItems: OverflowMenuItem[] = [
 		{
 			label: "편집하기",
@@ -55,7 +61,12 @@ export function MyArtworkCard({ artwork }: MyArtworkCardProps) {
 						setIsSubmitModalOpen(true);
 					},
 				},
-		{ label: "삭제하기", icon: "/icons/trash.svg", danger: true },
+		{
+			label: "삭제하기",
+			icon: "/icons/trash.svg",
+			danger: true,
+			onClick: () => setIsDeleteModalOpen(true),
+		},
 	];
 
 	return (
@@ -132,6 +143,25 @@ export function MyArtworkCard({ artwork }: MyArtworkCardProps) {
 					onActionClick={() => {}}
 				/>
 			</Modal>
+
+			<Modal
+				open={isDeleteModalOpen}
+				onOpenChange={setIsDeleteModalOpen}
+				title="작품 삭제"
+				titleTone="danger"
+				description={
+					<span className="text-light">
+						<span className="text-body1-bold">{artwork.title}</span>
+						{josa.pick(artwork.title, "이/가")} 작가 프로필과 참여 중인 전시에서 모두 삭제돼요.
+						삭제한 작품은 복구할 수 없어요.
+					</span>
+				}
+				showCloseButton
+				actions={[
+					{ text: "취소", variant: "assistive", onClick: () => setIsDeleteModalOpen(false) },
+					{ text: "삭제하기", variant: "danger", onClick: handleDelete },
+				]}
+			/>
 		</article>
 	);
 }

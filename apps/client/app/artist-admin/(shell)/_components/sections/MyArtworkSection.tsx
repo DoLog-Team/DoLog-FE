@@ -20,8 +20,9 @@ interface MyArtworkSectionProps {
 	artworks: MyArtwork[];
 }
 
-export function MyArtworkSection({ artworks }: MyArtworkSectionProps) {
+export function MyArtworkSection({ artworks: initialArtworks }: MyArtworkSectionProps) {
 	const router = useRouter();
+	const [artworks, setArtworks] = useState(initialArtworks);
 	const { visibleItems, expanded, canToggle, toggle } = useExpandableList(
 		artworks,
 		compareArtworks,
@@ -34,6 +35,11 @@ export function MyArtworkSection({ artworks }: MyArtworkSectionProps) {
 		if (!title) return;
 		setIsAddModalOpen(false);
 		router.push(`/artist-admin/artworks/new?title=${encodeURIComponent(title)}`);
+	};
+
+	// 삭제 API 연결 전 — 화면에서만 목록에서 제거
+	const handleDelete = (artworkId: string) => {
+		setArtworks((prev) => prev.filter((artwork) => artwork.artworkId !== artworkId));
 	};
 
 	return (
@@ -50,7 +56,7 @@ export function MyArtworkSection({ artworks }: MyArtworkSectionProps) {
 
 			<div className="mt-5 flex flex-col gap-5 min-[721px]:mt-0 min-[721px]:grid min-[721px]:grid-cols-4">
 				{visibleItems.map((artwork) => (
-					<MyArtworkCard key={artwork.artworkId} artwork={artwork} />
+					<MyArtworkCard key={artwork.artworkId} artwork={artwork} onDelete={handleDelete} />
 				))}
 			</div>
 
