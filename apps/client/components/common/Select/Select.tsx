@@ -19,6 +19,8 @@ export interface SelectProps {
 	className?: string;
 	actionLabel?: string;
 	onActionClick?: () => void;
+	// (이메일 도메인 추가 입력 용도) 목록에 없는 값을 직접 입력해 선택할 수 있게 한다
+	creatable?: boolean;
 	id?: string;
 	name?: string;
 }
@@ -33,6 +35,7 @@ export const Select = ({
 	className,
 	actionLabel,
 	onActionClick,
+	creatable,
 	id,
 	name,
 }: SelectProps) => {
@@ -42,7 +45,8 @@ export const Select = ({
 	const [query, setQuery] = useState("");
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	const selectedLabel = options.find((option) => option.value === value)?.label ?? "";
+	const selectedLabel =
+		options.find((option) => option.value === value)?.label ?? (creatable ? value : "") ?? "";
 	const filteredOptions = query
 		? options.filter((option) => option.label.toLowerCase().includes(query.toLowerCase()))
 		: options;
@@ -52,6 +56,8 @@ export const Select = ({
 
 		const handleClickOutside = (e: MouseEvent) => {
 			if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+				// 직접 입력을 허용하면 입력하던 값을 그대로 선택값으로 받는다
+				if (creatable && query.trim()) onChange(query.trim());
 				setIsOpen(false);
 				setQuery("");
 			}
@@ -59,7 +65,7 @@ export const Select = ({
 
 		document.addEventListener("mousedown", handleClickOutside);
 		return () => document.removeEventListener("mousedown", handleClickOutside);
-	}, [isOpen]);
+	}, [isOpen, creatable, query, onChange]);
 
 	const handleSelect = (option: SelectOption) => {
 		onChange(option.value);
@@ -84,6 +90,15 @@ export const Select = ({
 					value={isOpen ? query : selectedLabel}
 					onFocus={() => setIsOpen(true)}
 					onChange={(e) => setQuery(e.target.value)}
+					onKeyDown={(e) => {
+						if (creatable && e.key === "Enter" && query.trim()) {
+							e.preventDefault();
+							onChange(query.trim());
+							setIsOpen(false);
+							setQuery("");
+							e.currentTarget.blur();
+						}
+					}}
 					disabled={disabled}
 				/>
 				<Image
@@ -96,7 +111,7 @@ export const Select = ({
 				/>
 			</div>
 
-			{isOpen && (
+			{isOpen && !(creatable && filteredOptions.length === 0 && !actionLabel) && (
 				<ul className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-stroke-lighter bg-bg-normal shadow-lg divide-y divide-stroke-lighter">
 					{filteredOptions.length === 0 ? (
 						<li className="px-3 py-2 text-body2 text-lightest">검색 결과가 없어요.</li>

@@ -8,6 +8,7 @@ import { Textarea } from "@/components/common/Textarea/Textarea";
 import type { ArtistProfileForm } from "../../_mocks/profile";
 
 // 입력 중 조합 자모(ㄱ, ㅏ 등)도 허용해야 오류가 깜빡이지 않는다
+// TODO : 추후 API 연동하면서 라이브러리 사용으로 전환 가능한지 검토 예정
 const NAME_KO_PATTERN = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9 ]*$/;
 const NAME_EN_PATTERN = /^[a-zA-Z ]*$/;
 const INVALID_MESSAGE = "잘못 입력했어요.";
@@ -42,7 +43,6 @@ export const ProfileBasicInfoSection = ({
 				<h2 className="text-head3 text-strong">기본 정보</h2>
 				<span className="text-body2 text-lighter">작가 소개에 표시될 성함을 적어주세요.</span>
 			</div>
-			{/* 글자 수 줄(약 20px)이 입력칸 아래에 붙어 16px + 20px = Figma 36px 간격이 된다 (작품 기본 정보와 동일) */}
 			<div className="flex min-w-0 flex-1 flex-col gap-4">
 				<FormField label="국문 성명" required>
 					<Input

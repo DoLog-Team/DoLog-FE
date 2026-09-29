@@ -9,6 +9,8 @@ import { TabBar } from "@/components/common/TabBar/TabBar";
 import type { ArtistProfileForm } from "../_mocks/profile";
 import { PROFILE_EDIT_TABS } from "./profileEditTabs";
 import { ProfileBasicInfoSection } from "./sections/ProfileBasicInfoSection";
+import { ProfilePurchaseLinkSection } from "./sections/ProfilePurchaseLinkSection";
+import { ProfileSnsInfoSection } from "./sections/ProfileSnsInfoSection";
 
 export interface ProfileEditFormProps {
 	initialValue: ArtistProfileForm;
@@ -33,22 +35,27 @@ export const ProfileEditForm = ({ initialValue, onBack }: ProfileEditFormProps) 
 				/>
 			),
 		},
-		// TODO: SNS 정보, 구매하기 링크 관리 섹션
+		{
+			id: "sns",
+			className: "pb-7 pt-7",
+			render: () => <ProfileSnsInfoSection initialValue={initialValue} />,
+		},
+		{
+			id: "purchase",
+			className: "pb-7 pt-7",
+			render: () => <ProfilePurchaseLinkSection initialValue={initialValue} />,
+		},
 	];
 
-	// 구현된 섹션의 탭만 노출
-	const tabIds = useMemo<string[]>(
-		() => PROFILE_EDIT_TABS.map((tab) => tab.id).filter((id) => id === "basic"),
-		[],
-	);
+	const tabIds = useMemo(() => PROFILE_EDIT_TABS.map((tab) => tab.id), []);
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(tabIds, 120);
 
 	const tabs = useMemo(
 		() =>
-			PROFILE_EDIT_TABS.filter((tab) => tabIds.includes(tab.id)).map((tab) =>
+			PROFILE_EDIT_TABS.map((tab) =>
 				tab.id === "basic" ? { ...tab, badge: basicMissingCount } : tab,
 			),
-		[tabIds, basicMissingCount],
+		[basicMissingCount],
 	);
 
 	return (
