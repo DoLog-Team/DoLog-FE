@@ -53,8 +53,16 @@ export const MOCK_EXHIBITION: AdminExhibition = {
 
 const visibleArtworks = MOCK_ARTWORKS.filter((artwork) => !artwork.isHidden);
 
-// 전시 중인 작품 = 숨긴 작품만 빼고 셈 (플랜 한도 초과 미노출은 포함)
-export const MOCK_EXHIBITION_COUNTS = {
+export interface AdminExhibitionCounts {
+	artists: number;
+	pendingArtists: number;
+	// 전시 중인 작품 = 숨긴 작품만 빼고 셈 (플랜 한도 초과 미노출은 포함)
+	exhibitedArtworks: number;
+	exceededArtworks: number;
+	hiddenArtworks: number;
+}
+
+export const MOCK_EXHIBITION_COUNTS: AdminExhibitionCounts = {
 	artists: MOCK_ARTISTS.length,
 	pendingArtists: MOCK_PENDING_ARTISTS.length,
 	exhibitedArtworks: visibleArtworks.length,

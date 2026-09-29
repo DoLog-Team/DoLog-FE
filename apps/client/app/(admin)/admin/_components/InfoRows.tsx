@@ -16,6 +16,3 @@ export const InfoRows = ({ rows, className }: InfoRowsProps) => (
 		))}
 	</dl>
 );
-
-// "2026-08-20" → "2026.08.20"
-export const toDotDate = (date: string) => date.slice(0, 10).replaceAll("-", ".");

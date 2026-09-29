@@ -4,18 +4,17 @@ import { ImageHideIcon } from "@/components/common/icons/ImageHideIcon";
 import { ImageIcon } from "@/components/common/icons/ImageIcon";
 import { PeopleIcon } from "@/components/common/icons/PeopleIcon";
 import { SettingsIcon } from "@/components/common/icons/SettingsIcon";
-import type { MOCK_EXHIBITION_COUNTS } from "../_mocks/exhibition";
-import { SECTION_TITLE_CLASS } from "./ExhibitionSiteSection";
-
-type Counts = typeof MOCK_EXHIBITION_COUNTS;
+import type { AdminExhibitionCounts } from "../_mocks/exhibition";
+import { SECTION_TITLE_CLASS } from "./homeSection.styles";
 
 interface ManagementCardsProps {
 	// 조회 실패 시 null → 개수 자리에 "-"
-	counts: Counts | null;
+	counts: AdminExhibitionCounts | null;
 }
 
 export const ManagementCards = ({ counts }: ManagementCardsProps) => {
-	const count = (key: keyof Counts, unit: string) => (counts ? `${counts[key]}${unit}` : "-");
+	const count = (key: keyof AdminExhibitionCounts, unit: string) =>
+		counts ? `${counts[key]}${unit}` : "-";
 
 	const cards = [
 		{
