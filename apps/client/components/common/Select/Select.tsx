@@ -17,7 +17,7 @@ export interface SelectProps {
 	error?: boolean;
 	disabled?: boolean;
 	className?: string;
-	actionLabel?: string;
+	actionLabel?: React.ReactNode;
 	onActionClick?: () => void;
 	id?: string;
 	name?: string;
@@ -123,7 +123,7 @@ export const Select = ({
 									setIsOpen(false);
 									setQuery("");
 								}}
-								className="flex w-full items-center justify-between px-3 py-2 text-left text-body2 text-lighter"
+								className="flex w-full items-center justify-between bg-fg-lighter px-3 py-2 text-left text-body2 text-lighter"
 							>
 								{actionLabel}
 								<span aria-hidden>+</span>
