@@ -10,7 +10,7 @@ export default function ExhibitionAdminTermsPage() {
 	return (
 		<div className="flex w-full flex-col items-center gap-12.5">
 			<header className="flex flex-col items-center gap-4 text-center">
-				<h1 className="font-bold text-[24px] text-strong leading-8 tracking-[-0.02em] min-[721px]:text-[32px] min-[721px]:leading-10.5">
+				<h1 className="text-title1 text-strong">
 					전시 관리자
 					<br />
 					이용 약관에 동의해주세요

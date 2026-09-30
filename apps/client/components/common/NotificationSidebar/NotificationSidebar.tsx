@@ -49,7 +49,7 @@ export const NotificationSidebar = ({
 				</div>
 
 				<div className="hidden shrink-0 items-center justify-between px-8 pt-8 pb-6 min-[721px]:flex">
-					<p className="font-bold text-[32px] text-strong leading-10.5 tracking-[-0.02em]">알림</p>
+					<p className="text-display text-strong">알림</p>
 					<Dialog.Close aria-label="닫기" className="cursor-pointer">
 						<Image src="/icons/close.svg" alt="" width={32} height={32} />
 					</Dialog.Close>
