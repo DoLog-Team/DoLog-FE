@@ -7,13 +7,11 @@ import { Button } from "@/components/common/Button/Button";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { CopyIcon } from "@/components/common/icons/CopyIcon";
 import { Modal } from "@/components/common/Modal/Modal";
+import { ADMIN_PLAN_HREF } from "@/lib/constants/admin";
 import { addMonths, toDotDate, toLocalDate } from "@/lib/utils/date";
 import type { AdminExhibition } from "../_mocks/exhibition";
 import { SECTION_TITLE_CLASS } from "./homeSection.styles";
 import { InfoRows } from "./InfoRows";
-
-// 플랜 확인 페이지는 기획 중이라 경로 미정
-const PLAN_HREF = "#";
 
 const NOT_PUBLISHED = "게시 전";
 
@@ -71,7 +69,7 @@ export const ExhibitionSiteSection = ({ exhibition }: { exhibition: AdminExhibit
 											? toDotDate(addMonths(publishedAt, plan.months))
 											: NOT_PUBLISHED}
 										{plan && (
-											<Link href={PLAN_HREF} className="text-lighter underline">
+											<Link href={ADMIN_PLAN_HREF} className="text-lighter underline">
 												사용 중인 플랜 확인 →
 											</Link>
 										)}

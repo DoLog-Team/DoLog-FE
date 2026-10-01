@@ -1,3 +1,4 @@
+import type { CurrentPlan } from "@/lib/constants/plan";
 import { MOCK_ARTISTS, MOCK_PENDING_ARTISTS } from "./artists";
 import { MOCK_ARTWORKS } from "./artworks";
 
@@ -26,7 +27,7 @@ export interface AdminExhibition {
 	entryCode: string | null;
 	// "YYYY-MM-DD" · 게시 전이면 null
 	publishedAt: string | null;
-	plan: { name: string; months: number } | null;
+	plan: CurrentPlan | null;
 }
 
 export const MOCK_EXHIBITION: AdminExhibition = {
@@ -48,7 +49,7 @@ export const MOCK_EXHIBITION: AdminExhibition = {
 	siteUrl: "https://dolog.site/o/gdk95gzi",
 	entryCode: "DOLOGFOREVER",
 	publishedAt: null,
-	plan: { name: "베이직", months: 3 },
+	plan: { tier: "small", months: 3 },
 };
 
 const visibleArtworks = MOCK_ARTWORKS.filter((artwork) => !artwork.isHidden);
