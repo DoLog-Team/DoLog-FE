@@ -7,9 +7,10 @@ import { STATUS_TONE } from "./StatusBadge";
 
 interface MyExhibitionCardProps {
 	exhibition: MyExhibition;
+	onLeave: () => void;
 }
 
-export function MyExhibitionCard({ exhibition }: MyExhibitionCardProps) {
+export function MyExhibitionCard({ exhibition, onLeave }: MyExhibitionCardProps) {
 	const isPending = exhibition.acceptedAt === null;
 
 	return (
@@ -39,11 +40,10 @@ export function MyExhibitionCard({ exhibition }: MyExhibitionCardProps) {
 					)}
 				</div>
 				{/* 수락 대기 전시는 관리 메뉴(overflow menu)를 표시하지 않는다 */}
-				{/* TODO: 전시 나가기 확인 모달 연결 */}
 				{!isPending && (
 					<OverflowMenu
 						label={`${exhibition.name} 더보기`}
-						items={[{ label: "나가기", icon: "/icons/exit.svg", danger: true }]}
+						items={[{ label: "나가기", icon: "/icons/exit.svg", danger: true, onClick: onLeave }]}
 					/>
 				)}
 			</div>

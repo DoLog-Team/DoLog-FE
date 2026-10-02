@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/common/Checkbox/Checkbox";
 import { Title } from "@/components/common/Title/Title";
 import { cn } from "@/lib/utils/cn";
 import type { MarketingConsents } from "../../_mocks/account";
+import { AccountWithdrawModal } from "../modals/AccountWithdrawModal";
 import { SECTION_TITLE_CLASS } from "../SectionHeader";
 
 const SUB_TITLE_CLASS = "px-0.5 text-body1-bold text-strong min-[721px]:text-head3";
@@ -19,6 +20,7 @@ interface AccountSectionProps {
 export function AccountSection({ consents: initialConsents }: AccountSectionProps) {
 	// TODO: 동의 변경 시 동의 일자·서류 버전 저장 API 연결
 	const [consents, setConsents] = useState(initialConsents);
+	const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
 
 	useEffect(() => {
 		setConsents(initialConsents);
@@ -58,10 +60,15 @@ export function AccountSection({ consents: initialConsents }: AccountSectionProp
 				계정을 탈퇴하면 프로필, 전시, 작품, 비하인드 등 모든 데이터가 영구적으로 삭제되며 복구할 수
 				없습니다.
 			</p>
-			{/* TODO: 계정 탈퇴 확인 모달 연결 */}
-			<button type="button" className={cn(TEXT_LINK_CLASS, "mt-4 text-body1")}>
+			<button
+				type="button"
+				className={cn(TEXT_LINK_CLASS, "mt-4 text-body1")}
+				onClick={() => setIsWithdrawModalOpen(true)}
+			>
 				계정 탈퇴
 			</button>
+
+			<AccountWithdrawModal open={isWithdrawModalOpen} onOpenChange={setIsWithdrawModalOpen} />
 		</section>
 	);
 }
@@ -96,7 +103,6 @@ function ConsentRow({ label, subText, checked, onChange, nested }: ConsentRowPro
 				label={
 					<span className="flex flex-col">
 						{label}
-						{/* Figma 상 보조 문구는 모바일에만 있다 */}
 						{subText && (
 							<span className="text-body2 font-normal text-lighter min-[721px]:hidden">
 								{subText}
