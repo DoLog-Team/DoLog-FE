@@ -94,9 +94,7 @@ export const AdminSelectableList = <T extends { id: number }>({
 
 	return (
 		<section className="flex w-full flex-col">
-			<h1 className="pb-6 font-bold text-[24px] text-strong leading-8 tracking-[-0.02em] min-[721px]:text-[32px] min-[721px]:leading-10.5">
-				{title}
-			</h1>
+			<h1 className="pb-6 text-title1 text-strong">{title}</h1>
 
 			{notice && <div className="mb-6">{notice}</div>}
 			<SearchBar placeholder={searchPlaceholder} value={searchValue} onChange={changeSearch} />

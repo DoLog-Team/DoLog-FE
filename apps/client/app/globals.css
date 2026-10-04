@@ -28,6 +28,12 @@
   --text-head3--font-weight: 600;
   --text-head3--letter-spacing: -0.01em;
 
+  /* 화면 크기와 상관없이 큰 글자 (피그마 Head 1 데스크탑 값) — 반응형 제목은 아래 @utility text-title1 · text-title2 */
+  --text-display: 32px;
+  --text-display--line-height: 42px;
+  --text-display--font-weight: 700;
+  --text-display--letter-spacing: -0.02em;
+
   --text-body1: 16px;
   --text-body1--line-height: 24px;
   --text-body1--letter-spacing: -0.01em;
@@ -241,6 +247,29 @@
 }
 
 @source "../components/**/*.{ts,tsx}";
+
+/* 피그마 Head 1 · Head 2 반응형 제목 — 기존 head1~3 은 값이 하나라 따로 둠 */
+@utility text-title1 {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  @media (width >= 721px) {
+    font-size: 32px;
+    line-height: 42px;
+  }
+}
+
+@utility text-title2 {
+  font-size: 22px;
+  line-height: 32px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  @media (width >= 721px) {
+    font-size: 24px;
+    line-height: 36px;
+  }
+}
 
 @layer utilities {
   .scrollbar-hide {

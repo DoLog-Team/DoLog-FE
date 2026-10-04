@@ -14,12 +14,7 @@ export const ExhibitionSummary = ({ exhibition }: { exhibition: AdminExhibition 
 
 	return (
 		<section className="flex flex-col gap-6 pb-6 min-[721px]:pb-7">
-			<h1
-				className={cn(
-					"font-bold text-[24px] leading-8 tracking-[-0.02em] min-[721px]:text-[32px] min-[721px]:leading-10.5",
-					title ? "text-strong" : "text-lightest",
-				)}
-			>
+			<h1 className={cn("text-title1", title ? "text-strong" : "text-lightest")}>
 				{title ?? "전시 이름을 설정해주세요"}
 			</h1>
 			<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-5">

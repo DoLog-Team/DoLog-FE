@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ExhibitionSiteSection } from "./_components/ExhibitionSiteSection";
 import { ExhibitionSummary } from "./_components/ExhibitionSummary";
 import { ManagementCards } from "./_components/ManagementCards";
-import { MOCK_EXHIBITION, MOCK_EXHIBITION_COUNTS } from "./_mocks/exhibition";
+import { MOCK_EXHIBITION, MOCK_EXHIBITION_COUNTS, MOCK_SUBSCRIPTION } from "./_mocks/exhibition";
 
 export const metadata: Metadata = {
 	title: "전시 정보 | 두록",
@@ -20,7 +20,7 @@ export default function AdminHomePage() {
 			<hr
 				className={`my-4 border-stroke-lighter shadow-[0_0_0_100vmax_var(--color-stroke-lighter)] ${FULL_BLEED}`}
 			/>
-			<ExhibitionSiteSection exhibition={MOCK_EXHIBITION} />
+			<ExhibitionSiteSection exhibition={MOCK_EXHIBITION} subscription={MOCK_SUBSCRIPTION} />
 			<hr
 				className={`mt-4 border-stroke-lighter shadow-[0_0_0_100vmax_var(--color-stroke-lighter)] ${FULL_BLEED}`}
 			/>

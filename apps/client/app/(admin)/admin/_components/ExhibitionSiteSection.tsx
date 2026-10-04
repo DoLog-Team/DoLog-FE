@@ -7,13 +7,12 @@ import { Button } from "@/components/common/Button/Button";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { CopyIcon } from "@/components/common/icons/CopyIcon";
 import { Modal } from "@/components/common/Modal/Modal";
-import { addMonths, toDotDate, toLocalDate } from "@/lib/utils/date";
+import type { MySubscription } from "@/lib/api/plan.types";
+import { ADMIN_PLAN_HREF } from "@/lib/constants/admin";
+import { toDotDate, toLocalDate } from "@/lib/utils/date";
 import type { AdminExhibition } from "../_mocks/exhibition";
 import { SECTION_TITLE_CLASS } from "./homeSection.styles";
 import { InfoRows } from "./InfoRows";
-
-// 플랜 확인 페이지는 기획 중이라 경로 미정
-const PLAN_HREF = "#";
 
 const NOT_PUBLISHED = "게시 전";
 
@@ -29,20 +28,33 @@ const REQUIRED_FOR_PUBLISH = [
 	"hostDescription",
 ] as const satisfies readonly (keyof AdminExhibition)[];
 
-export const ExhibitionSiteSection = ({ exhibition }: { exhibition: AdminExhibition }) => {
-	const { siteUrl, entryCode, plan } = exhibition;
-	const [publishedAt, setPublishedAt] = useState(exhibition.publishedAt);
+interface ExhibitionSiteSectionProps {
+	exhibition: AdminExhibition;
+	subscription: MySubscription | null;
+}
+
+export const ExhibitionSiteSection = ({ exhibition, subscription }: ExhibitionSiteSectionProps) => {
+	const { siteUrl, entryCode } = exhibition;
+	const [{ publishedAt, expiresAt }, setPublication] = useState({
+		publishedAt: exhibition.publishedAt,
+		expiresAt: exhibition.expiresAt,
+	});
 	const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
 	const isPublished = publishedAt !== null;
-	// 게시 종료일 = 시작일 + 플랜 이용 개월 수 → 플랜이 연결돼 있어야 게시 가능
+	// 게시 API 는 활성 구독이 없으면 거절 (402)
 	const canPublish =
-		!isPublished && Boolean(plan) && REQUIRED_FOR_PUBLISH.every((key) => exhibition[key]);
+		!isPublished &&
+		subscription?.status === "ACTIVE" &&
+		REQUIRED_FOR_PUBLISH.every((key) => exhibition[key]);
 
-	// 게시 API 연결 전이라 화면에서만 게시 처리
+	// 게시 API 연결 전이라 화면에서만 게시 처리 — 종료일은 API 응답 expiresAt 으로 교체
 	const handlePublish = () => {
 		setIsConfirmOpen(false);
-		setPublishedAt(toLocalDate(new Date()));
+		setPublication({
+			publishedAt: toLocalDate(new Date()),
+			expiresAt: subscription?.endedAt?.slice(0, 10) ?? null,
+		});
 	};
 
 	return (
@@ -67,11 +79,9 @@ export const ExhibitionSiteSection = ({ exhibition }: { exhibition: AdminExhibit
 								label: "게시 종료",
 								value: (
 									<span className="flex flex-wrap gap-x-4">
-										{publishedAt && plan
-											? toDotDate(addMonths(publishedAt, plan.months))
-											: NOT_PUBLISHED}
-										{plan && (
-											<Link href={PLAN_HREF} className="text-lighter underline">
+										{expiresAt ? toDotDate(expiresAt) : NOT_PUBLISHED}
+										{subscription && (
+											<Link href={ADMIN_PLAN_HREF} className="text-lighter underline">
 												사용 중인 플랜 확인 →
 											</Link>
 										)}
