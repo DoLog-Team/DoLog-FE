@@ -1,4 +1,4 @@
-import type { CurrentPlan } from "@/lib/constants/plan";
+import type { MySubscription } from "@/lib/api/plan.types";
 import { MOCK_ARTISTS, MOCK_PENDING_ARTISTS } from "./artists";
 import { MOCK_ARTWORKS } from "./artworks";
 
@@ -27,7 +27,7 @@ export interface AdminExhibition {
 	entryCode: string | null;
 	// "YYYY-MM-DD" · 게시 전이면 null
 	publishedAt: string | null;
-	plan: CurrentPlan | null;
+	expiresAt: string | null;
 }
 
 export const MOCK_EXHIBITION: AdminExhibition = {
@@ -49,7 +49,20 @@ export const MOCK_EXHIBITION: AdminExhibition = {
 	siteUrl: "https://dolog.site/o/gdk95gzi",
 	entryCode: "DOLOGFOREVER",
 	publishedAt: null,
-	plan: { tier: "small", months: 3 },
+	expiresAt: null,
+};
+
+// 구독 API 연결 전 임시 데이터 — GET /subscriptions/me 중 이 전시의 구독 (없으면 null)
+export const MOCK_SUBSCRIPTION: MySubscription | null = {
+	subscriptionId: "subscription-1",
+	exhibitionId: "exhibition-1",
+	exhibitionName: "물에서 지나온 이야기",
+	planId: "plan-small",
+	planName: "소형",
+	billingCycle: "MONTHLY",
+	status: "ACTIVE",
+	startedAt: "2026-08-15T15:00:00",
+	endedAt: "2026-11-15T14:59:59",
 };
 
 const visibleArtworks = MOCK_ARTWORKS.filter((artwork) => !artwork.isHidden);

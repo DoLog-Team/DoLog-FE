@@ -1,20 +1,23 @@
-import type { PlanPeriod, PlanTier } from "@/lib/constants/plan";
+import type { Plan, PlanPrice } from "@/lib/api/plan.types";
+import { TARGET_SIZE_LABEL } from "@/lib/constants/plan";
 import { cn } from "@/lib/utils/cn";
-import { formatWon, getPlanPrice } from "@/lib/utils/plan";
+import { formatWon } from "@/lib/utils/plan";
 
 // 이용 중 띠 노랑(#fff5b5) · 그라데이션 끝 색(#ffeb6e) 은 globals.css 에 토큰 없음
 const CURRENT_BAND_YELLOW = "bg-[#fff5b5]";
 const DISCOUNT_BADGE_GRADIENT = "bg-[linear-gradient(120deg,var(--color-warning)_0%,#ffeb6e_136%)]";
 
 interface PlanCardProps {
-	tier: PlanTier;
-	period: PlanPeriod;
+	plan: Plan;
+	price: PlanPrice;
 	isCurrent: boolean;
 }
 
-export const PlanCard = ({ tier, period, isCurrent }: PlanCardProps) => {
-	const { months, discountRate, highlighted } = period;
-	const { originalTotal, total, monthly } = getPlanPrice(tier.monthlyPrice, period);
+export const PlanCard = ({ plan, price, isCurrent }: PlanCardProps) => {
+	const { months, discountedPrice, monthlyPrice } = price;
+	const discountRate = price.discountRate ?? 0;
+	// 피그마: 12개월(연간) 카드 강조
+	const highlighted = price.billingCycle === "ANNUAL";
 
 	return (
 		<article
@@ -49,14 +52,14 @@ export const PlanCard = ({ tier, period, isCurrent }: PlanCardProps) => {
 							<p className="flex items-center gap-0.5 text-body4-bold text-light">
 								{discountRate > 0 && (
 									<>
-										<s className="font-normal text-lightest">{formatWon(originalTotal)}</s>
+										<s className="font-normal text-lightest">{formatWon(price.price)}</s>
 										<span className="text-lightest">→</span>
 									</>
 								)}
-								{formatWon(total)}
+								{formatWon(discountedPrice)}
 							</p>
 							<p className="flex items-center gap-2">
-								<span className="text-display text-strong">월 {formatWon(monthly)}</span>
+								<span className="text-display text-strong">월 {formatWon(monthlyPrice)}</span>
 								{discountRate > 0 && (
 									<span
 										className={cn(
@@ -77,7 +80,9 @@ export const PlanCard = ({ tier, period, isCurrent }: PlanCardProps) => {
 				<hr className="border-stroke-lighter" />
 				<dl className="flex justify-between text-[15px] leading-5.5">
 					<dt className="font-medium text-light">대상 고객</dt>
-					<dd className="text-lighter">{tier.target}</dd>
+					<dd className="text-lighter">
+						{plan.targetSizes.map((size) => TARGET_SIZE_LABEL[size]).join(", ")}
+					</dd>
 				</dl>
 			</div>
 		</article>
