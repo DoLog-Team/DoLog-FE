@@ -6,10 +6,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
+import { ShareButton } from "@/components/common/ShareButton/ShareButton";
 import { track } from "@/lib/amplitude";
 import { cn } from "@/lib/utils/cn";
 import { useExhibition } from "../_context/ExhibitionContext";
-import { ShareButton } from "./ShareButton";
 import { Sidebar } from "./Sidebar";
 
 const NAV_ITEMS = [
