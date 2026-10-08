@@ -17,7 +17,7 @@ export function AccountWithdrawModal({ open, onOpenChange }: AccountWithdrawModa
 	const handleWithdraw = () => {
 		// TODO: 계정 탈퇴 API 연결 후 로그아웃 처리 (탈퇴 계정 정보는 3개월 보관 후 서버에서 삭제)
 		onOpenChange(false);
-		router.push("/");
+		router.replace("/");
 	};
 
 	return (

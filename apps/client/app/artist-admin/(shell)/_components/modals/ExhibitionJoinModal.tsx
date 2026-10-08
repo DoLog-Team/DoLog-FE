@@ -31,7 +31,10 @@ export function ExhibitionJoinModal({
 		onOpenChange(next);
 	};
 
+	const isSubmitDisabled = !code.trim() || isNotFound;
+
 	const handleSubmit = () => {
+		if (isSubmitDisabled) return;
 		// TODO: 입장 코드 조회 API 연결
 		const exhibition = findExhibitionByCode(code.trim());
 		if (!exhibition) {
@@ -55,20 +58,28 @@ export function ExhibitionJoinModal({
 					text: "입장하기",
 					variant: "primary",
 					onClick: handleSubmit,
-					disabled: !code.trim() || isNotFound,
+					disabled: isSubmitDisabled,
 				},
 			]}
 		>
-			<Input
-				placeholder="코드를 입력해주세요."
-				value={code}
-				onChange={(e) => {
-					setCode(e.target.value);
-					setIsNotFound(false);
+			{/* form으로 감싸서 엔터키로도 제출할 수 있도록 함 */}
+			<form
+				onSubmit={(e) => {
+					e.preventDefault();
+					handleSubmit();
 				}}
-				error={isNotFound}
-				errorMessage={isNotFound ? "없는 코드입니다." : undefined}
-			/>
+			>
+				<Input
+					placeholder="코드를 입력해주세요."
+					value={code}
+					onChange={(e) => {
+						setCode(e.target.value);
+						setIsNotFound(false);
+					}}
+					error={isNotFound}
+					errorMessage={isNotFound ? "없는 코드입니다." : undefined}
+				/>
+			</form>
 		</Modal>
 	);
 }
