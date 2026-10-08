@@ -8,6 +8,7 @@ import { FilterChip } from "@/components/common/FilterChip/FilterChip";
 import { ChevronIcon } from "@/components/common/icons/ChevronIcon";
 import { Modal } from "@/components/common/Modal/Modal";
 import { Select } from "@/components/common/Select/Select";
+import { ADMIN_PLAN_HREF } from "@/lib/constants/admin";
 import { cn } from "@/lib/utils/cn";
 import {
 	AdminSelectableList,
@@ -202,8 +203,7 @@ const ExceededNotice = ({ count }: { count: number }) => (
 			초과된 작품을 전시에 노출하려면 플랜을 업그레이드하거나, 기존 작품을 숨겨 작품 수를
 			조정해주세요.
 		</p>
-		{/* 플랜 확인 페이지는 기획 중이라 경로 미정 */}
-		<Link href="#" className="flex w-fit items-center text-body2 text-lighter">
+		<Link href={ADMIN_PLAN_HREF} className="flex w-fit items-center text-body2 text-lighter">
 			사용중인 플랜 확인하기
 			<ChevronIcon direction="right" size={20} />
 		</Link>

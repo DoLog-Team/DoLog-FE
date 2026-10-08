@@ -15,7 +15,7 @@ interface ModalAction {
 
 interface ModalProps extends Dialog.DialogProps {
 	title: string;
-	description?: string;
+	description?: React.ReactNode;
 	actions: ModalAction[];
 	titleTone?: "default" | "danger";
 	showCloseButton?: boolean;
