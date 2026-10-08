@@ -38,7 +38,7 @@ export const HeaderDropdownDivider = () => <div className="my-1 h-px bg-stroke-l
 
 interface HeaderAccountActionsProps {
 	account: AccountRole;
-	// 어느 화면의 헤더인지 — 프로필 메뉴 항목이 달라짐 (profileMenu.ts)
+	// 어느 화면의 헤더인지 — 두록 화면에서만 내 어드민 홈 링크를 표시
 	place: AccountPlace;
 	// sm: 20px 고정, md: 모바일 24px · 데스크탑 28px (Figma Navigation)
 	size?: "sm" | "md";
@@ -66,7 +66,7 @@ export function HeaderAccountActions({
 
 	const iconClassName = size === "md" ? "size-6 min-[721px]:size-7" : "size-5";
 	const isMenuOpen = profileMenuOpen ?? uncontrolledOpen;
-	const { links, switchLogin } = PROFILE_MENU[account][place];
+	const { homeLink, switchLogin } = PROFILE_MENU[account];
 
 	const setMenuOpen = (next: boolean) => {
 		if (profileMenuOpen === undefined) setUncontrolledOpen(next);
@@ -127,16 +127,15 @@ export function HeaderAccountActions({
 
 				{isMenuOpen && (
 					<HeaderDropdownList className="right-0 w-45">
-						{links.map((link) => (
+						{place === "client" && (
 							<Link
-								key={link.href}
-								href={link.href}
+								href={homeLink.href}
 								onClick={() => setMenuOpen(false)}
 								className={HEADER_DROPDOWN_ITEM_CLASS}
 							>
-								{link.label}
+								{homeLink.label}
 							</Link>
-						))}
+						)}
 						<button
 							type="button"
 							onClick={() => {
