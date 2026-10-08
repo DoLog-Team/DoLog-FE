@@ -8,7 +8,6 @@ import { Input } from "@/components/common/Input/Input";
 import { Select } from "@/components/common/Select/Select";
 import type { ArtistProfileForm } from "../../_mocks/profile";
 
-// TODO: 도메인 목록은 임시 값, 디자인·기획 확인 후 확정 예정
 const EMAIL_DOMAINS = [
 	"gmail.com",
 	"naver.com",
