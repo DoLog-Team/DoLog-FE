@@ -45,7 +45,10 @@ export const FormHeader = ({
 
 				<div className="flex items-center gap-3">
 					{lastSavedAt && (
-						<span className="text-body3 text-lighter">{lastSavedAt} 마지막 저장</span>
+						// 저장 시간은 데스크탑에서만 표시 (Figma NAV-07·NAV-11)
+						<span className="hidden text-body3 text-lighter min-[721px]:inline">
+							{lastSavedAt} 마지막 저장
+						</span>
 					)}
 					<Button type="button" variant="assistive" size="sm" onClick={onTempSave}>
 						{saveLabel}
