@@ -2,27 +2,20 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
-import { track } from "@/lib/amplitude";
+import { MOCK_AUTH_ROLE } from "../_mocks/auth";
+import { DologHeaderActions } from "./DologHeaderActions";
 
 export const Header = () => {
 	return (
 		<DesktopContainer>
-			<header className="flex items-center justify-between py-3">
+			{/* 높이 모바일 44px, 데스크탑 68px (Figma) */}
+			<header className="flex h-11 items-center justify-between min-[721px]:h-17">
 				<Link href="/" aria-label="두록 홈">
 					<Image src="/images/logo.svg" alt="DoLog" width={47} height={20} priority />
 				</Link>
-				<a
-					href="https://www.instagram.com/dolog.archive/"
-					target="_blank"
-					rel="noopener noreferrer"
-					onClick={() => track("Button Clicked", { button: "문의하기", page: "main" })}
-				>
-					<Button variant="assistive" size="sm">
-						문의하기
-					</Button>
-				</a>
+				{/* TODO: 로그인 상태 API 연결 후 실제 로그인 상태 전달 */}
+				<DologHeaderActions role={MOCK_AUTH_ROLE} page="main" />
 			</header>
 		</DesktopContainer>
 	);
