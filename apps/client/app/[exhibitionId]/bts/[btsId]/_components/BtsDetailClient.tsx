@@ -31,7 +31,7 @@ interface BtsDetailClientProps {
 
 export function BtsDetailClient({ btsItem, exhibitionId }: BtsDetailClientProps) {
 	const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
-	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(["artist", "related"]);
+	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(["artist", "related"], 44, 68);
 	const hasLink = btsItem.linkLabel && btsItem.linkUrl;
 
 	const setArtistRef = (el: HTMLElement | null) => {

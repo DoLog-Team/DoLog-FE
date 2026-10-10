@@ -10,8 +10,19 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
+// 고정 영역 높이가 상황에 따라 달라지면 숫자 대신 계산 함수를 넘길 수 있음 (v2에서 헤더 높이 변경 사항 있어서 offset을 함수로 받도록 변경)
+type Offset = number | (() => number);
+
+const resolveOffset = (offset: Offset, desktopOffset?: number) => {
+	if (desktopOffset !== undefined && window.matchMedia("(min-width: 721px)").matches) {
+		return desktopOffset;
+	}
+	return typeof offset === "function" ? offset() : offset;
+};
+
 // 기본 offset : 44px (헤더높이)
-export const useScrollSpy = (tabIds: string[], offset: number = 44) => {
+// desktopOffset : 데스크탑(721px 이상)에서 헤더 높이가 달라질 때 사용할 offset (없으면 offset 그대로 사용)
+export const useScrollSpy = (tabIds: string[], offset: Offset = 44, desktopOffset?: number) => {
 	const [activeTab, setActiveTab] = useState(tabIds[0]);
 	const isScrollingByClick = useRef(false);
 	const SCROLL_LOCK_DURATION_MS = 1000;
@@ -33,7 +44,10 @@ export const useScrollSpy = (tabIds: string[], offset: number = 44) => {
 	const handleTabClick = (tabId: string) => {
 		const ref = sectionRefs[tabId];
 		if (ref?.current) {
-			const top = ref.current.getBoundingClientRect().top + document.body.scrollTop - offset;
+			const top =
+				ref.current.getBoundingClientRect().top +
+				document.body.scrollTop -
+				resolveOffset(offset, desktopOffset);
 			isScrollingByClick.current = true;
 			document.body.scrollTo({ top, behavior: "smooth" });
 			setActiveTab(tabId);
@@ -66,7 +80,10 @@ export const useScrollSpy = (tabIds: string[], offset: number = 44) => {
 				return;
 			}
 
-			const passed = [...positions].reverse().find((position) => position.top <= offset + 10);
+			const currentOffset = resolveOffset(offset, desktopOffset);
+			const passed = [...positions]
+				.reverse()
+				.find((position) => position.top <= currentOffset + 10);
 			const nextActiveTab = passed?.id ?? positions[0].id;
 			setActiveTab(nextActiveTab);
 		};
@@ -89,7 +106,7 @@ export const useScrollSpy = (tabIds: string[], offset: number = 44) => {
 			document.body.removeEventListener("scroll", handleScroll);
 			window.removeEventListener("resize", handleScroll);
 		};
-	}, [sectionRefs, offset, tabIds]);
+	}, [sectionRefs, offset, desktopOffset, tabIds]);
 
 	return { activeTab, handleTabClick, sectionRefs };
 };

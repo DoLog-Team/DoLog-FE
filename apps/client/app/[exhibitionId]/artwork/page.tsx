@@ -41,7 +41,7 @@ export default async function ArtworkListPage({ params }: ArtworkListPageProps) 
 
 	return (
 		<main>
-			<Header />
+			<Header variant="sub" title="전체 전시물" />
 			<ArtworksClient maps={artworkData.maps} zones={artworkData.zones} hideFilter={hideFilter} />
 		</main>
 	);
