@@ -3,6 +3,8 @@
 
 export const ACCESS_TOKEN_COOKIE = "dolog_access_token";
 export const REFRESH_TOKEN_COOKIE = "dolog_refresh_token";
+// 로그인 여부·계정 종류를 화면(헤더)에서 알기 위한 표시용 쿠키 — 토큰이 아니라서 JS 가 읽을 수 있게 둔다
+export const ROLE_COOKIE = "dolog_role";
 
 const ACCESS_TOKEN_FALLBACK_MAX_AGE = 60 * 60;
 const REFRESH_TOKEN_FALLBACK_MAX_AGE = 60 * 60 * 24 * 7;
@@ -14,6 +16,8 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 export interface SessionTokens {
 	accessToken: string;
 	refreshToken?: string;
+	// 로그인 응답의 role (ARTIST_ADMIN, EXHIBITION_ADMIN 등)
+	role?: string;
 }
 
 interface CookieWriter {
@@ -29,9 +33,9 @@ interface CookieOptions {
 	maxAge: number;
 }
 
-function cookieOptions(maxAge: number): CookieOptions {
+function cookieOptions(maxAge: number, httpOnly = true): CookieOptions {
 	return {
-		httpOnly: true,
+		httpOnly,
 		secure: process.env.NODE_ENV === "production",
 		sameSite: "lax",
 		path: "/",
@@ -58,17 +62,17 @@ export function setSessionCookies(cookies: CookieWriter, tokens: SessionTokens) 
 		cookieOptions(getTokenMaxAge(tokens.accessToken, ACCESS_TOKEN_FALLBACK_MAX_AGE)),
 	);
 	if (tokens.refreshToken) {
-		cookies.set(
-			REFRESH_TOKEN_COOKIE,
-			tokens.refreshToken,
-			cookieOptions(getTokenMaxAge(tokens.refreshToken, REFRESH_TOKEN_FALLBACK_MAX_AGE)),
-		);
+		const refreshMaxAge = getTokenMaxAge(tokens.refreshToken, REFRESH_TOKEN_FALLBACK_MAX_AGE);
+		cookies.set(REFRESH_TOKEN_COOKIE, tokens.refreshToken, cookieOptions(refreshMaxAge));
+		// 로그인 상태 표시는 refresh 토큰과 같은 수명을 가진다
+		if (tokens.role) cookies.set(ROLE_COOKIE, tokens.role, cookieOptions(refreshMaxAge, false));
 	}
 }
 
 export function clearSessionCookies(cookies: CookieWriter) {
 	cookies.delete(ACCESS_TOKEN_COOKIE);
 	cookies.delete(REFRESH_TOKEN_COOKIE);
+	cookies.delete(ROLE_COOKIE);
 }
 
 // POST /auth/refresh — 실패하면 null (refresh 토큰 만료 등으로 재로그인이 필요한 상태)

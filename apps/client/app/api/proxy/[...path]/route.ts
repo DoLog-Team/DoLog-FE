@@ -57,13 +57,16 @@ async function handler(request: NextRequest, { params }: RouteContext) {
 		return undefined;
 	};
 
-	// access 쿠키가 만료돼 사라졌으면 요청 전에 미리 재발급한다
-	if (!accessToken) accessToken = await refresh();
+	// 로그인 요청은 기존 토큰 없이 보내고 재시도하지 않는다 — 소셜 인가 코드는 일회용이라 재전송 금지
+	const isLogin = TOKEN_ISSUING_PATHS.includes(path);
 
-	let res = await send(accessToken);
+	// access 쿠키가 만료돼 사라졌으면 요청 전에 미리 재발급한다
+	if (!accessToken && !isLogin) accessToken = await refresh();
+
+	let res = await send(isLogin ? undefined : accessToken);
 
 	// 서버 측에서 토큰이 무효화된 경우 한 번만 재발급 후 재시도한다
-	if (res.status === 401 && accessToken) {
+	if (res.status === 401 && accessToken && !isLogin) {
 		accessToken = await refresh();
 		if (accessToken) res = await send(accessToken);
 	}
@@ -72,20 +75,25 @@ async function handler(request: NextRequest, { params }: RouteContext) {
 		clearSessionCookies(cookieStore);
 	}
 
-	if (TOKEN_ISSUING_PATHS.includes(path) && res.ok) {
+	// 인증된 사용자별 응답이므로 브라우저·CDN 에 캐시되지 않게 한다
+	const headers = new Headers({ "cache-control": "no-store" });
+
+	if (isLogin && res.ok) {
 		const json = await res.json();
 		const { accessToken: issuedAccess, refreshToken: issuedRefresh, ...data } = json.data ?? {};
 		if (issuedAccess) {
-			setSessionCookies(cookieStore, { accessToken: issuedAccess, refreshToken: issuedRefresh });
+			setSessionCookies(cookieStore, {
+				accessToken: issuedAccess,
+				refreshToken: issuedRefresh,
+				role: data.role,
+			});
 		}
-		return Response.json({ ...json, data }, { status: res.status });
+		return Response.json({ ...json, data }, { status: res.status, headers });
 	}
 
 	const contentType = res.headers.get("content-type");
-	return new Response(res.body, {
-		status: res.status,
-		headers: contentType ? { "content-type": contentType } : undefined,
-	});
+	if (contentType) headers.set("content-type", contentType);
+	return new Response(res.body, { status: res.status, headers });
 }
 
 export { handler as GET, handler as POST, handler as PUT, handler as PATCH, handler as DELETE };
