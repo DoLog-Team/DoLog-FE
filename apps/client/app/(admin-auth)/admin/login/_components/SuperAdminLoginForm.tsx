@@ -88,7 +88,7 @@ export const SuperAdminLoginForm = () => {
 		setIsSubmitting(false);
 
 		if (result.ok) {
-			router.replace(result.data.is_first_login ? "/admin/terms" : "/admin");
+			router.replace(result.data.needsTermsAgreement ? "/admin/terms" : "/admin");
 			return;
 		}
 

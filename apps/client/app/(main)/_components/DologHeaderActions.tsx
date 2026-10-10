@@ -1,19 +1,22 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { buttonVariants } from "@/components/common/Button/Button";
 import { HeaderAccountActions } from "@/components/common/HeaderAccountActions/HeaderAccountActions";
 import { ShareButton } from "@/components/common/ShareButton/ShareButton";
 import { track } from "@/lib/amplitude";
+import type { AuthRole } from "@/lib/auth/useAuthRole";
 import { cn } from "@/lib/utils/cn";
-import type { DologAuthRole } from "../_mocks/auth";
+import { withLoginRedirect } from "@/lib/utils/loginHref";
 import type { DologHeaderVariant } from "./Header";
 
 const INQUIRY_URL = "https://www.instagram.com/dolog.archive/";
 const ARTIST_LOGIN_HREF = "/artist-admin/login";
 
 interface DologHeaderActionsProps {
-	role: DologAuthRole;
+	// null: 로그인 상태 확인 전 (서버 렌더링) — 계정 영역을 비워 둔다
+	role: AuthRole | null;
 	variant: DologHeaderVariant;
 	// 클릭 이벤트 기록용 페이지 이름
 	page: string;
@@ -28,7 +31,7 @@ export function DologHeaderActions({ role, variant, page }: DologHeaderActionsPr
 	return (
 		<div className="flex items-center gap-4">
 			{variant === "detail" && <ShareButton />}
-			{role === "guest" ? (
+			{role === null ? null : role === "guest" ? (
 				<GuestActions showInquiry={variant === "home"} page={page} />
 			) : (
 				<HeaderAccountActions account={role} place="client" size="md" />
@@ -39,6 +42,8 @@ export function DologHeaderActions({ role, variant, page }: DologHeaderActionsPr
 
 const GuestActions = ({ showInquiry, page }: { showInquiry: boolean; page: string }) => {
 	const handleInquiryClick = () => track("Button Clicked", { button: "전시 개설 문의", page });
+	// 로그인 후 지금 보던 화면으로 돌아온다
+	const loginHref = withLoginRedirect(ARTIST_LOGIN_HREF, usePathname());
 
 	return (
 		<>
@@ -54,7 +59,7 @@ const GuestActions = ({ showInquiry, page }: { showInquiry: boolean; page: strin
 					전시 개설 문의
 				</a>
 			)}
-			<Link href={ARTIST_LOGIN_HREF} className="text-body2-bold text-light min-[721px]:hidden">
+			<Link href={loginHref} className="text-body2-bold text-light min-[721px]:hidden">
 				로그인
 			</Link>
 
@@ -73,7 +78,7 @@ const GuestActions = ({ showInquiry, page }: { showInquiry: boolean; page: strin
 				</a>
 			)}
 			<Link
-				href={ARTIST_LOGIN_HREF}
+				href={loginHref}
 				className={cn(
 					buttonVariants({ variant: "assistive", size: "sm" }),
 					"hidden text-body2-bold min-[721px]:inline-flex",

@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api/instance";
+import { authApiClient } from "@/lib/api/instance";
 import type { TermsAgreementRequest, TermsAgreementResult } from "./terms.types";
 
 export type * from "./terms.types";
@@ -7,7 +7,7 @@ export async function saveTermsAgreement(
 	body: TermsAgreementRequest,
 ): Promise<TermsAgreementResult> {
 	try {
-		await apiClient("/accounts/me/terms", {
+		await authApiClient("/accounts/me/terms", {
 			method: "POST",
 			body: JSON.stringify(body),
 		});
