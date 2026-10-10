@@ -63,12 +63,19 @@ const renderInline = (text: string) =>
 		if (part.startsWith("**")) return <strong key={key}>{part.slice(2, -2)}</strong>;
 
 		const link = part.match(/^\[(.+)\]\(([^)]+)\)$/);
-		if (link)
+		if (link) {
+			const isExternal = /^https?:/; //.test(link[2]);
 			return (
-				<Link key={key} href={link[2]} className="font-medium underline">
+				<Link
+					key={key}
+					href={link[2]}
+					className="font-medium underline"
+					{...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}
+				>
 					{link[1]}
 				</Link>
 			);
+		}
 
 		return part;
 	});
