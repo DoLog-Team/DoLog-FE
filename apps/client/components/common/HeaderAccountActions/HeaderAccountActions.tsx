@@ -5,11 +5,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Modal } from "@/components/common/Modal/Modal";
 import { NotificationSidebar } from "@/components/common/NotificationSidebar/NotificationSidebar";
+import { logout } from "@/lib/api/auth";
+import { notifyAuthChange } from "@/lib/auth/useAuthRole";
 import { cn } from "@/lib/utils/cn";
+import { withLoginRedirect } from "@/lib/utils/loginHref";
 import { type AccountPlace, type AccountRole, PROFILE_MENU } from "./profileMenu";
 import { useNotifications } from "./useNotifications";
 
@@ -58,6 +61,7 @@ export function HeaderAccountActions({
 	onProfileMenuOpenChange,
 }: HeaderAccountActionsProps) {
 	const router = useRouter();
+	const pathname = usePathname();
 	const profileRef = useRef<HTMLDivElement>(null);
 	const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
 	const [isSwitchModalOpen, setIsSwitchModalOpen] = useState(false);
@@ -67,6 +71,11 @@ export function HeaderAccountActions({
 	const iconClassName = size === "md" ? "size-6 min-[721px]:size-7" : "size-5";
 	const isMenuOpen = profileMenuOpen ?? uncontrolledOpen;
 	const { homeLink, switchLogin } = PROFILE_MENU[account];
+	// 계정 전환 후 돌아올 곳 — 두록 화면이면 지금 화면, 어드민이면 새로 로그인할 계정의 어드민 홈
+	const switchRedirect =
+		place === "client"
+			? pathname
+			: PROFILE_MENU[account === "artist" ? "admin" : "artist"].homeLink.href;
 
 	const setMenuOpen = (next: boolean) => {
 		if (profileMenuOpen === undefined) setUncontrolledOpen(next);
@@ -85,8 +94,13 @@ export function HeaderAccountActions({
 		if (!open) markAllAsRead();
 	};
 
-	// TODO: 인증 저장 방식 확정 후 로그아웃 처리, 지금은 두록 홈으로만 이동
-	const handleLogout = () => router.replace("/");
+	// 로그아웃 후 두록 홈으로 — 계정 전환은 로그아웃 후 해당 로그인 화면으로
+	const logoutAndGo = async (href: string) => {
+		await logout();
+		notifyAuthChange();
+		router.replace(href);
+	};
+	const handleLogout = () => logoutAndGo("/");
 
 	// 열림 상태를 밖에서 관리하지 않을 때만 바깥 클릭으로 닫는다 (관리하는 쪽에서 처리)
 	useEffect(() => {
@@ -168,7 +182,11 @@ export function HeaderAccountActions({
 				title="로그아웃하시겠습니까?"
 				actions={[
 					{ text: "취소", variant: "assistive", onClick: () => setIsSwitchModalOpen(false) },
-					{ text: "로그아웃", variant: "primary", onClick: () => router.push(switchLogin.href) },
+					{
+						text: "로그아웃",
+						variant: "primary",
+						onClick: () => logoutAndGo(withLoginRedirect(switchLogin.href, switchRedirect)),
+					},
 				]}
 			/>
 

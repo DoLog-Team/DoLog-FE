@@ -3,8 +3,12 @@ import { PRIVACY_POLICY_HREF } from "@/lib/constants/terms";
 
 const EFFECTIVE_DATE = "본 동의서는 2026년 10월 18일부터 적용됩니다.";
 
-// 슈퍼 어드민(이용기관)용 약관 — 약관 API 연결 후 제거 (일반 어드민 약관은 따로 받음)
-export const MOCK_SUPER_ADMIN_TERMS = {
+// 회원가입 약관 동의의 보기 모달 전문 — BE 가 본문을 내려주지 않아 FE 에서 관리한다
+// 원문은 노션(피그마 모달 명세의 "약관 전문 (Notion)" 링크). 문구가 바뀌면 TERMS_VERSION 도 함께 올린다
+export const TERMS_VERSION = "v1.0";
+
+export const TERMS_DOCUMENTS = {
+	// 모달 32
 	privacy: {
 		title: "개인정보 수집 및 이용 동의",
 		blocks: [
@@ -42,7 +46,8 @@ export const MOCK_SUPER_ADMIN_TERMS = {
 			},
 		],
 	},
-	promotion: {
+	// 모달 34 · 전시 관리자용
+	exhibitionPromotion: {
 		title: "전시 정보의 서비스 홍보 활용 동의",
 		blocks: [
 			{
@@ -86,6 +91,53 @@ export const MOCK_SUPER_ADMIN_TERMS = {
 			},
 		],
 	},
+	// 모달 29 · 작가용
+	contentPromotion: {
+		title: "콘텐츠의 서비스 홍보 활용 동의",
+		blocks: [
+			{
+				type: "paragraph",
+				text: "두록에 업로드한 작품을 두록 공식 인스타그램에 홍보 목적으로 게시하는 것에 동의하시겠어요?",
+			},
+			{
+				type: "paragraph",
+				text: "본 동의는 해당 콘텐츠를 창작한 작가 본인이 직접 동의하는 것으로, 이용기관(학과·졸업준비위원회)의 동의로 갈음되지 않습니다.",
+			},
+			{
+				type: "table",
+				rows: [
+					{ label: "활용 대상", value: "두록에 업로드한 작품 이미지, 작품 소개글, 작가명" },
+					{
+						label: "활용 목적",
+						value: "두록 공식 인스타그램(@dolog.archive) 등 SNS 채널을 통한 플랫폼 및 전시 홍보",
+					},
+					{
+						label: "편집 범위",
+						value:
+							"게시 형식에 맞춘 크기 조정, 여백 조정, 두록 로고 삽입 등 단순 편집. 작품의 색상·형태 등 원본의 본질적 내용은 변경하지 않습니다.",
+					},
+					{
+						label: "출처 표기",
+						value:
+							"게시 시 작가명과 전시명을 함께 표기하며, 작가가 등록한 개인 SNS 계정이 있는 경우 함께 표기할 수 있습니다.",
+					},
+					{ label: "활용 기간", value: "동의 철회 또는 회원 탈퇴 시까지" },
+				],
+			},
+			{
+				type: "paragraph",
+				text: "작품을 SNS에 게시하는 경우, 게시 전 개별적으로 연락드려 안내해 드립니다. 게시 동의는 언제든 철회하실 수 있으며, 철회 시 두록은 지체 없이 게시를 중단하고 철회 요청일로부터 7일 이내에 게시물을 삭제한 후 그 결과를 안내드립니다. 다만 두록이 게시를 중단하기 전에 제3자가 저장·재게시한 콘텐츠에 대하여는 두록이 삭제 조치를 취하기 어려울 수 있습니다.",
+			},
+			{
+				type: "notice",
+				texts: [
+					"※ 본 동의는 선택 사항으로, 동의하지 않으셔도 서비스 이용에 어떠한 제한이 없습니다.",
+					EFFECTIVE_DATE,
+				],
+			},
+		],
+	},
+	// 모달 30
 	marketing: {
 		title: "마케팅 목적 개인정보 수집·이용 동의",
 		blocks: [

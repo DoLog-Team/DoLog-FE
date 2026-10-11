@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
+import { useAuthRole } from "@/lib/auth/useAuthRole";
 import { cn } from "@/lib/utils/cn";
-import { MOCK_AUTH_ROLE } from "../_mocks/auth";
 import { DologHeaderActions } from "./DologHeaderActions";
 
 // home: 두록 홈 (NAV-01·04·08) — 로고
@@ -21,6 +21,8 @@ interface HeaderProps {
 }
 
 export const Header = ({ variant = "home", title, showTitle = true, className }: HeaderProps) => {
+	const role = useAuthRole();
+
 	return (
 		<DesktopContainer>
 			{/* 높이 모바일 44px, 데스크탑 68px (Figma) */}
@@ -44,8 +46,7 @@ export const Header = ({ variant = "home", title, showTitle = true, className }:
 						</span>
 					</div>
 				)}
-				{/* TODO: 로그인 상태 API 연결 후 실제 로그인 상태 전달 */}
-				<DologHeaderActions role={MOCK_AUTH_ROLE} variant={variant} page="main" />
+				<DologHeaderActions role={role} variant={variant} page="main" />
 			</header>
 		</DesktopContainer>
 	);
