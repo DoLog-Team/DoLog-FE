@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { FormField } from "@/components/common/FormField/FormField";
 import { Input } from "@/components/common/Input/Input";
-import type { ArtistProfileForm } from "../../_mocks/profile";
+import type { ArtistProfileForm } from "../../_types";
 
 export interface ProfilePurchaseLinkSectionProps {
 	initialValue: ArtistProfileForm;

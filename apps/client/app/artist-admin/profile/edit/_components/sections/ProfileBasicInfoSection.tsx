@@ -5,7 +5,7 @@ import { FormField } from "@/components/common/FormField/FormField";
 import { ImageInput } from "@/components/common/ImageInput/ImageInput";
 import { Input } from "@/components/common/Input/Input";
 import { Textarea } from "@/components/common/Textarea/Textarea";
-import type { ArtistProfileForm } from "../../_mocks/profile";
+import type { ArtistProfileForm } from "../../_types";
 
 // 입력 중 조합 자모(ㄱ, ㅏ 등)도 허용해야 오류가 깜빡이지 않는다
 // TODO : 추후 API 연동하면서 라이브러리 사용으로 전환 가능한지 검토 예정
@@ -16,11 +16,20 @@ const INVALID_MESSAGE = "잘못 입력했어요.";
 export interface ProfileBasicInfoSectionProps {
 	initialValue: ArtistProfileForm;
 	onMissingCountChange?: (count: number) => void;
+	// 저장할 때 쓰도록 이름 입력값과 검증 결과를 부모에 알린다
+	onNameChange?: (name: BasicInfoName) => void;
+}
+
+export interface BasicInfoName {
+	nameKo: string;
+	nameEn: string;
+	isValid: boolean;
 }
 
 export const ProfileBasicInfoSection = ({
 	initialValue,
 	onMissingCountChange,
+	onNameChange,
 }: ProfileBasicInfoSectionProps) => {
 	const [nameKo, setNameKo] = useState(initialValue.nameKo);
 	const [nameEn, setNameEn] = useState(initialValue.nameEn);
@@ -31,6 +40,14 @@ export const ProfileBasicInfoSection = ({
 
 	const isNameKoInvalid = !NAME_KO_PATTERN.test(nameKo);
 	const isNameEnInvalid = !NAME_EN_PATTERN.test(nameEn);
+
+	useEffect(() => {
+		onNameChange?.({
+			nameKo,
+			nameEn,
+			isValid: Boolean(nameKo.trim()) && !isNameKoInvalid && !isNameEnInvalid,
+		});
+	}, [nameKo, nameEn, isNameKoInvalid, isNameEnInvalid, onNameChange]);
 
 	// 필수값은 국문 성명뿐
 	useEffect(() => {
