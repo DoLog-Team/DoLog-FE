@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils/cn";
-import type { ArtworkStatus } from "../_mocks/artworks";
+import type { ArtworkStatus } from "../_types";
 
 // (A) 색 규칙표
 // 색 이름마다 "뱃지일 때 클래스"와 "글자일 때 클래스"를 갖도록 함
