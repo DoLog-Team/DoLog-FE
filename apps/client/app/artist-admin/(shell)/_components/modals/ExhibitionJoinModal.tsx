@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Input } from "@/components/common/Input/Input";
 import { Modal } from "@/components/common/Modal/Modal";
-import { findExhibitionByCode, type JoinableExhibition } from "../../_mocks/exhibitionJoin";
+import { validateJoinCode } from "../../_api/actions";
+import type { JoinableExhibition } from "../../_types";
 
 interface ExhibitionJoinModalProps {
 	open: boolean;
@@ -21,28 +22,32 @@ export function ExhibitionJoinModal({
 	onCodeConfirmed,
 }: ExhibitionJoinModalProps) {
 	const [code, setCode] = useState("");
-	const [isNotFound, setIsNotFound] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const handleOpenChange = (next: boolean) => {
 		if (!next) {
 			setCode("");
-			setIsNotFound(false);
+			setErrorMessage("");
 		}
 		onOpenChange(next);
 	};
 
-	const isSubmitDisabled = !code.trim() || isNotFound;
+	const isSubmitDisabled = !code.trim() || Boolean(errorMessage) || isSubmitting;
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		if (isSubmitDisabled) return;
-		// TODO: 입장 코드 조회 API 연결
-		const exhibition = findExhibitionByCode(code.trim());
-		if (!exhibition) {
-			setIsNotFound(true);
+		setIsSubmitting(true);
+		const result = await validateJoinCode(code.trim());
+		setIsSubmitting(false);
+
+		if (!result.ok) {
+			// 없는 코드는 피그마 문구, 만료·이미 신청 등은 백엔드 안내 문구를 보여준다
+			setErrorMessage(result.reason === "INVALID_CODE" ? "없는 코드입니다." : result.message);
 			return;
 		}
 		handleOpenChange(false);
-		onCodeConfirmed(exhibition);
+		onCodeConfirmed(result.exhibition);
 	};
 
 	return (
@@ -74,10 +79,10 @@ export function ExhibitionJoinModal({
 					value={code}
 					onChange={(e) => {
 						setCode(e.target.value);
-						setIsNotFound(false);
+						setErrorMessage("");
 					}}
-					error={isNotFound}
-					errorMessage={isNotFound ? "없는 코드입니다." : undefined}
+					error={Boolean(errorMessage)}
+					errorMessage={errorMessage || undefined}
 				/>
 			</form>
 		</Modal>

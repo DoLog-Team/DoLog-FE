@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { JoinableExhibition } from "../../_mocks/exhibitionJoin";
-import type { MyExhibition } from "../../_mocks/exhibitions";
+import type { JoinableExhibition, MyExhibition } from "../../_types";
 import { ListToggleButton } from "../ListToggleButton";
 import { MyExhibitionCard } from "../MyExhibitionCard";
 import { ExhibitionIntroModal } from "../modals/ExhibitionIntroModal";

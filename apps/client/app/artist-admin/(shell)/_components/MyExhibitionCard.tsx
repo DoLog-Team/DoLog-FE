@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { cn } from "@/lib/utils/cn";
-import type { MyExhibition } from "../_mocks/exhibitions";
+import type { MyExhibition } from "../_types";
 import { OverflowMenu } from "./OverflowMenu";
 import { STATUS_TONE } from "./StatusBadge";
 
@@ -32,9 +32,11 @@ export function MyExhibitionCard({ exhibition, onLeave }: MyExhibitionCardProps)
 			<div className="flex min-w-0 flex-1 items-start gap-2.5">
 				<div className="flex min-w-0 flex-1 flex-col px-0.5">
 					<h3 className="truncate text-head3 text-strong">{exhibition.name}</h3>
-					<p className="text-body1 text-lighter">
-						{exhibition.startDate} ~ {exhibition.endDate}
-					</p>
+					{exhibition.startDate && exhibition.endDate && (
+						<p className="text-body1 text-lighter">
+							{exhibition.startDate} ~ {exhibition.endDate}
+						</p>
+					)}
 					{isPending && (
 						<p className={cn("text-body1-bold", STATUS_TONE.coral.text)}>수락 대기중</p>
 					)}

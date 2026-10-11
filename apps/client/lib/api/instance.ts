@@ -14,12 +14,15 @@ export interface ApiResponse<T> {
 export class ApiError extends Error {
 	readonly status: number;
 	readonly code?: string;
+	// 백엔드가 내려준 안내 문구 원문 (화면에 그대로 보여줄 때 사용)
+	readonly serverMessage?: string;
 
 	constructor(status: number, serverMessage?: string, code?: string) {
 		super(serverMessage ? `HTTP ${status}: ${serverMessage}` : `HTTP ${status}`);
 		this.name = "ApiError";
 		this.status = status;
 		this.code = code;
+		this.serverMessage = serverMessage;
 	}
 }
 
