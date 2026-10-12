@@ -23,6 +23,7 @@ export interface ProfileBasicInfoSectionProps {
 export interface BasicInfoName {
 	nameKo: string;
 	nameEn: string;
+	// 입력 형식 검증 결과 (필수값 여부와는 별개 — 필수값이 비어도 임시 저장은 가능)
 	isValid: boolean;
 }
 
@@ -45,7 +46,7 @@ export const ProfileBasicInfoSection = ({
 		onNameChange?.({
 			nameKo,
 			nameEn,
-			isValid: Boolean(nameKo.trim()) && !isNameKoInvalid && !isNameEnInvalid,
+			isValid: !isNameKoInvalid && !isNameEnInvalid,
 		});
 	}, [nameKo, nameEn, isNameKoInvalid, isNameEnInvalid, onNameChange]);
 
