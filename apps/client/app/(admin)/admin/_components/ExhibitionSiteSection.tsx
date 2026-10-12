@@ -17,11 +17,10 @@ import { SECTION_TITLE_CLASS } from "./homeSection.styles";
 import { InfoRows } from "./InfoRows";
 
 const NOT_PUBLISHED = "게시 전";
-// 활성 구독 없이 게시하면 만료일이 없다
+// 활성 구독 없이 게시된 전시는 만료일이 없다
 const NO_EXPIRY = "-";
 
-// 노션 `전시 활성화를 위한 기본 데이터 리스트` 의 필수값 — 하나라도 없으면 게시 불가
-// 주소, 주최기관도 필수인데 admin-home 응답에 없어서 아직 검사하지 못한다
+// 노션 `전시 활성화를 위한 기본 데이터 리스트` 의 필수값. 주소, 주최기관은 admin-home 응답에 없어서 아직 검사 못 함
 const REQUIRED_FOR_PUBLISH = [
 	"title",
 	"type",
@@ -51,7 +50,7 @@ export const ExhibitionSiteSection = ({
 	const [isPublishing, setIsPublishing] = useState(false);
 
 	const isPublished = publishedAt !== null;
-	// 서버는 게시 조건을 따로 검사하지 않아서 화면에서 막는다 (활성 구독 + 필수값)
+	// 게시 API 가 구독, 필수값을 검사하지 않아서 화면에서 막는다
 	const canPublish =
 		!isPublished &&
 		!isPublishing &&

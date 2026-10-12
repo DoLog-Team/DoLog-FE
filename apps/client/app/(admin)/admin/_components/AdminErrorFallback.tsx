@@ -8,13 +8,10 @@ interface AdminErrorFallbackProps {
 	reset: () => void;
 }
 
-// 전시 어드민 화면 데이터를 불러오지 못했을 때 — (admin), (admin-form) 의 error.tsx 가 같이 쓴다
-// 실패 문구는 명세에 없어서 다른 실패 안내와 같은 톤으로 둠
-// 에러 내용은 서버 로그에 남아서 화면에서는 따로 기록하지 않는다
 export const AdminErrorFallback = ({ reset }: AdminErrorFallbackProps) => {
 	const router = useRouter();
 
-	// 서버 컴포넌트에서 난 에러라 reset 만으로는 데이터를 다시 받지 않는다 — refresh 로 서버에서 다시 그린다
+	// 서버 컴포넌트 에러는 reset 만으로 데이터를 다시 받지 않아서 refresh 를 같이 한다
 	const retry = () =>
 		startTransition(() => {
 			router.refresh();
