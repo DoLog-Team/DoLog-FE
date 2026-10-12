@@ -1,10 +1,7 @@
 import { authApiClient, isApiError } from "@/lib/api/instance";
 
-// 전시 어드민 화면에서 버튼으로 하는 동작 — 클라이언트 컴포넌트에서 BFF 를 거쳐 호출한다
-
 export type ActionFailure = "UNAUTHORIZED" | "FAILED";
 
-// 401 은 세션 만료라 로그인 화면으로 보낸다
 export function toActionFailure(error: unknown): ActionFailure {
 	return isApiError(error, 401) ? "UNAUTHORIZED" : "FAILED";
 }
@@ -12,7 +9,6 @@ export function toActionFailure(error: unknown): ActionFailure {
 /************************
  * 전시 게시
  * POST exhibitions/{exhibitionId}/publish
- * 게시 시각과 만료 시각("yyyy-MM-dd HH:mm:ss")을 받아 날짜만 쓴다
  ************************/
 
 interface PublishResponse {
@@ -36,5 +32,28 @@ export async function publishExhibition(exhibitionId: string): Promise<PublishRe
 		};
 	} catch (error) {
 		return { ok: false, reason: toActionFailure(error) };
+	}
+}
+
+/************************
+ * 참여 작가 상태 일괄 변경
+ * PATCH exhibitions/{exhibitionId}/artists/status
+ ************************/
+
+export type ArtistDecision = "JOINED" | "DENIED" | "REMOVED";
+
+export async function updateArtistStatus(
+	exhibitionId: string,
+	artistIds: string[],
+	status: ArtistDecision,
+): Promise<ActionFailure | null> {
+	try {
+		await authApiClient(`/exhibitions/${exhibitionId}/artists/status`, {
+			method: "PATCH",
+			body: JSON.stringify({ artistIds, status }),
+		});
+		return null;
+	} catch (error) {
+		return toActionFailure(error);
 	}
 }

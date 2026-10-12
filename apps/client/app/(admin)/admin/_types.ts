@@ -1,4 +1,4 @@
-// 전시 어드민 홈 화면에서 쓰는 값 — 필드 기준: 노션 `전시 활성화를 위한 기본 데이터 리스트`
+// 필드 기준: 노션 `전시 활성화를 위한 기본 데이터 리스트`
 export interface AdminExhibition {
 	// 전시회_기본정보
 	title: string | null;
@@ -18,7 +18,7 @@ export interface AdminExhibition {
 	imageUrl: string | null;
 	siteUrl: string | null;
 	entryCode: string | null;
-	// "YYYY-MM-DD" · 게시 전이면 null
+	// "YYYY-MM-DD", 게시 전이면 null
 	publishedAt: string | null;
 	expiresAt: string | null;
 }
@@ -30,4 +30,12 @@ export interface AdminExhibitionCounts {
 	exhibitedArtworks: number;
 	exceededArtworks: number;
 	hiddenArtworks: number;
+}
+
+export interface AdminArtist {
+	id: string;
+	name: string;
+	email: string | null;
+	greeting: string | null;
+	artworkCount: number;
 }
