@@ -39,3 +39,24 @@ export interface AdminArtist {
 	greeting: string | null;
 	artworkCount: number;
 }
+
+export const ARTWORK_VISIBILITY_LABELS = ["공개", "비공개", "임시저장"] as const;
+export type ArtworkVisibilityLabel = (typeof ARTWORK_VISIBILITY_LABELS)[number];
+
+export interface AdminArtwork {
+	id: string;
+	title: string;
+	artistName: string;
+	groupId: string | null;
+	group: string | null;
+	visibility: ArtworkVisibilityLabel;
+	// 플랜 한도 초과로 전시에 노출되지 않으면 false
+	isExposed: boolean;
+	progress: number;
+	imageUrl: string | null;
+}
+
+export interface AdminArtworkGroup {
+	id: string;
+	name: string;
+}
