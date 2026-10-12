@@ -31,7 +31,7 @@ const getLoginResult = async (code: string) => {
 
 type FailureModal = "expired" | "failed" | null;
 
-export const SuperAdminLoginForm = () => {
+export const ExhibitionAdminLoginForm = () => {
 	const router = useRouter();
 
 	const [code, setCode] = useState("");

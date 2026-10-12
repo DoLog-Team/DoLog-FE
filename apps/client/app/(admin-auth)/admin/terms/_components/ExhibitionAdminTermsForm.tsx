@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { TermsAgreementForm } from "@/components/common/TermsAgreementForm/TermsAgreementForm";
 
-export const SuperAdminTermsForm = () => {
+export const ExhibitionAdminTermsForm = () => {
 	const router = useRouter();
 
 	return (
