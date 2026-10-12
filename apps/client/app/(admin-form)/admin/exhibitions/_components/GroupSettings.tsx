@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Button } from "@/components/common/Button/Button";
 import { Input } from "@/components/common/Input/Input";
 import { PlusIcon } from "@/components/common/icons/PlusIcon";
-import type { ArtworkGroup } from "../_mocks/exhibitionSettings";
+import type { ArtworkGroup } from "../_types";
 
 export const MAX_GROUP_COUNT = 30;
 const MAX_GROUP_NAME_LENGTH = 30;
