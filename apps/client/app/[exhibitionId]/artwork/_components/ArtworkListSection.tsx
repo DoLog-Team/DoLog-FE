@@ -111,7 +111,8 @@ export function ArtworkListSection({
 						onChange={onSearchChange}
 					/>
 					<div className="flex items-center">
-						{!hideFilter && (
+						{/* 서버가 내려준 카테고리가 없으면("전체"뿐이면) 필터를 숨긴다 */}
+						{!hideFilter && categories.length > 1 && (
 							<Filter
 								categories={categories}
 								selected={selected}

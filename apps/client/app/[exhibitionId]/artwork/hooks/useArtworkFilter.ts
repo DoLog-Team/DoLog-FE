@@ -8,7 +8,8 @@ export function useArtworkFilter(zones: ZoneGroup[], searchQuery: string = "") {
 	// const currentArtworks = artworks && artworks.length > 0 ? artworks : MOCK_ARTWORK_LIST.artworks; // TODO : 현재 백 데이터가 비어있어서 임시 처리
 	const categories = [
 		"전체",
-		...new Set(zones.flatMap((z) => z.categories.map((c) => c.categoryName))),
+		// 이름이 비어 있는 카테고리는 칩으로 만들지 않는다
+		...new Set(zones.flatMap((z) => z.categories.map((c) => c.categoryName)).filter(Boolean)),
 	];
 	const filteredZones = useMemo(
 		() =>
