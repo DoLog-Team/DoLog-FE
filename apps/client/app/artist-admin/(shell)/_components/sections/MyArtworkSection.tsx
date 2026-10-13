@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Input } from "@/components/common/Input/Input";
 import { Modal } from "@/components/common/Modal/Modal";
+import { createArtwork } from "../../../artworks/_api/createArtwork";
 import type { MyArtwork } from "../../_mocks/artworks";
 import { ListToggleButton } from "../ListToggleButton";
 import { MyArtworkCard } from "../MyArtworkCard";
@@ -29,12 +30,23 @@ export function MyArtworkSection({ artworks: initialArtworks }: MyArtworkSection
 	);
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [titleValue, setTitleValue] = useState("");
+	const [isAdding, setIsAdding] = useState(false);
+	const [addError, setAddError] = useState("");
 
-	const handleAdd = () => {
+	const handleAdd = async () => {
 		const title = titleValue.trim();
 		if (!title) return;
-		setIsAddModalOpen(false);
-		router.push(`/artist-admin/artworks/new?title=${encodeURIComponent(title)}`);
+		setIsAdding(true);
+		setAddError("");
+		try {
+			const artwork = await createArtwork(title);
+			setIsAddModalOpen(false);
+			router.push(`/artist-admin/artworks/${artwork.id}/edit`);
+		} catch {
+			setAddError("작품 추가에 실패했어요. 다시 시도해주세요.");
+		} finally {
+			setIsAdding(false);
+		}
 	};
 
 	// 삭제 API 연결 전 — 화면에서만 목록에서 제거
@@ -50,6 +62,7 @@ export function MyArtworkSection({ artworks: initialArtworks }: MyArtworkSection
 				actionLabel="추가하기"
 				onAction={() => {
 					setTitleValue("");
+					setAddError("");
 					setIsAddModalOpen(true);
 				}}
 			/>
@@ -76,7 +89,7 @@ export function MyArtworkSection({ artworks: initialArtworks }: MyArtworkSection
 					{
 						text: "추가하기",
 						variant: "primary",
-						disabled: !titleValue.trim(),
+						disabled: !titleValue.trim() || isAdding,
 						onClick: handleAdd,
 					},
 				]}
@@ -85,6 +98,8 @@ export function MyArtworkSection({ artworks: initialArtworks }: MyArtworkSection
 					value={titleValue}
 					onChange={(e) => setTitleValue(e.target.value)}
 					placeholder="작품 이름을 입력해주세요"
+					error={Boolean(addError)}
+					errorMessage={addError || undefined}
 				/>
 			</Modal>
 		</section>
