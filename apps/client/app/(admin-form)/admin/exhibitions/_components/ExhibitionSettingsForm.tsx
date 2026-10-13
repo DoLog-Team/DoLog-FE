@@ -10,6 +10,7 @@ import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { Modal } from "@/components/common/Modal/Modal";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { TabBar } from "@/components/common/TabBar/TabBar";
+import { formatSavedAt } from "@/lib/utils/date";
 import {
 	type ExhibitionSettings,
 	HIDDEN_OPTIONS,
@@ -29,12 +30,6 @@ const TABS = [
 const FIELD_CLASS = "gap-3";
 const CHECKBOX_CLASS = "min-h-11";
 const CHECKBOX_LABEL_CLASS = "text-body2-bold";
-
-// "2026.09.29 14:05"
-const formatSavedAt = (date: Date) => {
-	const pad = (value: number) => String(value).padStart(2, "0");
-	return `${date.getFullYear()}.${pad(date.getMonth() + 1)}.${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
-};
 
 export const ExhibitionSettingsForm = () => {
 	const router = useRouter();
