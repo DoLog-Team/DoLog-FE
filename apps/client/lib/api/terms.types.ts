@@ -1,12 +1,12 @@
-// 필드명 — BE 확정 후 매핑 필요
+// POST /accounts/me/terms
 export interface TermsAgreementRequest {
-	age_over_14: boolean;
-	service_terms: boolean;
-	privacy_collection: boolean;
-	exhibition_promotion: boolean;
-	marketing: boolean;
-	advertising: boolean;
-	terms_version: string;
+	termsVersion: string;
+	age14OrOverConfirmed: boolean;
+	serviceTermsAgreed: boolean;
+	privacyAgreed: boolean;
+	promotionAgreed: boolean;
+	marketingAgreed: boolean;
+	adReceiveAgreed: boolean;
 }
 
 // NO_ENDPOINT: API 없음(404·네트워크 오류), REJECTED: 서버가 요청을 거절

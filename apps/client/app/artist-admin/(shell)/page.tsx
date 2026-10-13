@@ -1,23 +1,53 @@
+import { redirect } from "next/navigation";
 import { Divider } from "@/components/common/Divider/Divider";
+import { isApiError } from "@/lib/api/instance";
+import { withLoginRedirect } from "@/lib/utils/loginHref";
+import {
+	getMyAccount,
+	getMyArtworks,
+	getMyExhibitions,
+	getMyProfile,
+	getMyTermsAgreement,
+} from "./_api/getMyPage";
 import { AccountSection } from "./_components/sections/AccountSection";
 import { MyArtworkSection } from "./_components/sections/MyArtworkSection";
 import { MyExhibitionSection } from "./_components/sections/MyExhibitionSection";
 import { ProfileSection } from "./_components/sections/ProfileSection";
-import { MOCK_MARKETING_CONSENTS } from "./_mocks/account";
-import { MOCK_MY_ARTWORKS } from "./_mocks/artworks";
-import { MOCK_MY_EXHIBITIONS } from "./_mocks/exhibitions";
-import { MOCK_ARTIST_PROFILE } from "./_mocks/profile";
+import type { MyArtwork, MyExhibition } from "./_types";
 
-export default function ArtistPage() {
+const LOGIN_HREF = withLoginRedirect("/artist-admin/login", "/artist-admin");
+
+export default async function ArtistPage() {
+	// 쿠키는 있지만 refresh 까지 만료된 경우 — 다시 로그인
+	const account = await getMyAccount().catch((error) => {
+		if (isApiError(error, 401) || isApiError(error, 403)) redirect(LOGIN_HREF);
+		throw error;
+	});
+	const { artistId } = account;
+
+	// TODO: 소셜 가입 직후 계정은 artistId 가 null — 작가 정보 생성 시점 BE 확인 중
+	// 작가 정보가 없으면 작품·전시 API 도 404(작가를 찾을 수 없음)라서 호출하지 않고 빈 화면으로 둔다
+	const [[profile, artworks, exhibitions], termsAgreement] = await Promise.all([
+		artistId
+			? Promise.all([getMyProfile(artistId), getMyArtworks(), getMyExhibitions()])
+			: ([null, [], []] satisfies [null, MyArtwork[], MyExhibition[]]),
+		// 약관 동의는 작가 정보가 아니라 계정 기준이라 artistId 없이도 불러온다
+		getMyTermsAgreement(),
+	]);
+
 	return (
 		<>
-			<ProfileSection profile={MOCK_ARTIST_PROFILE} />
+			{profile && (
+				<>
+					<ProfileSection profile={profile} />
+					<Divider spacing="md" thickness="thin" />
+				</>
+			)}
+			<MyArtworkSection artworks={artworks} exhibitions={exhibitions} />
 			<Divider spacing="md" thickness="thin" />
-			<MyArtworkSection artworks={MOCK_MY_ARTWORKS} />
+			<MyExhibitionSection exhibitions={exhibitions} />
 			<Divider spacing="md" thickness="thin" />
-			<MyExhibitionSection exhibitions={MOCK_MY_EXHIBITIONS} />
-			<Divider spacing="md" thickness="thin" />
-			<AccountSection consents={MOCK_MARKETING_CONSENTS} />
+			<AccountSection agreement={termsAgreement} />
 		</>
 	);
 }

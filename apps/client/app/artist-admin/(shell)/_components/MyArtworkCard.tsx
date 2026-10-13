@@ -7,28 +7,29 @@ import { useState } from "react";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { Modal } from "@/components/common/Modal/Modal";
 import { Select } from "@/components/common/Select/Select";
-import type { MyArtwork } from "../_mocks/artworks";
-import { MOCK_MY_EXHIBITIONS } from "../_mocks/exhibitions";
+import type { MyArtwork, MyExhibition } from "../_types";
 import { Engagement } from "./Engagement";
 import { OverflowMenu, type OverflowMenuItem } from "./OverflowMenu";
 import { ArtworkStatusBadge, StatusBadge } from "./StatusBadge";
 
 interface MyArtworkCardProps {
 	artwork: MyArtwork;
+	// 출품할 전시 선택지 — 나의 전시 목록
+	exhibitions: MyExhibition[];
 	onDelete: (artworkId: string) => void;
 }
 
 /**
  * 작품 카드 컴포넌트
  */
-export function MyArtworkCard({ artwork, onDelete }: MyArtworkCardProps) {
+export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardProps) {
 	const router = useRouter();
 	const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
 	const [selectedExhibitionId, setSelectedExhibitionId] = useState<string | undefined>(undefined);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
 	// 수락 완료된 전시만 출품 대상으로 선택 가능
-	const acceptedExhibitions = MOCK_MY_EXHIBITIONS.filter((exhibition) => exhibition.acceptedAt);
+	const acceptedExhibitions = exhibitions.filter((exhibition) => exhibition.acceptedAt);
 
 	const handleSubmit = () => {
 		if (!selectedExhibitionId) return;

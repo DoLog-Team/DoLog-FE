@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api/instance";
+import { authApiClient } from "@/lib/api/instance";
 
 export interface CreateArtworkResult {
 	id: string;
@@ -9,7 +9,7 @@ export async function createArtwork(title: string): Promise<CreateArtworkResult>
 	const formData = new FormData();
 	formData.append("title", title);
 
-	return apiClient<CreateArtworkResult>("/artworks", {
+	return authApiClient<CreateArtworkResult>("/artworks", {
 		method: "POST",
 		body: formData,
 	});

@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api/instance";
+import { authApiClient } from "@/lib/api/instance";
 
 export interface MyArtworkDetail {
 	artworkId: string;
@@ -33,5 +33,5 @@ export interface MyArtworkDetail {
 
 // 내 작품 상세 조회 (편집용) — 공개 여부/숨김과 무관
 export async function getMyArtwork(artworkId: string): Promise<MyArtworkDetail> {
-	return apiClient<MyArtworkDetail>(`/artworks/${artworkId}/me`);
+	return authApiClient<MyArtworkDetail>(`/artworks/${artworkId}/me`);
 }

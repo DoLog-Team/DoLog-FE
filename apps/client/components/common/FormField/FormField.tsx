@@ -18,7 +18,8 @@ export const FormField = ({
 }: FormFieldProps) => {
 	return (
 		<div className={cn("flex flex-col gap-2", className)}>
-			<div>
+			{/* Figma 라벨 좌우 2px 여백 */}
+			<div className="px-0.5">
 				<span className="text-body2-bold text-strong">
 					{label} {required && <span className="text-error">*</span>}
 				</span>

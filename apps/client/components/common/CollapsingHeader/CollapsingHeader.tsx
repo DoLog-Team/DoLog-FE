@@ -1,12 +1,11 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Header } from "@/app/(main)/_components/Header";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { Title } from "@/components/common/Title/Title";
+import { cn } from "@/lib/utils/cn";
 
 interface CollapsingHeaderProps {
 	title: string;
@@ -43,30 +42,17 @@ export const CollapsingHeader = ({
 
 	return (
 		<div className="sticky top-0 z-10 bg-normal">
-			<div className="hidden md:block">
-				<Header />
-			</div>
-			{/* 뒤로가기 + 스크롤 시 compact 타이틀 */}
+			{/* 두록 상세 헤더 — 큰 제목이 접히면 헤더에 제목 표시 */}
+			<Header
+				variant="detail"
+				title={title}
+				showTitle={isScrolled}
+				className={cn(
+					"border-b min-[721px]:border-b-0",
+					isScrolled ? "border-transparent" : "border-stroke-lightest",
+				)}
+			/>
 			<DesktopContainer>
-				<div
-					className={`flex md:hidden items-center gap-3 py-2.5 border-b ${
-						isScrolled ? "border-transparent" : "border-stroke-lightest"
-					}`}
-				>
-					<Link href="/" className="flex items-center justify-center w-6 h-6 shrink-0">
-						<Image src="/icons/backBtn.svg" alt="뒤로가기" width={24} height={24} />
-					</Link>
-					<span
-						className={`text-strong transition-opacity duration-200 ${
-							isScrolled
-								? "opacity-100 text-body1-bold"
-								: "opacity-0 text-head2 pointer-events-none"
-						}`}
-					>
-						{title}
-					</span>
-				</div>
-
 				{/* 큰 타이틀: 스크롤 전에만 보임 */}
 				<div
 					className={`overflow-hidden transition-all duration-200 ${

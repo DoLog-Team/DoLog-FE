@@ -5,7 +5,7 @@ import { EmptyArtistIcon } from "@/components/common/icons/EmptyArtistIcon";
 import RowList from "@/components/common/RowList/RowList";
 import { Title } from "@/components/common/Title/Title";
 import { cn } from "@/lib/utils/cn";
-import type { ArtistAdminProfile } from "../../_mocks/profile";
+import type { ArtistAdminProfile } from "../../_types";
 import { Engagement } from "../Engagement";
 import { SECTION_TITLE_CLASS } from "../SectionHeader";
 

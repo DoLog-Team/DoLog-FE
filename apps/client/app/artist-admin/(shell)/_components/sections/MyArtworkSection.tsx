@@ -5,7 +5,8 @@ import { useState } from "react";
 import { Input } from "@/components/common/Input/Input";
 import { Modal } from "@/components/common/Modal/Modal";
 import { createArtwork } from "../../../artworks/_api/createArtwork";
-import type { MyArtwork } from "../../_mocks/artworks";
+import { deleteArtwork, toErrorMessage } from "../../_api/actions";
+import type { MyArtwork, MyExhibition } from "../../_types";
 import { ListToggleButton } from "../ListToggleButton";
 import { MyArtworkCard } from "../MyArtworkCard";
 import { SectionHeader } from "../SectionHeader";
@@ -19,9 +20,14 @@ const compareArtworks = (a: MyArtwork, b: MyArtwork) => {
 
 interface MyArtworkSectionProps {
 	artworks: MyArtwork[];
+	// 작품 출품 시 전시 선택지
+	exhibitions: MyExhibition[];
 }
 
-export function MyArtworkSection({ artworks: initialArtworks }: MyArtworkSectionProps) {
+export function MyArtworkSection({
+	artworks: initialArtworks,
+	exhibitions,
+}: MyArtworkSectionProps) {
 	const router = useRouter();
 	const [artworks, setArtworks] = useState(initialArtworks);
 	const { visibleItems, expanded, canToggle, toggle } = useExpandableList(
@@ -49,9 +55,15 @@ export function MyArtworkSection({ artworks: initialArtworks }: MyArtworkSection
 		}
 	};
 
-	// 삭제 API 연결 전 — 화면에서만 목록에서 제거
-	const handleDelete = (artworkId: string) => {
-		setArtworks((prev) => prev.filter((artwork) => artwork.artworkId !== artworkId));
+	const [deleteError, setDeleteError] = useState("");
+
+	const handleDelete = async (artworkId: string) => {
+		try {
+			await deleteArtwork(artworkId);
+			setArtworks((prev) => prev.filter((artwork) => artwork.artworkId !== artworkId));
+		} catch (error) {
+			setDeleteError(toErrorMessage(error));
+		}
 	};
 
 	return (
@@ -69,7 +81,12 @@ export function MyArtworkSection({ artworks: initialArtworks }: MyArtworkSection
 
 			<div className="mt-5 flex flex-col gap-5 min-[721px]:mt-0 min-[721px]:grid min-[721px]:grid-cols-4">
 				{visibleItems.map((artwork) => (
-					<MyArtworkCard key={artwork.artworkId} artwork={artwork} onDelete={handleDelete} />
+					<MyArtworkCard
+						key={artwork.artworkId}
+						artwork={artwork}
+						exhibitions={exhibitions}
+						onDelete={handleDelete}
+					/>
 				))}
 			</div>
 
@@ -102,6 +119,15 @@ export function MyArtworkSection({ artworks: initialArtworks }: MyArtworkSection
 					errorMessage={addError || undefined}
 				/>
 			</Modal>
+			{/* TODO: 삭제 실패 안내 UI 는 피그마에 없음 — 임시 모달 */}
+			<Modal
+				open={Boolean(deleteError)}
+				onOpenChange={(open) => !open && setDeleteError("")}
+				title="삭제에 실패했어요."
+				description={deleteError}
+				showCloseButton
+				actions={[{ text: "확인", variant: "assistive", onClick: () => setDeleteError("") }]}
+			/>
 		</section>
 	);
 }

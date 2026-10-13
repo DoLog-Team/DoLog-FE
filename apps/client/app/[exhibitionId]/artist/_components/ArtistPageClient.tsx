@@ -32,11 +32,12 @@ export function ArtistPageClient({ exhibitionId, partners, artists }: ArtistPage
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(
 		TABS.map((t) => t.id),
 		100,
+		124,
 	);
 
 	return (
 		<>
-			<Header variant="logo" />
+			<Header variant="sub" title="참여한 사람" />
 
 			<ScrollTabBar
 				tabs={TABS}

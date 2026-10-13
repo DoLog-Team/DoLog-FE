@@ -37,7 +37,11 @@ export function ArtworkDetailClient({
 		return base;
 	}, [data.relatedBts]);
 
-	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(TABS.map((t) => t.id));
+	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(
+		TABS.map((t) => t.id),
+		44,
+		68,
+	);
 
 	const sectionNames = useMemo(() => TABS.map((t) => t.id), [TABS]);
 	useSectionTime("artwork_detail", sectionNames);
@@ -53,7 +57,7 @@ export function ArtworkDetailClient({
 
 	return (
 		<div className="flex flex-col">
-			<Header variant="back" />
+			<Header variant="sub" title="작품 상세" />
 
 			<div className="w-full">
 				{data.mainImage ? (

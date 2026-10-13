@@ -68,7 +68,7 @@ export default async function ArtistDetailPage({ params }: Props) {
 	return (
 		<>
 			<SectionTimeTracker pageName="artist_detail" sections={["profile", "contact", "artworks"]} />
-			<Header variant="back" title="작가 상세" />
+			<Header variant="sub" title="작가 상세" />
 
 			<DesktopContainer className="flex flex-col">
 				<div data-section="profile">

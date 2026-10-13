@@ -6,6 +6,7 @@ import MainFooter from "@/components/common/Footer/MainFooter";
 import { PageTracker } from "@/components/common/PageTracker";
 import { Title } from "@/components/common/Title/Title";
 import { TrackedLink } from "@/components/common/TrackedLink";
+import { WelcomeModal } from "@/components/common/WelcomeModal/WelcomeModal";
 import { getMainArtworks } from "@/lib/api/artwork";
 import { getBanners, getExhibitions, getMainExhibitions } from "@/lib/api/exhibition";
 import Banner from "./_components/Banner";
@@ -134,6 +135,8 @@ export default async function MainPage() {
 				/>
 			</DesktopContainer>
 			<MainFooter />
+			{/* 작가 회원가입(약관 동의) 직후 한 번만 뜬다 */}
+			<WelcomeModal />
 		</div>
 	);
 }

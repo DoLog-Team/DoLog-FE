@@ -1,11 +1,11 @@
-import { apiClient } from "@/lib/api/instance";
+import { authApiClient } from "@/lib/api/instance";
 
 // 작품 기본 정보 부분 수정 (보낸 필드만 반영)
 export async function renameArtwork(artworkId: string, title: string): Promise<void> {
 	const formData = new FormData();
 	formData.append("title", title);
 
-	await apiClient<void>(`/artworks/${artworkId}`, {
+	await authApiClient<void>(`/artworks/${artworkId}`, {
 		method: "PATCH",
 		body: formData,
 	});
@@ -63,7 +63,7 @@ export async function updateArtworkBasicInfo(
 
 	if (input.mainImageFile) formData.append("mainImageFile", input.mainImageFile);
 
-	await apiClient<void>(`/artworks/${artworkId}`, {
+	await authApiClient<void>(`/artworks/${artworkId}`, {
 		method: "PATCH",
 		body: formData,
 	});

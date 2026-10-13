@@ -4,10 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Fragment, useEffect, useRef, useState } from "react";
-import { Modal } from "@/components/common/Modal/Modal";
-import { NotificationSidebar } from "@/components/common/NotificationSidebar/NotificationSidebar";
+import {
+	HEADER_DROPDOWN_ITEM_CLASS,
+	HeaderAccountActions,
+	HeaderDropdownDivider,
+	HeaderDropdownList,
+} from "@/components/common/HeaderAccountActions/HeaderAccountActions";
 import { cn } from "@/lib/utils/cn";
-import { MOCK_NOTIFICATIONS } from "../_mocks/notifications";
 import { ExhibitionAdminSidebar } from "./ExhibitionAdminSidebar";
 import { getActiveHref } from "./getActiveHref";
 
@@ -26,11 +29,6 @@ const ARTWORK_MENU: MenuItem[] = [
 	{ label: "숨긴 작품 관리", href: "/admin/artworks/hidden" },
 ];
 
-const ARTIST_LOGIN_HREF = "/artist-admin/login";
-
-const MENU_ITEM_CLASS =
-	"flex h-12 w-full cursor-pointer items-center gap-2 whitespace-nowrap rounded px-3 text-body1-bold text-light hover:bg-fg-lighter";
-
 type OpenMenu = "artists" | "artworks" | "profile" | null;
 
 export function ExhibitionAdminHeader() {
@@ -39,18 +37,6 @@ export function ExhibitionAdminHeader() {
 	const headerRef = useRef<HTMLElement>(null);
 	const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-	const [isSwitchModalOpen, setIsSwitchModalOpen] = useState(false);
-	const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-	// 알림 API 연결 전 임시 데이터
-	const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
-
-	const hasUnread = notifications.some((notification) => !notification.isRead);
-
-	// 알림을 닫으면 확인한 것으로 보고 새 알림 점을 지운다
-	const handleNotificationOpenChange = (open: boolean) => {
-		setIsNotificationOpen(open);
-		if (!open) setNotifications((prev) => prev.map((item) => ({ ...item, isRead: true })));
-	};
 
 	// 메뉴 바깥을 누르면 닫는다
 	useEffect(() => {
@@ -67,7 +53,7 @@ export function ExhibitionAdminHeader() {
 	const toggleMenu = (menu: OpenMenu) => setOpenMenu((prev) => (prev === menu ? null : menu));
 	const closeMenu = () => setOpenMenu(null);
 
-	// 인증 저장 방식 확정 전이라 두록 홈으로 보내기만 한다
+	// 모바일 사이드바 로그아웃 — 인증 저장 방식 확정 전이라 두록 홈으로 보내기만 한다
 	const handleLogout = () => router.replace("/");
 
 	return (
@@ -112,74 +98,22 @@ export function ExhibitionAdminHeader() {
 					</div>
 
 					<div className="flex items-center gap-4">
-						<button
-							type="button"
-							onClick={() => {
+						<HeaderAccountActions
+							account="admin"
+							place="admin"
+							size="md"
+							onNotificationOpen={() => {
 								closeMenu();
 								setIsSidebarOpen(false);
-								setIsNotificationOpen(true);
 							}}
-							aria-label={hasUnread ? "알림 (새 알림 있음)" : "알림"}
-							className="relative cursor-pointer"
-						>
-							<Image
-								src="/icons/bell.svg"
-								alt=""
-								width={28}
-								height={28}
-								className="size-6 min-[721px]:size-7"
-							/>
-							{hasUnread && (
-								<span className="absolute top-[12.5%] right-[12.5%] size-1 rounded-full bg-error min-[721px]:size-1.5" />
-							)}
-						</button>
-
-						<div className="relative">
-							<button
-								type="button"
-								onClick={() => toggleMenu("profile")}
-								aria-label="프로필 메뉴"
-								aria-expanded={openMenu === "profile"}
-								className="flex cursor-pointer"
-							>
-								<Image
-									src="/icons/profile.svg"
-									alt=""
-									width={28}
-									height={28}
-									className="size-6 min-[721px]:size-7"
-								/>
-							</button>
-							{openMenu === "profile" && (
-								<MenuList className="right-0 w-45">
-									<button
-										type="button"
-										onClick={() => {
-											closeMenu();
-											setIsSwitchModalOpen(true);
-										}}
-										className={MENU_ITEM_CLASS}
-									>
-										작가 로그인
-									</button>
-									<MenuDivider />
-									<button
-										type="button"
-										onClick={handleLogout}
-										className={cn(MENU_ITEM_CLASS, "text-error")}
-									>
-										<Image src="/icons/logout.svg" alt="" width={20} height={20} />
-										로그아웃하기
-									</button>
-								</MenuList>
-							)}
-						</div>
+							profileMenuOpen={openMenu === "profile"}
+							onProfileMenuOpenChange={(open) => setOpenMenu(open ? "profile" : null)}
+						/>
 
 						<button
 							type="button"
 							onClick={() => {
 								closeMenu();
-								setIsNotificationOpen(false);
 								setIsSidebarOpen((prev) => !prev);
 							}}
 							aria-label={isSidebarOpen ? "메뉴 닫기" : "메뉴 열기"}
@@ -200,22 +134,6 @@ export function ExhibitionAdminHeader() {
 				isOpen={isSidebarOpen}
 				onClose={() => setIsSidebarOpen(false)}
 				onLogout={handleLogout}
-			/>
-
-			<NotificationSidebar
-				open={isNotificationOpen}
-				onOpenChange={handleNotificationOpenChange}
-				notifications={notifications}
-			/>
-
-			<Modal
-				open={isSwitchModalOpen}
-				onOpenChange={setIsSwitchModalOpen}
-				title="로그아웃하시겠습니까?"
-				actions={[
-					{ text: "취소", variant: "assistive", onClick: () => setIsSwitchModalOpen(false) },
-					{ text: "로그아웃", variant: "primary", onClick: () => router.push(ARTIST_LOGIN_HREF) },
-				]}
 			/>
 		</>
 	);
@@ -259,30 +177,17 @@ const NavDropdown = ({ label, items, pathname, isOpen, onToggle, onSelect }: Nav
 				/>
 			</button>
 			{isOpen && (
-				<MenuList className="right-0 w-45">
+				<HeaderDropdownList className="right-0 w-45">
 					{items.map((item, index) => (
 						<Fragment key={item.href}>
-							{index > 0 && <MenuDivider />}
-							<Link href={item.href} onClick={onSelect} className={MENU_ITEM_CLASS}>
+							{index > 0 && <HeaderDropdownDivider />}
+							<Link href={item.href} onClick={onSelect} className={HEADER_DROPDOWN_ITEM_CLASS}>
 								{item.label}
 							</Link>
 						</Fragment>
 					))}
-				</MenuList>
+				</HeaderDropdownList>
 			)}
 		</div>
 	);
 };
-
-const MenuList = ({ className, children }: { className?: string; children: React.ReactNode }) => (
-	<div
-		className={cn(
-			"absolute top-full z-dropdown flex flex-col rounded-lg border border-stroke-lighter bg-normal p-2 shadow-[0_4px_4px_0_rgba(0,0,0,0.04)]",
-			className,
-		)}
-	>
-		{children}
-	</div>
-);
-
-const MenuDivider = () => <div className="my-1 h-px bg-stroke-lightest" />;

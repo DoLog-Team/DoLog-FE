@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api/instance";
+import { authApiClient } from "@/lib/api/instance";
 
 // 작품 상세 설명(마크다운 텍스트) 임시저장
 export async function updateArtworkDescription(
@@ -8,7 +8,7 @@ export async function updateArtworkDescription(
 	const formData = new FormData();
 	if (description.trim()) formData.append("description", description);
 
-	await apiClient<void>(`/artworks/${artworkId}`, {
+	await authApiClient<void>(`/artworks/${artworkId}`, {
 		method: "PATCH",
 		body: formData,
 	});
@@ -26,7 +26,7 @@ export async function uploadContentImage(
 	const formData = new FormData();
 	formData.append("imageFile", file);
 
-	return apiClient<UploadContentImageResult>(`/artworks/${artworkId}/content-images`, {
+	return authApiClient<UploadContentImageResult>(`/artworks/${artworkId}/content-images`, {
 		method: "POST",
 		body: formData,
 	});

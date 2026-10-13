@@ -11,6 +11,8 @@ export interface ImageInputProps {
 	maxCount?: number;
 	onAdd: (files: File[]) => void;
 	onRemove: (index: number) => void;
+	// 업로드 버튼 안내 첫 줄 (기본: 1개 업로드 가능)
+	description?: string;
 	guideText?: string;
 	accept?: string;
 	className?: string;
@@ -23,6 +25,7 @@ export const ImageInput = ({
 	maxCount = 1,
 	onAdd,
 	onRemove,
+	description = "1개 업로드 가능",
 	guideText = "JPG, PNG / 용량 5MB 이하 / 가로 세로 1,000PX",
 	accept = "image/jpeg,image/png",
 	className,
@@ -49,7 +52,7 @@ export const ImageInput = ({
 			className={cn(imageInputBoxVariants(), "h-45 w-full")}
 		>
 			<p className="flex flex-col items-center text-center text-body2 text-lighter">
-				<span>1개 업로드 가능</span>
+				<span>{description}</span>
 				<span>{guideText}</span>
 			</p>
 			<span className="flex items-center gap-1">

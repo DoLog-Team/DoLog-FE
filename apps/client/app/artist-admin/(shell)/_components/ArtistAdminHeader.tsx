@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { AdminHeaderActions } from "@/components/common/AdminHeaderActions/AdminHeaderActions";
+import { HeaderAccountActions } from "@/components/common/HeaderAccountActions/HeaderAccountActions";
 
 export function ArtistAdminHeader() {
 	const router = useRouter();
@@ -19,8 +19,7 @@ export function ArtistAdminHeader() {
 					<Image src="/icons/backBtn.svg" alt="" width={24} height={24} />
 					<span className="px-0.5 text-body1-bold text-strong">마이 페이지</span>
 				</button>
-				{/* TODO: 알림 API 연결 후 새 알림이 있으면 hasNotification 전달 */}
-				<AdminHeaderActions size="md" />
+				<HeaderAccountActions account="artist" place="admin" size="md" />
 			</div>
 		</header>
 	);

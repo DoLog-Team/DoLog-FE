@@ -7,10 +7,14 @@ interface MainFooterProps {
 	logoSrc?: string;
 }
 
+// 두록 자주 묻는 질문 (노션)
+const FAQ_HREF = "https://tangy-parka-0cb.notion.site/3eb89814416f8006bc94c05b8711a79a";
+const TERMS_HREF = "https://app.notion.com/p/3ec89814416f805e85ccf96bfe88bff6?source=copy_link";
+
 const LEGAL_LINKS = [
-	{ label: "이용약관", href: "#" },
-	{ label: "개인정보 처리 방침", href: "#" },
-	{ label: "도움말 센터", href: "#" },
+	{ label: "이용약관", href: TERMS_HREF },
+	{ label: "개인정보 처리 방침", href: TERMS_HREF },
+	{ label: "도움말 센터", href: FAQ_HREF },
 ];
 
 export default function MainFooter({
