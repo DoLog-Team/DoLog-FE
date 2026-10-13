@@ -20,15 +20,6 @@ const NOT_PUBLISHED = "게시 전";
 // 활성 구독 없이 게시된 전시는 만료일이 없다
 const NO_EXPIRY = "-";
 
-// 노션 `전시 활성화를 위한 기본 데이터 리스트` 의 필수값. 주소, 주최기관은 admin-home 응답에 없어서 아직 검사 못 함
-const REQUIRED_FOR_PUBLISH = [
-	"title",
-	"type",
-	"startDate",
-	"endDate",
-	"description",
-] as const satisfies readonly (keyof AdminExhibition)[];
-
 interface ExhibitionSiteSectionProps {
 	exhibitionId: string;
 	exhibition: AdminExhibition;
@@ -50,12 +41,12 @@ export const ExhibitionSiteSection = ({
 	const [isPublishing, setIsPublishing] = useState(false);
 
 	const isPublished = publishedAt !== null;
-	// 게시 API 가 구독, 필수값을 검사하지 않아서 화면에서 막는다
+	// 게시 API 가 활성 구독은 검사하지 않아서 화면에서 막는다
 	const canPublish =
 		!isPublished &&
 		!isPublishing &&
 		subscription?.status === "ACTIVE" &&
-		REQUIRED_FOR_PUBLISH.every((key) => exhibition[key]);
+		exhibition.missingPublishFields.length === 0;
 
 	const handlePublish = async () => {
 		setIsConfirmOpen(false);
@@ -71,7 +62,7 @@ export const ExhibitionSiteSection = ({
 			router.replace(ADMIN_LOGIN_HREF);
 			return;
 		}
-		alert("게시에 실패했어요. 잠시 뒤 다시 시도해주세요.");
+		alert(result.message ?? "게시에 실패했어요. 잠시 뒤 다시 시도해주세요.");
 	};
 
 	return (

@@ -10,8 +10,8 @@ export interface AdminExhibition {
 	// 노션 `전시 기간 추가 정보` (자유 입력)
 	operatingHours: string | null;
 	note: string | null;
-	// 주제 설명
-	description: string | null;
+	// 게시 필수값 중 비어 있는 항목. 비어 있어야 게시 가능
+	missingPublishFields: string[];
 	// OG 태그 (선택값)
 	siteName: string | null;
 	siteDescription: string | null;

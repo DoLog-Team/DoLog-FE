@@ -37,7 +37,8 @@ interface PublishResponse {
 
 export type PublishResult =
 	| { ok: true; publishedAt: string; expiresAt: string | null }
-	| { ok: false; reason: ActionFailure };
+	// message: 필수값 누락(400) 등 백엔드 안내 문구
+	| { ok: false; reason: ActionFailure; message: string | null };
 
 export async function publishExhibition(exhibitionId: string): Promise<PublishResult> {
 	try {
@@ -50,7 +51,11 @@ export async function publishExhibition(exhibitionId: string): Promise<PublishRe
 			expiresAt: data.expiresAt?.slice(0, 10) ?? null,
 		};
 	} catch (error) {
-		return { ok: false, reason: toActionFailure(error) };
+		return {
+			ok: false,
+			reason: toActionFailure(error),
+			message: isApiError(error, 400) ? (error.serverMessage ?? null) : null,
+		};
 	}
 }
 

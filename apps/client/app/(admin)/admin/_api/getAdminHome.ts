@@ -33,7 +33,12 @@ interface AdminHomeResponse {
 	isPublished: boolean;
 	joinedArtistCount: number;
 	pendingArtistCount: number;
+	// 전시중 = 공개이고 숨기지 않은 작품 (플랜 한도 초과 포함)
+	publishedArtworkCount: number;
+	hiddenArtworkCount: number;
 	planName: string | null;
+	// title, exhibitionType, startDate, endDate, description, address, hostName, hostDescription 중 비어 있는 것
+	missingPublishFields?: string[];
 }
 
 const EXHIBITION_TYPE_LABEL = {
@@ -66,7 +71,7 @@ export async function getAdminHome(exhibitionId: string) {
 		endDate: home.endDate,
 		operatingHours: home.openTime && home.closeTime ? `${home.openTime} - ${home.closeTime}` : null,
 		note: home.operationNotice,
-		description: home.siteDescription,
+		missingPublishFields: home.missingPublishFields ?? guessMissingPublishFields(home),
 		siteName: home.siteName,
 		siteDescription: home.siteDescription,
 		imageUrl: home.siteThumbnail,
@@ -79,39 +84,51 @@ export async function getAdminHome(exhibitionId: string) {
 	return { exhibition, counts: await getCounts(exhibitionId, home) };
 }
 
+// missingPublishFields 를 주지 않는 서버(찬주 #429 배포 전)용 — 응답에 있는 값만 본다
+const guessMissingPublishFields = (home: AdminHomeResponse) =>
+	(
+		[
+			["title", home.title],
+			["exhibitionType", home.exhibitionType],
+			["startDate", home.startDate],
+			["endDate", home.endDate],
+			["description", home.siteDescription],
+		] as const
+	)
+		.filter(([, value]) => !value)
+		.map(([field]) => field);
+
 /************************
- * 홈 카드 개수
- * GET exhibitions/{exhibitionId}/artworks/manage — admin-home 의 작품 수가 0 고정이라 작품 관리 목록의 전체 수를 쓴다
+ * 플랜 한도 초과 작품 수 — admin-home 에 없어서 작품 관리 목록에서 받는다
+ * GET exhibitions/{exhibitionId}/artworks/manage
  ************************/
 
 interface ArtworkCountResponse {
-	totalCount: number;
 	planLimitExceededCount: number;
 }
 
 async function getCounts(
 	exhibitionId: string,
 	home: AdminHomeResponse,
-): Promise<AdminExhibitionCounts | null> {
-	const countArtworks = (query: string) =>
-		serverApiClient<ArtworkCountResponse>(
-			`/exhibitions/${exhibitionId}/artworks/manage?${query}&size=1`,
+): Promise<AdminExhibitionCounts> {
+	return {
+		artists: home.joinedArtistCount,
+		pendingArtists: home.pendingArtistCount,
+		exhibitedArtworks: home.publishedArtworkCount,
+		exceededArtworks: await getExceededCount(exhibitionId),
+		hiddenArtworks: home.hiddenArtworkCount,
+	};
+}
+
+// 실패하면 0 — 카드의 "플랜 한도 초과" 배지만 안 보인다
+async function getExceededCount(exhibitionId: string) {
+	try {
+		const { planLimitExceededCount } = await serverApiClient<ArtworkCountResponse>(
+			`/exhibitions/${exhibitionId}/artworks/manage?hidden=false&size=1`,
 			{ cache: "no-store" },
 		);
-
-	try {
-		const [shown, hidden] = await Promise.all([
-			countArtworks("hidden=false&visibility=PUBLIC"),
-			countArtworks("hidden=true"),
-		]);
-		return {
-			artists: home.joinedArtistCount,
-			pendingArtists: home.pendingArtistCount,
-			exhibitedArtworks: shown.totalCount,
-			exceededArtworks: shown.planLimitExceededCount,
-			hiddenArtworks: hidden.totalCount,
-		};
+		return planLimitExceededCount;
 	} catch {
-		return null;
+		return 0;
 	}
 }
