@@ -1,3 +1,5 @@
+import { getAccessToken } from "./authToken";
+
 type FetchOptions = RequestInit;
 
 interface ApiResponse<T> {
@@ -8,12 +10,17 @@ interface ApiResponse<T> {
 
 export function createApiClient(baseURL: string) {
 	return async function fetcher<T>(path: string, options?: FetchOptions): Promise<T> {
+		const token = getAccessToken();
+		// FormData 는 브라우저가 boundary 를 포함해 Content-Type 을 직접 설정해야 해서 비워둔다.
+		const isFormData = options?.body instanceof FormData;
+
 		const res = await fetch(`${baseURL}${path}`, {
+			...options,
 			headers: {
-				"Content-Type": "application/json",
+				...(isFormData ? {} : { "Content-Type": "application/json" }),
+				...(token ? { Authorization: `Bearer ${token}` } : {}),
 				...options?.headers,
 			},
-			...options,
 		});
 
 		if (!res.ok) {
