@@ -22,7 +22,7 @@ export function ExhibitionHostSection({ hostInfo, sns }: ExhibitionHostProps) {
 							src={hostInfo.hostImageUrl}
 							alt={hostInfo.hostName}
 							fill
-							className="object-cover"
+							className="object-contain"
 						/>
 					</div>
 				)}
