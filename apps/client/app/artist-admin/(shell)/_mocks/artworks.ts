@@ -10,7 +10,8 @@ export interface MyArtwork {
 	viewCount: number;
 	likeCount: number;
 	status: ArtworkStatus;
-	completionRate: number;
+	// 전시에 출품 안 했으면 완성도 기준 자체가 없어서 null
+	completionRate: number | null;
 	createdAt: string;
 }
 

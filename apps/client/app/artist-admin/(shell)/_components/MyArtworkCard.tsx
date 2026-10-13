@@ -105,7 +105,9 @@ export function MyArtworkCard({ artwork, onDelete }: MyArtworkCardProps) {
 
 				<div className="mt-3 flex gap-1.5">
 					<ArtworkStatusBadge status={artwork.status} />
-					{artwork.status === "draft" && <StatusBadge label={`${artwork.completionRate}% 작성`} />}
+					{artwork.status === "draft" && artwork.completionRate !== null && (
+						<StatusBadge label={`${artwork.completionRate}% 작성`} />
+					)}
 				</div>
 			</div>
 
