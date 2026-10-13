@@ -1,16 +1,29 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { FormField } from "@/components/common/FormField/FormField";
 import { ImageInput } from "@/components/common/ImageInput/ImageInput";
 import { Input } from "@/components/common/Input/Input";
 import { useYoutubeLink } from "./useYoutubeLink";
 
-export const ArtworkImageSection = () => {
-	const [mainImages, setMainImages] = useState<string[]>([]);
+export interface ArtworkImageValue {
+	mainImagePreview: string | null;
+	youtubeUrl: string;
+}
+
+export interface ArtworkImageSectionProps {
+	value: ArtworkImageValue;
+	onChange: (patch: Partial<ArtworkImageValue>) => void;
+	onMainImageFileChange: (file: File | null) => void;
+}
+
+export const ArtworkImageSection = ({
+	value,
+	onChange,
+	onMainImageFileChange,
+}: ArtworkImageSectionProps) => {
 	const { videoUrl, linkStatus, videoTitle, thumbnailUrl, handleVideoUrlChange, handleLink } =
-		useYoutubeLink();
+		useYoutubeLink(value.youtubeUrl, (youtubeUrl) => onChange({ youtubeUrl }));
 
 	return (
 		<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
@@ -29,10 +42,18 @@ export const ArtworkImageSection = () => {
 				>
 					<ImageInput
 						className="w-full"
-						images={mainImages}
+						images={value.mainImagePreview ? [value.mainImagePreview] : []}
 						maxCount={1}
-						onAdd={(files) => setMainImages(files.map((file) => URL.createObjectURL(file)))}
-						onRemove={() => setMainImages([])}
+						onAdd={(files) => {
+							const file = files[0];
+							if (!file) return;
+							onMainImageFileChange(file);
+							onChange({ mainImagePreview: URL.createObjectURL(file) });
+						}}
+						onRemove={() => {
+							onMainImageFileChange(null);
+							onChange({ mainImagePreview: null });
+						}}
 					/>
 				</FormField>
 

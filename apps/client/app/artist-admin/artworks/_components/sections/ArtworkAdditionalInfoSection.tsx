@@ -55,34 +55,44 @@ const SizeInput = ({
 	</div>
 );
 
-export const ArtworkAdditionalInfoSection = () => {
-	const [materials, setMaterials] = useState<string[]>([]);
+export interface ArtworkAdditionalInfoValue {
+	materials: string[];
+	width: string;
+	height: string;
+	hasVolume: boolean;
+	depth: string;
+}
+
+export interface ArtworkAdditionalInfoSectionProps {
+	value: ArtworkAdditionalInfoValue;
+	onChange: (patch: Partial<ArtworkAdditionalInfoValue>) => void;
+}
+
+export const ArtworkAdditionalInfoSection = ({
+	value,
+	onChange,
+}: ArtworkAdditionalInfoSectionProps) => {
 	const [materialQuery, setMaterialQuery] = useState("");
 	const [isMaterialFocused, setIsMaterialFocused] = useState(false);
 
-	const [width, setWidth] = useState("");
-	const [height, setHeight] = useState("");
-	const [hasVolume, setHasVolume] = useState(false);
-	const [depth, setDepth] = useState("");
-
-	const isMaterialLimitReached = materials.length >= MAX_MATERIAL_COUNT;
+	const isMaterialLimitReached = value.materials.length >= MAX_MATERIAL_COUNT;
 
 	const filteredMaterialOptions = MATERIAL_OPTIONS.filter(
 		(option) =>
-			!materials.includes(option) &&
+			!value.materials.includes(option) &&
 			option.toLowerCase().includes(materialQuery.trim().toLowerCase()),
 	);
 
-	const addMaterial = (value: string) => {
+	const addMaterial = (newValue: string) => {
 		if (isMaterialLimitReached) return;
-		const trimmed = value.trim();
-		if (!trimmed || materials.includes(trimmed)) return;
-		setMaterials((prev) => [...prev, trimmed]);
+		const trimmed = newValue.trim();
+		if (!trimmed || value.materials.includes(trimmed)) return;
+		onChange({ materials: [...value.materials, trimmed] });
 		setMaterialQuery("");
 	};
 
-	const removeMaterial = (value: string) => {
-		setMaterials((prev) => prev.filter((material) => material !== value));
+	const removeMaterial = (material: string) => {
+		onChange({ materials: value.materials.filter((item) => item !== material) });
 	};
 
 	return (
@@ -93,7 +103,7 @@ export const ArtworkAdditionalInfoSection = () => {
 			<div className="flex min-w-0 flex-1 flex-col gap-9">
 				<FormField label="재료 및 기법">
 					<div className="flex flex-wrap gap-2 empty:hidden">
-						{materials.map((material) => (
+						{value.materials.map((material) => (
 							<span
 								key={material}
 								className="flex items-center gap-1.5 rounded-[999px] bg-fg-lighter px-2 py-1 text-body4-bold text-light"
@@ -167,22 +177,35 @@ export const ArtworkAdditionalInfoSection = () => {
 					<div className="flex gap-2">
 						<div className="flex min-w-0 flex-1 flex-col gap-1">
 							<span className="text-body3 text-light">가로</span>
-							<SizeInput value={width} onChange={setWidth} placeholder="11" />
+							<SizeInput
+								value={value.width}
+								onChange={(width) => onChange({ width })}
+								placeholder="11"
+							/>
 						</div>
 						<div className="flex min-w-0 flex-1 flex-col gap-1">
 							<span className="text-body3 text-light">세로</span>
-							<SizeInput value={height} onChange={setHeight} placeholder="12.5" />
+							<SizeInput
+								value={value.height}
+								onChange={(height) => onChange({ height })}
+								placeholder="12.5"
+							/>
 						</div>
 					</div>
 
 					<Checkbox
 						className="pt-6"
-						checked={hasVolume}
-						onChange={setHasVolume}
+						checked={value.hasVolume}
+						onChange={(hasVolume) => onChange({ hasVolume })}
 						label="높이 입력하기 (부피가 있는 경우)"
 					/>
 
-					<SizeInput value={depth} onChange={setDepth} placeholder="200" disabled={!hasVolume} />
+					<SizeInput
+						value={value.depth}
+						onChange={(depth) => onChange({ depth })}
+						placeholder="200"
+						disabled={!value.hasVolume}
+					/>
 				</FormField>
 			</div>
 		</div>

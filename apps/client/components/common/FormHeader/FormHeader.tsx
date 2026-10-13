@@ -8,6 +8,7 @@ export interface FormHeaderProps {
 	onTitleEditClick?: () => void;
 	lastSavedAt?: string;
 	onTempSave?: () => void;
+	tempSaveDisabled?: boolean;
 	saveLabel?: string;
 	onBack: () => void;
 	className?: string;
@@ -19,6 +20,7 @@ export const FormHeader = ({
 	onTitleEditClick,
 	lastSavedAt = "2026.05.12 19:22",
 	onTempSave,
+	tempSaveDisabled,
 	saveLabel = "임시 저장",
 	onBack,
 	className,
@@ -47,7 +49,13 @@ export const FormHeader = ({
 					{lastSavedAt && (
 						<span className="text-body3 text-lighter">{lastSavedAt} 마지막 저장</span>
 					)}
-					<Button type="button" variant="assistive" size="sm" onClick={onTempSave}>
+					<Button
+						type="button"
+						variant="assistive"
+						size="sm"
+						onClick={onTempSave}
+						disabled={tempSaveDisabled}
+					>
 						{saveLabel}
 					</Button>
 				</div>
