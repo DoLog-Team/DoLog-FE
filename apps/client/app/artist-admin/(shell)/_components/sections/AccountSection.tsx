@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/common/Checkbox/Checkbox";
 import { Modal } from "@/components/common/Modal/Modal";
 import { TermsDocument } from "@/components/common/TermsDocument/TermsDocument";
 import { Title } from "@/components/common/Title/Title";
-import { saveTermsAgreement } from "@/lib/api/terms";
+import { updateOptionalTerms } from "@/lib/api/terms";
 import { TERMS_DOCUMENTS } from "@/lib/constants/termsDocuments";
 import { cn } from "@/lib/utils/cn";
 import type { MyTermsAgreement } from "../../_types";
@@ -35,7 +35,7 @@ export function AccountSection({ agreement: initialAgreement }: AccountSectionPr
 	const promotionAgreed = agreement?.promotionAgreed ?? false;
 	const marketingAgreed = agreement?.marketingAgreed ?? false;
 
-	// 동의를 바꾸면 바로 저장 — 동의 일자·서류 버전은 서버가 기록하고, 필수 항목은 기존 값 그대로 다시 보낸다
+	// 동의를 바꾸면 바로 저장 — 필수 동의와 최초 동의 일자는 서버가 그대로 유지한다
 	const updateConsent = async (
 		change: Pick<MyTermsAgreement, "promotionAgreed" | "marketingAgreed">,
 	) => {
@@ -45,11 +45,8 @@ export function AccountSection({ agreement: initialAgreement }: AccountSectionPr
 
 		setAgreement(next);
 		setIsSaving(true);
-		const result = await saveTermsAgreement({
+		const result = await updateOptionalTerms({
 			termsVersion: next.termsVersion,
-			age14OrOverConfirmed: next.age14OrOverConfirmed,
-			serviceTermsAgreed: next.serviceTermsAgreed,
-			privacyAgreed: next.privacyAgreed,
 			promotionAgreed: next.promotionAgreed,
 			marketingAgreed: next.marketingAgreed,
 			// 광고성 정보 수신은 마케팅 동의에 종속된다

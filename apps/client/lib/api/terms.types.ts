@@ -13,3 +13,11 @@ export interface TermsAgreementRequest {
 export type TermsAgreementFailure = "NO_ENDPOINT" | "REJECTED";
 
 export type TermsAgreementResult = { ok: true } | { ok: false; reason: TermsAgreementFailure };
+
+// PATCH /accounts/me/terms — 필수 동의와 최초 동의 일자는 서버가 보존한다
+export interface OptionalTermsRequest {
+	termsVersion: string;
+	promotionAgreed: boolean;
+	marketingAgreed: boolean;
+	adReceiveAgreed: boolean;
+}

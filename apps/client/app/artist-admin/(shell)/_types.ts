@@ -2,7 +2,8 @@
 
 export interface ArtistAdminProfile {
 	artistId: string;
-	nameKo: string;
+	// 소셜 가입으로 자동 생성된 작가는 이름이 없을 수 있음 — 프로필 수정에서 입력 (TODO : BE에서 이름 필수로 바꾸면 null 불가. 문의 필요)
+	nameKo: string | null;
 	nameEn: string | null;
 	bio: string | null;
 	profileImage: string | null;
