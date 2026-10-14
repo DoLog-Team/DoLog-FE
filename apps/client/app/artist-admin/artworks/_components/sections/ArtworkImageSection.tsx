@@ -1,9 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { FormField } from "@/components/common/FormField/FormField";
 import { ImageInput } from "@/components/common/ImageInput/ImageInput";
 import { Input } from "@/components/common/Input/Input";
+import { Modal } from "@/components/common/Modal/Modal";
+import { compressImageFile } from "@/lib/utils/image";
 import { useYoutubeLink } from "./useYoutubeLink";
 
 export interface ArtworkImageValue {
@@ -24,6 +27,7 @@ export const ArtworkImageSection = ({
 }: ArtworkImageSectionProps) => {
 	const { videoUrl, linkStatus, videoTitle, thumbnailUrl, handleVideoUrlChange, handleLink } =
 		useYoutubeLink(value.youtubeUrl, (youtubeUrl) => onChange({ youtubeUrl }));
+	const [imageError, setImageError] = useState(false);
 
 	return (
 		<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
@@ -42,13 +46,18 @@ export const ArtworkImageSection = ({
 				>
 					<ImageInput
 						className="w-full"
+						accept="image/jpeg,image/png,image/webp"
 						images={value.mainImagePreview ? [value.mainImagePreview] : []}
 						maxCount={1}
 						onAdd={(files) => {
 							const file = files[0];
 							if (!file) return;
-							onMainImageFileChange(file);
-							onChange({ mainImagePreview: URL.createObjectURL(file) });
+							compressImageFile(file)
+								.then((compressed) => {
+									onMainImageFileChange(compressed);
+									onChange({ mainImagePreview: URL.createObjectURL(compressed) });
+								})
+								.catch(() => setImageError(true));
 						}}
 						onRemove={() => {
 							onMainImageFileChange(null);
@@ -94,6 +103,16 @@ export const ArtworkImageSection = ({
 					)}
 				</FormField>
 			</div>
+
+			<Modal
+				open={imageError}
+				onOpenChange={setImageError}
+				title="이미지를 불러오지 못했어요"
+				description={
+					"jpg, png, webp 형식의 이미지만 업로드할 수 있어요.\n다른 파일로 다시 시도해주세요."
+				}
+				actions={[{ text: "확인", variant: "assistive", onClick: () => setImageError(false) }]}
+			/>
 		</div>
 	);
 };

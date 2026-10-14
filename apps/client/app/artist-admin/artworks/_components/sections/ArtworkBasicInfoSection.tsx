@@ -20,7 +20,7 @@ const CATEGORY_OPTIONS = [
 
 const CURRENT_YEAR = new Date().getFullYear();
 const YEAR_OPTIONS = Array.from({ length: CURRENT_YEAR - 2000 + 1 }, (_, i) => {
-	const year = String(2000 + i);
+	const year = String(CURRENT_YEAR - i);
 	return { label: year, value: year };
 });
 const MONTH_OPTIONS = Array.from({ length: 12 }, (_, i) => {

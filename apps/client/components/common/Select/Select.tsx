@@ -88,6 +88,7 @@ export const Select = ({
 					className="min-w-0 flex-1 p-3 bg-transparent text-body1 text-light outline-none placeholder:text-disable disabled:text-disable"
 					placeholder={isOpen ? undefined : placeholder}
 					value={isOpen ? query : selectedLabel}
+					autoComplete="off"
 					onFocus={() => setIsOpen(true)}
 					onChange={(e) => setQuery(e.target.value)}
 					onKeyDown={(e) => {

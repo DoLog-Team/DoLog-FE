@@ -10,6 +10,7 @@ import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { Modal } from "@/components/common/Modal/Modal";
 import { TabBar } from "@/components/common/TabBar/TabBar";
 import { useAsyncSave } from "@/lib/hooks/useAsyncSave";
+import { compressImageFile } from "@/lib/utils/image";
 import type { MyArtworkDetail } from "../_api/getMyArtwork";
 import { updateArtworkDescription, uploadContentImage } from "../_api/updateArtworkDetail";
 import { ARTWORK_FORM_TABS } from "./artworkFormTabs";
@@ -28,35 +29,18 @@ const MARKDOWN_IMAGE_URL_REGEX = /!\[[^\]]*\]\(([^)]+)\)/g;
 const extractImageUrls = (markdown: string) =>
 	[...markdown.matchAll(MARKDOWN_IMAGE_URL_REGEX)].map((match) => match[1]);
 
-const MAX_PREVIEW_DIMENSION = 1280;
-const PREVIEW_IMAGE_QUALITY = 0.7;
-
 // Toast UI 마크다운 Preview의 sanitizer(DOMPurify)가 blob: URL은 막고 data: URL은 허용해서,
-// 저장 전 임시 미리보기는 data URL로 만든다. (최종 업로드는 원본 blob 그대로)
-const compressToDataUrl = (blob: Blob): Promise<string> =>
+// 저장 전 임시 미리보기는 data URL로 만든다. 본문(Write 탭 원문)에 그대로 박히는 문자열이라
+// 작게 압축해 길이를 줄이고, 실제 업로드는 별도로 고화질 압축본을 쓴다.
+const PREVIEW_MAX_DIMENSION = 480;
+const PREVIEW_QUALITY = 0.5;
+
+const fileToDataUrl = (file: File): Promise<string> =>
 	new Promise((resolve, reject) => {
-		const objectUrl = URL.createObjectURL(blob);
-		const img = new Image();
-
-		img.onload = () => {
-			const scale = Math.min(1, MAX_PREVIEW_DIMENSION / Math.max(img.width, img.height));
-			const canvas = document.createElement("canvas");
-			canvas.width = img.width * scale;
-			canvas.height = img.height * scale;
-
-			const ctx = canvas.getContext("2d");
-			if (!ctx) {
-				reject(new Error("캔버스 컨텍스트를 가져올 수 없어요."));
-				return;
-			}
-			ctx.fillStyle = "#ffffff";
-			ctx.fillRect(0, 0, canvas.width, canvas.height);
-			ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-			resolve(canvas.toDataURL("image/jpeg", PREVIEW_IMAGE_QUALITY));
-			URL.revokeObjectURL(objectUrl);
-		};
-		img.onerror = reject;
-		img.src = objectUrl;
+		const reader = new FileReader();
+		reader.onload = () => resolve(reader.result as string);
+		reader.onerror = () => reject(reader.error);
+		reader.readAsDataURL(file);
 	});
 
 export interface ArtworkDetailFormProps {
@@ -154,15 +138,26 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 								return;
 							}
 
-							compressToDataUrl(blob)
-								.then((dataUrl) => {
-									pendingUploadsRef.current.set(dataUrl, blob);
+							const file =
+								blob instanceof File ? blob : new File([blob], "image", { type: blob.type });
+
+							compressImageFile(file)
+								.then(async (uploadFile) => {
+									// 실제 업로드본과 별개로, 본문에 박히는 미리보기는 작게 압축해 길이를 줄인다
+									const previewFile = await compressImageFile(file, {
+										maxDimension: PREVIEW_MAX_DIMENSION,
+										quality: PREVIEW_QUALITY,
+										outputType: "image/jpeg",
+									});
+									const dataUrl = await fileToDataUrl(previewFile);
+									pendingUploadsRef.current.set(dataUrl, uploadFile);
 									callback(dataUrl, "이미지");
 								})
 								.catch(() => {
 									setNotice({
 										title: "이미지 업로드 실패",
-										description: "이미지 파일을 불러오지 못했어요. 다른 파일로 다시 시도해주세요.",
+										description:
+											"jpg, png, webp 형식의 이미지만 업로드할 수 있어요.\n다른 파일로 다시 시도해주세요.",
 									});
 								});
 						},
