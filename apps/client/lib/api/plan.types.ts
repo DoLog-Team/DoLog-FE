@@ -42,6 +42,8 @@ export interface MySubscription {
 	planId: string;
 	planName: string;
 	billingCycle: BillingCycle;
+	// 실제 결제 금액
+	paidAmount: number | null;
 	status: SubscriptionStatus;
 	startedAt: string | null;
 	endedAt: string | null;

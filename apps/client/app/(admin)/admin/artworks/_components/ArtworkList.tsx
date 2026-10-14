@@ -10,15 +10,16 @@ import { Modal } from "@/components/common/Modal/Modal";
 import { Select } from "@/components/common/Select/Select";
 import { ADMIN_PLAN_HREF } from "@/lib/constants/admin";
 import { cn } from "@/lib/utils/cn";
+import { assignArtworksZone, updateArtworksHidden } from "../../_api/actions";
 import {
 	AdminSelectableList,
 	matchesKeyword,
 	type SelectableListColumn,
 } from "../../_components/AdminSelectableList";
+import { useAdminAction } from "../../_components/useAdminAction";
 import { useRowSelection } from "../../_components/useRowSelection";
-import { type AdminArtwork, MOCK_ARTWORKS, MOCK_GROUPS } from "../../_mocks/artworks";
+import { type AdminArtwork, type AdminArtworkGroup, ARTWORK_VISIBILITY_LABELS } from "../../_types";
 
-const VISIBILITY_OPTIONS = ["공개", "비공개", "임시저장"];
 const UNGROUPED = "그룹 미지정";
 
 const MODE = {
@@ -41,15 +42,30 @@ const MODE = {
 
 type Mode = keyof typeof MODE;
 
-export const ArtworkList = ({ mode }: { mode: Mode }) => {
-	// 작품 API 연결 전 임시 데이터
-	const [artworks, setArtworks] = useState(MOCK_ARTWORKS);
+interface ArtworkListProps {
+	mode: Mode;
+	exhibitionId: string;
+	artworks: AdminArtwork[];
+	groups: AdminArtworkGroup[];
+	// 전시 전체의 플랜 한도 초과 작품 수
+	exceededCount: number;
+}
+
+export const ArtworkList = ({
+	mode,
+	exhibitionId,
+	artworks,
+	groups,
+	exceededCount,
+}: ArtworkListProps) => {
 	const [keyword, setKeyword] = useState("");
 	const [visibility, setVisibility] = useState<string | null>(null);
 	const [group, setGroup] = useState<string | null>(null);
 	const [openedModal, setOpenedModal] = useState<"toggle" | "group" | null>(null);
-	const [targetGroup, setTargetGroup] = useState("");
-	const selection = useRowSelection<number>();
+	const [targetGroupId, setTargetGroupId] = useState("");
+	const selection = useRowSelection<string>();
+	const { isProcessing, run } = useAdminAction();
+	const groupNames = groups.map((item) => item.name);
 
 	// 필터로 가려진 작품이 선택된 채 남지 않도록 선택 해제
 	const changeFilter = (setFilter: (value: string | null) => void, value: string | null) => {
@@ -58,23 +74,15 @@ export const ArtworkList = ({ mode }: { mode: Mode }) => {
 	};
 	const config = MODE[mode];
 
-	const scoped = artworks.filter((artwork) => artwork.isHidden === (mode === "hidden"));
-	const items = scoped.filter(
+	const items = artworks.filter(
 		(artwork) =>
 			matchesKeyword(keyword, artwork.title, artwork.artistName) &&
 			(!visibility || artwork.visibility === visibility) &&
 			(!group || (group === UNGROUPED ? artwork.group === null : artwork.group === group)),
 	);
-	const exceededCount = mode === "all" ? scoped.filter((artwork) => !artwork.isExposed).length : 0;
-
-	const updateSelected = (change: Partial<AdminArtwork>) => {
-		setArtworks((prev) =>
-			prev.map((artwork) =>
-				selection.isSelected(artwork.id) ? { ...artwork, ...change } : artwork,
-			),
-		);
-		selection.clear();
+	const runOnSelected = (action: (ids: string[]) => ReturnType<typeof updateArtworksHidden>) => {
 		setOpenedModal(null);
+		run(() => action(selection.selectedIds), selection.clear);
 	};
 
 	const columns: SelectableListColumn<AdminArtwork>[] = [
@@ -100,7 +108,7 @@ export const ArtworkList = ({ mode }: { mode: Mode }) => {
 		<>
 			<AdminSelectableList
 				title={config.title}
-				notice={exceededCount > 0 && <ExceededNotice count={exceededCount} />}
+				notice={mode === "all" && exceededCount > 0 && <ExceededNotice count={exceededCount} />}
 				searchPlaceholder="검색할 내용을 입력해주세요"
 				searchValue={keyword}
 				onSearchChange={setKeyword}
@@ -108,17 +116,17 @@ export const ArtworkList = ({ mode }: { mode: Mode }) => {
 					<>
 						<FilterChip
 							label="공개 여부"
-							options={VISIBILITY_OPTIONS}
+							options={[...ARTWORK_VISIBILITY_LABELS]}
 							selected={visibility}
 							onSelect={(value) => changeFilter(setVisibility, value)}
 						/>
 						<FilterChip
 							label="그룹"
-							options={mode === "all" ? [...MOCK_GROUPS, UNGROUPED] : MOCK_GROUPS}
+							options={mode === "all" ? [...groupNames, UNGROUPED] : groupNames}
 							selected={group}
 							onSelect={(value) => changeFilter(setGroup, value)}
 							className={cn(
-								(mode === "all" ? MOCK_GROUPS.length <= 1 : MOCK_GROUPS.length === 0) &&
+								(mode === "all" ? groups.length <= 1 : groups.length === 0) &&
 									"pointer-events-none opacity-50",
 							)}
 						/>
@@ -140,13 +148,14 @@ export const ArtworkList = ({ mode }: { mode: Mode }) => {
 						label: "그룹 지정하기",
 						variant: "primary",
 						onClick: () => {
-							setTargetGroup("");
+							setTargetGroupId("");
 							setOpenedModal("group");
 						},
 					},
 				]}
 				// 전시 내 작품 상세 경로는 전시 사이트 연결 후 확정
 				getRowHref={() => "#"}
+				isProcessing={isProcessing}
 			/>
 
 			<Modal
@@ -160,7 +169,8 @@ export const ArtworkList = ({ mode }: { mode: Mode }) => {
 					{
 						text: config.modalAction,
 						variant: "primary",
-						onClick: () => updateSelected({ isHidden: mode === "all" }),
+						onClick: () =>
+							runOnSelected((ids) => updateArtworksHidden(exhibitionId, ids, mode === "all")),
 					},
 				]}
 			/>
@@ -176,15 +186,16 @@ export const ArtworkList = ({ mode }: { mode: Mode }) => {
 					{
 						text: "저장하기",
 						variant: "primary",
-						disabled: !targetGroup,
-						onClick: () => updateSelected({ group: targetGroup }),
+						disabled: !targetGroupId,
+						onClick: () =>
+							runOnSelected((ids) => assignArtworksZone(exhibitionId, ids, targetGroupId)),
 					},
 				]}
 			>
 				<Select
-					options={MOCK_GROUPS.map((name) => ({ label: name, value: name }))}
-					value={targetGroup}
-					onChange={setTargetGroup}
+					options={groups.map(({ id, name }) => ({ label: name, value: id }))}
+					value={targetGroupId}
+					onChange={setTargetGroupId}
 					placeholder="그룹을 선택해주세요"
 				/>
 			</Modal>

@@ -1,4 +1,4 @@
-import type { AdminArtist } from "../../_mocks/artists";
+import type { AdminArtist } from "../../_types";
 
 export const ArtistCard = ({
 	artist,

@@ -55,7 +55,6 @@ export function ExhibitionAdminHeader() {
 	const toggleMenu = (menu: OpenMenu) => setOpenMenu((prev) => (prev === menu ? null : menu));
 	const closeMenu = () => setOpenMenu(null);
 
-	// 모바일 사이드바 로그아웃 — 데스크탑 프로필 메뉴(HeaderAccountActions)와 같이 두록 홈으로
 	const handleLogout = async () => {
 		await logout();
 		notifyAuthChange();

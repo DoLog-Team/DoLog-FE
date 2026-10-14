@@ -2,31 +2,38 @@
 
 import { useState } from "react";
 import { Modal } from "@/components/common/Modal/Modal";
+import { updateArtistStatus } from "../../_api/actions";
 import {
 	AdminSelectableList,
 	matchesKeyword,
 	summarizeArtists,
 } from "../../_components/AdminSelectableList";
+import { useAdminAction } from "../../_components/useAdminAction";
 import { useRowSelection } from "../../_components/useRowSelection";
-import { MOCK_ARTISTS } from "../../_mocks/artists";
+import type { AdminArtist } from "../../_types";
 import { ArtistCard } from "./ArtistCard";
 
-export const ArtistList = () => {
-	// 참여 작가 API 연결 전 임시 데이터
-	const [artists, setArtists] = useState(MOCK_ARTISTS);
+interface ArtistListProps {
+	exhibitionId: string;
+	artists: AdminArtist[];
+}
+
+export const ArtistList = ({ exhibitionId, artists }: ArtistListProps) => {
 	const [keyword, setKeyword] = useState("");
 	const [isExcludeModalOpen, setIsExcludeModalOpen] = useState(false);
-	const selection = useRowSelection<number>();
+	const selection = useRowSelection<string>();
+	const { isProcessing, run } = useAdminAction();
 
-	const items = artists.filter((artist) => matchesKeyword(keyword, artist.name, artist.email));
+	const items = artists.filter((artist) =>
+		matchesKeyword(keyword, artist.name, artist.email ?? ""),
+	);
 	const selectedNames = artists
 		.filter((artist) => selection.isSelected(artist.id))
 		.map((artist) => artist.name);
 
 	const exclude = () => {
-		setArtists((prev) => prev.filter((artist) => !selection.isSelected(artist.id)));
-		selection.clear();
 		setIsExcludeModalOpen(false);
+		run(() => updateArtistStatus(exhibitionId, selection.selectedIds, "REMOVED"), selection.clear);
 	};
 
 	return (
@@ -41,8 +48,8 @@ export const ArtistList = () => {
 				selection={selection}
 				columns={[
 					{ header: "작가명", width: "20%", cell: (artist) => artist.name },
-					{ header: "이메일", width: "35%", cell: (artist) => artist.email },
-					{ header: "가입인사", width: "35%", cell: (artist) => artist.greeting },
+					{ header: "이메일", width: "35%", cell: (artist) => artist.email ?? "-" },
+					{ header: "가입인사", width: "35%", cell: (artist) => artist.greeting ?? "-" },
 					{ header: "작품", width: "80px", cell: (artist) => `${artist.artworkCount}개` },
 				]}
 				renderCard={(artist) => <ArtistCard artist={artist} showArtworkCount />}
@@ -51,6 +58,7 @@ export const ArtistList = () => {
 				]}
 				// 전시 내 작가 프로필 경로는 전시 사이트 연결 후 확정
 				getRowHref={() => "#"}
+				isProcessing={isProcessing}
 			/>
 
 			<Modal

@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils/cn";
 import { toDotDate } from "@/lib/utils/date";
-import type { AdminExhibition } from "../_mocks/exhibition";
+import type { AdminExhibition } from "../_types";
 import { InfoRows } from "./InfoRows";
 
 const EMPTY = "-";

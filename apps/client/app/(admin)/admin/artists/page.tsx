@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getMyExhibitionId } from "@/lib/api/account";
+import { getAdminArtists } from "../_api/getAdminArtists";
 import { ArtistList } from "./_components/ArtistList";
 
 export const metadata: Metadata = {
@@ -6,6 +8,9 @@ export const metadata: Metadata = {
 	robots: { index: false, follow: false },
 };
 
-export default function AdminArtistsPage() {
-	return <ArtistList />;
+export default async function AdminArtistsPage() {
+	const exhibitionId = await getMyExhibitionId();
+	const artists = await getAdminArtists(exhibitionId, "JOINED");
+
+	return <ArtistList exhibitionId={exhibitionId} artists={artists} />;
 }
