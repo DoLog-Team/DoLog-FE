@@ -1,10 +1,13 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import MainFooter from "@/components/common/Footer/MainFooter";
+import { requireExhibitionAdmin } from "@/lib/auth/requireExhibitionAdmin";
 import { ThemeProvider } from "@/providers/theme-providers";
 import { ExhibitionAdminHeader } from "./admin/_components/ExhibitionAdminHeader";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+	await requireExhibitionAdmin();
+
 	return (
 		<>
 			{process.env.NEXT_PUBLIC_ADMIN_GA_MEASUREMENT_ID && (

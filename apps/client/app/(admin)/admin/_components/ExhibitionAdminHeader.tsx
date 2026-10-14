@@ -10,6 +10,8 @@ import {
 	HeaderDropdownDivider,
 	HeaderDropdownList,
 } from "@/components/common/HeaderAccountActions/HeaderAccountActions";
+import { logout } from "@/lib/api/auth";
+import { notifyAuthChange } from "@/lib/auth/useAuthRole";
 import { cn } from "@/lib/utils/cn";
 import { ExhibitionAdminSidebar } from "./ExhibitionAdminSidebar";
 import { getActiveHref } from "./getActiveHref";
@@ -53,8 +55,12 @@ export function ExhibitionAdminHeader() {
 	const toggleMenu = (menu: OpenMenu) => setOpenMenu((prev) => (prev === menu ? null : menu));
 	const closeMenu = () => setOpenMenu(null);
 
-	// 모바일 사이드바 로그아웃 — 인증 저장 방식 확정 전이라 두록 홈으로 보내기만 한다
-	const handleLogout = () => router.replace("/");
+	// 모바일 사이드바 로그아웃 — 데스크탑 프로필 메뉴(HeaderAccountActions)와 같이 두록 홈으로
+	const handleLogout = async () => {
+		await logout();
+		notifyAuthChange();
+		router.replace("/");
+	};
 
 	return (
 		<>
