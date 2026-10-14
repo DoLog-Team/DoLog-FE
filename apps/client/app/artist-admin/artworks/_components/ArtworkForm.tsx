@@ -182,6 +182,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 					lastSavedAt={lastSavedAt}
 					onTempSave={handleTempSave}
 					tempSaveDisabled={isSaving}
+					saveLabel={basicMissingCount === 0 ? "저장" : "임시 저장"}
 					onBack={onBack}
 				/>
 				<TabBar tabs={tabs} activeTab={activeTab} onTabClick={handleTopTabClick} />

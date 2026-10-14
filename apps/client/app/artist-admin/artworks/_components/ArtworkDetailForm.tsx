@@ -15,6 +15,7 @@ import type { MyArtworkDetail } from "../_api/getMyArtwork";
 import { updateArtworkDescription, uploadContentImage } from "../_api/updateArtworkDetail";
 import { ARTWORK_FORM_TABS } from "./artworkFormTabs";
 import { getBasicMissingCount } from "./getBasicMissingCount";
+import { imageResizePlugin } from "./imageResizePlugin";
 import { RenameArtworkModal } from "./RenameArtworkModal";
 
 const Editor = dynamic<EditorProps>(
@@ -59,16 +60,18 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 	const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
 	const { isSaving, error: saveError, lastSavedAt, run } = useAsyncSave();
 
-	const tabs = useMemo(() => {
-		const basicMissingCount = getBasicMissingCount(artwork);
-		return ARTWORK_FORM_TABS.map((tab) =>
-			tab.id === "basic" ? { ...tab, badge: basicMissingCount } : tab,
-		);
-	}, [artwork]);
+	const basicMissingCount = useMemo(() => getBasicMissingCount(artwork), [artwork]);
+	const tabs = useMemo(
+		() =>
+			ARTWORK_FORM_TABS.map((tab) =>
+				tab.id === "basic" ? { ...tab, badge: basicMissingCount } : tab,
+			),
+		[basicMissingCount],
+	);
 
-	const handleTabClick = (tabId: string) => {
+	const handleTabClick = async (tabId: string) => {
 		if (tabId === "detail") return;
-		router.push(pathname.replace(/\/detail$/, ""));
+		if (await handleTempSave()) router.push(pathname.replace(/\/detail$/, ""));
 	};
 
 	const handleTempSave = () =>
@@ -105,22 +108,24 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 					lastSavedAt={lastSavedAt}
 					onTempSave={handleTempSave}
 					tempSaveDisabled={isSaving}
+					saveLabel={basicMissingCount === 0 ? "저장" : "임시 저장"}
 					onBack={onBack}
 				/>
 				<TabBar tabs={tabs} activeTab="detail" onTabClick={handleTabClick} />
 				{saveError && <p className="px-4 pt-2 text-body3 text-error">{saveError}</p>}
 			</div>
 
-			<div className="flex flex-col gap-4 py-7">
+			<div className="artwork-detail-editor flex flex-col gap-4 py-7">
 				<h2 className="text-head3 text-strong">상세 정보</h2>
 				<Editor
 					ref={editorRef}
 					previewStyle="tab"
 					height="600px"
-					initialEditType="markdown"
+					initialEditType="wysiwyg"
 					initialValue={artwork.description ?? ""}
 					useCommandShortcut
 					placeholder="작품에 대한 상세한 설명을 작성해주세요."
+					plugins={[imageResizePlugin]}
 					hooks={{
 						// 저장 전까지는 네트워크를 안 타고 data URL로만 미리보기 — 실제 업로드는 "임시저장" 시점에
 						addImageBlobHook: (

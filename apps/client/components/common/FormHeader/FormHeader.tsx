@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/common/Button/Button";
 import { PencilIcon } from "@/components/common/icons/PencilIcon";
+import { DotsLoader } from "@/components/common/Spinner/DotsLoader";
 
 export interface FormHeaderProps {
 	title: string;
@@ -29,7 +30,7 @@ export const FormHeader = ({
 		<header className={className}>
 			<div className="flex items-center justify-between py-3">
 				<div className="flex items-center gap-2">
-					<button type="button" onClick={onBack} aria-label="뒤로가기">
+					<button type="button" onClick={onBack} aria-label="뒤로가기" className="cursor-pointer">
 						<Image src="/icons/backBtn.svg" alt="" width={24} height={24} />
 					</button>
 					<span className="text-body1-bold text-strong">{title}</span>
@@ -58,8 +59,9 @@ export const FormHeader = ({
 						size="sm"
 						onClick={onTempSave}
 						disabled={tempSaveDisabled}
+						className={tempSaveDisabled ? "px-9.75 py-3.75" : undefined}
 					>
-						{saveLabel}
+						{tempSaveDisabled ? <DotsLoader /> : saveLabel}
 					</Button>
 				</div>
 			</div>
