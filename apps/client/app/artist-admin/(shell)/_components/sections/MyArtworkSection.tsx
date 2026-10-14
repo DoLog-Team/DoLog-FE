@@ -4,8 +4,10 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Input } from "@/components/common/Input/Input";
 import { Modal } from "@/components/common/Modal/Modal";
+import { NoticeModal } from "@/components/common/Modal/NoticeModal";
+import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
 import { createArtwork } from "../../../artworks/_api/createArtwork";
-import { deleteArtwork, toErrorMessage } from "../../_api/actions";
+import { changeArtworkStatus, deleteArtwork, toErrorMessage } from "../../_api/actions";
 import type { MyArtwork, MyExhibition } from "../../_types";
 import { ListToggleButton } from "../ListToggleButton";
 import { MyArtworkCard } from "../MyArtworkCard";
@@ -55,14 +57,29 @@ export function MyArtworkSection({
 		}
 	};
 
-	const [deleteError, setDeleteError] = useState("");
+	const { notice, showNotice, closeNotice } = useNoticeModal();
 
 	const handleDelete = async (artworkId: string) => {
 		try {
 			await deleteArtwork(artworkId);
 			setArtworks((prev) => prev.filter((artwork) => artwork.artworkId !== artworkId));
 		} catch (error) {
-			setDeleteError(toErrorMessage(error));
+			showNotice("삭제에 실패했어요.", toErrorMessage(error));
+		}
+	};
+
+	const handleStatusChange = async (artworkId: string, status: "DRAFT" | "PUBLISHED") => {
+		try {
+			await changeArtworkStatus(artworkId, status);
+			setArtworks((prev) =>
+				prev.map((artwork) =>
+					artwork.artworkId === artworkId
+						? { ...artwork, status: status === "PUBLISHED" ? "public" : "private" }
+						: artwork,
+				),
+			);
+		} catch (error) {
+			showNotice("전환에 실패했어요.", toErrorMessage(error));
 		}
 	};
 
@@ -86,6 +103,7 @@ export function MyArtworkSection({
 						artwork={artwork}
 						exhibitions={exhibitions}
 						onDelete={handleDelete}
+						onStatusChange={handleStatusChange}
 					/>
 				))}
 			</div>
@@ -119,15 +137,8 @@ export function MyArtworkSection({
 					errorMessage={addError || undefined}
 				/>
 			</Modal>
-			{/* TODO: 삭제 실패 안내 UI 는 피그마에 없음 — 임시 모달 */}
-			<Modal
-				open={Boolean(deleteError)}
-				onOpenChange={(open) => !open && setDeleteError("")}
-				title="삭제에 실패했어요."
-				description={deleteError}
-				showCloseButton
-				actions={[{ text: "확인", variant: "assistive", onClick: () => setDeleteError("") }]}
-			/>
+			{/* TODO: 삭제/전환 실패 안내 UI 는 피그마에 없음 — 임시 모달 */}
+			<NoticeModal notice={notice} onClose={closeNotice} />
 		</section>
 	);
 }

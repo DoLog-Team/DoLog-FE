@@ -73,6 +73,18 @@ export async function deleteArtwork(artworkId: string) {
 }
 
 /************************
+ * 작품 공개/비공개 전환 — PATCH artworks/{artworkId}/exhibition
+ * 공개 전환 시 필수 항목이 안 채워져 있으면 백엔드가 에러로 거절한다
+ ************************/
+
+export async function changeArtworkStatus(artworkId: string, status: "DRAFT" | "PUBLISHED") {
+	await authApiClient(`/artworks/${artworkId}/exhibition`, {
+		method: "PATCH",
+		body: JSON.stringify({ status }),
+	});
+}
+
+/************************
  * 계정 탈퇴 — DELETE accounts/me
  ************************/
 

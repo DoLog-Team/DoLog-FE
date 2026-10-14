@@ -7,9 +7,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { FormHeader } from "@/components/common/FormHeader/FormHeader";
-import { Modal } from "@/components/common/Modal/Modal";
+import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { TabBar } from "@/components/common/TabBar/TabBar";
 import { useAsyncSave } from "@/lib/hooks/useAsyncSave";
+import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
 import { compressImageFile } from "@/lib/utils/image";
 import type { MyArtworkDetail } from "../_api/getMyArtwork";
 import { updateArtworkDescription, uploadContentImage } from "../_api/updateArtworkDetail";
@@ -55,7 +56,7 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 	const editorRef = useRef<ToastEditor>(null);
 	// 붙여넣었지만 아직 저장 안 한 이미지: 미리보기용 data URL -> 원본 Blob (임시저장 시점에만 실제 업로드)
 	const pendingUploadsRef = useRef<Map<string, Blob>>(new Map());
-	const [notice, setNotice] = useState<{ title: string; description: string } | null>(null);
+	const { notice, showNotice, closeNotice } = useNoticeModal();
 	const [artworkTitle, setArtworkTitle] = useState(artwork.title);
 	const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
 	const { isSaving, error: saveError, lastSavedAt, run } = useAsyncSave();
@@ -136,10 +137,10 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 							const imageCount = extractImageUrls(currentMarkdown).length;
 
 							if (imageCount >= MAX_IMAGE_COUNT) {
-								setNotice({
-									title: "이미지 개수 제한",
-									description: `이미지는 최대 ${MAX_IMAGE_COUNT}장까지 첨부할 수 있어요.`,
-								});
+								showNotice(
+									"이미지 개수 제한",
+									`이미지는 최대 ${MAX_IMAGE_COUNT}장까지 첨부할 수 있어요.`,
+								);
 								return;
 							}
 
@@ -159,26 +160,17 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 									callback(dataUrl, "이미지");
 								})
 								.catch(() => {
-									setNotice({
-										title: "이미지 업로드 실패",
-										description:
-											"jpg, png, webp 형식의 이미지만 업로드할 수 있어요.\n다른 파일로 다시 시도해주세요.",
-									});
+									showNotice(
+										"이미지 업로드 실패",
+										"jpg, png, webp 형식의 이미지만 업로드할 수 있어요.\n다른 파일로 다시 시도해주세요.",
+									);
 								});
 						},
 					}}
 				/>
 			</div>
 
-			<Modal
-				open={notice !== null}
-				onOpenChange={(open) => {
-					if (!open) setNotice(null);
-				}}
-				title={notice?.title ?? ""}
-				description={notice?.description}
-				actions={[{ text: "확인", variant: "assistive", onClick: () => setNotice(null) }]}
-			/>
+			<NoticeModal notice={notice} onClose={closeNotice} />
 
 			<RenameArtworkModal
 				artworkId={artwork.artworkId}
