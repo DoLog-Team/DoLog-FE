@@ -120,9 +120,15 @@ export async function getMyArtworks(): Promise<MyArtwork[]> {
 interface MyExhibitionResponse {
 	exhibitionId: string;
 	exhibitionName: string;
+	exhibitionImg: string | null;
+	startDate: string | null;
+	endDate: string | null;
 	status: "PENDING" | "JOINED";
 	joinedAt: string;
 }
+
+// YYYY-MM-DD → YYYY.MM.DD
+const toDotDate = (date: string | null) => date?.replace(/-/g, ".") ?? null;
 
 export async function getMyExhibitions(): Promise<MyExhibition[]> {
 	const data = await serverApiClient<{ exhibitions: MyExhibitionResponse[] }>("/exhibitions/me", {
@@ -131,9 +137,9 @@ export async function getMyExhibitions(): Promise<MyExhibition[]> {
 	return data.exhibitions.map((exhibition) => ({
 		exhibitionId: exhibition.exhibitionId,
 		name: exhibition.exhibitionName,
-		image: null,
-		startDate: null,
-		endDate: null,
+		image: exhibition.exhibitionImg,
+		startDate: toDotDate(exhibition.startDate),
+		endDate: toDotDate(exhibition.endDate),
 		acceptedAt: exhibition.status === "JOINED" ? exhibition.joinedAt : null,
 	}));
 }

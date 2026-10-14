@@ -25,7 +25,7 @@ export default async function ArtistPage() {
 	});
 	const { artistId } = account;
 
-	// TODO: 소셜 가입 직후 계정은 artistId 가 null — 작가 정보 생성 시점 BE 확인 중
+	// 소셜 로그인 시 BE 가 작가 정보를 자동 생성함
 	// 작가 정보가 없으면 작품·전시 API 도 404(작가를 찾을 수 없음)라서 호출하지 않고 빈 화면으로 둔다
 	const [[profile, artworks, exhibitions], termsAgreement] = await Promise.all([
 		artistId
