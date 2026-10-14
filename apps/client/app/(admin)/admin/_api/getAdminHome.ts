@@ -38,7 +38,7 @@ interface AdminHomeResponse {
 	hiddenArtworkCount: number;
 	planName: string | null;
 	// title, exhibitionType, startDate, endDate, description, address, hostName, hostDescription 중 비어 있는 것
-	missingPublishFields?: string[];
+	missingPublishFields: string[];
 }
 
 const EXHIBITION_TYPE_LABEL = {
@@ -71,7 +71,7 @@ export async function getAdminHome(exhibitionId: string) {
 		endDate: home.endDate,
 		operatingHours: home.openTime && home.closeTime ? `${home.openTime} - ${home.closeTime}` : null,
 		note: home.operationNotice,
-		missingPublishFields: home.missingPublishFields ?? guessMissingPublishFields(home),
+		missingPublishFields: home.missingPublishFields,
 		siteName: home.siteName,
 		siteDescription: home.siteDescription,
 		imageUrl: home.siteThumbnail,
@@ -83,20 +83,6 @@ export async function getAdminHome(exhibitionId: string) {
 
 	return { exhibition, counts: await getCounts(exhibitionId, home) };
 }
-
-// missingPublishFields 를 주지 않는 서버(찬주 #429 배포 전)용 — 응답에 있는 값만 본다
-const guessMissingPublishFields = (home: AdminHomeResponse) =>
-	(
-		[
-			["title", home.title],
-			["exhibitionType", home.exhibitionType],
-			["startDate", home.startDate],
-			["endDate", home.endDate],
-			["description", home.siteDescription],
-		] as const
-	)
-		.filter(([, value]) => !value)
-		.map(([field]) => field);
 
 /************************
  * 플랜 한도 초과 작품 수 — admin-home 에 없어서 작품 관리 목록에서 받는다
