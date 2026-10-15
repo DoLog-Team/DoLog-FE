@@ -61,9 +61,9 @@ function ArtworkNavItem({ artwork, direction }: ArtworkNavItemProps) {
 
 export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigationProps) {
 	return (
-		<section className="flex flex-col pb-6 w-full">
+		<section className="flex flex-col pb-6 w-full pt-7">
 			<DesktopContainer>
-				<span className="text-body1-bold text-lighter pt-7 pb-2.5">작품 둘러보기</span>
+				<span className="text-body1-bold text-lighter pb-2.5">작품 둘러보기</span>
 				<hr className="border border-stroke-lighter" />
 				{prevArtwork && <ArtworkNavItem artwork={prevArtwork} direction="prev" />}
 				<hr className="border border-stroke-lightest" />
