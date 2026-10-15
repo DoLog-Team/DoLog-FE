@@ -19,7 +19,9 @@ interface InfoSectionProps {
 
 // RowList를 위한 작가정보 map
 export const InfoSection = ({ data, hideArtistRole }: InfoSectionProps) => {
-	const categories = data.category ? [data.category] : [];
+	// 카테고리가 없으면 작품이 속한 구역 이름으로 대체
+	const chipLabel = data.category || data.zoneName;
+	const categories = chipLabel ? [chipLabel] : [];
 	const artistRows = data.participants.map((participant) => ({
 		label: participant.nameKo,
 		value: participant.role,

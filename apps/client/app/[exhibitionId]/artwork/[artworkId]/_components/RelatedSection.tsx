@@ -15,7 +15,7 @@ export const RelatedSection = ({ artworks, artworkTitle }: RelatedSectionProps) 
 	const items = artworks.map((a) => ({
 		id: a.id,
 		title: a.title,
-		category: a.category,
+		category: a.category || a.zoneName || "",
 		author: a.artistName,
 		imageUrl: a.mainImage,
 	}));
