@@ -96,7 +96,8 @@ export interface ArtworkBts {
 export interface RelatedArtwork {
 	id: string;
 	title: string;
-	category: string;
+	category: string | null;
+	zoneName?: string | null;
 	artistName: string;
 	mainImage: string;
 	type?: "prev" | "next";
@@ -105,7 +106,8 @@ export interface RelatedArtwork {
 // 작품 상세 전체 응답
 export interface ArtworkDetail {
 	title: string;
-	category: string;
+	category: string | null;
+	zoneName?: string | null;
 	material?: string;
 	size?: string | null;
 	description: string;
