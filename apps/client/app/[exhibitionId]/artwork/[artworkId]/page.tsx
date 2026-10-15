@@ -54,8 +54,11 @@ export default async function ArtworkDetailPage({ params }: ArtworkDetailPagePro
 		);
 	}
 
-	// 특정 전시에서만 작가 역할 영역 숨김 처리 [동국대 서양화과]
-	const HIDE_ARTIST_ROLE_EXHIBITION_IDS = new Set(["5918413e-3bb4-4237-ae4d-c55d8f025f34"]);
+	// 특정 전시에서만 작가 역할 영역 숨김 처리 [동국대 서양화과, 동국대 한국화]
+	const HIDE_ARTIST_ROLE_EXHIBITION_IDS = new Set([
+		"5918413e-3bb4-4237-ae4d-c55d8f025f34",
+		"802d25fc-2ae9-4b7a-b174-63bffe0d9c96",
+	]);
 	const hideArtistRole = HIDE_ARTIST_ROLE_EXHIBITION_IDS.has(uuid);
 
 	return <ArtworkDetailClient data={data} hideArtistRole={hideArtistRole} />;
