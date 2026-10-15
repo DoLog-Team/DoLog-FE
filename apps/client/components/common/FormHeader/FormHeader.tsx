@@ -11,6 +11,8 @@ export interface FormHeaderProps {
 	onTempSave?: () => void;
 	tempSaveDisabled?: boolean;
 	saveLabel?: string;
+	// 변경 내용이 없을 때 저장 버튼 비활성
+	saveDisabled?: boolean;
 	onBack: () => void;
 	className?: string;
 }
@@ -23,6 +25,7 @@ export const FormHeader = ({
 	onTempSave,
 	tempSaveDisabled,
 	saveLabel = "임시 저장",
+	saveDisabled,
 	onBack,
 	className,
 }: FormHeaderProps) => {
@@ -48,7 +51,7 @@ export const FormHeader = ({
 
 				<div className="flex items-center gap-3">
 					{lastSavedAt && (
-						// 저장 시간은 데스크탑에서만 표시 (Figma NAV-07·NAV-11)
+						// 저장 시간은 데스크탑에서만 표시
 						<span className="hidden text-body3 text-lighter min-[721px]:inline">
 							{lastSavedAt} 마지막 저장
 						</span>
@@ -58,7 +61,7 @@ export const FormHeader = ({
 						variant="assistive"
 						size="sm"
 						onClick={onTempSave}
-						disabled={tempSaveDisabled}
+						disabled={tempSaveDisabled || saveDisabled}
 						className={tempSaveDisabled ? "px-9.75 py-3.75" : undefined}
 					>
 						{tempSaveDisabled ? <DotsLoader /> : saveLabel}

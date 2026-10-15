@@ -4,7 +4,7 @@ import { ImageHideIcon } from "@/components/common/icons/ImageHideIcon";
 import { ImageIcon } from "@/components/common/icons/ImageIcon";
 import { PeopleIcon } from "@/components/common/icons/PeopleIcon";
 import { SettingsIcon } from "@/components/common/icons/SettingsIcon";
-import type { AdminExhibitionCounts } from "../_mocks/exhibition";
+import type { AdminExhibitionCounts } from "../_types";
 import { SECTION_TITLE_CLASS } from "./homeSection.styles";
 
 interface ManagementCardsProps {

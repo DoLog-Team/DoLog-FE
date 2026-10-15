@@ -38,16 +38,3 @@ export interface ExhibitionSettings {
 	required: Record<RequiredKey, boolean>;
 	hidden: Record<HiddenKey, boolean>;
 }
-
-// 전시 설정 API 연결 전 임시 데이터 — 그룹 이름은 작품 관리 목데이터와 맞춤
-export const MOCK_EXHIBITION_SETTINGS: ExhibitionSettings = {
-	groups: [
-		{ id: "1", name: "A 구역", description: "1층 로비" },
-		{ id: "2", name: "B 구역", description: "" },
-		{ id: "3", name: "C 구역", description: "" },
-	],
-	required: { image: true, size: false, material: false, location: false },
-	hidden: { size: false, material: false, location: false, period: false, year: false },
-};
-
-export const MOCK_LAST_SAVED_AT = "2026.09.20 14:05";

@@ -6,7 +6,7 @@ import { Button } from "@/components/common/Button/Button";
 import { FormField } from "@/components/common/FormField/FormField";
 import { Input } from "@/components/common/Input/Input";
 import { Select } from "@/components/common/Select/Select";
-import type { ArtistProfileForm } from "../../_mocks/profile";
+import type { ArtistProfileForm } from "../../_types";
 
 const EMAIL_DOMAINS = [
 	"gmail.com",

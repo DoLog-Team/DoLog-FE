@@ -2,38 +2,47 @@
 
 import { useState } from "react";
 import { Modal } from "@/components/common/Modal/Modal";
+import { updateArtistStatus } from "../../_api/actions";
 import {
 	AdminSelectableList,
 	matchesKeyword,
 	summarizeArtists,
 } from "../../_components/AdminSelectableList";
+import { useAdminAction } from "../../_components/useAdminAction";
 import { useRowSelection } from "../../_components/useRowSelection";
-import { MOCK_PENDING_ARTISTS } from "../../_mocks/artists";
+import type { AdminArtist } from "../../_types";
 import { ArtistCard } from "./ArtistCard";
 
 type Decision = "accept" | "reject";
 
 const MODAL = {
-	accept: { title: "전시 참여 수락", verb: "수락해요", action: "수락하기" },
-	reject: { title: "전시 참여 거절", verb: "거절해요", action: "거절하기" },
+	accept: { title: "전시 참여 수락", verb: "수락해요", action: "수락하기", status: "JOINED" },
+	reject: { title: "전시 참여 거절", verb: "거절해요", action: "거절하기", status: "DENIED" },
 } as const;
 
-export const PendingArtistList = () => {
-	// 참여 대기 작가 API 연결 전 임시 데이터
-	const [artists, setArtists] = useState(MOCK_PENDING_ARTISTS);
+interface PendingArtistListProps {
+	exhibitionId: string;
+	artists: AdminArtist[];
+}
+
+export const PendingArtistList = ({ exhibitionId, artists }: PendingArtistListProps) => {
 	const [keyword, setKeyword] = useState("");
 	const [decision, setDecision] = useState<Decision | null>(null);
-	const selection = useRowSelection<number>();
+	const selection = useRowSelection<string>();
+	const { isProcessing, run } = useAdminAction();
 
-	const items = artists.filter((artist) => matchesKeyword(keyword, artist.name, artist.email));
+	const items = artists.filter((artist) =>
+		matchesKeyword(keyword, artist.name, artist.email ?? ""),
+	);
 	const selectedNames = artists
 		.filter((artist) => selection.isSelected(artist.id))
 		.map((artist) => artist.name);
 
 	const confirm = () => {
-		setArtists((prev) => prev.filter((artist) => !selection.isSelected(artist.id)));
-		selection.clear();
+		if (!decision) return;
+		const { status } = MODAL[decision];
 		setDecision(null);
+		run(() => updateArtistStatus(exhibitionId, selection.selectedIds, status), selection.clear);
 	};
 
 	return (
@@ -48,14 +57,15 @@ export const PendingArtistList = () => {
 				selection={selection}
 				columns={[
 					{ header: "작가명", width: "20%", cell: (artist) => artist.name },
-					{ header: "이메일", width: "40%", cell: (artist) => artist.email },
-					{ header: "가입 인사", width: "40%", cell: (artist) => artist.greeting },
+					{ header: "이메일", width: "40%", cell: (artist) => artist.email ?? "-" },
+					{ header: "가입 인사", width: "40%", cell: (artist) => artist.greeting ?? "-" },
 				]}
 				renderCard={(artist) => <ArtistCard artist={artist} />}
 				actions={[
 					{ label: "거절하기", variant: "assistive", onClick: () => setDecision("reject") },
 					{ label: "수락하기", variant: "primary", onClick: () => setDecision("accept") },
 				]}
+				isProcessing={isProcessing}
 			/>
 
 			<Modal

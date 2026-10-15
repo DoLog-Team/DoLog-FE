@@ -28,7 +28,7 @@ export interface SelectableListAction {
 	onClick: () => void;
 }
 
-interface AdminSelectableListProps<T extends { id: number }> {
+interface AdminSelectableListProps<T extends { id: Id }, Id extends string | number = T["id"]> {
 	title: string;
 	searchPlaceholder: string;
 	searchValue: string;
@@ -40,7 +40,7 @@ interface AdminSelectableListProps<T extends { id: number }> {
 	// 검색·필터가 적용된 전체 목록
 	items: T[];
 	isCountError?: boolean;
-	selection: RowSelection<number>;
+	selection: RowSelection<Id>;
 	columns: SelectableListColumn<T>[];
 	renderCard: (item: T) => React.ReactNode;
 	cardClassName?: (item: T) => string | undefined;
@@ -49,7 +49,7 @@ interface AdminSelectableListProps<T extends { id: number }> {
 	getRowHref?: (item: T) => string;
 }
 
-export const AdminSelectableList = <T extends { id: number }>({
+export const AdminSelectableList = <T extends { id: Id }, Id extends string | number = T["id"]>({
 	title,
 	searchPlaceholder,
 	searchValue,
@@ -66,7 +66,7 @@ export const AdminSelectableList = <T extends { id: number }>({
 	actions,
 	isProcessing,
 	getRowHref,
-}: AdminSelectableListProps<T>) => {
+}: AdminSelectableListProps<T, Id>) => {
 	const [page, setPage] = useState(1);
 
 	// 목록 전체를 받아 클라이언트에서 10개씩 자름 — API 가 페이지 단위로 주면 page 를 밖으로 뺄 것

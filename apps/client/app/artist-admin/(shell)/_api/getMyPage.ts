@@ -33,7 +33,7 @@ export async function getMyAccount() {
 
 interface ArtistResponse {
 	artistId: string;
-	nameKo: string;
+	nameKo: string | null;
 	nameEn: string | null;
 	bio: string | null;
 	profileImg: string | null;

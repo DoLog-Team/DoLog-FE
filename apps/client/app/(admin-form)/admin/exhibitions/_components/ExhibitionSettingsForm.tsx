@@ -10,14 +10,9 @@ import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { Modal } from "@/components/common/Modal/Modal";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { TabBar } from "@/components/common/TabBar/TabBar";
-import { formatSavedAt } from "@/lib/utils/date";
-import {
-	type ExhibitionSettings,
-	HIDDEN_OPTIONS,
-	MOCK_EXHIBITION_SETTINGS,
-	MOCK_LAST_SAVED_AT,
-	REQUIRED_OPTIONS,
-} from "../_mocks/exhibitionSettings";
+import { ADMIN_LOGIN_HREF } from "@/lib/constants/admin";
+import { NEW_GROUP_ID_PREFIX, saveExhibitionSettings } from "../_api/actions";
+import { type ExhibitionSettings, HIDDEN_OPTIONS, REQUIRED_OPTIONS } from "../_types";
 import { GroupSettings, getGroupNameErrors } from "./GroupSettings";
 
 const TABS = [
@@ -31,15 +26,32 @@ const FIELD_CLASS = "gap-3";
 const CHECKBOX_CLASS = "min-h-11";
 const CHECKBOX_LABEL_CLASS = "text-body2-bold";
 
-export const ExhibitionSettingsForm = () => {
+// "2026.09.29 14:05"
+const formatSavedAt = (date: Date) => {
+	const pad = (value: number) => String(value).padStart(2, "0");
+	return `${date.getFullYear()}.${pad(date.getMonth() + 1)}.${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
+const SAVE_FAILED_MESSAGE = "저장에 실패했어요. 잠시 뒤 다시 시도해주세요.";
+
+interface ExhibitionSettingsFormProps {
+	exhibitionId: string;
+	initialSettings: ExhibitionSettings;
+}
+
+export const ExhibitionSettingsForm = ({
+	exhibitionId,
+	initialSettings,
+}: ExhibitionSettingsFormProps) => {
 	const router = useRouter();
 	const tabIds = useMemo(() => TABS.map((tab) => tab.id), []);
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(tabIds, 120);
 
-	// 전시 설정 API 연결 전 — 목 데이터로 시작하고 저장도 화면에서만
-	const [saved, setSaved] = useState(MOCK_EXHIBITION_SETTINGS);
-	const [settings, setSettings] = useState(MOCK_EXHIBITION_SETTINGS);
-	const [lastSavedAt, setLastSavedAt] = useState(MOCK_LAST_SAVED_AT);
+	const [saved, setSaved] = useState(initialSettings);
+	const [settings, setSettings] = useState(initialSettings);
+	// API 가 저장 시각을 주지 않아 이 화면에서 저장했을 때만 표시 (빈 문자열이면 FormHeader 가 숨김)
+	const [lastSavedAt, setLastSavedAt] = useState("");
+	const [isSaving, setIsSaving] = useState(false);
 	const [showErrors, setShowErrors] = useState(false);
 	const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
 	const nextGroupId = useRef(0);
@@ -58,8 +70,9 @@ export const ExhibitionSettingsForm = () => {
 	const update = (patch: Partial<ExhibitionSettings>) =>
 		setSettings((prev) => ({ ...prev, ...patch }));
 
-	// 그룹 이름 오류가 있으면 저장하지 않고 false
-	const handleSave = () => {
+	// 저장하지 못했으면 false
+	const handleSave = async () => {
+		if (isSaving) return false;
 		if (groupErrors.some(Boolean)) {
 			setShowErrors(true);
 			handleTabClick("group");
@@ -69,8 +82,21 @@ export const ExhibitionSettingsForm = () => {
 			...settings,
 			groups: settings.groups.map((group) => ({ ...group, name: group.name.trim() })),
 		};
-		setSettings(trimmed);
-		setSaved(trimmed);
+
+		setIsSaving(true);
+		const result = await saveExhibitionSettings(exhibitionId, trimmed);
+		setIsSaving(false);
+
+		if (!result.ok) {
+			if (result.reason === "UNAUTHORIZED") router.replace(ADMIN_LOGIN_HREF);
+			else alert(result.message ?? SAVE_FAILED_MESSAGE);
+			return false;
+		}
+
+		// 새 그룹은 서버가 준 id 로 바꿔야 다시 저장할 때 또 생성되지 않는다
+		const next = { ...trimmed, groups: result.groups };
+		setSettings(next);
+		setSaved(next);
 		setShowErrors(false);
 		setLastSavedAt(formatSavedAt(new Date()));
 		return true;
@@ -102,7 +128,7 @@ export const ExhibitionSettingsForm = () => {
 							update({
 								groups: [
 									...settings.groups,
-									{ id: `new-${nextGroupId.current}`, name: "", description: "" },
+									{ id: `${NEW_GROUP_ID_PREFIX}${nextGroupId.current}`, name: "", description: "" },
 								],
 							});
 						}}
@@ -198,9 +224,9 @@ export const ExhibitionSettingsForm = () => {
 					{
 						text: "저장하기",
 						variant: "primary",
-						onClick: () => {
+						onClick: async () => {
 							setIsLeaveModalOpen(false);
-							if (handleSave()) router.back();
+							if (await handleSave()) router.back();
 						},
 					},
 				]}
