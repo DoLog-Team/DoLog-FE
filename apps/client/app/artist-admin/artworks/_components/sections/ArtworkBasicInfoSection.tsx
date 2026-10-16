@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Checkbox } from "@/components/common/Checkbox/Checkbox";
 import { DateSelectField } from "@/components/common/DateSelectField/DateSelectField";
 import { FormField } from "@/components/common/FormField/FormField";
@@ -20,7 +20,7 @@ const CATEGORY_OPTIONS = [
 
 const CURRENT_YEAR = new Date().getFullYear();
 const YEAR_OPTIONS = Array.from({ length: CURRENT_YEAR - 2000 + 1 }, (_, i) => {
-	const year = String(2000 + i);
+	const year = String(CURRENT_YEAR - i);
 	return { label: year, value: year };
 });
 const MONTH_OPTIONS = Array.from({ length: 12 }, (_, i) => {
@@ -32,30 +32,38 @@ const DAY_OPTIONS = Array.from({ length: 31 }, (_, i) => {
 	return { label: day, value: day };
 });
 
+export interface ArtworkBasicInfoValue {
+	shortIntro: string;
+	category: string | undefined;
+	hasStartDate: boolean;
+	startYear: string | undefined;
+	startMonth: string | undefined;
+	startDay: string | undefined;
+	endYear: string | undefined;
+	endMonth: string | undefined;
+	endDay: string | undefined;
+}
+
 export interface ArtworkBasicInfoSectionProps {
+	value: ArtworkBasicInfoValue;
+	onChange: (patch: Partial<ArtworkBasicInfoValue>) => void;
 	onMissingCountChange?: (count: number) => void;
 }
 
-export const ArtworkBasicInfoSection = ({ onMissingCountChange }: ArtworkBasicInfoSectionProps) => {
-	const [intro, setIntro] = useState("");
-	const [category, setCategory] = useState<string | undefined>(undefined);
-
-	const [hasStartDate, setHasStartDate] = useState(false);
-	const [startYear, setStartYear] = useState<string | undefined>(undefined);
-	const [startMonth, setStartMonth] = useState<string | undefined>(undefined);
-	const [startDay, setStartDay] = useState<string | undefined>(undefined);
-	const [endYear, setEndYear] = useState<string | undefined>(undefined);
-	const [endMonth, setEndMonth] = useState<string | undefined>(undefined);
-	const [endDay, setEndDay] = useState<string | undefined>(undefined);
-
-	const isStartDateComplete = !hasStartDate || Boolean(startYear && startMonth && startDay);
-	const isEndDateComplete = Boolean(endYear && endMonth && endDay);
+export const ArtworkBasicInfoSection = ({
+	value,
+	onChange,
+	onMissingCountChange,
+}: ArtworkBasicInfoSectionProps) => {
+	const isStartDateComplete =
+		!value.hasStartDate || Boolean(value.startYear && value.startMonth && value.startDay);
+	const isEndDateComplete = Boolean(value.endYear && value.endMonth && value.endDay);
 	const isPeriodComplete = isStartDateComplete && isEndDateComplete;
 
 	useEffect(() => {
-		const missing = (category ? 0 : 1) + (isPeriodComplete ? 0 : 1);
+		const missing = (value.category ? 0 : 1) + (isPeriodComplete ? 0 : 1);
 		onMissingCountChange?.(missing);
-	}, [category, isPeriodComplete, onMissingCountChange]);
+	}, [value.category, isPeriodComplete, onMissingCountChange]);
 
 	return (
 		<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
@@ -67,22 +75,26 @@ export const ArtworkBasicInfoSection = ({ onMissingCountChange }: ArtworkBasicIn
 					<Textarea
 						placeholder="작품을 간단하게 소개해주세요."
 						maxLength={200}
-						value={intro}
-						onChange={(e) => setIntro(e.target.value)}
+						value={value.shortIntro}
+						onChange={(e) => onChange({ shortIntro: e.target.value })}
 					/>
 				</FormField>
 
 				<FormField label="카테고리" required>
 					<Select
 						options={CATEGORY_OPTIONS}
-						value={category}
-						onChange={setCategory}
+						value={value.category}
+						onChange={(category) => onChange({ category })}
 						placeholder="작품의 카테고리를 선택해주세요."
 					/>
 				</FormField>
 
 				<FormField label="제작 기간" required className="mt-5">
-					<Checkbox checked={hasStartDate} onChange={setHasStartDate} label="시작 날짜 입력하기" />
+					<Checkbox
+						checked={value.hasStartDate}
+						onChange={(hasStartDate) => onChange({ hasStartDate })}
+						label="시작 날짜 입력하기"
+					/>
 
 					<div className="flex flex-col gap-6">
 						<div className="flex gap-2">
@@ -90,25 +102,25 @@ export const ArtworkBasicInfoSection = ({ onMissingCountChange }: ArtworkBasicIn
 								label="시작 년도"
 								placeholder="2000"
 								options={YEAR_OPTIONS}
-								value={startYear}
-								onChange={setStartYear}
-								disabled={!hasStartDate}
+								value={value.startYear}
+								onChange={(startYear) => onChange({ startYear })}
+								disabled={!value.hasStartDate}
 							/>
 							<DateSelectField
 								label="월"
 								placeholder="-"
 								options={MONTH_OPTIONS}
-								value={startMonth}
-								onChange={setStartMonth}
-								disabled={!hasStartDate}
+								value={value.startMonth}
+								onChange={(startMonth) => onChange({ startMonth })}
+								disabled={!value.hasStartDate}
 							/>
 							<DateSelectField
 								label="일"
 								placeholder="-"
 								options={DAY_OPTIONS}
-								value={startDay}
-								onChange={setStartDay}
-								disabled={!hasStartDate}
+								value={value.startDay}
+								onChange={(startDay) => onChange({ startDay })}
+								disabled={!value.hasStartDate}
 							/>
 						</div>
 
@@ -117,22 +129,22 @@ export const ArtworkBasicInfoSection = ({ onMissingCountChange }: ArtworkBasicIn
 								label="종료 년도"
 								placeholder="2000"
 								options={YEAR_OPTIONS}
-								value={endYear}
-								onChange={setEndYear}
+								value={value.endYear}
+								onChange={(endYear) => onChange({ endYear })}
 							/>
 							<DateSelectField
 								label="월"
 								placeholder="-"
 								options={MONTH_OPTIONS}
-								value={endMonth}
-								onChange={setEndMonth}
+								value={value.endMonth}
+								onChange={(endMonth) => onChange({ endMonth })}
 							/>
 							<DateSelectField
 								label="일"
 								placeholder="-"
 								options={DAY_OPTIONS}
-								value={endDay}
-								onChange={setEndDay}
+								value={value.endDay}
+								onChange={(endDay) => onChange({ endDay })}
 							/>
 						</div>
 					</div>

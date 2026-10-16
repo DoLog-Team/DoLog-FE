@@ -148,6 +148,7 @@ export const ProfileEditForm = ({ initialValue, onBack }: ProfileEditFormProps) 
 					lastSavedAt={lastSavedAt}
 					saveLabel={isRequiredFilled ? "저장" : "임시 저장"}
 					saveDisabled={!isDirty || isSaving}
+					tempSaveDisabled={isSaving}
 					onTempSave={handleSave}
 					onBack={handleBack}
 				/>

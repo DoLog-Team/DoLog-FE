@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useId, useRef } from "react";
+import { useId, useRef, useState } from "react";
 import { cn } from "@/lib/utils/cn";
 import { Button } from "../Button/Button";
 import { imageInputBoxVariants } from "./ImageInput.styles";
@@ -38,6 +38,7 @@ export const ImageInput = ({
 	const remaining = maxCount - images.length;
 	const canAdd = remaining > 0;
 	const isSingle = maxCount === 1;
+	const [isDragOver, setIsDragOver] = useState(false);
 
 	const handleFiles = (fileList: FileList | null) => {
 		if (!fileList || fileList.length === 0) return;
@@ -49,7 +50,17 @@ export const ImageInput = ({
 		<button
 			type="button"
 			onClick={() => inputRef.current?.click()}
-			className={cn(imageInputBoxVariants(), "h-45 w-full")}
+			onDragOver={(e) => {
+				e.preventDefault();
+				setIsDragOver(true);
+			}}
+			onDragLeave={() => setIsDragOver(false)}
+			onDrop={(e) => {
+				e.preventDefault();
+				setIsDragOver(false);
+				handleFiles(e.dataTransfer.files);
+			}}
+			className={cn(imageInputBoxVariants(), "h-45 w-full", isDragOver && "bg-stroke-lighter")}
 		>
 			<p className="flex flex-col items-center text-center text-body2 text-lighter">
 				<span>{description}</span>
