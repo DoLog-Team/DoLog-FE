@@ -18,7 +18,7 @@ export interface UploadContentImageResult {
 	imageUrl: string;
 }
 
-// 본문(마크다운)에 인라인으로 끼워넣을 이미지 업로드. 갤러리(ArtworkImg)에는 남지 않는다.
+// 본문(마크다운)에 인라인으로 끼워넣을 이미지 업로드
 export async function uploadContentImage(
 	artworkId: string,
 	file: Blob,
