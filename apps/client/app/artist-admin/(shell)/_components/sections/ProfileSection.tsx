@@ -11,17 +11,17 @@ import { SECTION_TITLE_CLASS } from "../SectionHeader";
 
 const PROFILE_EDIT_PATH = "/artist-admin/profile/edit";
 
-// 보연 TODO: 두록 작가 상세 페이지 경로가 정해지면 작가 프로필 보기에 연결
-const ACTIONS = [
-	{ label: "프로필 수정", icon: "/icons/edit.svg", href: PROFILE_EDIT_PATH },
-	{ label: "작가 프로필 보기", icon: "/icons/check.svg", href: null },
-] as const;
-
 interface ProfileSectionProps {
 	profile: ArtistAdminProfile;
 }
 
 export function ProfileSection({ profile }: ProfileSectionProps) {
+	const actions = [
+		{ label: "프로필 수정", icon: "/icons/edit.svg", href: PROFILE_EDIT_PATH },
+		// 두록 작가 상세
+		{ label: "작가 프로필 보기", icon: "/icons/check.svg", href: `/artists/${profile.artistId}` },
+	];
+
 	const rows = [
 		...(profile.email ? [{ label: "이메일", value: profile.email }] : []),
 		...profile.sns.map((sns) => ({ label: sns.label, value: sns.url })),
@@ -59,7 +59,7 @@ export function ProfileSection({ profile }: ProfileSectionProps) {
 						className={SECTION_TITLE_CLASS}
 					/>
 					<div className="hidden items-center gap-2.5 min-[721px]:flex">
-						{ACTIONS.map((action) => (
+						{actions.map((action) => (
 							<ProfileAction key={action.label} {...action} size="sm" />
 						))}
 					</div>
@@ -77,7 +77,7 @@ export function ProfileSection({ profile }: ProfileSectionProps) {
 				<Engagement viewCount={profile.viewCount} likeCount={profile.likeCount} />
 
 				<div className="mt-7 flex flex-col gap-2.5 min-[721px]:hidden">
-					{ACTIONS.map((action) => (
+					{actions.map((action) => (
 						<ProfileAction key={action.label} {...action} size="lg" />
 					))}
 				</div>
