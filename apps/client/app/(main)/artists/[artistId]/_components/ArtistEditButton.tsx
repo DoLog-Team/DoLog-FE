@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { authApiClient } from "@/lib/api/instance";
 import type { MyAccount } from "@/lib/api/account.types";
+import { authApiClient } from "@/lib/api/instance";
 import { useAuthRole } from "@/lib/auth/useAuthRole";
 
 const PROFILE_EDIT_PATH = "/artist-admin/profile/edit";
