@@ -12,7 +12,10 @@ export default function ExhibitionCard({
 	imageUrl,
 	startDate,
 	endDate,
-}: Omit<ExhibitionItem, "id">) {
+}: Pick<
+	ExhibitionItem,
+	"title" | "univName" | "deptName" | "address" | "imageUrl" | "startDate" | "endDate"
+>) {
 	return (
 		<article className="group flex gap-4 min-[721px]:flex-col min-[721px]:gap-3">
 			<div className="relative self-stretch h-40 aspect-[1/1.414] shrink-0 overflow-hidden min-[721px]:h-auto min-[721px]:w-full">
