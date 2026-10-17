@@ -38,5 +38,4 @@ export interface ArtistDetail {
 	artworks: ArtistArtwork[];
 	prevArtist?: ArtistNavItem;
 	nextArtist?: ArtistNavItem;
-	public: boolean;
 }
