@@ -4,7 +4,7 @@ import { Header } from "../../_components/Header";
 import { getDologArtist } from "./_api/getArtist";
 import { ArtistDetailClient } from "./_components/ArtistDetailClient";
 
-// 두록 작가 상세 (피그마 000401) — 전시와 상관없는 작가 한 명의 프로필·작품·참여 전시
+// 두록 작가 상세 (일반 프로필)
 // 전시 안의 작가 상세(app/[exhibitionId]/artist/[artistId])와는 별개
 
 interface Props {
