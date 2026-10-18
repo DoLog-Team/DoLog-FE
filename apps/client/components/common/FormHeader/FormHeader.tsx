@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/common/Button/Button";
 import { PencilIcon } from "@/components/common/icons/PencilIcon";
+import { DotsLoader } from "@/components/common/Spinner/DotsLoader";
 
 export interface FormHeaderProps {
 	title: string;
@@ -8,6 +9,7 @@ export interface FormHeaderProps {
 	onTitleEditClick?: () => void;
 	lastSavedAt?: string;
 	onTempSave?: () => void;
+	tempSaveDisabled?: boolean;
 	saveLabel?: string;
 	// 변경 내용이 없을 때 저장 버튼 비활성
 	saveDisabled?: boolean;
@@ -21,6 +23,7 @@ export const FormHeader = ({
 	onTitleEditClick,
 	lastSavedAt = "2026.05.12 19:22",
 	onTempSave,
+	tempSaveDisabled,
 	saveLabel = "임시 저장",
 	saveDisabled,
 	onBack,
@@ -30,7 +33,7 @@ export const FormHeader = ({
 		<header className={className}>
 			<div className="flex items-center justify-between py-3">
 				<div className="flex items-center gap-2">
-					<button type="button" onClick={onBack} aria-label="뒤로가기">
+					<button type="button" onClick={onBack} aria-label="뒤로가기" className="cursor-pointer">
 						<Image src="/icons/backBtn.svg" alt="" width={24} height={24} />
 					</button>
 					<span className="text-body1-bold text-strong">{title}</span>
@@ -58,9 +61,10 @@ export const FormHeader = ({
 						variant="assistive"
 						size="sm"
 						onClick={onTempSave}
-						disabled={saveDisabled}
+						disabled={tempSaveDisabled || saveDisabled}
+						className={tempSaveDisabled ? "px-9.75 py-3.75" : undefined}
 					>
-						{saveLabel}
+						{tempSaveDisabled ? <DotsLoader /> : saveLabel}
 					</Button>
 				</div>
 			</div>

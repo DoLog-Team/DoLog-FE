@@ -1,16 +1,33 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { FormField } from "@/components/common/FormField/FormField";
 import { ImageInput } from "@/components/common/ImageInput/ImageInput";
 import { Input } from "@/components/common/Input/Input";
+import { NoticeModal } from "@/components/common/Modal/NoticeModal";
+import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
+import { compressImageFile } from "@/lib/utils/image";
 import { useYoutubeLink } from "./useYoutubeLink";
 
-export const ArtworkImageSection = () => {
-	const [mainImages, setMainImages] = useState<string[]>([]);
+export interface ArtworkImageValue {
+	mainImagePreview: string | null;
+	youtubeUrl: string;
+}
+
+export interface ArtworkImageSectionProps {
+	value: ArtworkImageValue;
+	onChange: (patch: Partial<ArtworkImageValue>) => void;
+	onMainImageFileChange: (file: File | null) => void;
+}
+
+export const ArtworkImageSection = ({
+	value,
+	onChange,
+	onMainImageFileChange,
+}: ArtworkImageSectionProps) => {
 	const { videoUrl, linkStatus, videoTitle, thumbnailUrl, handleVideoUrlChange, handleLink } =
-		useYoutubeLink();
+		useYoutubeLink(value.youtubeUrl, (youtubeUrl) => onChange({ youtubeUrl }));
+	const { notice, showNotice, closeNotice } = useNoticeModal();
 
 	return (
 		<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
@@ -29,10 +46,28 @@ export const ArtworkImageSection = () => {
 				>
 					<ImageInput
 						className="w-full"
-						images={mainImages}
+						accept="image/jpeg,image/png,image/webp"
+						images={value.mainImagePreview ? [value.mainImagePreview] : []}
 						maxCount={1}
-						onAdd={(files) => setMainImages(files.map((file) => URL.createObjectURL(file)))}
-						onRemove={() => setMainImages([])}
+						onAdd={(files) => {
+							const file = files[0];
+							if (!file) return;
+							compressImageFile(file)
+								.then((compressed) => {
+									onMainImageFileChange(compressed);
+									onChange({ mainImagePreview: URL.createObjectURL(compressed) });
+								})
+								.catch(() =>
+									showNotice(
+										"이미지를 불러오지 못했어요",
+										"jpg, png, webp 형식의 이미지만 업로드할 수 있어요.\n다른 파일로 다시 시도해주세요.",
+									),
+								);
+						}}
+						onRemove={() => {
+							onMainImageFileChange(null);
+							onChange({ mainImagePreview: null });
+						}}
 					/>
 				</FormField>
 
@@ -73,6 +108,8 @@ export const ArtworkImageSection = () => {
 					)}
 				</FormField>
 			</div>
+
+			<NoticeModal notice={notice} onClose={closeNotice} />
 		</div>
 	);
 };

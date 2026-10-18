@@ -280,3 +280,27 @@
     display: none;
   }
 }
+
+/* 작품 상세 정보 에디터: 기본값이 WYSIWYG라 Markdown/WYSIWYG 탭 순서를 시각적으로 뒤집는다
+   (Toast UI 내부적으로 Markdown 탭이 항상 먼저 렌더링되도록 고정돼 있어 CSS로만 순서를 바꾼다) */
+.artwork-detail-editor .toastui-editor-mode-switch {
+  direction: rtl;
+}
+.artwork-detail-editor .toastui-editor-mode-switch .tab-item {
+  direction: ltr;
+}
+
+/* 저장 버튼 등에 쓰는 점 3개 로딩 인디케이터 — 순서대로 출렁이는 애니메이션 */
+@keyframes dot-wave {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-4px);
+  }
+}
+.animate-dot-wave {
+  animation: dot-wave 1.1s ease-in-out infinite;
+}
