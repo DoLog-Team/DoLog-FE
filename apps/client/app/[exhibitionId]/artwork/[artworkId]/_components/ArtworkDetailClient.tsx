@@ -28,14 +28,17 @@ export function ArtworkDetailClient({
 	data: ArtworkDetail;
 	hideArtistRole?: boolean;
 }) {
+	// 작품 소개가 없거나 공백뿐이면 탭과 섹션을 모두 숨김
+	const hasDescription = !!data.description?.trim();
+
 	const TABS = useMemo(() => {
 		const base = [
-			{ id: "detail", label: "작품 소개" },
+			...(hasDescription ? [{ id: "detail", label: "작품 소개" }] : []),
 			{ id: "artist", label: "작가 소개" },
 		];
 		if (data.relatedBts?.length) base.push({ id: "behind", label: "비하인드" });
 		return base;
-	}, [data.relatedBts]);
+	}, [hasDescription, data.relatedBts]);
 
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(TABS.map((t) => t.id));
 
@@ -106,14 +109,16 @@ export function ArtworkDetailClient({
 			)}
 			<InfoSection data={data} hideArtistRole={hideArtistRole} />
 			<LocationSection locationImageUrl={data.locationMap} />
-			<section
-				data-section="detail"
-				ref={(el) => {
-					sectionRefs.detail.current = el;
-				}}
-			>
-				<DescriptionSection content={data.description} />
-			</section>
+			{hasDescription && (
+				<section
+					data-section="detail"
+					ref={(el) => {
+						sectionRefs.detail.current = el;
+					}}
+				>
+					<DescriptionSection content={data.description} />
+				</section>
+			)}
 			<YoutubeSection youtubeUrl={data.youtubeUrl} />
 			<PhotoSection data={data} />
 			<section
