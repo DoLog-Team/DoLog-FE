@@ -12,8 +12,8 @@ const extractYoutubeVideoId = (url: string): string | null => {
 
 type LinkStatus = "idle" | "loading" | "success" | "error";
 
-export const useYoutubeLink = () => {
-	const [videoUrl, setVideoUrl] = useState("");
+export const useYoutubeLink = (initialUrl = "", onUrlChange?: (url: string) => void) => {
+	const [videoUrl, setVideoUrl] = useState(initialUrl);
 	const [linkedUrl, setLinkedUrl] = useState<string | null>(null);
 	const [linkStatus, setLinkStatus] = useState<LinkStatus>("idle");
 	const [videoTitle, setVideoTitle] = useState("");
@@ -21,6 +21,7 @@ export const useYoutubeLink = () => {
 
 	const handleVideoUrlChange = (value: string) => {
 		setVideoUrl(value);
+		onUrlChange?.(value);
 		if (value !== linkedUrl) {
 			setLinkStatus("idle");
 			setVideoTitle("");

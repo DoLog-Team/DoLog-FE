@@ -8,8 +8,19 @@ import { FormField } from "@/components/common/FormField/FormField";
 import { Input } from "@/components/common/Input/Input";
 import { Modal } from "@/components/common/Modal/Modal";
 
-export const ArtworkPurchaseInfoSection = () => {
-	const [showPurchaseButton, setShowPurchaseButton] = useState(false);
+export interface ArtworkPurchaseInfoValue {
+	showPurchaseButton: boolean;
+}
+
+export interface ArtworkPurchaseInfoSectionProps {
+	value: ArtworkPurchaseInfoValue;
+	onChange: (patch: Partial<ArtworkPurchaseInfoValue>) => void;
+}
+
+export const ArtworkPurchaseInfoSection = ({
+	value,
+	onChange,
+}: ArtworkPurchaseInfoSectionProps) => {
 	const [openChatUrl] = useState("");
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
@@ -33,8 +44,8 @@ export const ArtworkPurchaseInfoSection = () => {
 			<div className="flex min-w-0 flex-1 flex-col gap-9">
 				<FormField label="작품 구매 버튼">
 					<Checkbox
-						checked={showPurchaseButton}
-						onChange={setShowPurchaseButton}
+						checked={value.showPurchaseButton}
+						onChange={(showPurchaseButton) => onChange({ showPurchaseButton })}
 						label="작품 구매 버튼 표시하기"
 					/>
 				</FormField>

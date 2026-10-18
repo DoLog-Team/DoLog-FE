@@ -17,12 +17,18 @@ interface MyArtworkCardProps {
 	// 출품할 전시 선택지 — 나의 전시 목록
 	exhibitions: MyExhibition[];
 	onDelete: (artworkId: string) => void;
+	onStatusChange: (artworkId: string, status: "DRAFT" | "PUBLISHED") => void;
 }
 
 /**
  * 작품 카드 컴포넌트
  */
-export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardProps) {
+export function MyArtworkCard({
+	artwork,
+	exhibitions,
+	onDelete,
+	onStatusChange,
+}: MyArtworkCardProps) {
 	const router = useRouter();
 	const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
 	const [selectedExhibitionId, setSelectedExhibitionId] = useState<string | undefined>(undefined);
@@ -62,6 +68,24 @@ export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardP
 						setIsSubmitModalOpen(true);
 					},
 				},
+		// 작성 중(draft)인 작품은 필수 항목이 덜 채워져 있을 수 있어 공개 전환 자체를 안 보여준다
+		...(artwork.status === "public"
+			? [
+					{
+						label: "비공개로 전환",
+						icon: "/icons/view.svg",
+						onClick: () => onStatusChange(artwork.artworkId, "DRAFT"),
+					},
+				]
+			: artwork.status === "private"
+				? [
+						{
+							label: "공개로 전환",
+							icon: "/icons/view.svg",
+							onClick: () => onStatusChange(artwork.artworkId, "PUBLISHED"),
+						},
+					]
+				: []),
 		{
 			label: "삭제하기",
 			icon: "/icons/trash.svg",
@@ -106,7 +130,9 @@ export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardP
 
 				<div className="mt-3 flex gap-1.5">
 					<ArtworkStatusBadge status={artwork.status} />
-					{artwork.status === "draft" && <StatusBadge label={`${artwork.completionRate}% 작성`} />}
+					{artwork.status === "draft" && artwork.completionRate !== null && (
+						<StatusBadge label={`${artwork.completionRate}% 작성`} />
+					)}
 				</div>
 			</div>
 
