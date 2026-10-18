@@ -16,12 +16,14 @@ import { ProfilePurchaseLinkSection } from "./sections/ProfilePurchaseLinkSectio
 import { ProfileSnsInfoSection } from "./sections/ProfileSnsInfoSection";
 
 export interface ProfileEditFormProps {
+	// 저장 후 두록 작가 상세로 이동할 때 사용 — 작가 정보가 없는 계정은 null
+	artistId: string | null;
 	initialValue: ArtistProfileForm;
 	// 없으면 이전 화면으로
 	onBack?: () => void;
 }
 
-export const ProfileEditForm = ({ initialValue, onBack }: ProfileEditFormProps) => {
+export const ProfileEditForm = ({ artistId, initialValue, onBack }: ProfileEditFormProps) => {
 	const router = useRouter();
 	const [basicMissingCount, setBasicMissingCount] = useState(0);
 
@@ -52,9 +54,12 @@ export const ProfileEditForm = ({ initialValue, onBack }: ProfileEditFormProps) 
 	const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
 
 	const goBack = onBack ?? (() => router.back());
+	// 저장 후 연결된 상세 페이지(두록 작가 상세)로 이동 (Figma NAV-07)
+	const goToArtistDetail = () => {
+		if (artistId) router.push(`/artists/${artistId}`);
+	};
 
 	// 저장에 성공하면 true — 변경 내용 확인 모달의 "저장하기"가 저장 후 이동할 때 쓴다
-	// TODO: 저장 후 두록 작가 상세로 이동 (작가 상세 페이지 미구현)
 	const save = async () => {
 		if (isSaving || !isDirty) return false;
 		const { nameKo, nameEn, isValid } = name;
@@ -86,7 +91,10 @@ export const ProfileEditForm = ({ initialValue, onBack }: ProfileEditFormProps) 
 	const handleSave = async () => {
 		const isTempSave = !isRequiredFilled;
 		const saved = await save();
-		if (saved && isTempSave) setIsTempSavedModalOpen(true);
+		if (!saved) return;
+		// 임시 저장은 안내 모달(MODAL 24)의 [확인] 뒤에 이동한다
+		if (isTempSave) setIsTempSavedModalOpen(true);
+		else goToArtistDetail();
 	};
 
 	// 변경 내용이 있으면 바로 나가지 않고 확인 모달을 띄운다 (Figma NAV-07 · MODAL 25)
@@ -181,7 +189,7 @@ export const ProfileEditForm = ({ initialValue, onBack }: ProfileEditFormProps) 
 				showCloseButton
 				actions={[{ text: "확인", variant: "assistive", onClick: () => setIsSaveFailed(false) }]}
 			/>
-			{/* 임시저장 안내 모달 — TODO: [확인] 시 연결된 상세 페이지(두록 작가 상세)로 이동 — 페이지 미구현 */}
+			{/* 임시저장 안내 모달 — [확인] 시 연결된 상세 페이지(두록 작가 상세)로 이동 */}
 			<Modal
 				open={isTempSavedModalOpen}
 				onOpenChange={setIsTempSavedModalOpen}
@@ -195,7 +203,14 @@ export const ProfileEditForm = ({ initialValue, onBack }: ProfileEditFormProps) 
 				}
 				showCloseButton
 				actions={[
-					{ text: "확인", variant: "assistive", onClick: () => setIsTempSavedModalOpen(false) },
+					{
+						text: "확인",
+						variant: "assistive",
+						onClick: () => {
+							setIsTempSavedModalOpen(false);
+							goToArtistDetail();
+						},
+					},
 				]}
 			/>
 

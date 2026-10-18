@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { exhibitionId, artistId } = await params;
 	const uuid = await resolveExhibitionId(exhibitionId);
 	const [artist, meta] = await Promise.all([
-		getArtistDetail(artistId),
+		uuid ? getArtistDetail(artistId, uuid) : null,
 		uuid ? getExhibitionMeta(uuid) : null,
 	]);
 
@@ -55,7 +55,7 @@ export default async function ArtistDetailPage({ params }: Props) {
 		);
 	}
 
-	const artist = await getArtistDetail(artistId);
+	const artist = await getArtistDetail(artistId, resolved.uuid);
 	if (!artist) {
 		return (
 			<main className="flex flex-1 flex-col">

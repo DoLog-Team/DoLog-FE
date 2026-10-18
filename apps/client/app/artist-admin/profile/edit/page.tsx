@@ -31,5 +31,5 @@ export default async function ProfileEditPage() {
 			}
 		: EMPTY_FORM;
 
-	return <ProfileEditForm initialValue={initialValue} />;
+	return <ProfileEditForm artistId={artistId} initialValue={initialValue} />;
 }
