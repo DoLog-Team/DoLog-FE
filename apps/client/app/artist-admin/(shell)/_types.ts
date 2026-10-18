@@ -33,7 +33,6 @@ export interface MyArtwork {
 export interface MyExhibition {
 	exhibitionId: string;
 	name: string;
-	// TODO: GET /exhibitions/me 응답에 대표 이미지·전시 기간이 없음 — BE 추가 요청 중
 	image: string | null;
 	startDate: string | null;
 	endDate: string | null;
