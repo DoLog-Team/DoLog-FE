@@ -5,15 +5,13 @@ import { Fragment, useCallback, useMemo, useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
-import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
-import { TabBar } from "@/components/common/TabBar/TabBar";
 import { useAsyncSave } from "@/lib/hooks/useAsyncSave";
 import type { MyArtworkDetail } from "../_api/getMyArtwork";
 import { updateArtworkBasicInfo } from "../_api/updateArtwork";
+import { ArtworkFormHeader } from "./ArtworkFormHeader";
 import { ARTWORK_FORM_TABS } from "./artworkFormTabs";
 import { getBasicMissingCount } from "./getBasicMissingCount";
-import { RenameArtworkModal } from "./RenameArtworkModal";
 import {
 	ArtworkAdditionalInfoSection,
 	type ArtworkAdditionalInfoValue,
@@ -42,8 +40,6 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 	const tabIds = useMemo(() => ARTWORK_FORM_TABS.map((tab) => tab.id), []);
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(tabIds, 120);
 	const [basicMissingCount, setBasicMissingCount] = useState(() => getBasicMissingCount(artwork));
-	const [artworkTitle, setArtworkTitle] = useState(artwork.title);
-	const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
 
 	const [basic, setBasic] = useState<ArtworkBasicInfoValue>({
 		shortIntro: artwork.shortIntro ?? "",
@@ -174,20 +170,19 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 
 	return (
 		<DesktopContainer>
-			<div className="sticky top-0 z-10 bg-bg-normal">
-				<FormHeader
-					title={artworkTitle}
-					editableTitle
-					onTitleEditClick={() => setIsRenameModalOpen(true)}
-					lastSavedAt={lastSavedAt}
-					onTempSave={handleTempSave}
-					tempSaveDisabled={isSaving}
-					saveLabel={basicMissingCount === 0 ? "저장" : "임시 저장"}
-					onBack={onBack}
-				/>
-				<TabBar tabs={tabs} activeTab={activeTab} onTabClick={handleTopTabClick} />
-				{saveError && <p className="px-4 pt-2 text-body3 text-error">{saveError}</p>}
-			</div>
+			<ArtworkFormHeader
+				artworkId={artwork.artworkId}
+				initialTitle={artwork.title}
+				lastSavedAt={lastSavedAt}
+				onTempSave={handleTempSave}
+				isSaving={isSaving}
+				saveError={saveError}
+				basicMissingCount={basicMissingCount}
+				tabs={tabs}
+				activeTab={activeTab}
+				onTabClick={handleTopTabClick}
+				onBack={onBack}
+			/>
 
 			<div className="py-7">
 				{formSections.map((section, index) => (
@@ -213,14 +208,6 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 					다음으로
 				</Button>
 			</div>
-
-			<RenameArtworkModal
-				artworkId={artwork.artworkId}
-				currentTitle={artworkTitle}
-				open={isRenameModalOpen}
-				onOpenChange={setIsRenameModalOpen}
-				onRenamed={setArtworkTitle}
-			/>
 		</DesktopContainer>
 	);
 };

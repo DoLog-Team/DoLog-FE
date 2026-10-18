@@ -4,20 +4,18 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import type { EditorProps, Editor as ToastEditor } from "@toast-ui/react-editor";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
-import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
-import { TabBar } from "@/components/common/TabBar/TabBar";
 import { useAsyncSave } from "@/lib/hooks/useAsyncSave";
 import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
 import { compressImageFile } from "@/lib/utils/image";
 import type { MyArtworkDetail } from "../_api/getMyArtwork";
 import { updateArtworkDescription, uploadContentImage } from "../_api/updateArtworkDetail";
+import { ArtworkFormHeader } from "./ArtworkFormHeader";
 import { ARTWORK_FORM_TABS } from "./artworkFormTabs";
 import { getBasicMissingCount } from "./getBasicMissingCount";
 import { imageResizePlugin } from "./imageResizePlugin";
-import { RenameArtworkModal } from "./RenameArtworkModal";
 
 const Editor = dynamic<EditorProps>(
 	() => import("@toast-ui/react-editor").then((mod) => mod.Editor),
@@ -57,8 +55,6 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 	// 붙여넣었지만 아직 저장 안 한 이미지: 미리보기용 data URL -> 원본 Blob (임시저장 시점에만 실제 업로드)
 	const pendingUploadsRef = useRef<Map<string, Blob>>(new Map());
 	const { notice, showNotice, closeNotice } = useNoticeModal();
-	const [artworkTitle, setArtworkTitle] = useState(artwork.title);
-	const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
 	const { isSaving, error: saveError, lastSavedAt, run } = useAsyncSave();
 
 	const basicMissingCount = useMemo(() => getBasicMissingCount(artwork), [artwork]);
@@ -101,20 +97,19 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 
 	return (
 		<DesktopContainer>
-			<div className="sticky top-0 z-10 bg-bg-normal">
-				<FormHeader
-					title={artworkTitle}
-					editableTitle
-					onTitleEditClick={() => setIsRenameModalOpen(true)}
-					lastSavedAt={lastSavedAt}
-					onTempSave={handleTempSave}
-					tempSaveDisabled={isSaving}
-					saveLabel={basicMissingCount === 0 ? "저장" : "임시 저장"}
-					onBack={onBack}
-				/>
-				<TabBar tabs={tabs} activeTab="detail" onTabClick={handleTabClick} />
-				{saveError && <p className="px-4 pt-2 text-body3 text-error">{saveError}</p>}
-			</div>
+			<ArtworkFormHeader
+				artworkId={artwork.artworkId}
+				initialTitle={artwork.title}
+				lastSavedAt={lastSavedAt}
+				onTempSave={handleTempSave}
+				isSaving={isSaving}
+				saveError={saveError}
+				basicMissingCount={basicMissingCount}
+				tabs={tabs}
+				activeTab="detail"
+				onTabClick={handleTabClick}
+				onBack={onBack}
+			/>
 
 			<div className="artwork-detail-editor flex flex-col gap-4 py-7">
 				<h2 className="text-head3 text-strong">상세 정보</h2>
@@ -171,14 +166,6 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 			</div>
 
 			<NoticeModal notice={notice} onClose={closeNotice} />
-
-			<RenameArtworkModal
-				artworkId={artwork.artworkId}
-				currentTitle={artworkTitle}
-				open={isRenameModalOpen}
-				onOpenChange={setIsRenameModalOpen}
-				onRenamed={setArtworkTitle}
-			/>
 		</DesktopContainer>
 	);
 };
