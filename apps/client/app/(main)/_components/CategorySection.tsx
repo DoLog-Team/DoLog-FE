@@ -13,10 +13,9 @@ interface Props {
 	title: string;
 	categories: string[];
 	artworks: Record<string, CardItem[]>;
-	slugMap?: Record<string, string>;
 }
 
-export default function CategorySection({ title, categories, artworks, slugMap }: Props) {
+export default function CategorySection({ title, categories, artworks }: Props) {
 	const [selected] = useState(categories[0]);
 
 	return (
@@ -41,14 +40,7 @@ export default function CategorySection({ title, categories, artworks, slugMap }
 				<CardGrid
 					items={artworks[selected] ?? []}
 					limit={4}
-					getHref={
-						slugMap
-							? (item) => {
-									const slug = slugMap[String(item.id)];
-									return slug ? `/${slug}/artwork/${item.id}` : "#";
-								}
-							: undefined
-					}
+					getHref={(item) => `/artworks/${item.id}`}
 					onItemClick={(item) =>
 						track("Artwork Card Clicked", {
 							artwork_id: item.id,

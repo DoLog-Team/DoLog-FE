@@ -64,3 +64,17 @@ export async function getArtworkDetail(
 		return null;
 	}
 }
+
+/************************
+ * 두록 작품 상세 조회 (공개)
+ * GET artworks/{artworkId}
+ * 전시에 종속되지 않아 전시 없는 단독 작품도 열린다. 응답은 전시 작품 상세와 같다
+ ************************/
+
+export async function getDologArtworkDetail(artworkId: string): Promise<ArtworkDetail | null> {
+	try {
+		return await apiClient<ArtworkDetail>(`/artworks/${artworkId}`, { cache: "no-store" });
+	} catch {
+		return null;
+	}
+}

@@ -80,7 +80,6 @@ export default async function MainPage() {
 		author: a.artistName,
 		category: a.deptName,
 	}));
-	const artworkSlugMap = Object.fromEntries(mainArtworks.map((a) => [a.id, a.slug]));
 
 	return (
 		<div className="flex flex-col">
@@ -131,7 +130,6 @@ export default async function MainPage() {
 					artworks={{
 						작품: allArtworks,
 					}}
-					slugMap={artworkSlugMap}
 				/>
 			</DesktopContainer>
 			<MainFooter />

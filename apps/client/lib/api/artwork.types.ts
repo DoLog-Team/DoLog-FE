@@ -99,15 +99,30 @@ export interface RelatedArtwork {
 	category: string;
 	artistName: string;
 	mainImage: string;
-	type?: "prev" | "next";
+	// alphabeticalArtworks 는 "prev" | "next"
+	// sameCategoryArtworks 는 추천 작품(같은 작가 기준, 최대 2개) — dev 에서 같은 작가는 "artist" 로 옴
+	type?: "prev" | "next" | "artist";
 }
 
-// 작품 상세 전체 응답
+// 작품 상세 전체 응답 (전시 작품 상세 · 두록 작품 상세 공통)
 export interface ArtworkDetail {
 	title: string;
 	category: string;
 	material?: string;
 	size?: string | null;
+	// 아래는 v2 응답 필드 — 두록 작품 상세에서 사용
+	shortIntro?: string | null;
+	materials?: string[];
+	// 단위 cm
+	width?: number | null;
+	height?: number | null;
+	depth?: number | null;
+	productionStartYear?: number | null;
+	productionEndYear?: number | null;
+	purchaseChatUrl?: string | null;
+	showPurchaseButton?: boolean | null;
+	likeCount?: number;
+	liked?: boolean;
 	description: string;
 	purchaseUrl?: string | null;
 	mainImage: string;

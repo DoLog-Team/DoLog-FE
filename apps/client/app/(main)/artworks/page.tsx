@@ -25,7 +25,5 @@ export default async function ArtworksPage() {
 		exhibitionType: exhibitionMap[a.exhibitionId]?.exhibitionType ?? undefined,
 	}));
 
-	const slugMap = Object.fromEntries(artworks.map((a) => [a.id, a.slug]));
-
-	return <ArtworksClient artworks={displayArtworks} slugMap={slugMap} />;
+	return <ArtworksClient artworks={displayArtworks} />;
 }

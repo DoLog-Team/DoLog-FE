@@ -13,10 +13,16 @@ const Viewer = dynamic<ViewerProps>(
 	{ ssr: false },
 );
 
-export const DescriptionSection = ({ content }: { content: string | null | undefined }) => (
+export const DescriptionSection = ({
+	content,
+	title = "작품 소개",
+}: {
+	content: string | null | undefined;
+	title?: string;
+}) => (
 	<section className="flex flex-col pb-6">
 		<DesktopContainer>
-			<Title title="작품 소개" margin="compact" />
+			<Title title={title} margin="compact" />
 			<div className="text-body1 leading-relaxed">
 				<Viewer initialValue={content ?? ""} customHTMLRenderer={artworkImageHTMLRenderer} />
 			</div>
