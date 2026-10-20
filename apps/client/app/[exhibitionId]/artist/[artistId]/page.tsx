@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import { SectionTimeTracker } from "@/components/common/SectionTimeTracker";
 import { resolveExhibitionSlug } from "@/lib/api/exhibition";
+import { VISITOR_COOKIE } from "@/lib/visitor";
 import { getArtistDetail } from "../../../../lib/api/artists/artist-detail";
 import { getExhibitionMeta } from "../../_api/getExhibitionMeta";
 import { resolveExhibitionId } from "../../_api/resolveExhibitionId";
 import { Header } from "../../_components/Header";
 import { NotFound } from "../../_components/NotFound";
+import { ArtistTabBar } from "./_components/ArtistTabBar";
 import { ArtworkSection } from "./_components/sections/ArtworkSection";
 import { BTSSection } from "./_components/sections/BTSSection";
 import { ContactSection } from "./_components/sections/ContactSection";
@@ -55,7 +58,9 @@ export default async function ArtistDetailPage({ params }: Props) {
 		);
 	}
 
-	const artist = await getArtistDetail(artistId, resolved.uuid);
+	// 방문자 ID 를 같이 보내야 내가 누른 좋아요(liked)가 처음부터 맞게 보인다
+	const visitorId = (await cookies()).get(VISITOR_COOKIE)?.value;
+	const artist = await getArtistDetail(artistId, resolved.uuid, visitorId);
 	if (!artist) {
 		return (
 			<main className="flex flex-1 flex-col">
@@ -92,6 +97,12 @@ export default async function ArtistDetailPage({ params }: Props) {
 
 				<NavigationSection artist={artist} />
 			</DesktopContainer>
+
+			<ArtistTabBar
+				profileId={artist.profileId}
+				initialLiked={artist.liked}
+				hasArtworks={artist.artworks.length > 0}
+			/>
 		</>
 	);
 }

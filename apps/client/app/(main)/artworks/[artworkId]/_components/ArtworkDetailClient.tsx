@@ -10,9 +10,11 @@ import { PostNavigationSection } from "@/app/[exhibitionId]/artwork/[artworkId]/
 import { Divider } from "@/components/common/Divider/Divider";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { ImageViewerModal } from "@/components/common/ImageViewerModal/ImageViewerModal";
+import { LikeButton } from "@/components/common/LikeButton/LikeButton";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
-import type { ArtworkDetail } from "@/lib/api/artwork";
+import { type ArtworkDetail, setArtworkLike } from "@/lib/api/artwork";
+import { useRecordArtworkView } from "./useRecordArtworkView";
 
 // 섹션은 전시 작품 상세(app/[exhibitionId]/artwork/[artworkId]) 것을 재사용한다
 
@@ -36,10 +38,13 @@ function formatSize({ width, height, depth }: ArtworkDetail) {
 }
 
 interface ArtworkDetailClientProps {
+	artworkId: string;
 	data: ArtworkDetail;
 }
 
-export function ArtworkDetailClient({ data }: ArtworkDetailClientProps) {
+export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProps) {
+	useRecordArtworkView(artworkId);
+
 	const hasArtist = data.participants.length > 0;
 
 	const tabs = useMemo(() => {
@@ -138,9 +143,18 @@ export function ArtworkDetailClient({ data }: ArtworkDetailClientProps) {
 				/>
 			)}
 
-			{/* TODO: 탭바 왼쪽 좋아요 버튼 — 작품 좋아요 API 확인 후 추가 (응답에 likeCount·liked 는 있음) */}
 			{/* TODO: 작가 본인 FAB 메뉴 (QR·편집·출품·공개/비공개·삭제) — 다음 단계 */}
-			<ScrollTabBar tabs={tabs} activeTab={activeTab} onTabClick={handleTabClick} />
+			<ScrollTabBar
+				tabs={tabs}
+				activeTab={activeTab}
+				onTabClick={handleTabClick}
+				leading={
+					<LikeButton
+						initialLiked={!!data.liked}
+						onToggle={(next, visitorId) => setArtworkLike(artworkId, next, visitorId)}
+					/>
+				}
+			/>
 		</div>
 	);
 }

@@ -38,4 +38,7 @@ export interface ArtistDetail {
 	artworks: ArtistArtwork[];
 	prevArtist?: ArtistNavItem;
 	nextArtist?: ArtistNavItem;
+	// 조회한 방문자 기준 (X-Visitor-Id)
+	likeCount: number;
+	liked: boolean;
 }

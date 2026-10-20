@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 // import { MOCK_ARTWORK_DETAIL } from "@/app/[exhibitionId]/artwork/_mocks/artworkDetail";
 import { getArtworkDetail } from "@/lib/api/artwork";
+import { VISITOR_COOKIE } from "@/lib/visitor";
 import { resolveExhibitionId } from "../../_api/resolveExhibitionId";
 import { Header } from "../../_components/Header";
 import { NotFound } from "../../_components/NotFound";
@@ -43,7 +45,9 @@ export default async function ArtworkDetailPage({ params }: ArtworkDetailPagePro
 		);
 	}
 
-	const data = await getArtworkDetail(uuid, artworkId);
+	// 방문자 ID 를 같이 보내야 내가 누른 좋아요(liked)가 처음부터 맞게 보인다
+	const visitorId = (await cookies()).get(VISITOR_COOKIE)?.value;
+	const data = await getArtworkDetail(uuid, artworkId, visitorId);
 
 	if (!data) {
 		return (
@@ -58,5 +62,5 @@ export default async function ArtworkDetailPage({ params }: ArtworkDetailPagePro
 	const HIDE_ARTIST_ROLE_EXHIBITION_IDS = new Set(["5918413e-3bb4-4237-ae4d-c55d8f025f34"]);
 	const hideArtistRole = HIDE_ARTIST_ROLE_EXHIBITION_IDS.has(uuid);
 
-	return <ArtworkDetailClient data={data} hideArtistRole={hideArtistRole} />;
+	return <ArtworkDetailClient artworkId={artworkId} data={data} hideArtistRole={hideArtistRole} />;
 }

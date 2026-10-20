@@ -6,10 +6,11 @@ import { useExhibition } from "@/app/[exhibitionId]/_context/ExhibitionContext";
 import { Divider } from "@/components/common/Divider/Divider";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { ImageViewerModal } from "@/components/common/ImageViewerModal/ImageViewerModal";
+import { LikeButton } from "@/components/common/LikeButton/LikeButton";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { track } from "@/lib/amplitude";
-import type { ArtworkDetail } from "@/lib/api/artwork";
+import { type ArtworkDetail, setArtworkLike } from "@/lib/api/artwork";
 import { useSectionTime } from "@/lib/hooks/useSectionTime";
 import { Header } from "../../../_components/Header";
 import { ArtistSection } from "../_components/ArtistSection";
@@ -23,9 +24,11 @@ import { RelatedSection } from "../_components/RelatedSection";
 import { YoutubeSection } from "../_components/YoutubeSection";
 
 export function ArtworkDetailClient({
+	artworkId,
 	data,
 	hideArtistRole,
 }: {
+	artworkId: string;
 	data: ArtworkDetail;
 	hideArtistRole?: boolean;
 }) {
@@ -162,6 +165,12 @@ export function ArtworkDetailClient({
 					handleTabClick(tabId);
 					track("Artwork Tab Clicked", { tab: tabId, artwork_title: data.title });
 				}}
+				leading={
+					<LikeButton
+						initialLiked={!!data.liked}
+						onToggle={(next, visitorId) => setArtworkLike(artworkId, next, visitorId)}
+					/>
+				}
 			/>
 		</div>
 	);

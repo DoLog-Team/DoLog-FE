@@ -42,11 +42,13 @@ export const LinkCard = ({ items, className, onItemClick }: LinkCardProps) => {
 	return (
 		<section className={`${s.wrapper} ${className ?? ""}`}>
 			<div className={s.list}>
-				{sortedItems.map((item) => {
+				{sortedItems.map((item, index) => {
 					const href = getHref(item);
 
 					return (
-						<div key={`${item.label}-${item.value}`} className={s.row}>
+						// TODO : 테스트 이후에는 중복 등록 막는 등 다시 조치하기
+						// biome-ignore lint/suspicious/noArrayIndexKey: 같은 SNS·주소가 두 번 등록될 수 있어 순서도 key 에 넣는다 (목록 순서는 바뀌지 않음)
+						<div key={`${item.label}-${item.value}-${index}`} className={s.row}>
 							<div className={s.labelBox}>
 								<span className={s.label}>{item.label}</span>
 							</div>
