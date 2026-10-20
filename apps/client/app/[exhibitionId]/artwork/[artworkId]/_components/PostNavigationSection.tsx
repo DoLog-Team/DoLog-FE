@@ -9,20 +9,24 @@ import type { RelatedArtwork } from "@/lib/api/artwork";
 interface PostNavigationProps {
 	prevArtwork?: RelatedArtwork;
 	nextArtwork?: RelatedArtwork;
+	// 두록 작품 상세: "작가의 다른 작품 둘러보기", /artworks/{id}
+	title?: string;
+	getHref?: (artwork: RelatedArtwork) => string;
 }
 
 interface ArtworkNavItemProps {
 	artwork: RelatedArtwork;
 	direction: "prev" | "next";
+	href: string;
 }
 
-function ArtworkNavItem({ artwork, direction }: ArtworkNavItemProps) {
+function ArtworkNavItem({ artwork, direction, href }: ArtworkNavItemProps) {
 	const iconSrc = direction === "prev" ? "/icons/arrowUp.svg" : "/icons/arrowDown.svg";
 	const iconAlt = direction === "prev" ? "이전" : "다음";
 
 	return (
 		<Link
-			href={`../artwork/${artwork.id}`}
+			href={href}
 			onClick={() =>
 				track("Artwork Navigation Clicked", {
 					direction,
@@ -59,15 +63,24 @@ function ArtworkNavItem({ artwork, direction }: ArtworkNavItemProps) {
 	);
 }
 
-export function PostNavigationSection({ prevArtwork, nextArtwork }: PostNavigationProps) {
+export function PostNavigationSection({
+	prevArtwork,
+	nextArtwork,
+	title = "작품 둘러보기",
+	getHref = (artwork) => `../artwork/${artwork.id}`,
+}: PostNavigationProps) {
 	return (
 		<section className="flex flex-col pb-6 w-full">
 			<DesktopContainer>
-				<span className="text-body1-bold text-lighter pt-7 pb-2.5">작품 둘러보기</span>
+				<span className="text-body1-bold text-lighter pt-7 pb-2.5">{title}</span>
 				<hr className="border border-stroke-lighter" />
-				{prevArtwork && <ArtworkNavItem artwork={prevArtwork} direction="prev" />}
+				{prevArtwork && (
+					<ArtworkNavItem artwork={prevArtwork} direction="prev" href={getHref(prevArtwork)} />
+				)}
 				<hr className="border border-stroke-lightest" />
-				{nextArtwork && <ArtworkNavItem artwork={nextArtwork} direction="next" />}
+				{nextArtwork && (
+					<ArtworkNavItem artwork={nextArtwork} direction="next" href={getHref(nextArtwork)} />
+				)}
 			</DesktopContainer>
 		</section>
 	);

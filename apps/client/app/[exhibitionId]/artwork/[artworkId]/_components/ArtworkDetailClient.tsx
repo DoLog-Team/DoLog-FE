@@ -2,13 +2,15 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import { useExhibition } from "@/app/[exhibitionId]/_context/ExhibitionContext";
 import { Divider } from "@/components/common/Divider/Divider";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { ImageViewerModal } from "@/components/common/ImageViewerModal/ImageViewerModal";
+import { LikeButton } from "@/components/common/LikeButton/LikeButton";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { track } from "@/lib/amplitude";
-import type { ArtworkDetail } from "@/lib/api/artwork";
+import { type ArtworkDetail, setArtworkLike } from "@/lib/api/artwork";
 import { useSectionTime } from "@/lib/hooks/useSectionTime";
 import { Header } from "../../../_components/Header";
 import { ArtistSection } from "../_components/ArtistSection";
@@ -22,9 +24,11 @@ import { RelatedSection } from "../_components/RelatedSection";
 import { YoutubeSection } from "../_components/YoutubeSection";
 
 export function ArtworkDetailClient({
+	artworkId,
 	data,
 	hideArtistRole,
 }: {
+	artworkId: string;
 	data: ArtworkDetail;
 	hideArtistRole?: boolean;
 }) {
@@ -45,6 +49,8 @@ export function ArtworkDetailClient({
 
 	const sectionNames = useMemo(() => TABS.map((t) => t.id), [TABS]);
 	useSectionTime("artwork_detail", sectionNames);
+
+	const { slug } = useExhibition();
 
 	const prevArtwork = data.alphabeticalArtworks.find((a) => a.type === "prev");
 	const nextArtwork = data.alphabeticalArtworks.find((a) => a.type === "next");
@@ -126,7 +132,10 @@ export function ArtworkDetailClient({
 					sectionRefs.artist.current = el;
 				}}
 			>
-				<ArtistSection authors={data.participants} />
+				<ArtistSection
+					authors={data.participants}
+					getProfileHref={(author) => `/${slug}/artist/${author.profileId}`}
+				/>
 			</section>
 
 			{data.relatedBts && data.relatedBts.length > 0 && (
@@ -156,6 +165,12 @@ export function ArtworkDetailClient({
 					handleTabClick(tabId);
 					track("Artwork Tab Clicked", { tab: tabId, artwork_title: data.title });
 				}}
+				leading={
+					<LikeButton
+						initialLiked={!!data.liked}
+						onToggle={(next, visitorId) => setArtworkLike(artworkId, next, visitorId)}
+					/>
+				}
 			/>
 		</div>
 	);

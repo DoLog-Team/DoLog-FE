@@ -31,27 +31,29 @@ export const PhotoSection = ({ data }: PhotoSectionProps) => {
 		<section className="flex flex-col pb-6">
 			<DesktopContainer>
 				{/* 작품소개 상세사진 - 선택값 */}
-				{data.detailImages.map((img, index) => {
-					const alt = img.description ?? `작품 상세 이미지 ${index + 1}`;
-					return (
-						<button
-							key={img.imageUrl}
-							type="button"
-							onClick={() => handleImageClick(img.imageUrl, alt)}
-							className="relative w-full cursor-pointer"
-							aria-label={`${alt} 전체보기`}
-						>
-							<Image
-								src={img.imageUrl}
-								alt={alt}
-								width={0}
-								height={0}
-								sizes="100vw"
-								className="w-full h-auto"
-							/>
-						</button>
-					);
-				})}
+				<div className="flex flex-col gap-7">
+					{data.detailImages.map((img, index) => {
+						const alt = img.description ?? `작품 상세 이미지 ${index + 1}`;
+						return (
+							<button
+								key={img.imageUrl}
+								type="button"
+								onClick={() => handleImageClick(img.imageUrl, alt)}
+								className="relative w-full cursor-pointer"
+								aria-label={`${alt} 전체보기`}
+							>
+								<Image
+									src={img.imageUrl}
+									alt={alt}
+									width={0}
+									height={0}
+									sizes="100vw"
+									className="w-full h-auto"
+								/>
+							</button>
+						);
+					})}
+				</div>
 				{viewerImage && (
 					<ImageViewerModal
 						open={!!viewerImage}
@@ -64,7 +66,7 @@ export const PhotoSection = ({ data }: PhotoSectionProps) => {
 				{/* 구매링크 - 선택값 */}
 				{purchaseUrl && (
 					<>
-						<Button variant="main" className="mt-6" onClick={() => setIsOpen(true)}>
+						<Button variant="main" className="mt-7" onClick={() => setIsOpen(true)}>
 							작품 구매하기
 						</Button>
 						<Modal

@@ -15,10 +15,13 @@ import type { ArtworkDetail } from "@/lib/api/artwork";
 interface InfoSectionProps {
 	data: ArtworkDetail;
 	hideArtistRole?: boolean;
+	// 제목 아래 정보 줄 — 넘기면 재료 | 크기 줄 대신 표시 (두록 작품 상세: 제작 연도, 재료 / 크기)
+	// TODO : size, material 관련 데이터 변경 방향 BE 문의 중, 답변 오면 수정 예정
+	lines?: string[];
 }
 
 // RowList를 위한 작가정보 map
-export const InfoSection = ({ data, hideArtistRole }: InfoSectionProps) => {
+export const InfoSection = ({ data, hideArtistRole, lines }: InfoSectionProps) => {
 	const categories = data.category ? [data.category] : [];
 	const artistRows = data.participants.map((participant) => ({
 		label: participant.nameKo,
@@ -35,7 +38,12 @@ export const InfoSection = ({ data, hideArtistRole }: InfoSectionProps) => {
 					<Title title={data.title} margin="none" className="break-all" />
 
 					{/* 작품 재료, 작품 사이즈 - 선택값 */}
-					{(data.material || data.size) && (
+					{lines?.map((line) => (
+						<p key={line} className="text-body1 mt-1 whitespace-pre-line">
+							{line}
+						</p>
+					))}
+					{!lines && (data.material || data.size) && (
 						<p className="text-body1 mt-1 whitespace-pre-line">
 							{[data.material, data.size].filter(Boolean).join(" | ")}
 						</p>

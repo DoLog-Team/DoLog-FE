@@ -14,10 +14,9 @@ import { EXHIBITION_TYPE_LABEL } from "@/lib/constants/exhibition";
 
 interface ArtworksClientProps {
 	artworks: CardItem[];
-	slugMap?: Record<string, string>;
 }
 
-export default function ArtworksClient({ artworks, slugMap }: ArtworksClientProps) {
+export default function ArtworksClient({ artworks }: ArtworksClientProps) {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedUniv, setSelectedUniv] = useState<string | null>(null);
 	const [selectedDept, setSelectedDept] = useState<string | null>(null);
@@ -91,10 +90,7 @@ export default function ArtworksClient({ artworks, slugMap }: ArtworksClientProp
 					{filtered.length > 0 ? (
 						<CardGrid
 							items={filtered}
-							getHref={(item) => {
-								const slug = slugMap?.[String(item.id)];
-								return slug ? `/${slug}/artwork/${item.id}` : "#";
-							}}
+							getHref={(item) => `/artworks/${item.id}`}
 							onItemClick={(item) =>
 								track("Artwork Card Clicked", {
 									artwork_id: item.id,

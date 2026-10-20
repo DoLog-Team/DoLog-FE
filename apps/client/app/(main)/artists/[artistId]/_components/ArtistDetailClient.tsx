@@ -83,8 +83,11 @@ export function ArtistDetailClient({ artist }: ArtistDetailClientProps) {
 							}}
 						>
 							<Title title="작품" size="head2" margin="compact" />
-							{/* TODO: 작품 카드 이동 — 두록 작품 상세 페이지 미구현 */}
-							<CardGrid items={artworkItems} imageObjectFit="contain" />
+							<CardGrid
+								items={artworkItems}
+								getHref={(item) => `/artworks/${item.id}`}
+								imageObjectFit="contain"
+							/>
 						</section>
 					</DesktopContainer>
 				</>
