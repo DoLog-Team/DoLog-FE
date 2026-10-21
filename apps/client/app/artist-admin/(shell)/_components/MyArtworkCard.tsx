@@ -15,18 +15,12 @@ interface MyArtworkCardProps {
 	// 출품할 전시 선택지 — 나의 전시 목록
 	exhibitions: MyExhibition[];
 	onDelete: (artworkId: string) => void;
-	onStatusChange: (artworkId: string, status: "DRAFT" | "PUBLISHED") => void;
 }
 
 /**
  * 작품 카드 컴포넌트
  */
-export function MyArtworkCard({
-	artwork,
-	exhibitions,
-	onDelete,
-	onStatusChange,
-}: MyArtworkCardProps) {
+export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardProps) {
 	const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -47,24 +41,6 @@ export function MyArtworkCard({
 					icon: "/icons/link.svg",
 					onClick: () => setIsSubmitModalOpen(true),
 				},
-		// 작성 중(draft)인 작품은 필수 항목이 덜 채워져 있을 수 있어 공개 전환 자체를 안 보여준다
-		...(artwork.status === "public"
-			? [
-					{
-						label: "비공개로 전환",
-						icon: "/icons/view.svg",
-						onClick: () => onStatusChange(artwork.artworkId, "DRAFT"),
-					},
-				]
-			: artwork.status === "private"
-				? [
-						{
-							label: "공개로 전환",
-							icon: "/icons/view.svg",
-							onClick: () => onStatusChange(artwork.artworkId, "PUBLISHED"),
-						},
-					]
-				: []),
 		{
 			label: "삭제하기",
 			icon: "/icons/trash.svg",

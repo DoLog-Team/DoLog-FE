@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { toErrorMessage } from "@/app/artist-admin/(shell)/_api/actions";
 import type { MyArtworkDetail } from "@/app/artist-admin/artworks/_api/getMyArtwork";
+import { ArtworkVisibilitySection } from "@/app/artist-admin/artworks/_components/ArtworkVisibilitySection";
+import { useArtworkVisibility } from "@/app/artist-admin/artworks/_components/useArtworkVisibility";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import { FormField } from "@/components/common/FormField/FormField";
@@ -16,7 +18,6 @@ import { ArtworkExhibitionLinkSection } from "./sections/ArtworkExhibitionLinkSe
 
 export interface ArtworkExhibitionFormProps {
 	artwork: MyArtworkDetail;
-	// 아직 출품 전이면, 전시 선택 모달에서 고른 전시 id (쿼리로 전달됨)
 	pendingExhibitionId: string | null;
 	onBack: () => void;
 	onSubmitted: () => void;
@@ -31,14 +32,15 @@ export const ArtworkExhibitionForm = ({
 	onCancelled,
 }: ArtworkExhibitionFormProps) => {
 	const { notice, showNotice, closeNotice } = useNoticeModal();
+	const visibility = useArtworkVisibility(artwork.artworkId, artwork);
 
 	if (artwork.exhibitionId && artwork.exhibitionName) {
 		return (
 			<DesktopContainer>
 				<div className="sticky top-0 z-10 bg-bg-normal">
-					<FormHeader title={artwork.title} onBack={onBack} />
+					<FormHeader title={artwork.title} lastSavedAt="" onBack={onBack} />
 				</div>
-				<div className="py-7">
+				<div className="flex flex-col gap-7 py-7">
 					<ArtworkExhibitionLinkSection
 						artworkId={artwork.artworkId}
 						artworkTitle={artwork.title}
@@ -46,7 +48,18 @@ export const ArtworkExhibitionForm = ({
 						hidden={artwork.hidden}
 						onCancelled={onCancelled}
 					/>
+
+					<Divider thickness="thin" fullBleed={true} spacing="md" />
+
+					<ArtworkVisibilitySection
+						value={visibility.visibility}
+						onChange={visibility.handleChange}
+						disabled={visibility.isSaving}
+						hasExhibition
+					/>
 				</div>
+
+				<NoticeModal notice={visibility.notice} onClose={visibility.closeNotice} />
 			</DesktopContainer>
 		);
 	}
@@ -64,7 +77,6 @@ export const ArtworkExhibitionForm = ({
 	);
 };
 
-// 아직 미출품인 작품을 전시에 출품하는 폼 — 모달에서 고른 전시에 속한 구역을 골라 제출한다
 const SubmitForm = ({
 	artwork,
 	exhibitionId,
@@ -110,6 +122,7 @@ const SubmitForm = ({
 			<div className="sticky top-0 z-10 bg-bg-normal">
 				<FormHeader
 					title={artwork.title}
+					lastSavedAt=""
 					onBack={onBack}
 					saveLabel="출품하기"
 					onTempSave={handleSubmit}

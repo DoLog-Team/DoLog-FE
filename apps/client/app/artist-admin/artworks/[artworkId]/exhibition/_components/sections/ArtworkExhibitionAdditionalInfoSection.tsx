@@ -1,7 +1,5 @@
 "use client";
 
-// TODO: 전시별 필수/숨김 설정(ExhibitionFieldSettings)을 작가가 읽을 수 있는 API가 아직 없어 미사용 상태.
-// 백엔드에 작가용 조회 엔드포인트 추가를 요청해둠 — 추가되면 이 섹션을 출품 폼에 다시 연결한다.
 import { useEffect, useRef, useState } from "react";
 import { Checkbox } from "@/components/common/Checkbox/Checkbox";
 import { FormField } from "@/components/common/FormField/FormField";

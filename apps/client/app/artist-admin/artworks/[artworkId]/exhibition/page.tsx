@@ -21,11 +21,11 @@ export default function ArtworkExhibitionPage() {
 			.finally(() => setIsLoading(false));
 	}, [artworkId]);
 
-	// 출품 성공 후 상태를 다시 읽어와 "출품됨" 화면으로 전환한다
 	const reload = () => {
 		getMyArtwork(artworkId)
 			.then(setArtwork)
 			.catch(() => {});
+		router.refresh();
 	};
 
 	if (isLoading) return <LoadingScreen />;
@@ -37,7 +37,10 @@ export default function ArtworkExhibitionPage() {
 			pendingExhibitionId={pendingExhibitionId}
 			onBack={() => router.back()}
 			onSubmitted={reload}
-			onCancelled={() => router.push("/artist-admin")}
+			onCancelled={() => {
+				router.push("/artist-admin");
+				router.refresh();
+			}}
 		/>
 	);
 }

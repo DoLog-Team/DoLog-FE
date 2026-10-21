@@ -7,7 +7,7 @@ import { Modal } from "@/components/common/Modal/Modal";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
 import { createArtwork } from "../../../artworks/_api/createArtwork";
-import { changeArtworkStatus, deleteArtwork, toErrorMessage } from "../../_api/actions";
+import { deleteArtwork, toErrorMessage } from "../../_api/actions";
 import type { MyArtwork, MyExhibition } from "../../_types";
 import { ListToggleButton } from "../ListToggleButton";
 import { MyArtworkCard } from "../MyArtworkCard";
@@ -68,21 +68,6 @@ export function MyArtworkSection({
 		}
 	};
 
-	const handleStatusChange = async (artworkId: string, status: "DRAFT" | "PUBLISHED") => {
-		try {
-			await changeArtworkStatus(artworkId, status);
-			setArtworks((prev) =>
-				prev.map((artwork) =>
-					artwork.artworkId === artworkId
-						? { ...artwork, status: status === "PUBLISHED" ? "public" : "private" }
-						: artwork,
-				),
-			);
-		} catch (error) {
-			showNotice("전환에 실패했어요.", toErrorMessage(error));
-		}
-	};
-
 	return (
 		<section className="pb-6 min-[721px]:pb-7">
 			<SectionHeader
@@ -103,7 +88,6 @@ export function MyArtworkSection({
 						artwork={artwork}
 						exhibitions={exhibitions}
 						onDelete={handleDelete}
-						onStatusChange={handleStatusChange}
 					/>
 				))}
 			</div>

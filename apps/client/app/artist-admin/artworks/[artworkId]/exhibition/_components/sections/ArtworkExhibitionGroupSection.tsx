@@ -24,7 +24,6 @@ export const ArtworkExhibitionGroupSection = ({
 			.catch(() => {});
 	}, [exhibitionId]);
 
-	// 전시에 설정된 구역이 없으면 섹션 자체를 표시하지 않는다
 	if (zones.length === 0) return null;
 
 	return (

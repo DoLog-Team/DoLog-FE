@@ -1,4 +1,5 @@
 export const ARTWORK_FORM_TABS = [
+	{ id: "visibility", label: "공개 상태" },
 	{ id: "basic", label: "기본 정보" },
 	{ id: "image", label: "이미지" },
 	{ id: "additional", label: "부가 정보" },

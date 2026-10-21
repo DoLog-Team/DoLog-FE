@@ -23,6 +23,7 @@ export interface MyArtworkDetail {
 	mainImg: string | null;
 	status: "DRAFT" | "PUBLISHED";
 	hidden: boolean;
+	exhibitionOnly: boolean;
 	exhibitionId: string | null;
 	exhibitionName: string | null;
 	zoneId: string | null;

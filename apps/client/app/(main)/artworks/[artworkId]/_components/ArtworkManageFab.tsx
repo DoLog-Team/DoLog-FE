@@ -3,14 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
-	changeArtworkStatus,
 	deleteArtwork,
 	getMyExhibitionOptions,
 	toErrorMessage,
 } from "@/app/artist-admin/(shell)/_api/actions";
 import { ArtworkDeleteModal } from "@/app/artist-admin/(shell)/_components/modals/ArtworkDeleteModal";
 import { ArtworkSubmitModal } from "@/app/artist-admin/(shell)/_components/modals/ArtworkSubmitModal";
-import { ArtworkVisibilityModal } from "@/app/artist-admin/(shell)/_components/modals/ArtworkVisibilityModal";
 import type { MyExhibition } from "@/app/artist-admin/(shell)/_types";
 import { EditFab } from "@/components/common/EditFab/EditFab";
 import { Engagement } from "@/components/common/Engagement/Engagement";
@@ -30,7 +28,6 @@ interface ArtworkManageFabProps {
 	likeCount: number;
 	// 본인 작품의 공개 상태·출품 전시 — 불러오기 전이면 null
 	myArtwork: MyArtworkState | null;
-	onStatusChange: (status: MyArtworkState["status"]) => void;
 }
 
 /**
@@ -42,7 +39,6 @@ export function ArtworkManageFab({
 	viewCount,
 	likeCount,
 	myArtwork,
-	onStatusChange,
 }: ArtworkManageFabProps) {
 	const router = useRouter();
 	const [isQrModalOpen, setIsQrModalOpen] = useState(false);
@@ -50,7 +46,6 @@ export function ArtworkManageFab({
 	const [exhibitions, setExhibitions] = useState<
 		Pick<MyExhibition, "exhibitionId" | "name" | "acceptedAt">[]
 	>([]);
-	const [nextStatus, setNextStatus] = useState<MyArtworkState["status"] | null>(null);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 	const { notice, showNotice, closeNotice } = useNoticeModal();
 
@@ -68,15 +63,6 @@ export function ArtworkManageFab({
 			ignore = true;
 		};
 	}, [needsExhibitionOptions]);
-
-	const handleStatusChange = async (status: MyArtworkState["status"]) => {
-		try {
-			await changeArtworkStatus(artworkId, status);
-			onStatusChange(status);
-		} catch (error) {
-			showNotice("전환에 실패했어요.", toErrorMessage(error));
-		}
-	};
 
 	const handleDelete = async () => {
 		try {
@@ -109,17 +95,6 @@ export function ArtworkManageFab({
 								label: "출품하기",
 								icon: "/icons/link.svg",
 								onClick: () => setIsSubmitModalOpen(true),
-							},
-					myArtwork.status === "PUBLISHED"
-						? {
-								label: "비공개하기",
-								icon: "/icons/view.svg",
-								onClick: () => setNextStatus("DRAFT"),
-							}
-						: {
-								label: "작품 공개하기",
-								icon: "/icons/view.svg",
-								onClick: () => setNextStatus("PUBLISHED"),
 							},
 				]
 			: []),
@@ -160,11 +135,6 @@ export function ArtworkManageFab({
 				artworkId={artworkId}
 				artworkTitle={title}
 				exhibitions={exhibitions}
-			/>
-			<ArtworkVisibilityModal
-				nextStatus={nextStatus}
-				onOpenChange={(open) => !open && setNextStatus(null)}
-				onConfirm={handleStatusChange}
 			/>
 			<ArtworkDeleteModal
 				open={isDeleteModalOpen}
