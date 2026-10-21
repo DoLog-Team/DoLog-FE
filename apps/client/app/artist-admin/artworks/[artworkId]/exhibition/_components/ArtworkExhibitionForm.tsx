@@ -1,69 +1,161 @@
 "use client";
 
-import { Fragment, useMemo } from "react";
+import { useState } from "react";
+import { toErrorMessage } from "@/app/artist-admin/(shell)/_api/actions";
+import type { MyArtworkDetail } from "@/app/artist-admin/artworks/_api/getMyArtwork";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
+import { FormField } from "@/components/common/FormField/FormField";
 import { FormHeader } from "@/components/common/FormHeader/FormHeader";
-import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
-import { TabBar } from "@/components/common/TabBar/TabBar";
-import { EXHIBITION_FORM_TABS } from "./exhibitionFormTabs";
-import { ArtworkExhibitionAdditionalInfoSection } from "./sections/ArtworkExhibitionAdditionalInfoSection";
+import { ImageInput } from "@/components/common/ImageInput/ImageInput";
+import { NoticeModal } from "@/components/common/Modal/NoticeModal";
+import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
+import { submitArtwork } from "../_api/submitArtwork";
 import { ArtworkExhibitionGroupSection } from "./sections/ArtworkExhibitionGroupSection";
 import { ArtworkExhibitionLinkSection } from "./sections/ArtworkExhibitionLinkSection";
 
 export interface ArtworkExhibitionFormProps {
-	artworkId: string;
-	title: string;
+	artwork: MyArtworkDetail;
+	// 아직 출품 전이면, 전시 선택 모달에서 고른 전시 id (쿼리로 전달됨)
+	pendingExhibitionId: string | null;
 	onBack: () => void;
+	onSubmitted: () => void;
+	onCancelled: () => void;
 }
 
-export const ArtworkExhibitionForm = ({ artworkId, title, onBack }: ArtworkExhibitionFormProps) => {
-	const tabIds = useMemo(() => EXHIBITION_FORM_TABS.map((tab) => tab.id), []);
-	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(tabIds, 120);
+export const ArtworkExhibitionForm = ({
+	artwork,
+	pendingExhibitionId,
+	onBack,
+	onSubmitted,
+	onCancelled,
+}: ArtworkExhibitionFormProps) => {
+	const { notice, showNotice, closeNotice } = useNoticeModal();
 
-	const formSections = [
-		{
-			id: "link",
-			className: "pb-7",
-			render: () => <ArtworkExhibitionLinkSection artworkId={artworkId} artworkTitle={title} />,
-		},
-		{
-			id: "group",
-			className: "pb-7 pt-7",
-			render: () => <ArtworkExhibitionGroupSection artworkId={artworkId} />,
-		},
-		{
-			id: "additional",
-			className: "pb-7 pt-7",
-			render: () => <ArtworkExhibitionAdditionalInfoSection />,
-		},
-	];
+	if (artwork.exhibitionId && artwork.exhibitionName) {
+		return (
+			<DesktopContainer>
+				<div className="sticky top-0 z-10 bg-bg-normal">
+					<FormHeader title={artwork.title} onBack={onBack} />
+				</div>
+				<div className="py-7">
+					<ArtworkExhibitionLinkSection
+						artworkId={artwork.artworkId}
+						artworkTitle={artwork.title}
+						exhibitionName={artwork.exhibitionName}
+						hidden={artwork.hidden}
+						onCancelled={onCancelled}
+					/>
+				</div>
+			</DesktopContainer>
+		);
+	}
+
+	return (
+		<SubmitForm
+			artwork={artwork}
+			exhibitionId={pendingExhibitionId}
+			onBack={onBack}
+			onSubmitted={onSubmitted}
+			showNotice={showNotice}
+			notice={notice}
+			closeNotice={closeNotice}
+		/>
+	);
+};
+
+// 아직 미출품인 작품을 전시에 출품하는 폼 — 모달에서 고른 전시에 속한 구역을 골라 제출한다
+const SubmitForm = ({
+	artwork,
+	exhibitionId,
+	onBack,
+	onSubmitted,
+	notice,
+	showNotice,
+	closeNotice,
+}: {
+	artwork: MyArtworkDetail;
+	exhibitionId: string | null;
+	onBack: () => void;
+	onSubmitted: () => void;
+} & ReturnType<typeof useNoticeModal>) => {
+	const [zoneId, setZoneId] = useState<string | undefined>(undefined);
+	const [locationMapPreview, setLocationMapPreview] = useState<string | null>(null);
+	const [locationMapFile, setLocationMapFile] = useState<File | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	if (!exhibitionId) {
+		return (
+			<div className="p-8 text-body1 text-lighter">
+				출품할 전시를 찾을 수 없어요. 작품 카드의 "작품 출품하기"로 다시 시도해주세요.
+			</div>
+		);
+	}
+
+	const handleSubmit = async () => {
+		if (!zoneId) return;
+		setIsSubmitting(true);
+		try {
+			await submitArtwork(artwork.artworkId, { exhibitionId, zoneId, locationMapFile });
+			onSubmitted();
+		} catch (error) {
+			showNotice("출품에 실패했어요", toErrorMessage(error));
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
 
 	return (
 		<DesktopContainer>
 			<div className="sticky top-0 z-10 bg-bg-normal">
-				<FormHeader title={title} onTempSave={() => {}} onBack={onBack} />
-				<TabBar tabs={EXHIBITION_FORM_TABS} activeTab={activeTab} onTabClick={handleTabClick} />
+				<FormHeader
+					title={artwork.title}
+					onBack={onBack}
+					saveLabel="출품하기"
+					onTempSave={handleSubmit}
+					tempSaveDisabled={isSubmitting}
+					saveDisabled={!zoneId}
+				/>
 			</div>
 
-			<div className="py-7">
-				{formSections.map((section, index) => (
-					<Fragment key={section.id}>
-						<section
-							className={section.className}
-							ref={(el) => {
-								sectionRefs[section.id].current = el;
-							}}
-						>
-							{section.render()}
-						</section>
+			<div className="flex flex-col gap-7 py-7">
+				<ArtworkExhibitionGroupSection
+					exhibitionId={exhibitionId}
+					value={zoneId}
+					onChange={setZoneId}
+				/>
 
-						{index < formSections.length - 1 && (
-							<Divider thickness="thin" fullBleed={true} spacing="md" />
-						)}
-					</Fragment>
-				))}
+				<Divider thickness="thin" fullBleed={true} spacing="md" />
+
+				<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
+					<div className="min-w-0 min-[721px]:w-100">
+						<h2 className="text-head3 text-strong">작품 위치 이미지</h2>
+						<span className="text-body2 text-lighter">
+							전시장 안에서 작품이 배치된 위치를 안내하는 이미지를 등록할 수 있어요.
+						</span>
+					</div>
+					<div className="min-w-0 flex-1">
+						<FormField label="위치 이미지">
+							<ImageInput
+								images={locationMapPreview ? [locationMapPreview] : []}
+								maxCount={1}
+								onAdd={(files) => {
+									const file = files[0];
+									if (!file) return;
+									setLocationMapFile(file);
+									setLocationMapPreview(URL.createObjectURL(file));
+								}}
+								onRemove={() => {
+									setLocationMapFile(null);
+									setLocationMapPreview(null);
+								}}
+							/>
+						</FormField>
+					</div>
+				</div>
 			</div>
+
+			<NoticeModal notice={notice} onClose={closeNotice} />
 		</DesktopContainer>
 	);
 };

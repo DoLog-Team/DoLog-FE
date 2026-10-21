@@ -1,51 +1,44 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { toErrorMessage } from "@/app/artist-admin/(shell)/_api/actions";
 import { FormField } from "@/components/common/FormField/FormField";
 import { Modal } from "@/components/common/Modal/Modal";
+import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { Select } from "@/components/common/Select/Select";
-import {
-	type ArtworkExhibitionLink,
-	getArtworkExhibitionLink,
-} from "../../_api/getArtworkExhibitionLink";
-
-const VISIBILITY_NOTICE = {
-	overLimit: {
-		title: "작품이 전시에서 미노출되어요.",
-		description:
-			"전시 플랜에 따른 작품 수가 초과되어서 작품이 전시에 미노출되어요.\n전시 관리자가 작품 수를 조정한 후 다시 노출될 수 있어요.",
-	},
-	hidden: {
-		title: "작품이 숨김처리 됐어요.",
-		description: "전시 관리자가 작품을 숨김으로 처리하여 전시에서 노출되지 않아요.",
-	},
-} as const;
+import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
+import { cancelArtworkSubmission } from "../../_api/submitArtwork";
 
 export interface ArtworkExhibitionLinkSectionProps {
 	artworkId: string;
 	artworkTitle: string;
+	exhibitionName: string;
+	hidden: boolean;
+	onCancelled: () => void;
 }
 
 export const ArtworkExhibitionLinkSection = ({
 	artworkId,
 	artworkTitle,
+	exhibitionName,
+	hidden,
+	onCancelled,
 }: ArtworkExhibitionLinkSectionProps) => {
-	const router = useRouter();
-	const [link, setLink] = useState<ArtworkExhibitionLink | null>(null);
 	const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+	const [isCancelling, setIsCancelling] = useState(false);
+	const { notice, showNotice, closeNotice } = useNoticeModal();
 
-	useEffect(() => {
-		getArtworkExhibitionLink(artworkId)
-			.then(setLink)
-			.catch(() => {});
-	}, [artworkId]);
-
-	const notice = link && link.visibility !== "visible" ? VISIBILITY_NOTICE[link.visibility] : null;
-
-	const handleCancelLink = () => {
-		// TODO: 실제 출품 취소 API 연동 필요
-		router.push("/artist-admin");
+	const handleCancelLink = async () => {
+		setIsCancelling(true);
+		try {
+			await cancelArtworkSubmission(artworkId);
+			setIsCancelModalOpen(false);
+			onCancelled();
+		} catch (error) {
+			showNotice("출품 취소에 실패했어요", toErrorMessage(error));
+		} finally {
+			setIsCancelling(false);
+		}
 	};
 
 	return (
@@ -56,8 +49,8 @@ export const ArtworkExhibitionLinkSection = ({
 			<div className="flex min-w-0 flex-1 flex-col gap-5">
 				<FormField label="전시회">
 					<Select
-						options={link ? [{ label: link.exhibitionName, value: link.exhibitionName }] : []}
-						value={link?.exhibitionName}
+						options={[{ label: exhibitionName, value: exhibitionName }]}
+						value={exhibitionName}
 						onChange={() => {}}
 						placeholder="이전 모달에서 연동한 전시회 이름이 표시됨"
 						disabled
@@ -72,10 +65,12 @@ export const ArtworkExhibitionLinkSection = ({
 						출품 취소하기
 					</button>
 
-					{notice && (
+					{hidden && (
 						<div className="flex flex-col gap-2 rounded-lg bg-admin2 p-6">
-							<span className="text-body1-bold text-error">{notice.title}</span>
-							<p className="whitespace-pre-line text-body3 text-black">{notice.description}</p>
+							<span className="text-body1-bold text-error">작품이 숨김처리 됐어요.</span>
+							<p className="whitespace-pre-line text-body3 text-black">
+								전시 관리자가 작품을 숨김으로 처리하여 전시에서 노출되지 않아요.
+							</p>
 						</div>
 					)}
 				</div>
@@ -86,17 +81,19 @@ export const ArtworkExhibitionLinkSection = ({
 				onOpenChange={setIsCancelModalOpen}
 				title="전시 출품 취소하기"
 				titleTone="danger"
-				description={
-					link
-						? `연결을 해제하면 ${artworkTitle}이 ${link.exhibitionName}에 더 이상 표시되지 않아요.`
-						: undefined
-				}
+				description={`연결을 해제하면 ${artworkTitle}이 ${exhibitionName}에 더 이상 표시되지 않아요.`}
 				showCloseButton
 				actions={[
 					{ text: "취소", variant: "assistive", onClick: () => setIsCancelModalOpen(false) },
-					{ text: "출품 취소하기", variant: "danger", onClick: handleCancelLink },
+					{
+						text: "출품 취소하기",
+						variant: "danger",
+						disabled: isCancelling,
+						onClick: handleCancelLink,
+					},
 				]}
 			/>
+			<NoticeModal notice={notice} onClose={closeNotice} />
 		</div>
 	);
 };
