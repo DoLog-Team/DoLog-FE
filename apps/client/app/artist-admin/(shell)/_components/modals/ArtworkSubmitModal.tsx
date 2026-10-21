@@ -51,7 +51,9 @@ export function ArtworkSubmitModal({
 	const handleSubmit = () => {
 		if (!selectedExhibitionId) return;
 		handleOpenChange(false);
-		router.push(`/artist-admin/artworks/${artworkId}/exhibition`);
+		router.push(
+			`/artist-admin/artworks/${artworkId}/exhibition?exhibitionId=${selectedExhibitionId}`,
+		);
 	};
 
 	return (

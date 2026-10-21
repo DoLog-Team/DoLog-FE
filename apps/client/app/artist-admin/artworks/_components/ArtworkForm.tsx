@@ -5,11 +5,13 @@ import { Fragment, useCallback, useMemo, useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
+import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { useAsyncSave } from "@/lib/hooks/useAsyncSave";
 import type { MyArtworkDetail } from "../_api/getMyArtwork";
 import { updateArtworkBasicInfo } from "../_api/updateArtwork";
 import { ArtworkFormHeader } from "./ArtworkFormHeader";
+import { ArtworkVisibilitySection } from "./ArtworkVisibilitySection";
 import { ARTWORK_FORM_TABS } from "./artworkFormTabs";
 import { getBasicMissingCount } from "./getBasicMissingCount";
 import {
@@ -25,6 +27,7 @@ import {
 	ArtworkPurchaseInfoSection,
 	type ArtworkPurchaseInfoValue,
 } from "./sections/ArtworkPurchaseInfoSection";
+import { useArtworkVisibility } from "./useArtworkVisibility";
 
 export interface ArtworkFormProps {
 	artwork: MyArtworkDetail;
@@ -68,6 +71,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 		showPurchaseButton: artwork.showPurchaseButton ?? false,
 	});
 	const { isSaving, error: saveError, lastSavedAt, run } = useAsyncSave();
+	const visibility = useArtworkVisibility(artwork.artworkId, artwork);
 
 	const updateBasic = useCallback(
 		(patch: Partial<ArtworkBasicInfoValue>) => setBasic((prev) => ({ ...prev, ...patch })),
@@ -135,8 +139,20 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 
 	const formSections = [
 		{
-			id: "basic",
+			id: "visibility",
 			className: "pb-7",
+			render: () => (
+				<ArtworkVisibilitySection
+					value={visibility.visibility}
+					onChange={visibility.handleChange}
+					disabled={visibility.isSaving}
+					hasExhibition={artwork.exhibitionId != null}
+				/>
+			),
+		},
+		{
+			id: "basic",
+			className: "pb-7 pt-7",
 			render: () => (
 				<ArtworkBasicInfoSection
 					value={basic}
@@ -208,6 +224,8 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 					다음으로
 				</Button>
 			</div>
+
+			<NoticeModal notice={visibility.notice} onClose={visibility.closeNotice} />
 		</DesktopContainer>
 	);
 };

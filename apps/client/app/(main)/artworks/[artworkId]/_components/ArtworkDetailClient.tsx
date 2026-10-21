@@ -50,7 +50,7 @@ export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProp
 	useRecordArtworkView(artworkId);
 
 	const isMine = useIsOwnArtist(data.participants.map((participant) => participant.artistId));
-	const [myArtwork, setMyArtwork] = useMyArtwork(artworkId, isMine);
+	const [myArtwork] = useMyArtwork(artworkId, isMine);
 
 	const hasArtist = data.participants.length > 0;
 
@@ -162,7 +162,6 @@ export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProp
 					viewCount={data.viewCount ?? 0}
 					likeCount={data.likeCount ?? 0}
 					myArtwork={myArtwork}
-					onStatusChange={(status) => setMyArtwork((prev) => prev && { ...prev, status })}
 				/>
 			)}
 			<ScrollTabBar
