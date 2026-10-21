@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
+import { OverflowMenu } from "@/components/common/OverflowMenu/OverflowMenu";
 import { cn } from "@/lib/utils/cn";
 import type { MyExhibition } from "../_types";
-import { OverflowMenu } from "./OverflowMenu";
 import { STATUS_TONE } from "./StatusBadge";
 
 interface MyExhibitionCardProps {

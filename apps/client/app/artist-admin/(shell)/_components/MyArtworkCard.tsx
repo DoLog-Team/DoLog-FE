@@ -1,15 +1,13 @@
 "use client";
 
-import { josa } from "es-hangul";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
-import { Modal } from "@/components/common/Modal/Modal";
-import { Select } from "@/components/common/Select/Select";
+import { Engagement } from "@/components/common/Engagement/Engagement";
+import { OverflowMenu, type OverflowMenuItem } from "@/components/common/OverflowMenu/OverflowMenu";
 import type { MyArtwork, MyExhibition } from "../_types";
-import { Engagement } from "./Engagement";
-import { OverflowMenu, type OverflowMenuItem } from "./OverflowMenu";
+import { ArtworkDeleteModal } from "./modals/ArtworkDeleteModal";
+import { ArtworkSubmitModal } from "./modals/ArtworkSubmitModal";
 import { ArtworkStatusBadge, StatusBadge } from "./StatusBadge";
 
 interface MyArtworkCardProps {
@@ -29,24 +27,8 @@ export function MyArtworkCard({
 	onDelete,
 	onStatusChange,
 }: MyArtworkCardProps) {
-	const router = useRouter();
 	const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
-	const [selectedExhibitionId, setSelectedExhibitionId] = useState<string | undefined>(undefined);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-	// 수락 완료된 전시만 출품 대상으로 선택 가능
-	const acceptedExhibitions = exhibitions.filter((exhibition) => exhibition.acceptedAt);
-
-	const handleSubmit = () => {
-		if (!selectedExhibitionId) return;
-		setIsSubmitModalOpen(false);
-		router.push(`/artist-admin/artworks/${artwork.artworkId}/exhibition`);
-	};
-
-	const handleDelete = () => {
-		setIsDeleteModalOpen(false);
-		onDelete(artwork.artworkId);
-	};
 
 	const menuItems: OverflowMenuItem[] = [
 		{
@@ -63,10 +45,7 @@ export function MyArtworkCard({
 			: {
 					label: "작품 출품하기",
 					icon: "/icons/link.svg",
-					onClick: () => {
-						setSelectedExhibitionId(undefined);
-						setIsSubmitModalOpen(true);
-					},
+					onClick: () => setIsSubmitModalOpen(true),
 				},
 		// 작성 중(draft)인 작품은 필수 항목이 덜 채워져 있을 수 있어 공개 전환 자체를 안 보여준다
 		...(artwork.status === "public"
@@ -136,58 +115,18 @@ export function MyArtworkCard({
 				</div>
 			</div>
 
-			<Modal
+			<ArtworkSubmitModal
 				open={isSubmitModalOpen}
 				onOpenChange={setIsSubmitModalOpen}
-				title="전시 선택"
-				description={`${josa(artwork.title, "을/를")} 출품할 전시를 선택해주세요.`}
-				showCloseButton
-				actions={[
-					{ text: "취소", variant: "assistive", onClick: () => setIsSubmitModalOpen(false) },
-					{
-						text: "제출하기",
-						variant: "primary",
-						disabled: !selectedExhibitionId,
-						onClick: handleSubmit,
-					},
-				]}
-			>
-				<Select
-					options={acceptedExhibitions.map((exhibition) => ({
-						label: exhibition.name,
-						value: exhibition.exhibitionId,
-					}))}
-					value={selectedExhibitionId}
-					onChange={setSelectedExhibitionId}
-					placeholder="placeholder"
-					actionLabel={
-						<span className="flex items-center gap-1">
-							<span className="text-body2-bold text-light">새로운 전시</span>
-							<span>입장하기</span>
-						</span>
-					}
-					// TODO: 전시 입장 코드 입력 흐름 연결 (보연 담당)
-					onActionClick={() => {}}
-				/>
-			</Modal>
-
-			<Modal
+				artworkId={artwork.artworkId}
+				artworkTitle={artwork.title}
+				exhibitions={exhibitions}
+			/>
+			<ArtworkDeleteModal
 				open={isDeleteModalOpen}
 				onOpenChange={setIsDeleteModalOpen}
-				title="작품 삭제"
-				titleTone="danger"
-				description={
-					<span className="text-light">
-						<span className="text-body1-bold">{artwork.title}</span>
-						{josa.pick(artwork.title, "이/가")} 작가 프로필과 참여 중인 전시에서 모두 삭제돼요.
-						삭제한 작품은 복구할 수 없어요.
-					</span>
-				}
-				showCloseButton
-				actions={[
-					{ text: "취소", variant: "assistive", onClick: () => setIsDeleteModalOpen(false) },
-					{ text: "삭제하기", variant: "danger", onClick: handleDelete },
-				]}
+				artworkTitle={artwork.title}
+				onConfirm={() => onDelete(artwork.artworkId)}
 			/>
 		</article>
 	);

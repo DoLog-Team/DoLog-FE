@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { buttonVariants } from "@/components/common/Button/Button";
+import { Engagement } from "@/components/common/Engagement/Engagement";
 import { EmptyArtistIcon } from "@/components/common/icons/EmptyArtistIcon";
 import RowList from "@/components/common/RowList/RowList";
 import { Title } from "@/components/common/Title/Title";
 import { cn } from "@/lib/utils/cn";
 import type { ArtistAdminProfile } from "../../_types";
-import { Engagement } from "../Engagement";
 import { SECTION_TITLE_CLASS } from "../SectionHeader";
 
 const PROFILE_EDIT_PATH = "/artist-admin/profile/edit";
