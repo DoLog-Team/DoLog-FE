@@ -21,6 +21,7 @@ export interface MyArtworkDetail {
 	showPurchaseButton: boolean | null;
 	youtubeUrl: string | null;
 	mainImg: string | null;
+	locationMap: string | null;
 	status: "DRAFT" | "PUBLISHED";
 	hidden: boolean;
 	exhibitionOnly: boolean;

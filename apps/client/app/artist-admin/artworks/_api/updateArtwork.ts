@@ -74,9 +74,10 @@ export interface UpdateArtworkAdditionalInfoInput {
 	width?: string;
 	height?: string;
 	depth?: string;
+	locationMapFile?: File | null;
 }
 
-// 작품 부가 정보(재료·사이즈)만 부분 수정 — 출품 화면의 "부가 정보" 탭에서 쓴다
+// 작품 부가 정보(재료·사이즈·위치 이미지)만 부분 수정 — 출품 화면의 "부가 정보" 탭에서 쓴다
 export async function updateArtworkAdditionalInfo(
 	artworkId: string,
 	input: UpdateArtworkAdditionalInfoInput,
@@ -86,6 +87,7 @@ export async function updateArtworkAdditionalInfo(
 	if (input.width) formData.append("width", input.width);
 	if (input.height) formData.append("height", input.height);
 	if (input.depth) formData.append("depth", input.depth);
+	if (input.locationMapFile) formData.append("locationMapFile", input.locationMapFile);
 
 	if (input.materials.length > 0) {
 		for (const material of input.materials) formData.append("materials", material);

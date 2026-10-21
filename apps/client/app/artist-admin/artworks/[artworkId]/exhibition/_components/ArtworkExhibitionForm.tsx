@@ -82,6 +82,7 @@ export const ArtworkExhibitionForm = ({
 									width: artwork.width,
 									height: artwork.height,
 									depth: artwork.depth,
+									locationMap: artwork.locationMap,
 								}}
 							/>
 						</>
