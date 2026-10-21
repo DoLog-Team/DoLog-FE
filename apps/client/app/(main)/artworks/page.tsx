@@ -3,6 +3,7 @@ import { getExhibitions } from "@/lib/api/exhibition";
 // import { CATEGORIES, MOCK_ARTWORKS } from "../_mocks/artwork";
 import ArtworksClient from "./_components/ArtworksClient";
 
+// TODO: GET artworks 에 전시 없는 단독(미출품) 공개 작품이 안 옴 — BE 문의 중. 오면 exhibitionId 가 null 인 작품 표시 확인
 export default async function ArtworksPage() {
 	const [artworks, exhibitions] = await Promise.all([getArtworks(), getExhibitions()]);
 

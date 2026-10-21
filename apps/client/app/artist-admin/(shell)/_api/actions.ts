@@ -1,5 +1,5 @@
 import { authApiClient, isApiError } from "@/lib/api/instance";
-import type { JoinableExhibition } from "../_types";
+import type { JoinableExhibition, MyExhibition } from "../_types";
 
 // 작가 어드민 홈(마이페이지)에서 버튼으로 하는 동작 — 클라이언트 컴포넌트에서 BFF 를 거쳐 호출한다
 // 실패하면 화면에 보여줄 문구를 담은 Error 를 던진다
@@ -54,6 +54,29 @@ export async function joinExhibition(joinCode: string, greeting: string) {
 		method: "POST",
 		body: JSON.stringify({ joinCode, greeting }),
 	});
+}
+
+/************************
+ * 나의 전시 (출품 모달 선택지용) — GET exhibitions/me
+ * 작가 어드민 홈은 서버에서 getMyExhibitions 로 받고, 두록 작품 상세는 여기서 받는다
+ ************************/
+
+interface MyExhibitionItem {
+	exhibitionId: string;
+	exhibitionName: string;
+	status: "PENDING" | "JOINED";
+	joinedAt: string;
+}
+
+export async function getMyExhibitionOptions(): Promise<
+	Pick<MyExhibition, "exhibitionId" | "name" | "acceptedAt">[]
+> {
+	const data = await authApiClient<{ exhibitions: MyExhibitionItem[] }>("/exhibitions/me");
+	return data.exhibitions.map((exhibition) => ({
+		exhibitionId: exhibition.exhibitionId,
+		name: exhibition.exhibitionName,
+		acceptedAt: exhibition.status === "JOINED" ? exhibition.joinedAt : null,
+	}));
 }
 
 /************************
