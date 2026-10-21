@@ -14,6 +14,10 @@ import { LikeButton } from "@/components/common/LikeButton/LikeButton";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { type ArtworkDetail, setArtworkLike } from "@/lib/api/artwork";
+import { useIsOwnArtist } from "@/lib/auth/useIsOwnArtist";
+import { ArtworkManageFab } from "./ArtworkManageFab";
+import { RelatedExhibitionCta } from "./RelatedExhibitionCta";
+import { useMyArtwork } from "./useMyArtwork";
 import { useRecordArtworkView } from "./useRecordArtworkView";
 
 // 섹션은 전시 작품 상세(app/[exhibitionId]/artwork/[artworkId]) 것을 재사용한다
@@ -44,6 +48,9 @@ interface ArtworkDetailClientProps {
 
 export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProps) {
 	useRecordArtworkView(artworkId);
+
+	const isMine = useIsOwnArtist(data.participants.map((participant) => participant.artistId));
+	const [myArtwork, setMyArtwork] = useMyArtwork(artworkId, isMine);
 
 	const hasArtist = data.participants.length > 0;
 
@@ -143,7 +150,21 @@ export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProp
 				/>
 			)}
 
-			{/* TODO: 작가 본인 FAB 메뉴 (QR·편집·출품·공개/비공개·삭제) — 다음 단계 */}
+			{/* 관련 전시 보기는 출품 전시가 있을 때만 누구에게나 뜬다 */}
+			{/* TODO: GET artworks/{artworkId} 응답에 exhibitionId·exhibitionTitle·slug 추가 BE 문의 중 — 오기 전까지는 뜨지 않음, 답변 오면 필드명 확인 */}
+			{data.exhibitionId && (
+				<RelatedExhibitionCta exhibitionId={data.exhibitionId} slug={data.slug} />
+			)}
+			{isMine && (
+				<ArtworkManageFab
+					artworkId={artworkId}
+					title={data.title}
+					viewCount={data.viewCount ?? 0}
+					likeCount={data.likeCount ?? 0}
+					myArtwork={myArtwork}
+					onStatusChange={(status) => setMyArtwork((prev) => prev && { ...prev, status })}
+				/>
+			)}
 			<ScrollTabBar
 				tabs={tabs}
 				activeTab={activeTab}

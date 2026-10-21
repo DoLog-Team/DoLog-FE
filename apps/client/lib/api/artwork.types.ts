@@ -121,6 +121,11 @@ export interface ArtworkDetail {
 	productionEndYear?: number | null;
 	purchaseChatUrl?: string | null;
 	showPurchaseButton?: boolean | null;
+	// TODO: 출품 전시 — 두록 작품 상세 응답에 추가 BE 문의 중 (작품 목록 응답과 같은 이름으로 요청). 단독 작품이면 null
+	exhibitionId?: string | null;
+	exhibitionTitle?: string | null;
+	slug?: string | null;
+	viewCount?: number;
 	likeCount?: number;
 	liked?: boolean;
 	description: string;
