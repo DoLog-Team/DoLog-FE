@@ -68,3 +68,33 @@ export async function updateArtworkBasicInfo(
 		body: formData,
 	});
 }
+
+export interface UpdateArtworkAdditionalInfoInput {
+	materials: string[];
+	width?: string;
+	height?: string;
+	depth?: string;
+}
+
+// 작품 부가 정보(재료·사이즈)만 부분 수정 — 출품 화면의 "부가 정보" 탭에서 쓴다
+export async function updateArtworkAdditionalInfo(
+	artworkId: string,
+	input: UpdateArtworkAdditionalInfoInput,
+): Promise<void> {
+	const formData = new FormData();
+
+	if (input.width) formData.append("width", input.width);
+	if (input.height) formData.append("height", input.height);
+	if (input.depth) formData.append("depth", input.depth);
+
+	if (input.materials.length > 0) {
+		for (const material of input.materials) formData.append("materials", material);
+	} else {
+		formData.append("materials", "");
+	}
+
+	await authApiClient<void>(`/artworks/${artworkId}`, {
+		method: "PATCH",
+		body: formData,
+	});
+}

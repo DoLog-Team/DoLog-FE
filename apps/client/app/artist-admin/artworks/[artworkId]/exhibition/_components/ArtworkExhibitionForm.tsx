@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toErrorMessage } from "@/app/artist-admin/(shell)/_api/actions";
 import type { MyArtworkDetail } from "@/app/artist-admin/artworks/_api/getMyArtwork";
 import { ArtworkVisibilitySection } from "@/app/artist-admin/artworks/_components/ArtworkVisibilitySection";
@@ -12,7 +12,12 @@ import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { ImageInput } from "@/components/common/ImageInput/ImageInput";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
+import {
+	type ArtworkFieldSettings,
+	getArtworkExhibitionStatus,
+} from "../_api/getArtworkExhibitionStatus";
 import { submitArtwork } from "../_api/submitArtwork";
+import { ArtworkExhibitionAdditionalInfoSection } from "./sections/ArtworkExhibitionAdditionalInfoSection";
 import { ArtworkExhibitionGroupSection } from "./sections/ArtworkExhibitionGroupSection";
 import { ArtworkExhibitionLinkSection } from "./sections/ArtworkExhibitionLinkSection";
 
@@ -33,6 +38,14 @@ export const ArtworkExhibitionForm = ({
 }: ArtworkExhibitionFormProps) => {
 	const { notice, showNotice, closeNotice } = useNoticeModal();
 	const visibility = useArtworkVisibility(artwork.artworkId, artwork);
+	const [fieldSettings, setFieldSettings] = useState<ArtworkFieldSettings | null>(null);
+
+	useEffect(() => {
+		if (!artwork.exhibitionId) return;
+		getArtworkExhibitionStatus(artwork.artworkId)
+			.then((status) => setFieldSettings(status.fieldSettings))
+			.catch(() => {});
+	}, [artwork.artworkId, artwork.exhibitionId]);
 
 	if (artwork.exhibitionId && artwork.exhibitionName) {
 		return (
@@ -57,6 +70,22 @@ export const ArtworkExhibitionForm = ({
 						disabled={visibility.isSaving}
 						hasExhibition
 					/>
+
+					{fieldSettings && (
+						<>
+							<Divider thickness="thin" fullBleed={true} spacing="md" />
+							<ArtworkExhibitionAdditionalInfoSection
+								artworkId={artwork.artworkId}
+								required={fieldSettings.required}
+								initial={{
+									materials: artwork.materials,
+									width: artwork.width,
+									height: artwork.height,
+									depth: artwork.depth,
+								}}
+							/>
+						</>
+					)}
 				</div>
 
 				<NoticeModal notice={visibility.notice} onClose={visibility.closeNotice} />
