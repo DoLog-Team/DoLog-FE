@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
+import { getDologArtist } from "@/app/(main)/artists/[artistId]/_api/getArtist";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import { SectionTimeTracker } from "@/components/common/SectionTimeTracker";
@@ -10,7 +11,9 @@ import { getExhibitionMeta } from "../../_api/getExhibitionMeta";
 import { resolveExhibitionId } from "../../_api/resolveExhibitionId";
 import { Header } from "../../_components/Header";
 import { NotFound } from "../../_components/NotFound";
+import { ArtistManageFab } from "./_components/ArtistManageFab";
 import { ArtistTabBar } from "./_components/ArtistTabBar";
+import { OtherArtworksCta } from "./_components/OtherArtworksCta";
 import { ArtworkSection } from "./_components/sections/ArtworkSection";
 import { BTSSection } from "./_components/sections/BTSSection";
 import { ContactSection } from "./_components/sections/ContactSection";
@@ -70,6 +73,13 @@ export default async function ArtistDetailPage({ params }: Props) {
 		);
 	}
 
+	// 작가 전체 정보(두록 작가 상세와 같은 API) — 작가 조회수와 이 전시 밖 작품이 있는지는 전시 작가 응답에 없다
+	const dologArtist = await getDologArtist(artist.artistId);
+	const exhibitionArtworkIds = new Set(artist.artworks.map((artwork) => artwork.artworkId));
+	const hasOtherArtworks = !!dologArtist?.artworks.some(
+		(artwork) => !exhibitionArtworkIds.has(artwork.artworkId),
+	);
+
 	return (
 		<>
 			<SectionTimeTracker pageName="artist_detail" sections={["profile", "contact", "artworks"]} />
@@ -98,6 +108,13 @@ export default async function ArtistDetailPage({ params }: Props) {
 				<NavigationSection artist={artist} />
 			</DesktopContainer>
 
+			{/* 전시 외 작품 보기 — 작품 목록 확인 결과, 이 전시에 없는 작품이 있을 때만 표시 */}
+			{hasOtherArtworks && <OtherArtworksCta artistId={artist.artistId} />}
+			<ArtistManageFab
+				artistId={artist.artistId}
+				viewCount={dologArtist?.viewCount ?? 0}
+				likeCount={artist.likeCount}
+			/>
 			<ArtistTabBar
 				profileId={artist.profileId}
 				initialLiked={artist.liked}
