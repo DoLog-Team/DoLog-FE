@@ -31,7 +31,12 @@ export function OverflowMenuList({ items, onSelect, header, className }: Overflo
 				className,
 			)}
 		>
-			{header}
+			{header && (
+				<>
+					{header}
+					<div className="h-px bg-stroke-lightest" />
+				</>
+			)}
 			{items.map((item, index) => {
 				const className = cn(
 					"flex w-full cursor-pointer items-center gap-3 rounded-sm p-3 text-body1-bold hover:bg-fg-lighter",
@@ -52,7 +57,7 @@ export function OverflowMenuList({ items, onSelect, header, className }: Overflo
 					</>
 				);
 				// 위험 항목은 앞 항목들과 구분선으로 분리 (단독 항목이면 생략)
-				const hasDivider = (item.danger || item.dividerBefore) && (index > 0 || !!header);
+				const hasDivider = (item.danger || item.dividerBefore) && index > 0;
 
 				return (
 					<div key={item.label}>
