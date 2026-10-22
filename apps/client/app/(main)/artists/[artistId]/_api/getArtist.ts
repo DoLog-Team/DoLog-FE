@@ -1,4 +1,5 @@
 import { apiClient } from "@/lib/api/instance";
+import { visitorHeaders } from "@/lib/visitor";
 
 /************************
  * GET artists/{artistId} — 두록 작가 상세 (공개)
@@ -24,6 +25,8 @@ export interface DologArtistArtwork {
 
 export interface DologArtist {
 	artistId: string;
+	// 작가 공통 프로필 — 좋아요(artist-profiles/{profileId}/likes)에 사용 (백에 문의하여 profileId가 필수로 생성되어 오도록 확인함. null인 경우는 없음)
+	profileId: string | null;
 	// 소셜 가입 직후 이름을 아직 입력하지 않은 작가는 null
 	// TODO : 현재 백+기획 논의중. 추후 확정되는 방향으로 수정 필요함!!
 	nameKo: string | null;
@@ -39,10 +42,16 @@ export interface DologArtist {
 	viewCount: number;
 }
 
-// 없는 작가면 null
-export async function getDologArtist(artistId: string): Promise<DologArtist | null> {
+// 없는 작가면 null · visitorId 를 넘기면 그 방문자 기준 liked 가 온다
+export async function getDologArtist(
+	artistId: string,
+	visitorId?: string | null,
+): Promise<DologArtist | null> {
 	try {
-		return await apiClient<DologArtist>(`/artists/${artistId}`, { cache: "no-store" });
+		return await apiClient<DologArtist>(`/artists/${artistId}`, {
+			cache: "no-store",
+			headers: visitorHeaders(visitorId),
+		});
 	} catch {
 		return null;
 	}

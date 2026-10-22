@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import MainFooter from "@/components/common/Footer/MainFooter";
+import { VISITOR_COOKIE } from "@/lib/visitor";
 import { Header } from "../../_components/Header";
 import { getDologArtist } from "./_api/getArtist";
 import { ArtistDetailClient } from "./_components/ArtistDetailClient";
@@ -29,7 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function DologArtistPage({ params }: Props) {
 	const { artistId } = await params;
-	const artist = await getDologArtist(artistId);
+	// 방문자 ID 를 같이 보내야 내가 누른 좋아요(liked)가 처음부터 맞게 보인다
+	const visitorId = (await cookies()).get(VISITOR_COOKIE)?.value;
+	const artist = await getDologArtist(artistId, visitorId);
 
 	return (
 		// 하단 고정 탭바에 푸터가 가리지 않게

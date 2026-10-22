@@ -2,17 +2,19 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
+import { ArtistManageFab } from "@/app/[exhibitionId]/artist/[artistId]/_components/ArtistManageFab";
 import { CardGrid } from "@/components/common/Card/CardGrid";
 import { LinkCard } from "@/components/common/Card/LinkCard/LinkCard";
 import { ProfileCard } from "@/components/common/Card/ProfileCard/ProfileCard";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
+import { LikeButton } from "@/components/common/LikeButton/LikeButton";
 import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { Title } from "@/components/common/Title/Title";
+import { setArtistProfileLike } from "@/lib/api/artists/artist-detail";
 import ExhibitionCard from "../../../_components/ExhibitionCard";
 import type { DologArtist } from "../_api/getArtist";
-import { ArtistEditButton } from "./ArtistEditButton";
 
 interface ArtistDetailClientProps {
 	artist: DologArtist;
@@ -21,6 +23,7 @@ interface ArtistDetailClientProps {
 export function ArtistDetailClient({ artist }: ArtistDetailClientProps) {
 	// TODO: 이름 미등록 작가(소셜 가입 직후) 표시 — BE 에 이름 필수 문의 중
 	const name = artist.nameKo ?? "";
+	const { profileId } = artist;
 
 	// 탭 순서는 화면 섹션 순서와 같게 (작가 소개 · 작품 · 전시), 내용이 없는 섹션은 탭도 뺀다
 	const tabs = useMemo(() => {
@@ -127,10 +130,27 @@ export function ArtistDetailClient({ artist }: ArtistDetailClientProps) {
 				</>
 			)}
 
-			<ArtistEditButton artistId={artist.artistId} />
+			{/* 작가 관리 메뉴(연필 버튼) — 전시 작가 상세와 같은 컴포넌트 */}
+			<ArtistManageFab
+				artistId={artist.artistId}
+				viewCount={artist.viewCount}
+				likeCount={artist.likeCount}
+			/>
 
-			{/* TODO: 탭바 왼쪽 좋아요 버튼 — 좋아요 API 가 전시별 프로필 기준이라 BE 확인 후 추가 */}
-			<ScrollTabBar tabs={tabs} activeTab={activeTab} onTabClick={handleTabClick} />
+			<ScrollTabBar
+				tabs={tabs}
+				activeTab={activeTab}
+				onTabClick={handleTabClick}
+				// 좋아요는 작가 공통 프로필(profileId) 기준
+				leading={
+					profileId ? (
+						<LikeButton
+							initialLiked={artist.liked}
+							onToggle={(next, visitorId) => setArtistProfileLike(profileId, next, visitorId)}
+						/>
+					) : undefined
+				}
+			/>
 		</div>
 	);
 }
