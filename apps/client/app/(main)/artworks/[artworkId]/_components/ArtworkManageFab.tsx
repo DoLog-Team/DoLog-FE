@@ -26,18 +26,22 @@ interface ArtworkManageFabProps {
 	title: string;
 	viewCount: number;
 	likeCount: number;
+	// QR 이 가리킬 작품 상세 경로 — 두록 /artworks/{id}, 전시 /{slug}/artwork/{id}
+	qrPath: string;
 	// 본인 작품의 공개 상태·출품 전시 — 불러오기 전이면 null
 	myArtwork: MyArtworkState | null;
 }
 
 /**
- * 작품 관리 메뉴 버튼 (피그마 000301-9801) — 작품을 작성한 작가 본인일 때만 그린다
+ * 작품 관리 메뉴 버튼 — 로그인 정보가 작품을 작성한 작가 본인일 때만 그린다
+ * 두록 작품 상세와 전시 작품 상세에서 같이 쓴다
  */
 export function ArtworkManageFab({
 	artworkId,
 	title,
 	viewCount,
 	likeCount,
+	qrPath,
 	myArtwork,
 }: ArtworkManageFabProps) {
 	const router = useRouter();
@@ -73,7 +77,10 @@ export function ArtworkManageFab({
 		}
 	};
 
-	// 출품·공개 상태 항목은 내 작품 조회가 끝난 뒤에 보여준다
+	// 출품 항목은 내 작품 조회가 끝난 뒤에 보여준다 (공개 상태는 작품 편집 화면에서 바꾼다)
+	// TODO: 피그마 9806 "작품 공개하기 / 비공개하기" 항목 — 기획 질문 예정, QA 때 확인
+	//  - 상세는 공개 작품만 열리는데 비공개 상태에서 공개하기 모달이 뜨는 경우가 있는지
+	//  - 공개 상태 3단계(공개/비공개/전시에만 공개)를 메뉴에 어떻게 보여줄지
 	const menuItems: OverflowMenuItem[] = [
 		{ label: "QR 확인하기", icon: "/icons/qr.svg", onClick: () => setIsQrModalOpen(true) },
 		{
@@ -126,7 +133,7 @@ export function ArtworkManageFab({
 			<ArtworkQrModal
 				open={isQrModalOpen}
 				onOpenChange={setIsQrModalOpen}
-				artworkId={artworkId}
+				qrPath={qrPath}
 				title={title}
 			/>
 			<ArtworkSubmitModal
