@@ -7,22 +7,23 @@ import { Modal } from "@/components/common/Modal/Modal";
 interface ArtworkQrModalProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	artworkId: string;
+	// QR 이 가리킬 작품 상세 경로 (두록 /artworks/{id}, 전시 /{slug}/artwork/{id})
+	qrPath: string;
 	title: string;
 }
 
 /**
- * 작품 QR 코드 확인 모달 — QR 은 작품 상세 주소로 프론트에서 만듦
+ * 작품 QR 코드 확인 모달 — QR 은 작품 상세 주소로 프론트에서 만듦 (두록·전시 작품 상세 공통)
  */
-export function ArtworkQrModal({ open, onOpenChange, artworkId, title }: ArtworkQrModalProps) {
+export function ArtworkQrModal({ open, onOpenChange, qrPath, title }: ArtworkQrModalProps) {
 	const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
 
 	useEffect(() => {
 		if (!open || qrDataUrl) return;
-		QRCode.toDataURL(`${window.location.origin}/artworks/${artworkId}`, { width: 512, margin: 1 })
+		QRCode.toDataURL(`${window.location.origin}${qrPath}`, { width: 512, margin: 1 })
 			.then(setQrDataUrl)
 			.catch(() => {});
-	}, [open, qrDataUrl, artworkId]);
+	}, [open, qrDataUrl, qrPath]);
 
 	const handleDownload = () => {
 		if (!qrDataUrl) return;

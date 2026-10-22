@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import { ArtworkManageFab } from "@/app/(main)/artworks/[artworkId]/_components/ArtworkManageFab";
+import { useMyArtwork } from "@/app/(main)/artworks/[artworkId]/_components/useMyArtwork";
 import { useExhibition } from "@/app/[exhibitionId]/_context/ExhibitionContext";
 import { Divider } from "@/components/common/Divider/Divider";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
@@ -11,6 +13,7 @@ import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { track } from "@/lib/amplitude";
 import { type ArtworkDetail, setArtworkLike } from "@/lib/api/artwork";
+import { useIsOwnArtist } from "@/lib/auth/useIsOwnArtist";
 import { useSectionTime } from "@/lib/hooks/useSectionTime";
 import { Header } from "../../../_components/Header";
 import { ArtistSection } from "../_components/ArtistSection";
@@ -51,6 +54,10 @@ export function ArtworkDetailClient({
 	useSectionTime("artwork_detail", sectionNames);
 
 	const { slug } = useExhibition();
+
+	// 작품 관리 메뉴(연필 버튼)는 두록 작품 상세와 같은 컴포넌트를 쓴다
+	const isMine = useIsOwnArtist(data.participants.map((participant) => participant.artistId));
+	const [myArtwork] = useMyArtwork(artworkId, isMine);
 
 	const prevArtwork = data.alphabeticalArtworks.find((a) => a.type === "prev");
 	const nextArtwork = data.alphabeticalArtworks.find((a) => a.type === "next");
@@ -158,6 +165,16 @@ export function ArtworkDetailClient({
 				<PostNavigationSection prevArtwork={prevArtwork} nextArtwork={nextArtwork} />
 			)}
 
+			{isMine && (
+				<ArtworkManageFab
+					artworkId={artworkId}
+					title={data.title}
+					viewCount={data.viewCount ?? 0}
+					likeCount={data.likeCount ?? 0}
+					qrPath={`/${slug}/artwork/${artworkId}`}
+					myArtwork={myArtwork}
+				/>
+			)}
 			<ScrollTabBar
 				tabs={TABS}
 				activeTab={activeTab}

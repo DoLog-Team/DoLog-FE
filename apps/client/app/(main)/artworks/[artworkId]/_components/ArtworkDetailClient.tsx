@@ -161,6 +161,7 @@ export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProp
 					title={data.title}
 					viewCount={data.viewCount ?? 0}
 					likeCount={data.likeCount ?? 0}
+					qrPath={`/artworks/${artworkId}`}
 					myArtwork={myArtwork}
 				/>
 			)}
