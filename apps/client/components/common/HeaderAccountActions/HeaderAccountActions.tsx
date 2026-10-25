@@ -66,7 +66,7 @@ export function HeaderAccountActions({
 	const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
 	const [isSwitchModalOpen, setIsSwitchModalOpen] = useState(false);
 	const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-	const { notifications, hasUnread, markAllAsRead } = useNotifications(account);
+	const { notifications, hasUnread, markAllAsRead, markAsRead } = useNotifications();
 
 	const iconClassName = size === "md" ? "size-6 min-[721px]:size-7" : "size-5";
 	const isMenuOpen = profileMenuOpen ?? uncontrolledOpen;
@@ -194,6 +194,7 @@ export function HeaderAccountActions({
 				open={isNotificationOpen}
 				onOpenChange={handleNotificationOpenChange}
 				notifications={notifications}
+				onNotificationClick={markAsRead}
 			/>
 		</div>
 	);

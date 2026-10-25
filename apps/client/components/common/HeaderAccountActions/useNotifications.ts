@@ -1,16 +1,34 @@
-import { useState } from "react";
-import { MOCK_NOTIFICATIONS } from "./mockNotifications";
-import type { AccountRole } from "./profileMenu";
+import { useEffect, useState } from "react";
+import {
+	getNotifications,
+	markAllNotificationsAsRead,
+	markNotificationAsRead,
+	type NotificationResponse,
+} from "./notificationsApi";
 
-// 계정별 알림 데이터 — 알림 UI는 하나로 쓰고, 불러오는 곳만 계정마다 다름
-// TODO: 알림 API 연결 시 account로 슈퍼 어드민(109999)·일반 어드민(119999) 알림 목록을 나눠 불러옴
-export function useNotifications(_account: AccountRole) {
-	const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
+export function useNotifications() {
+	const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
+
+	useEffect(() => {
+		getNotifications()
+			.then((data) => setNotifications(data.notifications))
+			.catch(() => {});
+	}, []);
 
 	const hasUnread = notifications.some((notification) => !notification.isRead);
 
-	const markAllAsRead = () =>
+	const markAllAsRead = () => {
+		if (!hasUnread) return;
 		setNotifications((prev) => prev.map((item) => ({ ...item, isRead: true })));
+		markAllNotificationsAsRead().catch(() => {});
+	};
 
-	return { notifications, hasUnread, markAllAsRead };
+	const markAsRead = (notificationId: string) => {
+		setNotifications((prev) =>
+			prev.map((item) => (item.id === notificationId ? { ...item, isRead: true } : item)),
+		);
+		markNotificationAsRead(notificationId).catch(() => {});
+	};
+
+	return { notifications, hasUnread, markAllAsRead, markAsRead };
 }
