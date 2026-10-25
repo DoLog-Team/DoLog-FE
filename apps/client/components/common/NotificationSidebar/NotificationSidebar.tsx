@@ -2,21 +2,17 @@
 
 import * as Dialog from "@radix-ui/react-dialog";
 import Image from "next/image";
+import Link from "next/link";
 import { Fragment } from "react";
+import { toNotificationContent } from "@/components/common/HeaderAccountActions/notificationContent";
+import type { NotificationResponse } from "@/components/common/HeaderAccountActions/notificationsApi";
 import { cn } from "@/lib/utils/cn";
-
-export interface NotificationItem {
-	id: number;
-	title: string;
-	description: string;
-	createdAt: string;
-	isRead: boolean;
-}
 
 interface NotificationSidebarProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	notifications: NotificationItem[];
+	notifications: NotificationResponse[];
+	onNotificationClick: (notificationId: string) => void;
 }
 
 const relativeTime = new Intl.RelativeTimeFormat("ko", { numeric: "always" });
@@ -33,6 +29,7 @@ export const NotificationSidebar = ({
 	open,
 	onOpenChange,
 	notifications,
+	onNotificationClick,
 }: NotificationSidebarProps) => (
 	<Dialog.Root open={open} onOpenChange={onOpenChange}>
 		<Dialog.Portal>
@@ -56,10 +53,11 @@ export const NotificationSidebar = ({
 				</div>
 
 				<ul className="flex-1 overflow-y-auto px-4 min-[721px]:px-8">
-					{notifications.map((notification, index) => (
-						<Fragment key={notification.id}>
-							{index === 0 && <li aria-hidden className="h-px bg-stroke-lightest" />}
-							<li className="flex py-4 pl-4">
+					{notifications.map((notification, index) => {
+						const content = toNotificationContent(notification);
+						const rowClassName = "flex w-full py-4 pl-4 text-left";
+						const rowContent = (
+							<>
 								{!notification.isRead && (
 									<span className="mr-4 flex size-6 shrink-0 items-center justify-center">
 										<span className="size-1.5 rounded-full bg-error" />
@@ -72,7 +70,7 @@ export const NotificationSidebar = ({
 											notification.isRead ? "text-lighter" : "text-light",
 										)}
 									>
-										{notification.title}
+										{content.title}
 									</p>
 									<p
 										className={cn(
@@ -80,16 +78,41 @@ export const NotificationSidebar = ({
 											notification.isRead ? "text-lightest" : "text-lighter",
 										)}
 									>
-										{notification.description}
+										{content.description}
 									</p>
 									<p className="mt-4 text-body2 text-lightest">
 										{formatRelativeTime(notification.createdAt)}
 									</p>
 								</div>
-							</li>
-							<li aria-hidden className="h-px bg-stroke-lightest" />
-						</Fragment>
-					))}
+							</>
+						);
+
+						return (
+							<Fragment key={notification.id}>
+								{index === 0 && <li aria-hidden className="h-px bg-stroke-lightest" />}
+								<li>
+									{content.href ? (
+										<Link
+											href={content.href}
+											onClick={() => onNotificationClick(notification.id)}
+											className={rowClassName}
+										>
+											{rowContent}
+										</Link>
+									) : (
+										<button
+											type="button"
+											onClick={() => onNotificationClick(notification.id)}
+											className={rowClassName}
+										>
+											{rowContent}
+										</button>
+									)}
+								</li>
+								<li aria-hidden className="h-px bg-stroke-lightest" />
+							</Fragment>
+						);
+					})}
 				</ul>
 
 				<p className="shrink-0 px-4 py-6 text-body1 text-lightest min-[721px]:px-8 min-[721px]:pt-4 min-[721px]:pb-7">

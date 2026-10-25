@@ -16,6 +16,7 @@ const meta = {
 	args: {
 		open: true,
 		onOpenChange: () => {},
+		onNotificationClick: () => {},
 	},
 } satisfies Meta<typeof NotificationSidebar>;
 
@@ -26,16 +27,18 @@ export const Default: Story = {
 	args: {
 		notifications: [
 			{
-				id: 1,
-				title: "알림명",
-				description: "설명",
+				id: "1",
+				type: "ARTIST_JOIN_APPROVED",
+				payload: { exhibitionName: "제 28회 졸업전시회" },
+				referenceId: "exhibition-1",
 				createdAt: hoursAgo(2),
 				isRead: false,
 			},
 			{
-				id: 2,
-				title: "알림명",
-				description: "설명",
+				id: "2",
+				type: "ARTWORK_HIDDEN",
+				payload: { exhibitionName: "제 28회 졸업전시회", artworkTitle: "오후 6시의 고요함" },
+				referenceId: "exhibition-1",
 				createdAt: hoursAgo(30),
 				isRead: true,
 			},
