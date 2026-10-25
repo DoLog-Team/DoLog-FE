@@ -86,11 +86,27 @@ const TEMPLATES: Record<
 	}),
 	PLAN_EXPIRING_SOON: (p) => ({
 		title: "플랜 만료 임박 안내",
-		description: `${p.exhibitionName} 전시의 사용 기간이 얼마 남지 않았어요. 기간이 만료되면 전시가 비공개로 전환돼요.`,
+		description: `${p.exhibitionName} 전시의 사용 기간이 ${p.daysLeft}일 남았어요. 기간이 만료되면 전시가 비공개로 전환돼요.`,
 	}),
 	PLAN_LIMIT_EXCEEDED: (p) => ({
 		title: "전시 작품 수 초과",
-		description: `${p.exhibitionName} 전시에 연결된 작품 수가 플랜 한도를 초과했어요. 일부 작품이 노출되지 않고 있어요.`,
+		description: `${p.exhibitionName} 전시에 연결된 작품 수가 플랜 한도를 초과했어요. ${p.exceededCount}개의 작품이 노출되지 않고 있어요.`,
+	}),
+	ARTWORK_PLAN_LIMIT_EXCEEDED: (p) => ({
+		title: "플랜 한도 초과 미노출",
+		description: `${p.exhibitionName} 전시의 공개 가능한 작품 수를 초과해, '${p.artworkTitle}' 작품은 전시에 노출되지 않아요.`,
+	}),
+	ARTWORK_PLAN_LIMIT_CLEARED: (p) => ({
+		title: "자리 확보로 작품 공개",
+		description: `${p.exhibitionName} 전시에 공개 가능한 자리가 생겨 '${p.artworkTitle}' 작품이 전시에 공개되었어요.`,
+	}),
+	ARTWORK_PLAN_DOWNGRADED: (p) => ({
+		title: "플랜 다운그레이드 미노출",
+		description: `전시 플랜이 변경되어 작품 '${p.artworkTitle}'이 ${p.exhibitionName} 전시에 노출되지 않아요. 전시 관리자가 작품 수를 조정하면 다시 노출될 수 있어요.`,
+	}),
+	ARTWORK_PLAN_UPGRADED: (p) => ({
+		title: "플랜 변경 작품 공개",
+		description: `플랜이 변경되어 미노출 상태였던 작품 '${p.artworkTitle}'이 ${p.exhibitionName} 전시에 공개되었어요.`,
 	}),
 };
 
