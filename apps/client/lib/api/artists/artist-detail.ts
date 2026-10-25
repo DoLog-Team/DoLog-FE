@@ -7,9 +7,10 @@ import type { ArtistDetail } from "./artist-detail.types";
 interface ArtistProfileResponse {
 	profileId: string;
 	artistId: string;
-	nameKo: string;
-	nameEn: string;
-	bio: string;
+	// 국문 성명은 필수값이 아니라 없을 수 있음 (Figma 10.20 추가 사항)
+	nameKo: string | null;
+	nameEn: string | null;
+	bio: string | null;
 	profileImg: string | null;
 	email: string | null;
 	snsList: { snsId: string; platformName: string; url: string }[] | null;
@@ -35,10 +36,10 @@ export async function getArtistDetail(
 		return {
 			profileId: data.profileId,
 			artistId: data.artistId,
-			nameKo: data.nameKo,
-			nameEn: data.nameEn,
+			nameKo: data.nameKo ?? "",
+			nameEn: data.nameEn ?? "",
 			profileImage: data.profileImg ?? "",
-			bio: data.bio,
+			bio: data.bio ?? "",
 			contact: { email: data.email ?? "", snsList: data.snsList ?? [] },
 			behindTheScenes: [],
 			artworks: data.artworks.map((artwork) => ({

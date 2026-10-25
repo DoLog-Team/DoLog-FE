@@ -6,7 +6,8 @@ import type { ProfileCardProps } from "./ProfileCard.types";
 export const ProfileCard = ({ imageUrl, name, engName, bio, bottomSlot }: ProfileCardProps) => {
 	const nameContent = (
 		<>
-			<h3 className={s.name}>{name}</h3>
+			{/* 국문 성명이 없으면 영문 성명만, 둘 다 없으면 이름 자리를 비운다 */}
+			{name && <h3 className={s.name}>{name}</h3>}
 			{engName && <p className={s.engName}>{engName}</p>}
 		</>
 	);
@@ -16,7 +17,13 @@ export const ProfileCard = ({ imageUrl, name, engName, bio, bottomSlot }: Profil
 			{/* 이미지 + 모바일 이름 */}
 			<div className={s.imageWrapper}>
 				{imageUrl ? (
-					<Image src={imageUrl} alt={name} width={150} height={200} className={s.image} />
+					<Image
+						src={imageUrl}
+						alt={name || engName || ""}
+						width={150}
+						height={200}
+						className={s.image}
+					/>
 				) : (
 					<div
 						className={s.imageEmpty}

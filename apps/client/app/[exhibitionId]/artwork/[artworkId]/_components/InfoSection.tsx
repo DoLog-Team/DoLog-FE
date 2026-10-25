@@ -24,7 +24,8 @@ interface InfoSectionProps {
 export const InfoSection = ({ data, hideArtistRole, lines }: InfoSectionProps) => {
 	const categories = data.category ? [data.category] : [];
 	const artistRows = data.participants.map((participant) => ({
-		label: participant.nameKo,
+		// 국문 성명이 없으면 영문 성명
+		label: participant.nameKo || participant.nameEn || "",
 		value: participant.role,
 	}));
 

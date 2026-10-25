@@ -37,7 +37,7 @@ export function ProfileSection({ profile }: ProfileSectionProps) {
 				{profile.profileImage ? (
 					<Image
 						src={profile.profileImage}
-						alt={profile.nameKo ?? ""}
+						alt={profile.nameKo || profile.nameEn || ""}
 						width={254}
 						height={359}
 						className="aspect-[1/1.414] w-full object-cover"
@@ -52,8 +52,8 @@ export function ProfileSection({ profile }: ProfileSectionProps) {
 			<div className="col-span-5 self-end min-[721px]:col-span-3 min-[721px]:self-start min-[721px]:pt-4 min-[721px]:pb-5">
 				<div className="flex items-center gap-1">
 					<Title
-						// TODO: 이름 미등록 작가(소셜 가입 직후)의 표시는 피그마 확인 필요 — 임시로 비워 둠
-						title={profile.nameKo ?? ""}
+						// 국문 성명 미등록이면 입력 안내 (Figma 10.20 추가 사항)
+						title={profile.nameKo || "작가명을 입력해주세요."}
 						size="head2"
 						margin="none"
 						className={SECTION_TITLE_CLASS}

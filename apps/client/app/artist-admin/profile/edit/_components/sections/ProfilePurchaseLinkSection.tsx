@@ -1,17 +1,24 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
 import { FormField } from "@/components/common/FormField/FormField";
 import { Input } from "@/components/common/Input/Input";
 import type { ArtistProfileForm } from "../../_types";
+import { INVALID_MESSAGE, isPurchaseUrlInvalid } from "../profileValidation";
 
 export interface ProfilePurchaseLinkSectionProps {
-	initialValue: ArtistProfileForm;
+	value: ArtistProfileForm;
+	onChange: (patch: Partial<ArtistProfileForm>) => void;
+	// URL 은 입력 도중 형식이 맞지 않으므로 저장을 시도한 뒤에 오류를 보여준다
+	showErrors: boolean;
 }
 
-export const ProfilePurchaseLinkSection = ({ initialValue }: ProfilePurchaseLinkSectionProps) => {
-	const [purchaseUrl, setPurchaseUrl] = useState(initialValue.purchaseUrl);
+export const ProfilePurchaseLinkSection = ({
+	value,
+	onChange,
+	showErrors,
+}: ProfilePurchaseLinkSectionProps) => {
+	const isUrlError = showErrors && isPurchaseUrlInvalid(value.purchaseUrl);
 
 	return (
 		<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
@@ -35,11 +42,13 @@ export const ProfilePurchaseLinkSection = ({ initialValue }: ProfilePurchaseLink
 					label="소통 주소"
 					description="카카오 오픈채팅 같은 소통할 수 있는 url 을 남겨주세요."
 				>
-					{/* 보연 TODO: URL 형식 검증은 허용 규칙 확정 후 추가 */}
 					<Input
 						placeholder="example@gmail.com"
-						value={purchaseUrl}
-						onChange={(e) => setPurchaseUrl(e.target.value)}
+						maxLength={255}
+						value={value.purchaseUrl}
+						onChange={(e) => onChange({ purchaseUrl: e.target.value })}
+						error={isUrlError}
+						errorMessage={isUrlError ? INVALID_MESSAGE : undefined}
 					/>
 				</FormField>
 			</div>

@@ -1,59 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { FormField } from "@/components/common/FormField/FormField";
 import { ImageInput } from "@/components/common/ImageInput/ImageInput";
 import { Input } from "@/components/common/Input/Input";
 import { Textarea } from "@/components/common/Textarea/Textarea";
 import type { ArtistProfileForm } from "../../_types";
-
-// 입력 중 조합 자모(ㄱ, ㅏ 등)도 허용해야 오류가 깜빡이지 않는다
-// TODO : 추후 API 연동하면서 라이브러리 사용으로 전환 가능한지 검토 예정
-const NAME_KO_PATTERN = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9 ]*$/;
-const NAME_EN_PATTERN = /^[a-zA-Z ]*$/;
-const INVALID_MESSAGE = "잘못 입력했어요.";
+import {
+	INVALID_MESSAGE,
+	isNameEnInvalid,
+	isNameKoInvalid,
+	isNameKoTypingInvalid,
+} from "../profileValidation";
 
 export interface ProfileBasicInfoSectionProps {
-	initialValue: ArtistProfileForm;
-	onMissingCountChange?: (count: number) => void;
-	// 저장할 때 쓰도록 이름 입력값과 검증 결과를 부모에 알린다
-	onNameChange?: (name: BasicInfoName) => void;
-}
-
-export interface BasicInfoName {
-	nameKo: string;
-	nameEn: string;
-	// 입력 형식 검증 결과 (필수값 여부와는 별개 — 필수값이 비어도 임시 저장은 가능)
-	isValid: boolean;
+	value: ArtistProfileForm;
+	onChange: (patch: Partial<ArtistProfileForm>) => void;
+	// 저장을 시도한 뒤에는 입력 중 허용하던 조합 자모도 오류로 보여준다
+	showErrors: boolean;
 }
 
 export const ProfileBasicInfoSection = ({
-	initialValue,
-	onMissingCountChange,
-	onNameChange,
+	value,
+	onChange,
+	showErrors,
 }: ProfileBasicInfoSectionProps) => {
-	const [nameKo, setNameKo] = useState(initialValue.nameKo);
-	const [nameEn, setNameEn] = useState(initialValue.nameEn);
-	const [bio, setBio] = useState(initialValue.bio);
-	const [profileImages, setProfileImages] = useState<string[]>(
-		initialValue.profileImage ? [initialValue.profileImage] : [],
-	);
-
-	const isNameKoInvalid = !NAME_KO_PATTERN.test(nameKo);
-	const isNameEnInvalid = !NAME_EN_PATTERN.test(nameEn);
-
-	useEffect(() => {
-		onNameChange?.({
-			nameKo,
-			nameEn,
-			isValid: !isNameKoInvalid && !isNameEnInvalid,
-		});
-	}, [nameKo, nameEn, isNameKoInvalid, isNameEnInvalid, onNameChange]);
-
-	// 필수값은 국문 성명뿐
-	useEffect(() => {
-		onMissingCountChange?.(nameKo.trim() ? 0 : 1);
-	}, [nameKo, onMissingCountChange]);
+	const nameKoError = showErrors
+		? isNameKoInvalid(value.nameKo)
+		: isNameKoTypingInvalid(value.nameKo);
+	const nameEnError = isNameEnInvalid(value.nameEn);
 
 	return (
 		<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
@@ -62,14 +36,15 @@ export const ProfileBasicInfoSection = ({
 				<span className="text-body2 text-lighter">작가 소개에 표시될 성함을 적어주세요.</span>
 			</div>
 			<div className="flex min-w-0 flex-1 flex-col gap-4">
-				<FormField label="국문 성명" required>
+				{/* 국문 성명은 필수값이 아니다 (Figma 10.20 추가 사항) */}
+				<FormField label="국문 성명">
 					<Input
 						placeholder="홍길동"
 						maxLength={10}
-						value={nameKo}
-						onChange={(e) => setNameKo(e.target.value)}
-						error={isNameKoInvalid}
-						errorMessage={isNameKoInvalid ? INVALID_MESSAGE : undefined}
+						value={value.nameKo}
+						onChange={(e) => onChange({ nameKo: e.target.value })}
+						error={nameKoError}
+						errorMessage={nameKoError ? INVALID_MESSAGE : undefined}
 					/>
 				</FormField>
 
@@ -77,10 +52,10 @@ export const ProfileBasicInfoSection = ({
 					<Input
 						placeholder="Hong Gildong"
 						maxLength={50}
-						value={nameEn}
-						onChange={(e) => setNameEn(e.target.value)}
-						error={isNameEnInvalid}
-						errorMessage={isNameEnInvalid ? INVALID_MESSAGE : undefined}
+						value={value.nameEn}
+						onChange={(e) => onChange({ nameEn: e.target.value })}
+						error={nameEnError}
+						errorMessage={nameEnError ? INVALID_MESSAGE : undefined}
 					/>
 				</FormField>
 
@@ -88,8 +63,8 @@ export const ProfileBasicInfoSection = ({
 					<Textarea
 						placeholder="나를 잘 표현할 수 있는 소개문을 작성해요."
 						maxLength={200}
-						value={bio}
-						onChange={(e) => setBio(e.target.value)}
+						value={value.bio}
+						onChange={(e) => onChange({ bio: e.target.value })}
 					/>
 				</FormField>
 
@@ -97,13 +72,16 @@ export const ProfileBasicInfoSection = ({
 					{/* TODO: 파일 선택 후 프로필 이미지 크롭 페이지로 이동 (#170 크롭 작업) */}
 					<ImageInput
 						className="w-full"
-						images={profileImages}
+						images={value.profileImage ? [value.profileImage] : []}
 						maxCount={1}
 						description="1:1.4 비율의 이미지를 권장드립니다."
 						guideText="JPG, JPEG, PNG / 용량 5MB 이하"
 						accept="image/jpeg,image/png"
-						onAdd={(files) => setProfileImages(files.map((file) => URL.createObjectURL(file)))}
-						onRemove={() => setProfileImages([])}
+						onAdd={([file]) => {
+							if (file)
+								onChange({ profileImage: URL.createObjectURL(file), profileImageFile: file });
+						}}
+						onRemove={() => onChange({ profileImage: null, profileImageFile: null })}
 					/>
 				</FormField>
 			</div>
