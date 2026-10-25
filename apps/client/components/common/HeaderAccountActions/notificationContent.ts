@@ -63,6 +63,10 @@ const TEMPLATES: Record<
 		description: `전시 관리자의 조치로 필수 조건이 완화되어 ${p.artworkTitle} 작품이 자동 공개 처리되었어요.`,
 		href: p.artworkId ? ARTWORK_EXHIBITION_HREF(p.artworkId) : undefined,
 	}),
+	ARTWORK_FIELDS_HIDDEN: (p) => ({
+		title: "작품 항목 숨김",
+		description: `전시 관리자의 조치로 ${p.exhibitionName} 전시의 작품 항목 '${p.hiddenFieldNames}'이 숨김 처리되었어요. 전시 내에서 해당 항목이 노출되지 않아요.`,
+	}),
 	// 전시 어드민 알림 — 피그마에 문구가 명확히 없는 것은 같은 톤으로 작성함
 	ARTIST_JOIN_REQUESTED: (p) => ({
 		title: "작가 참여 신청",
