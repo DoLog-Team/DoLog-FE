@@ -16,7 +16,7 @@ import { type ArtworkDetail, setArtworkLike } from "@/lib/api/artwork";
 import { useIsOwnArtist } from "@/lib/auth/useIsOwnArtist";
 import { useSectionTime } from "@/lib/hooks/useSectionTime";
 import { Header } from "../../../_components/Header";
-import { ArtistSection } from "../_components/ArtistSection";
+import { ArtistSection, getVisibleAuthors } from "../_components/ArtistSection";
 import { BtsSection } from "../_components/BtsSection";
 import { DescriptionSection } from "../_components/DescriptionSection";
 import { InfoSection } from "../_components/InfoSection";
@@ -35,14 +35,15 @@ export function ArtworkDetailClient({
 	data: ArtworkDetail;
 	hideArtistRole?: boolean;
 }) {
+	const authors = getVisibleAuthors(data.participants);
+	const hasArtist = authors.length > 0;
+
 	const TABS = useMemo(() => {
-		const base = [
-			{ id: "detail", label: "작품 소개" },
-			{ id: "artist", label: "작가 소개" },
-		];
+		const base = [{ id: "detail", label: "작품 소개" }];
+		if (hasArtist) base.push({ id: "artist", label: "작가 소개" });
 		if (data.relatedBts?.length) base.push({ id: "behind", label: "비하인드" });
 		return base;
-	}, [data.relatedBts]);
+	}, [hasArtist, data.relatedBts]);
 
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(
 		TABS.map((t) => t.id),
@@ -133,17 +134,19 @@ export function ArtworkDetailClient({
 			</section>
 			<YoutubeSection youtubeUrl={data.youtubeUrl} />
 			<PhotoSection data={data} />
-			<section
-				data-section="artist"
-				ref={(el) => {
-					sectionRefs.artist.current = el;
-				}}
-			>
-				<ArtistSection
-					authors={data.participants}
-					getProfileHref={(author) => `/${slug}/artist/${author.profileId}`}
-				/>
-			</section>
+			{hasArtist && (
+				<section
+					data-section="artist"
+					ref={(el) => {
+						if (sectionRefs.artist) sectionRefs.artist.current = el;
+					}}
+				>
+					<ArtistSection
+						authors={authors}
+						getProfileHref={(author) => `/${slug}/artist/${author.profileId}`}
+					/>
+				</section>
+			)}
 
 			{data.relatedBts && data.relatedBts.length > 0 && (
 				<>

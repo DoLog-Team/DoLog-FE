@@ -8,76 +8,78 @@ import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { Modal } from "@/components/common/Modal/Modal";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { TabBar } from "@/components/common/TabBar/TabBar";
-import { updateMyArtistName } from "../_api/actions";
-import type { ArtistProfileForm } from "../_types";
+import {
+	createArtistSns,
+	deleteArtistSns,
+	type MyArtistProfileRequest,
+	updateArtistSns,
+	updateMyArtistName,
+	updateMyArtistProfile,
+} from "../_api/actions";
+import type { ArtistProfileForm, ArtistSnsLink } from "../_types";
 import { PROFILE_EDIT_TABS } from "./profileEditTabs";
-import { type BasicInfoName, ProfileBasicInfoSection } from "./sections/ProfileBasicInfoSection";
+import { isProfileFormValid, isSnsRowEmpty, normalizeUrl } from "./profileValidation";
+import { ProfileBasicInfoSection } from "./sections/ProfileBasicInfoSection";
 import { ProfilePurchaseLinkSection } from "./sections/ProfilePurchaseLinkSection";
 import { ProfileSnsInfoSection } from "./sections/ProfileSnsInfoSection";
 
+const MY_PAGE_PATH = "/artist-admin";
+
 export interface ProfileEditFormProps {
-	// 저장 후 두록 작가 상세로 이동할 때 사용 — 작가 정보가 없는 계정은 null
-	artistId: string | null;
+	// SNS 추가에 사용
+	profileId: string;
 	initialValue: ArtistProfileForm;
 	// 없으면 이전 화면으로
 	onBack?: () => void;
 }
 
-export const ProfileEditForm = ({ artistId, initialValue, onBack }: ProfileEditFormProps) => {
+export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEditFormProps) => {
 	const router = useRouter();
-	const [basicMissingCount, setBasicMissingCount] = useState(0);
 
-	const handleBasicMissingCountChange = useCallback((count: number) => {
-		setBasicMissingCount(count);
+	// 현재 입력값과 마지막으로 저장된 값 — 비교해서 변경 여부를 판단한다
+	const [form, setForm] = useState(initialValue);
+	const [savedForm, setSavedForm] = useState(initialValue);
+	const handleChange = useCallback((patch: Partial<ArtistProfileForm>) => {
+		setForm((prev) => ({ ...prev, ...patch }));
 	}, []);
 
-	// 현재 입력 중인 이름과 마지막으로 저장된 이름 — 비교해서 변경 여부를 판단한다
-	const initialName: BasicInfoName = {
-		nameKo: initialValue.nameKo,
-		nameEn: initialValue.nameEn,
-		isValid: true,
-	};
-	const [name, setName] = useState(initialName);
-	const [savedName, setSavedName] = useState(initialName);
-	const handleNameChange = useCallback((next: BasicInfoName) => setName(next), []);
-
-	// 네비게이션 : 변경 내용이 있을 때만 활성, 필수값(국문 성명)이 비면 라벨이 "임시 저장"
-	// TODO: 지금은 이름만 저장할 수 있어 이름 변경만 변경 내용으로 본다 (소개·사진 등은 저장 대상 BE 확인 중)
-	const isDirty = name.nameKo !== savedName.nameKo || name.nameEn !== savedName.nameEn;
-	const isRequiredFilled = Boolean(name.nameKo.trim());
+	// 네비게이션 : 변경 내용이 있을 때만 활성
+	// 버튼 문구는 Figma 대로 데스크탑 "임시 저장"(마지막 저장 시각과 함께), 모바일 "저장"
+	const isDirty = toComparable(form) !== toComparable(savedForm);
+	// 형식 오류는 저장을 시도한 뒤부터 보여준다 (입력 도중에는 형식이 맞지 않으므로)
+	const [showErrors, setShowErrors] = useState(false);
 
 	const [lastSavedAt, setLastSavedAt] = useState("");
 	const [isSaving, setIsSaving] = useState(false);
 	const [isSaveFailed, setIsSaveFailed] = useState(false);
-	// MODAL 24 임시저장 안내 / MODAL 25 변경 내용 확인
-	const [isTempSavedModalOpen, setIsTempSavedModalOpen] = useState(false);
+	// MODAL 25 변경 내용 확인
 	const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
 
 	const goBack = onBack ?? (() => router.back());
-	// 저장 후 연결된 상세 페이지(두록 작가 상세)로 이동 (Figma NAV-07)
-	const goToArtistDetail = () => {
-		if (artistId) router.push(`/artists/${artistId}`);
-	};
 
 	// 저장에 성공하면 true — 변경 내용 확인 모달의 "저장하기"가 저장 후 이동할 때 쓴다
 	const save = async () => {
 		if (isSaving || !isDirty) return false;
-		const { nameKo, nameEn, isValid } = name;
-		// 형식 오류는 입력칸의 오류 표시로 이미 안내된다
-		if (!isValid) return false;
+		if (!isProfileFormValid(form)) {
+			setShowErrors(true);
+			return false;
+		}
 
 		setIsSaving(true);
 		try {
-			// 필수값(국문 성명)이 비면 임시 저장 — 국문 성명은 빼고 나머지만 저장한다 (서버는 기존 값 유지)
-			// 영문 성명도 비우면 null 과 같아 기존 값이 유지되므로 값이 있을 때만 보낸다
-			// TODO: 임시 저장 시 비공개 전환은 BE 에 작가 공개 여부가 없어 아직 불가
-			await updateMyArtistName({
-				nameKo: nameKo.trim() || undefined,
-				nameEn: nameEn.trim() || undefined,
-			});
-			setSavedName(name);
+			const request = toProfileRequest(form);
+			await updateMyArtistProfile(request, form.profileImageFile);
+			if (form.nameKo !== savedForm.nameKo || form.nameEn !== savedForm.nameEn) {
+				await updateMyArtistName({ nameKo: request.nameKo, nameEn: request.nameEn });
+			}
+			const sns = await saveSnsChanges(profileId, savedForm.sns, form.sns);
+
+			const nextForm = { ...form, profileImageFile: null, sns };
+			setForm(nextForm);
+			setSavedForm(nextForm);
+			setShowErrors(false);
 			setLastSavedAt(formatSavedAt(new Date()));
-			// 마이페이지 프로필 카드에 새 이름이 보이도록 서버 데이터를 다시 불러온다
+			// 마이페이지 프로필 카드에 새 정보가 보이도록 서버 데이터를 다시 불러온다
 			router.refresh();
 			return true;
 		} catch {
@@ -88,13 +90,10 @@ export const ProfileEditForm = ({ artistId, initialValue, onBack }: ProfileEditF
 		}
 	};
 
+	// 저장 후 마이페이지(프로필)로 돌아간다 — 뒤로가기로 수정 화면에 다시 오지 않도록 replace
 	const handleSave = async () => {
-		const isTempSave = !isRequiredFilled;
 		const saved = await save();
-		if (!saved) return;
-		// 임시 저장은 안내 모달(MODAL 24)의 [확인] 뒤에 이동한다
-		if (isTempSave) setIsTempSavedModalOpen(true);
-		else goToArtistDetail();
+		if (saved) router.replace(MY_PAGE_PATH);
 	};
 
 	// 변경 내용이 있으면 바로 나가지 않고 확인 모달을 띄운다 (Figma NAV-07 · MODAL 25)
@@ -108,9 +107,9 @@ export const ProfileEditForm = ({ artistId, initialValue, onBack }: ProfileEditF
 
 	const handleSaveAndLeave = async () => {
 		const saved = await save();
-		if (!saved) return;
+		// 형식 오류로 저장하지 못했으면 모달을 닫아 오류 표시를 보여준다
 		setIsLeaveModalOpen(false);
-		goBack();
+		if (saved) goBack();
 	};
 
 	const formSections = [
@@ -118,35 +117,27 @@ export const ProfileEditForm = ({ artistId, initialValue, onBack }: ProfileEditF
 			id: "basic",
 			className: "pb-7",
 			render: () => (
-				<ProfileBasicInfoSection
-					initialValue={initialValue}
-					onMissingCountChange={handleBasicMissingCountChange}
-					onNameChange={handleNameChange}
-				/>
+				<ProfileBasicInfoSection value={form} onChange={handleChange} showErrors={showErrors} />
 			),
 		},
 		{
 			id: "sns",
 			className: "pb-7 pt-7",
-			render: () => <ProfileSnsInfoSection initialValue={initialValue} />,
+			render: () => (
+				<ProfileSnsInfoSection value={form} onChange={handleChange} showErrors={showErrors} />
+			),
 		},
 		{
 			id: "purchase",
 			className: "pb-7 pt-7",
-			render: () => <ProfilePurchaseLinkSection initialValue={initialValue} />,
+			render: () => (
+				<ProfilePurchaseLinkSection value={form} onChange={handleChange} showErrors={showErrors} />
+			),
 		},
 	];
 
 	const tabIds = useMemo(() => PROFILE_EDIT_TABS.map((tab) => tab.id), []);
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(tabIds, 120);
-
-	const tabs = useMemo(
-		() =>
-			PROFILE_EDIT_TABS.map((tab) =>
-				tab.id === "basic" ? { ...tab, badge: basicMissingCount } : tab,
-			),
-		[basicMissingCount],
-	);
 
 	return (
 		<DesktopContainer>
@@ -154,13 +145,18 @@ export const ProfileEditForm = ({ artistId, initialValue, onBack }: ProfileEditF
 				<FormHeader
 					title="프로필 정보 수정"
 					lastSavedAt={lastSavedAt}
-					saveLabel={isRequiredFilled ? "저장" : "임시 저장"}
+					saveLabel={
+						<>
+							<span className="min-[721px]:hidden">저장</span>
+							<span className="hidden min-[721px]:inline">임시 저장</span>
+						</>
+					}
 					saveDisabled={!isDirty || isSaving}
 					tempSaveDisabled={isSaving}
 					onTempSave={handleSave}
 					onBack={handleBack}
 				/>
-				<TabBar tabs={tabs} activeTab={activeTab} onTabClick={handleTabClick} />
+				<TabBar tabs={PROFILE_EDIT_TABS} activeTab={activeTab} onTabClick={handleTabClick} />
 			</div>
 
 			<div className="py-7">
@@ -189,31 +185,6 @@ export const ProfileEditForm = ({ artistId, initialValue, onBack }: ProfileEditF
 				showCloseButton
 				actions={[{ text: "확인", variant: "assistive", onClick: () => setIsSaveFailed(false) }]}
 			/>
-			{/* 임시저장 안내 모달 — [확인] 시 연결된 상세 페이지(두록 작가 상세)로 이동 */}
-			<Modal
-				open={isTempSavedModalOpen}
-				onOpenChange={setIsTempSavedModalOpen}
-				title="임시로 저장되었어요"
-				description={
-					<>
-						아직 작성되지 않은 필수값이 있어요.
-						<br />
-						필수값을 모두 작성해야 플랫폼에 노출돼요.
-					</>
-				}
-				showCloseButton
-				actions={[
-					{
-						text: "확인",
-						variant: "assistive",
-						onClick: () => {
-							setIsTempSavedModalOpen(false);
-							goToArtistDetail();
-						},
-					},
-				]}
-			/>
-
 			{/* 변경내용 안내 모달 */}
 			<Modal
 				open={isLeaveModalOpen}
@@ -240,4 +211,51 @@ export const ProfileEditForm = ({ artistId, initialValue, onBack }: ProfileEditF
 const formatSavedAt = (date: Date) => {
 	const pad = (value: number) => String(value).padStart(2, "0");
 	return `${date.getFullYear()}.${pad(date.getMonth() + 1)}.${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
+// 변경 여부 비교용 — 화면용 행 key 와 파일 객체는 빼고 비교한다 (새 파일은 미리보기 주소가 바뀌어 잡힌다)
+const toComparable = ({ profileImageFile: _file, sns, ...rest }: ArtistProfileForm) =>
+	JSON.stringify({ ...rest, sns: sns.map(({ snsId, label, url }) => ({ snsId, label, url })) });
+
+// 보내지 않은 필드는 서버가 기존 값을 유지한다
+// TODO: 국문 성명·이메일·프로필 이미지는 비워서 저장할 수 없음 (빈 값을 받지 않고 삭제 API 도 없음) — BE 문의 필요
+const toProfileRequest = (form: ArtistProfileForm): MyArtistProfileRequest => {
+	const nameKo = form.nameKo.trim();
+	const email = form.emailLocal && form.emailDomain ? `${form.emailLocal}@${form.emailDomain}` : "";
+	return {
+		nameKo: nameKo || undefined,
+		nameEn: form.nameEn.trim(),
+		bio: form.bio,
+		email: email || undefined,
+		purchaseContactUrl: normalizeUrl(form.purchaseUrl),
+	};
+};
+
+// SNS 는 행 단위 API 라 저장된 목록과 비교해 삭제·수정·추가를 보낸다 — 빈 행은 버리고, 새 행에는 받은 snsId 를 붙여 돌려준다
+const saveSnsChanges = async (
+	profileId: string,
+	savedRows: ArtistSnsLink[],
+	rows: ArtistSnsLink[],
+): Promise<ArtistSnsLink[]> => {
+	const nextRows = rows
+		.filter((row) => !isSnsRowEmpty(row))
+		.map((row) => ({ ...row, label: row.label.trim(), url: normalizeUrl(row.url) }));
+	const keptSnsIds = new Set(nextRows.map((row) => row.snsId));
+
+	const deletions = savedRows
+		.filter((row) => row.snsId && !keptSnsIds.has(row.snsId))
+		.map((row) => deleteArtistSns(row.snsId as string));
+
+	const upserts = nextRows.map(async (row) => {
+		const body = { platformName: row.label, url: row.url };
+		if (!row.snsId) return { ...row, snsId: await createArtistSns(profileId, body) };
+
+		const saved = savedRows.find((savedRow) => savedRow.snsId === row.snsId);
+		if (saved?.label !== row.label || saved?.url !== row.url)
+			await updateArtistSns(row.snsId, body);
+		return row;
+	});
+
+	const [, savedNextRows] = await Promise.all([Promise.all(deletions), Promise.all(upserts)]);
+	return savedNextRows;
 };

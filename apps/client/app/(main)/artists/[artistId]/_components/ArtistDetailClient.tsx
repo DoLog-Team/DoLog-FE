@@ -13,6 +13,7 @@ import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { Title } from "@/components/common/Title/Title";
 import { setArtistProfileLike } from "@/lib/api/artists/artist-detail";
+import { hasArtistProfileInfo } from "@/lib/utils/artistProfile";
 import ExhibitionCard from "../../../_components/ExhibitionCard";
 import type { DologArtist } from "../_api/getArtist";
 
@@ -21,17 +22,26 @@ interface ArtistDetailClientProps {
 }
 
 export function ArtistDetailClient({ artist }: ArtistDetailClientProps) {
-	// TODO: 이름 미등록 작가(소셜 가입 직후) 표시 — BE 에 이름 필수 문의 중
+	// 국문 성명이 없으면 영문 성명만, 둘 다 없으면 이름 자리를 비운다
 	const name = artist.nameKo ?? "";
 	const { profileId } = artist;
+	// 프로필에 등록된 정보가 하나도 없으면 작가 소개(프로필)를 숨긴다 (Figma 10.20 추가 사항)
+	const hasProfile = hasArtistProfileInfo({
+		nameKo: artist.nameKo,
+		nameEn: artist.nameEn,
+		bio: artist.bio,
+		profileImage: artist.profileImg,
+		email: artist.email,
+		snsCount: artist.snsList?.length,
+	});
 
 	// 탭 순서는 화면 섹션 순서와 같게 (작가 소개 · 작품 · 전시), 내용이 없는 섹션은 탭도 뺀다
 	const tabs = useMemo(() => {
-		const base = [{ id: "intro", label: "작가 소개" }];
+		const base = hasProfile ? [{ id: "intro", label: "작가 소개" }] : [];
 		if (artist.artworks.length) base.push({ id: "artworks", label: "작품" });
 		if (artist.exhibitions.length) base.push({ id: "exhibitions", label: "전시" });
 		return base;
-	}, [artist.exhibitions.length, artist.artworks.length]);
+	}, [hasProfile, artist.exhibitions.length, artist.artworks.length]);
 
 	// 헤더 높이 모바일 44px, 데스크탑 68px
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(
@@ -58,26 +68,28 @@ export function ArtistDetailClient({ artist }: ArtistDetailClientProps) {
 
 	return (
 		<div className="flex flex-col">
-			<DesktopContainer>
-				<section
-					ref={(el) => {
-						sectionRefs.intro.current = el;
-					}}
-				>
-					<ProfileCard
-						// 빈 값이면 기본 작가 아이콘
-						imageUrl={artist.profileImg ?? ""}
-						name={name}
-						engName={artist.nameEn ?? undefined}
-						bio={artist.bio ?? undefined}
-						bottomSlot={contactItems.length > 0 ? <LinkCard items={contactItems} /> : undefined}
-					/>
-				</section>
-			</DesktopContainer>
+			{hasProfile && (
+				<DesktopContainer>
+					<section
+						ref={(el) => {
+							if (sectionRefs.intro) sectionRefs.intro.current = el;
+						}}
+					>
+						<ProfileCard
+							// 빈 값이면 기본 작가 아이콘
+							imageUrl={artist.profileImg ?? ""}
+							name={name}
+							engName={artist.nameEn ?? undefined}
+							bio={artist.bio ?? undefined}
+							bottomSlot={contactItems.length > 0 ? <LinkCard items={contactItems} /> : undefined}
+						/>
+					</section>
+				</DesktopContainer>
+			)}
 
 			{artist.artworks.length > 0 && (
 				<>
-					<Divider />
+					{hasProfile && <Divider />}
 					<DesktopContainer>
 						<section
 							className="mb-6"
@@ -98,7 +110,7 @@ export function ArtistDetailClient({ artist }: ArtistDetailClientProps) {
 
 			{artist.exhibitions.length > 0 && (
 				<>
-					<Divider />
+					{(hasProfile || artist.artworks.length > 0) && <Divider />}
 					<DesktopContainer>
 						<section
 							className="mb-6"

@@ -2,7 +2,10 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { ArtistSection } from "@/app/[exhibitionId]/artwork/[artworkId]/_components/ArtistSection";
+import {
+	ArtistSection,
+	getVisibleAuthors,
+} from "@/app/[exhibitionId]/artwork/[artworkId]/_components/ArtistSection";
 import { DescriptionSection } from "@/app/[exhibitionId]/artwork/[artworkId]/_components/DescriptionSection";
 import { InfoSection } from "@/app/[exhibitionId]/artwork/[artworkId]/_components/InfoSection";
 import { PhotoSection } from "@/app/[exhibitionId]/artwork/[artworkId]/_components/PhotoSection";
@@ -52,7 +55,8 @@ export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProp
 	const isMine = useIsOwnArtist(data.participants.map((participant) => participant.artistId));
 	const [myArtwork] = useMyArtwork(artworkId, isMine);
 
-	const hasArtist = data.participants.length > 0;
+	const authors = getVisibleAuthors(data.participants);
+	const hasArtist = authors.length > 0;
 
 	const tabs = useMemo(() => {
 		const base = [{ id: "detail", label: "작품 소개" }];
@@ -134,7 +138,7 @@ export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProp
 					}}
 				>
 					<ArtistSection
-						authors={data.participants}
+						authors={authors}
 						getProfileHref={(author) => `/artists/${author.artistId}`}
 						title="작가"
 					/>

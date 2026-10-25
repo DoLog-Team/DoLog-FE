@@ -69,8 +69,9 @@ export interface ArtistSns {
 export interface ArtworkParticipant {
 	artistId: string;
 	profileId: string;
-	nameKo: string;
-	nameEn: string;
+	// 국문 성명은 필수값이 아니라 없을 수 있음 (Figma 10.20 추가 사항)
+	nameKo: string | null;
+	nameEn: string | null;
 	profileImg: string | null;
 	role?: string;
 	bio?: string;

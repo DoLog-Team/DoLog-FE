@@ -17,8 +17,9 @@ export interface ArtistCardProps {
 export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 	const nameSection = (
 		<>
-			<span className="text-head3 text-strong">{author.nameKo}</span>
-			<span className="text-body2 text-light pt-1">{author.nameEn}</span>
+			{/* 국문 성명이 없으면 영문 성명만, 둘 다 없으면 이름 자리를 비운다 */}
+			{author.nameKo && <span className="text-head3 text-strong">{author.nameKo}</span>}
+			{author.nameEn && <span className="text-body2 text-light pt-1">{author.nameEn}</span>}
 			{author.role && <span className="text-body2 text-lighter pt-2">{author.role}</span>}
 		</>
 	);
@@ -63,7 +64,12 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 			<div className="flex gap-4 shrink-0 min-[721px]:block">
 				<div className="relative shrink-0 w-32 aspect-[1/1.414] min-[721px]:w-[180px]">
 					{author.profileImg ? (
-						<Image src={author.profileImg} alt={author.nameKo} fill className="object-cover" />
+						<Image
+							src={author.profileImg}
+							alt={author.nameKo || author.nameEn || ""}
+							fill
+							className="object-cover"
+						/>
 					) : (
 						<div
 							className="w-full h-full flex items-center justify-center"

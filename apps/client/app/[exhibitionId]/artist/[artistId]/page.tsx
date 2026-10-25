@@ -5,6 +5,7 @@ import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopCo
 import { Divider } from "@/components/common/Divider/Divider";
 import { SectionTimeTracker } from "@/components/common/SectionTimeTracker";
 import { resolveExhibitionSlug } from "@/lib/api/exhibition";
+import { hasArtistProfileInfo } from "@/lib/utils/artistProfile";
 import { VISITOR_COOKIE } from "@/lib/visitor";
 import { getArtistDetail } from "../../../../lib/api/artists/artist-detail";
 import { getExhibitionMeta } from "../../_api/getExhibitionMeta";
@@ -80,25 +81,39 @@ export default async function ArtistDetailPage({ params }: Props) {
 		(artwork) => !exhibitionArtworkIds.has(artwork.artworkId),
 	);
 
+	// 프로필에 등록된 정보가 하나도 없으면 작가 소개(프로필)를 숨긴다 (Figma 10.20 추가 사항)
+	const hasProfile = hasArtistProfileInfo({
+		nameKo: artist.nameKo,
+		nameEn: artist.nameEn,
+		bio: artist.bio,
+		profileImage: artist.profileImage,
+		email: artist.contact.email,
+		snsCount: artist.contact.snsList?.length,
+	});
+
 	return (
 		<>
 			<SectionTimeTracker pageName="artist_detail" sections={["profile", "contact", "artworks"]} />
 			<Header variant="sub" title="작가 상세" />
 
-			<DesktopContainer className="flex flex-col">
-				<div data-section="profile">
-					<ProfileSection
-						artist={artist}
-						bottomSlot={
-							!!artist.contact.email || (artist.contact.snsList?.length ?? 0) > 0 ? (
-								<ContactSection contact={artist.contact} />
-							) : undefined
-						}
-					/>
-				</div>
-			</DesktopContainer>
+			{hasProfile && (
+				<>
+					<DesktopContainer className="flex flex-col">
+						<div data-section="profile">
+							<ProfileSection
+								artist={artist}
+								bottomSlot={
+									!!artist.contact.email || (artist.contact.snsList?.length ?? 0) > 0 ? (
+										<ContactSection contact={artist.contact} />
+									) : undefined
+								}
+							/>
+						</div>
+					</DesktopContainer>
 
-			<Divider />
+					<Divider />
+				</>
+			)}
 
 			<DesktopContainer className="flex flex-col">
 				<BTSSection exhibitionId={exhibitionId} artist={artist} />
@@ -118,6 +133,7 @@ export default async function ArtistDetailPage({ params }: Props) {
 			<ArtistTabBar
 				profileId={artist.profileId}
 				initialLiked={artist.liked}
+				hasProfile={hasProfile}
 				hasArtworks={artist.artworks.length > 0}
 			/>
 		</>

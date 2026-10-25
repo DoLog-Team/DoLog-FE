@@ -29,6 +29,7 @@ export interface ArtistNavItem {
 export interface ArtistDetail {
 	profileId: string;
 	artistId: string;
+	// 이름·소개가 없으면 빈 문자열 (응답의 null 을 변환)
 	nameKo: string;
 	nameEn: string;
 	profileImage: string;

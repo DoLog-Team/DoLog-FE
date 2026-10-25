@@ -27,8 +27,7 @@ export interface DologArtist {
 	artistId: string;
 	// 작가 공통 프로필 — 좋아요(artist-profiles/{profileId}/likes)에 사용 (백에 문의하여 profileId가 필수로 생성되어 오도록 확인함. null인 경우는 없음)
 	profileId: string | null;
-	// 소셜 가입 직후 이름을 아직 입력하지 않은 작가는 null
-	// TODO : 현재 백+기획 논의중. 추후 확정되는 방향으로 수정 필요함!!
+	// 국문 성명은 필수값이 아니라 없을 수 있음
 	nameKo: string | null;
 	nameEn: string | null;
 	bio: string | null;

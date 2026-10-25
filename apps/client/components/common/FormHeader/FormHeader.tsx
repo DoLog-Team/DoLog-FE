@@ -10,7 +10,8 @@ export interface FormHeaderProps {
 	lastSavedAt?: string;
 	onTempSave?: () => void;
 	tempSaveDisabled?: boolean;
-	saveLabel?: string;
+	// 화면 크기별로 문구를 바꿀 때는 노드로 넘긴다
+	saveLabel?: React.ReactNode;
 	// 변경 내용이 없을 때 저장 버튼 비활성
 	saveDisabled?: boolean;
 	onBack: () => void;

@@ -13,15 +13,21 @@ import { setArtistProfileLike } from "@/lib/api/artists/artist-detail";
 interface ArtistTabBarProps {
 	profileId: string;
 	initialLiked: boolean;
+	hasProfile: boolean;
 	hasArtworks: boolean;
 }
 
-export function ArtistTabBar({ profileId, initialLiked, hasArtworks }: ArtistTabBarProps) {
+export function ArtistTabBar({
+	profileId,
+	initialLiked,
+	hasProfile,
+	hasArtworks,
+}: ArtistTabBarProps) {
 	const tabs = useMemo(() => {
-		const base = [{ id: "profile", label: "작가 소개" }];
+		const base = hasProfile ? [{ id: "profile", label: "작가 소개" }] : [];
 		if (hasArtworks) base.push({ id: "artworks", label: "작품" });
 		return base;
-	}, [hasArtworks]);
+	}, [hasProfile, hasArtworks]);
 
 	// 헤더 높이 모바일 44px, 데스크탑 68px
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(
