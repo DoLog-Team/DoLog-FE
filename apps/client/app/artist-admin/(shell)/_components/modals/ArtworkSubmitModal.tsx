@@ -44,9 +44,10 @@ export function ArtworkSubmitModal({
 	};
 
 	const openJoinModal = () => {
-		handleOpenChange(false);
 		setIsJoinModalOpen(true);
 	};
+
+	const isSelectModalOpen = open && !isJoinModalOpen && !joiningExhibition;
 
 	const handleSubmit = () => {
 		if (!selectedExhibitionId) return;
@@ -60,7 +61,7 @@ export function ArtworkSubmitModal({
 		<>
 			{acceptedExhibitions.length > 0 ? (
 				<Modal
-					open={open}
+					open={isSelectModalOpen}
 					onOpenChange={handleOpenChange}
 					title="전시 선택"
 					description={`${josa(artworkTitle, "을/를")} 출품할 전시를 선택해주세요.`}
@@ -94,7 +95,7 @@ export function ArtworkSubmitModal({
 				</Modal>
 			) : (
 				<Modal
-					open={open}
+					open={isSelectModalOpen}
 					onOpenChange={handleOpenChange}
 					title="참여중인 전시가 없어요."
 					description="작품을 출품하려면 먼저 전시에 참여해주세요."
