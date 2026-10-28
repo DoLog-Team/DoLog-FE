@@ -22,6 +22,7 @@ import {
 import {
 	ArtworkBasicInfoSection,
 	type ArtworkBasicInfoValue,
+	hasStartAfterEndError,
 	hasStartDatePartialError,
 } from "./sections/ArtworkBasicInfoSection";
 import { ArtworkImageSection, type ArtworkImageValue } from "./sections/ArtworkImageSection";
@@ -97,7 +98,10 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 		setBasicMissingCount(count);
 	}, []);
 
-	const hasValidationError = hasAdditionalInfoError(additional) || hasStartDatePartialError(basic);
+	const hasValidationError =
+		hasAdditionalInfoError(additional) ||
+		hasStartDatePartialError(basic) ||
+		hasStartAfterEndError(basic);
 
 	// 성공하면 true — "다음으로" 이동 전에 저장부터 시키는 데도 재사용
 	const handleTempSave = () => {

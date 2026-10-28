@@ -51,6 +51,16 @@ export const hasStartDatePartialError = (value: ArtworkBasicInfoValue) => {
 	return filledCount > 0 && filledCount < 3;
 };
 
+// 시작/종료 날짜가 둘 다 완성됐을 때만 비교 — 시작이 종료보다 늦으면 에러
+export const hasStartAfterEndError = (value: ArtworkBasicInfoValue) => {
+	if (!value.hasStartDate) return false;
+	const { startYear, startMonth, startDay, endYear, endMonth, endDay } = value;
+	if (!startYear || !startMonth || !startDay || !endYear || !endMonth || !endDay) return false;
+	const start = `${startYear.padStart(4, "0")}${startMonth.padStart(2, "0")}${startDay.padStart(2, "0")}`;
+	const end = `${endYear.padStart(4, "0")}${endMonth.padStart(2, "0")}${endDay.padStart(2, "0")}`;
+	return start > end;
+};
+
 export interface ArtworkBasicInfoSectionProps {
 	value: ArtworkBasicInfoValue;
 	onChange: (patch: Partial<ArtworkBasicInfoValue>) => void;
@@ -67,6 +77,7 @@ export const ArtworkBasicInfoSection = ({
 	const isEndDateComplete = Boolean(value.endYear && value.endMonth && value.endDay);
 	const isPeriodComplete = isStartDateComplete && isEndDateComplete;
 	const isStartDatePartial = hasStartDatePartialError(value);
+	const isStartAfterEnd = hasStartAfterEndError(value);
 
 	useEffect(() => {
 		const missing = (value.category ? 0 : 1) + (isPeriodComplete ? 0 : 1);
@@ -142,28 +153,38 @@ export const ArtworkBasicInfoSection = ({
 							)}
 						</div>
 
-						<div className="flex gap-2">
-							<DateSelectField
-								label="종료 년도"
-								placeholder="2000"
-								options={YEAR_OPTIONS}
-								value={value.endYear}
-								onChange={(endYear) => onChange({ endYear })}
-							/>
-							<DateSelectField
-								label="월"
-								placeholder="-"
-								options={MONTH_OPTIONS}
-								value={value.endMonth}
-								onChange={(endMonth) => onChange({ endMonth })}
-							/>
-							<DateSelectField
-								label="일"
-								placeholder="-"
-								options={DAY_OPTIONS}
-								value={value.endDay}
-								onChange={(endDay) => onChange({ endDay })}
-							/>
+						<div className="flex flex-col gap-1">
+							<div className="flex gap-2">
+								<DateSelectField
+									label="종료 년도"
+									placeholder="2000"
+									options={YEAR_OPTIONS}
+									value={value.endYear}
+									onChange={(endYear) => onChange({ endYear })}
+									error={isStartAfterEnd}
+								/>
+								<DateSelectField
+									label="월"
+									placeholder="-"
+									options={MONTH_OPTIONS}
+									value={value.endMonth}
+									onChange={(endMonth) => onChange({ endMonth })}
+									error={isStartAfterEnd}
+								/>
+								<DateSelectField
+									label="일"
+									placeholder="-"
+									options={DAY_OPTIONS}
+									value={value.endDay}
+									onChange={(endDay) => onChange({ endDay })}
+									error={isStartAfterEnd}
+								/>
+							</div>
+							{isStartAfterEnd && (
+								<span className="pl-0.5 text-body3 text-error">
+									시작 날짜는 종료 날짜보다 늦을 수 없어요.
+								</span>
+							)}
 						</div>
 					</div>
 				</FormField>
