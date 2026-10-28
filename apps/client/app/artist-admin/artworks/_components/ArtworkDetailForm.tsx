@@ -35,6 +35,11 @@ const extractImageUrls = (markdown: string) =>
 const PREVIEW_MAX_DIMENSION = 480;
 const PREVIEW_QUALITY = 0.5;
 
+// Netlify Functions(BFF 프록시)가 동기 요청 바디를 6MB로 제한해서, 기본 압축값(1600px/0.9)보다
+// 더 세게 줄여야 복잡한 사진도 여유 있게 걸린다
+const CONTENT_IMAGE_MAX_DIMENSION = 1280;
+const CONTENT_IMAGE_QUALITY = 0.8;
+
 const fileToDataUrl = (file: File): Promise<string> =>
 	new Promise((resolve, reject) => {
 		const reader = new FileReader();
@@ -142,7 +147,10 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 							const file =
 								blob instanceof File ? blob : new File([blob], "image", { type: blob.type });
 
-							compressImageFile(file)
+							compressImageFile(file, {
+								maxDimension: CONTENT_IMAGE_MAX_DIMENSION,
+								quality: CONTENT_IMAGE_QUALITY,
+							})
 								.then(async (uploadFile) => {
 									// 실제 업로드본과 별개로, 본문에 박히는 미리보기는 작게 압축해 길이를 줄인다
 									const previewFile = await compressImageFile(file, {
