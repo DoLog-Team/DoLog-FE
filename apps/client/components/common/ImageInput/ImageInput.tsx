@@ -42,7 +42,7 @@ export const ImageInput = ({
 
 	const handleFiles = (fileList: FileList | null) => {
 		if (!fileList || fileList.length === 0) return;
-		onAdd(Array.from(fileList).slice(0, remaining));
+		onAdd(Array.from(fileList).slice(0, isSingle ? 1 : remaining));
 		if (inputRef.current) inputRef.current.value = "";
 	};
 
