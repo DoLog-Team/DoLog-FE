@@ -68,6 +68,8 @@ interface MyArtworkResponse {
 	mainImg: string | null;
 	status: "DRAFT" | "PUBLISHED";
 	hidden: boolean;
+	// 플랜 한도 초과로 전시에 노출되지 않으면 true
+	planLimitExceeded?: boolean;
 	exhibitionId: string | null;
 	exhibitionName: string | null;
 	viewCount: number;
@@ -103,6 +105,7 @@ export async function getMyArtworks(): Promise<MyArtwork[]> {
 						exhibitionId: artwork.exhibitionId,
 						name: artwork.exhibitionName,
 						hidden: artwork.hidden,
+						planLimitExceeded: artwork.planLimitExceeded ?? false,
 					}
 				: null,
 		viewCount: artwork.viewCount,
