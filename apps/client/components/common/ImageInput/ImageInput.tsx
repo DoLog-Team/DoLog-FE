@@ -88,9 +88,9 @@ export const ImageInput = ({
 			{isSingle ? (
 				images[0] ? (
 					<div className="flex w-full items-center gap-2.5">
-						<div className="relative aspect-[360/509] w-40 shrink-0 overflow-hidden bg-fg-light">
+						<div className="w-40 shrink-0 overflow-hidden bg-fg-light">
 							{/* biome-ignore lint/performance/noImgElement: 사용자가 업로드한 로컬/원격 미리보기 URL이라 next/image 최적화 대상이 아님 */}
-							<img src={images[0]} alt="업로드한 이미지" className="size-full object-cover" />
+							<img src={images[0]} alt="업로드한 이미지" className="block w-full" />
 						</div>
 						<div className="flex flex-1 items-end gap-1.5 self-stretch">
 							<Button
