@@ -63,6 +63,8 @@ const websiteJsonLd = {
 	description: "대학 전시를 위한 전시 웹사이트 제작 및 작품 아카이빙 플랫폼",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function MainPage() {
 	const [banners, mainExhibitions, allExhibitions, mainArtworks] = await Promise.all([
 		getBanners(),
