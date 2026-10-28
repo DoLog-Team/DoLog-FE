@@ -113,6 +113,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				productionStartYear: basic.hasStartDate ? basic.startYear : undefined,
 				productionStartMonth: basic.hasStartDate ? basic.startMonth : undefined,
 				productionStartDay: basic.hasStartDate ? basic.startDay : undefined,
+				clearProductionStartDate: !basic.hasStartDate,
 				productionEndYear: basic.endYear,
 				productionEndMonth: basic.endMonth,
 				productionEndDay: basic.endDay,
