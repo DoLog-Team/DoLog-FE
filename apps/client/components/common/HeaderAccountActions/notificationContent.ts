@@ -65,7 +65,7 @@ const TEMPLATES: Partial<
 	}),
 	ARTIST_WITHDRAWN: (p) => ({
 		title: "소속 작가 전시 참여 종료",
-		description: `${p.artistName} 작가가 전시에서 나갔어요. 더 이상 해당 작가의 프로필, 작품, 비하인드가 전시에서 보이지 않아요.`,
+		description: `${p.artistName} 작가가 전시에서 나갔어요. 더 이상 해당 작가의 프로필, 작품이 전시에서 보이지 않아요.`,
 	}),
 	ARTWORK_CANCELLED: (p) => ({
 		title: "소속 작가 작품 출품 취소",
@@ -73,7 +73,7 @@ const TEMPLATES: Partial<
 	}),
 	ARTIST_ACCOUNT_DELETED: (p) => ({
 		title: "소속 작가 계정 탈퇴",
-		description: `${p.artistName} 작가가 계정을 탈퇴했어요. 더 이상 해당 작가의 프로필, 작품, 비하인드가 전시에서 보이지 않아요.`,
+		description: `${p.artistName} 작가가 계정을 탈퇴했어요. 더 이상 해당 작가의 프로필, 작품이 전시에서 보이지 않아요.`,
 	}),
 	PLAN_EXPIRING_SOON: (p) => ({
 		title: "플랜 만료 임박 안내",
