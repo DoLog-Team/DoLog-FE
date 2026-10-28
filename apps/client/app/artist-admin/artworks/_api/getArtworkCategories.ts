@@ -5,7 +5,13 @@ export interface ArtworkCategoryOption {
 	label: string;
 }
 
-// 두록 어드민이 관리하는 작품 카테고리 목록
+interface ArtworkCategoryResponse {
+	id: string;
+	name: string;
+	orderIndex: number;
+}
+
 export async function getArtworkCategories(): Promise<ArtworkCategoryOption[]> {
-	return authApiClient<ArtworkCategoryOption[]>("/artworks/categories");
+	const categories = await authApiClient<ArtworkCategoryResponse[]>("/artworks/categories");
+	return categories.map(({ name }) => ({ value: name, label: name }));
 }
