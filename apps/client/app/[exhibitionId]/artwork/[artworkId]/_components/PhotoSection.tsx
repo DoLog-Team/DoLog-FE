@@ -6,6 +6,7 @@ import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopCo
 import { ImageViewerModal } from "@/components/common/ImageViewerModal/ImageViewerModal";
 import { Modal } from "@/components/common/Modal/Modal";
 import type { ArtworkDetail } from "@/lib/api/artwork";
+import { resolveContactHref } from "@/lib/utils/sns";
 
 /**
  * 작품소개 상세사진(images) : 선택값
@@ -23,7 +24,7 @@ export const PhotoSection = ({ data }: PhotoSectionProps) => {
 	const handleImageClick = (src: string, alt: string) => {
 		setViewerImage({ src, alt });
 	};
-	const { purchaseUrl } = data;
+	const purchaseUrl = data.purchaseUrl ? resolveContactHref(data.purchaseUrl) : null;
 
 	if (!data.detailImages || data.detailImages.length === 0) return null;
 
