@@ -9,10 +9,15 @@ import { cn } from "@/lib/utils/cn";
 const MAX_MATERIAL_COUNT = 20;
 const MAX_MATERIAL_LENGTH = 20;
 const MAX_SIZE_VALUE = 99999;
-const isSizeOverMax = (value: string) => {
+export const isSizeOverMax = (value: string) => {
 	const parsed = Number(value);
 	return value.trim() !== "" && !Number.isNaN(parsed) && parsed > MAX_SIZE_VALUE;
 };
+
+export const hasAdditionalInfoError = (value: ArtworkAdditionalInfoValue) =>
+	isSizeOverMax(value.width) ||
+	isSizeOverMax(value.height) ||
+	(value.hasVolume && isSizeOverMax(value.depth));
 
 const sanitizeSizeInput = (raw: string) => {
 	const digitsAndDot = raw.replace(/[^0-9.]/g, "");

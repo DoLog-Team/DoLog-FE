@@ -17,10 +17,12 @@ import { getBasicMissingCount } from "./getBasicMissingCount";
 import {
 	ArtworkAdditionalInfoSection,
 	type ArtworkAdditionalInfoValue,
+	hasAdditionalInfoError,
 } from "./sections/ArtworkAdditionalInfoSection";
 import {
 	ArtworkBasicInfoSection,
 	type ArtworkBasicInfoValue,
+	hasStartDatePartialError,
 } from "./sections/ArtworkBasicInfoSection";
 import { ArtworkImageSection, type ArtworkImageValue } from "./sections/ArtworkImageSection";
 import {
@@ -95,9 +97,12 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 		setBasicMissingCount(count);
 	}, []);
 
+	const hasValidationError = hasAdditionalInfoError(additional) || hasStartDatePartialError(basic);
+
 	// 성공하면 true — "다음으로" 이동 전에 저장부터 시키는 데도 재사용
-	const handleTempSave = () =>
-		run(() =>
+	const handleTempSave = () => {
+		if (hasValidationError) return Promise.resolve(false);
+		return run(() =>
 			updateArtworkBasicInfo(artwork.artworkId, {
 				category: basic.category,
 				shortIntro: basic.shortIntro,
@@ -116,6 +121,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				mainImageFile,
 			}),
 		);
+	};
 
 	const handleNext = async () => {
 		if (await handleTempSave()) router.push(`${pathname}/detail`);
@@ -192,6 +198,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				lastSavedAt={lastSavedAt}
 				onTempSave={handleTempSave}
 				isSaving={isSaving}
+				hasValidationError={hasValidationError}
 				saveError={saveError}
 				basicMissingCount={basicMissingCount}
 				tabs={tabs}
@@ -220,7 +227,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 			</div>
 
 			<div className="sticky bottom-0 z-10 flex justify-end border-t border-stroke-lightest bg-bg-normal py-4">
-				<Button type="button" disabled={isSaving} onClick={handleNext}>
+				<Button type="button" disabled={isSaving || hasValidationError} onClick={handleNext}>
 					다음으로
 				</Button>
 			</div>
