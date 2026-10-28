@@ -240,7 +240,7 @@ export const ArtworkAdditionalInfoSection = ({
 						<SizeInput
 							value={value.depth}
 							onChange={(depth) => onChange({ depth })}
-							placeholder="200"
+							placeholder="0"
 							disabled={!value.hasVolume}
 							error={value.hasVolume && isSizeOverMax(value.depth)}
 						/>
