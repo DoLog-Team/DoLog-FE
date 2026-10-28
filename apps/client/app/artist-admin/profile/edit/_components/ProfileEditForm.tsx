@@ -247,7 +247,7 @@ const saveSnsChanges = async (
 ): Promise<ArtistSnsLink[]> => {
 	const nextRows = rows
 		.filter((row) => !isSnsRowEmpty(row))
-		.map((row) => ({ ...row, label: row.label.trim(), url: normalizeUrl(row.url) }));
+		.map((row) => ({ ...row, label: row.label.trim(), url: row.url.trim() }));
 	const keptSnsIds = new Set(nextRows.map((row) => row.snsId));
 
 	const deletions = savedRows
