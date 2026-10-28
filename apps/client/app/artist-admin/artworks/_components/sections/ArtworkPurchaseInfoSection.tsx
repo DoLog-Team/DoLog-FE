@@ -1,12 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { Checkbox } from "@/components/common/Checkbox/Checkbox";
 import { FormField } from "@/components/common/FormField/FormField";
 import { Input } from "@/components/common/Input/Input";
 import { Modal } from "@/components/common/Modal/Modal";
+import { DotsLoader } from "@/components/common/Spinner/DotsLoader";
+import { getMyPurchaseContactUrl } from "../../_api/getMyPurchaseContactUrl";
 
 export interface ArtworkPurchaseInfoValue {
 	showPurchaseButton: boolean;
@@ -15,14 +18,32 @@ export interface ArtworkPurchaseInfoValue {
 export interface ArtworkPurchaseInfoSectionProps {
 	value: ArtworkPurchaseInfoValue;
 	onChange: (patch: Partial<ArtworkPurchaseInfoValue>) => void;
+	// 프로필 수정 페이지로 이동하기 전, 지금 작성 중인 작품 폼을 먼저 저장한다
+	onSaveBeforeLeave: () => Promise<boolean>;
 }
 
 export const ArtworkPurchaseInfoSection = ({
 	value,
 	onChange,
+	onSaveBeforeLeave,
 }: ArtworkPurchaseInfoSectionProps) => {
-	const [openChatUrl] = useState("");
+	const router = useRouter();
+	const [openChatUrl, setOpenChatUrl] = useState("");
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [isNavigating, setIsNavigating] = useState(false);
+
+	useEffect(() => {
+		getMyPurchaseContactUrl()
+			.then(setOpenChatUrl)
+			.catch(() => {});
+	}, []);
+
+	const handleSaveAndLeave = async () => {
+		setIsNavigating(true);
+		const saved = await onSaveBeforeLeave();
+		setIsNavigating(false);
+		if (saved) router.push("/artist-admin/profile/edit?tab=purchase");
+	};
 
 	return (
 		<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
@@ -80,13 +101,17 @@ export const ArtworkPurchaseInfoSection = ({
 				description="구매 오픈채팅 주소를 수정하기 위해 내 프로필 수정 페이지로 이동해요. 변경 내용을 저장할까요?"
 				showCloseButton
 				actions={[
-					{ text: "취소", variant: "assistive", onClick: () => setIsEditModalOpen(false) },
 					{
-						text: "저장하고 이동",
+						text: "취소",
+						variant: "assistive",
+						onClick: () => setIsEditModalOpen(false),
+						disabled: isNavigating,
+					},
+					{
+						text: isNavigating ? <DotsLoader /> : "저장하고 이동",
 						variant: "primary",
-						onClick: () => {
-							// TODO: 추후 프로필 페이지 이동 경로 추가 필요
-						},
+						onClick: handleSaveAndLeave,
+						disabled: isNavigating,
 					},
 				]}
 			/>

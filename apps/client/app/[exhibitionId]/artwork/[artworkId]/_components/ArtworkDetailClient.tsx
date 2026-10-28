@@ -37,6 +37,8 @@ export function ArtworkDetailClient({
 }) {
 	const authors = getVisibleAuthors(data.participants);
 	const hasArtist = authors.length > 0;
+	// 구매 버튼 표시 체크 여부와 무관하게 purchaseUrl만 보고 버튼을 띄우던 버그 수정 — 두록 단독 작품 상세와 동일하게 처리
+	const purchaseUrl = data.showPurchaseButton ? (data.purchaseChatUrl ?? data.purchaseUrl) : null;
 
 	const TABS = useMemo(() => {
 		const base = [{ id: "detail", label: "작품 소개" }];
@@ -133,7 +135,7 @@ export function ArtworkDetailClient({
 				<DescriptionSection content={data.description} />
 			</section>
 			<YoutubeSection youtubeUrl={data.youtubeUrl} />
-			<PhotoSection data={data} />
+			<PhotoSection data={{ ...data, purchaseUrl }} />
 			{hasArtist && (
 				<section
 					data-section="artist"

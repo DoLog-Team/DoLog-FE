@@ -200,7 +200,13 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 		{
 			id: "purchase",
 			className: "pb-7 pt-7",
-			render: () => <ArtworkPurchaseInfoSection value={purchase} onChange={updatePurchase} />,
+			render: () => (
+				<ArtworkPurchaseInfoSection
+					value={purchase}
+					onChange={updatePurchase}
+					onSaveBeforeLeave={handleTempSave}
+				/>
+			),
 		},
 	];
 
