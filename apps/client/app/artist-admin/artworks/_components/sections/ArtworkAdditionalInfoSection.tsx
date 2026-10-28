@@ -8,6 +8,21 @@ import { cn } from "@/lib/utils/cn";
 
 const MAX_MATERIAL_COUNT = 20;
 const MAX_MATERIAL_LENGTH = 20;
+const MAX_SIZE_VALUE = 99999;
+const isSizeOverMax = (value: string) => {
+	const parsed = Number(value);
+	return value.trim() !== "" && !Number.isNaN(parsed) && parsed > MAX_SIZE_VALUE;
+};
+
+const sanitizeSizeInput = (raw: string) => {
+	const digitsAndDot = raw.replace(/[^0-9.]/g, "");
+	const firstDotIndex = digitsAndDot.indexOf(".");
+	if (firstDotIndex === -1) return digitsAndDot;
+	return (
+		digitsAndDot.slice(0, firstDotIndex + 1) +
+		digitsAndDot.slice(firstDotIndex + 1).replace(/\./g, "")
+	);
+};
 
 const MATERIAL_OPTIONS = [
 	"캔버스에 아크릴릭",
@@ -31,27 +46,35 @@ const SizeInput = ({
 	onChange,
 	placeholder,
 	disabled,
+	error,
 }: {
 	value: string;
 	onChange: (value: string) => void;
 	placeholder: string;
 	disabled?: boolean;
+	error?: boolean;
 }) => (
-	<div className="relative">
-		<input
-			type="text"
-			inputMode="decimal"
-			value={value}
-			onChange={(e) => onChange(e.target.value)}
-			placeholder={placeholder}
-			disabled={disabled}
-			className={cn(
-				"h-11 w-full rounded-lg border border-stroke-lighter bg-bg-normal py-3 pr-10 pl-4",
-				"text-body1 outline-none transition-colors placeholder:text-disable",
-				"focus:border-stroke-inverse disabled:bg-fg-lighter disabled:text-disable",
-			)}
-		/>
-		<span className="-translate-y-1/2 absolute top-1/2 right-4 text-body2 text-lighter">cm</span>
+	<div className="flex flex-col gap-1">
+		<div className="relative">
+			<input
+				type="text"
+				inputMode="decimal"
+				value={value}
+				onChange={(e) => onChange(sanitizeSizeInput(e.target.value))}
+				placeholder={placeholder}
+				disabled={disabled}
+				className={cn(
+					"h-11 w-full rounded-lg border bg-bg-normal py-3 pr-10 pl-4",
+					"text-body1 outline-none transition-colors placeholder:text-disable",
+					"disabled:bg-fg-lighter disabled:text-disable",
+					error
+						? "border-error focus:border-error"
+						: "border-stroke-lighter focus:border-stroke-inverse",
+				)}
+			/>
+			<span className="-translate-y-1/2 absolute top-1/2 right-4 text-body2 text-lighter">cm</span>
+		</div>
+		{error && <span className="pl-0.5 text-body3 text-error">99,999 이하로 입력해주세요.</span>}
 	</div>
 );
 
@@ -188,6 +211,7 @@ export const ArtworkAdditionalInfoSection = ({
 									value={value.width}
 									onChange={(width) => onChange({ width })}
 									placeholder="11"
+									error={isSizeOverMax(value.width)}
 								/>
 							</div>
 							<div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -196,6 +220,7 @@ export const ArtworkAdditionalInfoSection = ({
 									value={value.height}
 									onChange={(height) => onChange({ height })}
 									placeholder="12.5"
+									error={isSizeOverMax(value.height)}
 								/>
 							</div>
 						</div>
@@ -212,6 +237,7 @@ export const ArtworkAdditionalInfoSection = ({
 							onChange={(depth) => onChange({ depth })}
 							placeholder="200"
 							disabled={!value.hasVolume}
+							error={value.hasVolume && isSizeOverMax(value.depth)}
 						/>
 					</FormField>
 				)}
