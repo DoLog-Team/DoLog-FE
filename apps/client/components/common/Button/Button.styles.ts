@@ -13,7 +13,7 @@ export const buttonVariants = cva(
 	// 공통 기본 스타일
 	"inline-flex items-center justify-center cursor-pointer relative overflow-hidden " +
 		"after:absolute after:inset-0 after:bg-black after:opacity-0 after:pointer-events-none hover:after:opacity-20 " +
-		"transition-all active:scale-[0.98]",
+		"transition-all active:scale-[0.98] disabled:cursor-not-allowed",
 	{
 		variants: {
 			variant: {
