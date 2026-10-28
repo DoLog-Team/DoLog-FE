@@ -1,13 +1,14 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { Fragment, useCallback, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { useAsyncSave } from "@/lib/hooks/useAsyncSave";
+import { type ArtworkCategoryOption, getArtworkCategories } from "../_api/getArtworkCategories";
 import type { MyArtworkDetail } from "../_api/getMyArtwork";
 import { updateArtworkBasicInfo } from "../_api/updateArtwork";
 import { ArtworkFormHeader } from "./ArtworkFormHeader";
@@ -46,6 +47,13 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 	const tabIds = useMemo(() => ARTWORK_FORM_TABS.map((tab) => tab.id), []);
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(tabIds, 120);
 	const [basicMissingCount, setBasicMissingCount] = useState(() => getBasicMissingCount(artwork));
+	const [categoryOptions, setCategoryOptions] = useState<ArtworkCategoryOption[]>([]);
+
+	useEffect(() => {
+		getArtworkCategories()
+			.then(setCategoryOptions)
+			.catch(() => {});
+	}, []);
 
 	const [basic, setBasic] = useState<ArtworkBasicInfoValue>({
 		shortIntro: artwork.shortIntro ?? "",
@@ -169,6 +177,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 					value={basic}
 					onChange={updateBasic}
 					onMissingCountChange={handleBasicMissingCountChange}
+					categoryOptions={categoryOptions}
 				/>
 			),
 		},

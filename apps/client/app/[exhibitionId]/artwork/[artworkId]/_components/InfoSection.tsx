@@ -15,7 +15,6 @@ import type { ArtworkDetail } from "@/lib/api/artwork";
 interface InfoSectionProps {
 	data: ArtworkDetail;
 	hideArtistRole?: boolean;
-	// 전시 작품 상세에서만 넘긴다 — 넘기면 카테고리 대신 이 값(또는 빈 값)을 보여준다. 두록 단독 작품 상세는 넘기지 않아 카테고리를 그대로 보여준다.
 	groupName?: string | null;
 	// 제목 아래 정보 줄 — 넘기면 재료 | 크기 줄 대신 표시 (두록 작품 상세: 제작 연도, 재료 / 크기)
 	// TODO : size, material 관련 데이터 변경 방향 BE 문의 중, 답변 오면 수정 예정

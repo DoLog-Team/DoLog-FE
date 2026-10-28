@@ -7,17 +7,6 @@ import { FormField } from "@/components/common/FormField/FormField";
 import { Select } from "@/components/common/Select/Select";
 import { Textarea } from "@/components/common/Textarea/Textarea";
 
-const CATEGORY_OPTIONS = [
-	{ label: "회화", value: "painting" },
-	{ label: "조각", value: "sculpture" },
-	{ label: "사진", value: "photography" },
-	{ label: "설치", value: "installation" },
-	{ label: "미디어", value: "media" },
-	{ label: "공예", value: "craft" },
-	{ label: "디자인", value: "design" },
-	{ label: "기타", value: "etc" },
-];
-
 const CURRENT_YEAR = new Date().getFullYear();
 const YEAR_OPTIONS = Array.from({ length: CURRENT_YEAR - 2000 + 1 }, (_, i) => {
 	const year = String(CURRENT_YEAR - i);
@@ -65,12 +54,14 @@ export interface ArtworkBasicInfoSectionProps {
 	value: ArtworkBasicInfoValue;
 	onChange: (patch: Partial<ArtworkBasicInfoValue>) => void;
 	onMissingCountChange?: (count: number) => void;
+	categoryOptions?: { label: string; value: string }[];
 }
 
 export const ArtworkBasicInfoSection = ({
 	value,
 	onChange,
 	onMissingCountChange,
+	categoryOptions = [],
 }: ArtworkBasicInfoSectionProps) => {
 	const isStartDateComplete =
 		!value.hasStartDate || Boolean(value.startYear && value.startMonth && value.startDay);
@@ -101,10 +92,11 @@ export const ArtworkBasicInfoSection = ({
 
 				<FormField label="카테고리" required>
 					<Select
-						options={CATEGORY_OPTIONS}
+						options={categoryOptions}
 						value={value.category}
 						onChange={(category) => onChange({ category })}
 						placeholder="작품의 카테고리를 선택해주세요."
+						creatable={categoryOptions.length === 0}
 					/>
 				</FormField>
 
