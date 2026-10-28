@@ -5,6 +5,7 @@ import { updateArtworkAdditionalInfo } from "@/app/artist-admin/artworks/_api/up
 import {
 	ArtworkAdditionalInfoSection,
 	type ArtworkAdditionalInfoValue,
+	hasAdditionalInfoError,
 } from "@/app/artist-admin/artworks/_components/sections/ArtworkAdditionalInfoSection";
 import { Button } from "@/components/common/Button/Button";
 import { FormField } from "@/components/common/FormField/FormField";
@@ -47,8 +48,11 @@ export const ArtworkExhibitionAdditionalInfoSection = ({
 	const updateValue = (patch: Partial<ArtworkAdditionalInfoValue>) =>
 		setValue((prev) => ({ ...prev, ...patch }));
 
-	const handleSave = () =>
-		run(() =>
+	const hasValidationError = hasAdditionalInfoError(value);
+
+	const handleSave = () => {
+		if (hasValidationError) return Promise.resolve(false);
+		return run(() =>
 			updateArtworkAdditionalInfo(artworkId, {
 				materials: value.materials,
 				width: value.width,
@@ -57,6 +61,7 @@ export const ArtworkExhibitionAdditionalInfoSection = ({
 				locationMapFile,
 			}),
 		);
+	};
 
 	return (
 		<div className="flex flex-col gap-4">
@@ -98,7 +103,7 @@ export const ArtworkExhibitionAdditionalInfoSection = ({
 
 			<div className="flex items-center justify-end gap-3">
 				{error && <p className="text-body3 text-error">{error}</p>}
-				<Button type="button" disabled={isSaving} onClick={handleSave}>
+				<Button type="button" disabled={isSaving || hasValidationError} onClick={handleSave}>
 					저장
 				</Button>
 			</div>

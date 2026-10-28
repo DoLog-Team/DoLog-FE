@@ -7,6 +7,7 @@ export interface DateSelectFieldProps {
 	value: string | undefined;
 	onChange: (value: string) => void;
 	disabled?: boolean;
+	error?: boolean;
 }
 
 export const DateSelectField = ({
@@ -16,6 +17,7 @@ export const DateSelectField = ({
 	value,
 	onChange,
 	disabled,
+	error,
 }: DateSelectFieldProps) => (
 	<div className="flex min-w-0 flex-1 flex-col gap-1">
 		<span className="text-body3 text-light">{label}</span>
@@ -25,6 +27,7 @@ export const DateSelectField = ({
 			onChange={onChange}
 			placeholder={placeholder}
 			disabled={disabled}
+			error={error}
 		/>
 	</div>
 );

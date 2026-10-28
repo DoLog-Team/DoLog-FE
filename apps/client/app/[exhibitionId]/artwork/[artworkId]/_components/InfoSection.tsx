@@ -15,14 +15,16 @@ import type { ArtworkDetail } from "@/lib/api/artwork";
 interface InfoSectionProps {
 	data: ArtworkDetail;
 	hideArtistRole?: boolean;
+	groupName?: string | null;
 	// 제목 아래 정보 줄 — 넘기면 재료 | 크기 줄 대신 표시 (두록 작품 상세: 제작 연도, 재료 / 크기)
 	// TODO : size, material 관련 데이터 변경 방향 BE 문의 중, 답변 오면 수정 예정
 	lines?: string[];
 }
 
 // RowList를 위한 작가정보 map
-export const InfoSection = ({ data, hideArtistRole, lines }: InfoSectionProps) => {
-	const categories = data.category ? [data.category] : [];
+export const InfoSection = ({ data, hideArtistRole, groupName, lines }: InfoSectionProps) => {
+	const topLabel = groupName !== undefined ? groupName : data.category;
+	const categories = topLabel ? [topLabel] : [];
 	const artistRows = data.participants.map((participant) => ({
 		// 국문 성명이 없으면 영문 성명
 		label: participant.nameKo || participant.nameEn || "",

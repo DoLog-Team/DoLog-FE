@@ -21,6 +21,8 @@ export interface UpdateArtworkBasicInfoInput {
 	productionStartYear?: string;
 	productionStartMonth?: string;
 	productionStartDay?: string;
+	// true면 시작 날짜 세 필드를 전부 지운다 (안 보내는 것만으로는 기존 값이 유지됨)
+	clearProductionStartDate?: boolean;
 	productionEndYear?: string;
 	productionEndMonth?: string;
 	productionEndDay?: string;
@@ -48,6 +50,7 @@ export async function updateArtworkBasicInfo(
 	appendIfPresent("productionStartYear", input.productionStartYear);
 	appendIfPresent("productionStartMonth", input.productionStartMonth);
 	appendIfPresent("productionStartDay", input.productionStartDay);
+	if (input.clearProductionStartDate) formData.append("clearProductionStartDate", "true");
 	appendIfPresent("productionEndYear", input.productionEndYear);
 	appendIfPresent("productionEndMonth", input.productionEndMonth);
 	appendIfPresent("productionEndDay", input.productionEndDay);

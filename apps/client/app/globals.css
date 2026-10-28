@@ -290,6 +290,15 @@
   direction: ltr;
 }
 
+/* 이미지/링크 등 첨부 팝업이 기본 400px 고정 폭이라 모바일 화면보다 넓어서 밖으로 잘려 보이는 문제 수정 */
+@media (width < 721px) {
+  .artwork-detail-editor .toastui-editor-popup {
+    left: 16px !important;
+    right: 16px !important;
+    width: auto !important;
+  }
+}
+
 /* 저장 버튼 등에 쓰는 점 3개 로딩 인디케이터 — 순서대로 출렁이는 애니메이션 */
 @keyframes dot-wave {
   0%,

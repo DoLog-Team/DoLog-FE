@@ -11,6 +11,7 @@ export interface ArtworkFormHeaderProps {
 	lastSavedAt?: string;
 	onTempSave: () => void;
 	isSaving: boolean;
+	hasValidationError?: boolean;
 	saveError?: string;
 	basicMissingCount: number;
 	tabs: Tab[];
@@ -25,6 +26,7 @@ export const ArtworkFormHeader = ({
 	lastSavedAt,
 	onTempSave,
 	isSaving,
+	hasValidationError,
 	saveError,
 	basicMissingCount,
 	tabs,
@@ -45,6 +47,7 @@ export const ArtworkFormHeader = ({
 					lastSavedAt={lastSavedAt}
 					onTempSave={onTempSave}
 					tempSaveDisabled={isSaving}
+					saveDisabled={hasValidationError}
 					saveLabel={basicMissingCount === 0 ? "저장" : "임시 저장"}
 					onBack={onBack}
 				/>

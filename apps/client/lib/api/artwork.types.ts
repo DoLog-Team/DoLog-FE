@@ -126,6 +126,7 @@ export interface ArtworkDetail {
 	exhibitionId?: string | null;
 	exhibitionTitle?: string | null;
 	slug?: string | null;
+	zoneName?: string | null;
 	viewCount?: number;
 	likeCount?: number;
 	liked?: boolean;

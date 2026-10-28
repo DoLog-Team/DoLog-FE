@@ -1,13 +1,14 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { Fragment, useCallback, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { useAsyncSave } from "@/lib/hooks/useAsyncSave";
+import { type ArtworkCategoryOption, getArtworkCategories } from "../_api/getArtworkCategories";
 import type { MyArtworkDetail } from "../_api/getMyArtwork";
 import { updateArtworkBasicInfo } from "../_api/updateArtwork";
 import { ArtworkFormHeader } from "./ArtworkFormHeader";
@@ -17,10 +18,13 @@ import { getBasicMissingCount } from "./getBasicMissingCount";
 import {
 	ArtworkAdditionalInfoSection,
 	type ArtworkAdditionalInfoValue,
+	hasAdditionalInfoError,
 } from "./sections/ArtworkAdditionalInfoSection";
 import {
 	ArtworkBasicInfoSection,
 	type ArtworkBasicInfoValue,
+	hasStartAfterEndError,
+	hasStartDatePartialError,
 } from "./sections/ArtworkBasicInfoSection";
 import { ArtworkImageSection, type ArtworkImageValue } from "./sections/ArtworkImageSection";
 import {
@@ -43,6 +47,13 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 	const tabIds = useMemo(() => ARTWORK_FORM_TABS.map((tab) => tab.id), []);
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(tabIds, 120);
 	const [basicMissingCount, setBasicMissingCount] = useState(() => getBasicMissingCount(artwork));
+	const [categoryOptions, setCategoryOptions] = useState<ArtworkCategoryOption[]>([]);
+
+	useEffect(() => {
+		getArtworkCategories()
+			.then(setCategoryOptions)
+			.catch(() => {});
+	}, []);
 
 	const [basic, setBasic] = useState<ArtworkBasicInfoValue>({
 		shortIntro: artwork.shortIntro ?? "",
@@ -95,9 +106,15 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 		setBasicMissingCount(count);
 	}, []);
 
+	const hasValidationError =
+		hasAdditionalInfoError(additional) ||
+		hasStartDatePartialError(basic) ||
+		hasStartAfterEndError(basic);
+
 	// 성공하면 true — "다음으로" 이동 전에 저장부터 시키는 데도 재사용
-	const handleTempSave = () =>
-		run(() =>
+	const handleTempSave = () => {
+		if (hasValidationError) return Promise.resolve(false);
+		return run(() =>
 			updateArtworkBasicInfo(artwork.artworkId, {
 				category: basic.category,
 				shortIntro: basic.shortIntro,
@@ -108,6 +125,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				productionStartYear: basic.hasStartDate ? basic.startYear : undefined,
 				productionStartMonth: basic.hasStartDate ? basic.startMonth : undefined,
 				productionStartDay: basic.hasStartDate ? basic.startDay : undefined,
+				clearProductionStartDate: !basic.hasStartDate,
 				productionEndYear: basic.endYear,
 				productionEndMonth: basic.endMonth,
 				productionEndDay: basic.endDay,
@@ -116,6 +134,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				mainImageFile,
 			}),
 		);
+	};
 
 	const handleNext = async () => {
 		if (await handleTempSave()) router.push(`${pathname}/detail`);
@@ -158,6 +177,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 					value={basic}
 					onChange={updateBasic}
 					onMissingCountChange={handleBasicMissingCountChange}
+					categoryOptions={categoryOptions}
 				/>
 			),
 		},
@@ -192,6 +212,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				lastSavedAt={lastSavedAt}
 				onTempSave={handleTempSave}
 				isSaving={isSaving}
+				hasValidationError={hasValidationError}
 				saveError={saveError}
 				basicMissingCount={basicMissingCount}
 				tabs={tabs}
@@ -220,7 +241,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 			</div>
 
 			<div className="sticky bottom-0 z-10 flex justify-end border-t border-stroke-lightest bg-bg-normal py-4">
-				<Button type="button" disabled={isSaving} onClick={handleNext}>
+				<Button type="button" disabled={isSaving || hasValidationError} onClick={handleNext}>
 					다음으로
 				</Button>
 			</div>

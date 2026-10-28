@@ -122,7 +122,7 @@ export function ArtworkDetailClient({
 					title={data.title}
 				/>
 			)}
-			<InfoSection data={data} hideArtistRole={hideArtistRole} />
+			<InfoSection data={data} hideArtistRole={hideArtistRole} groupName={data.zoneName} />
 			<LocationSection locationImageUrl={data.locationMap} />
 			<section
 				data-section="detail"
