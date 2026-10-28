@@ -1,8 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toErrorMessage } from "@/app/artist-admin/(shell)/_api/actions";
 import type { MyArtworkDetail } from "@/app/artist-admin/artworks/_api/getMyArtwork";
+import { updateArtworkVisibility } from "@/app/artist-admin/artworks/_api/updateArtworkVisibility";
 import { ArtworkVisibilitySection } from "@/app/artist-admin/artworks/_components/ArtworkVisibilitySection";
 import { useArtworkVisibility } from "@/app/artist-admin/artworks/_components/useArtworkVisibility";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
@@ -10,12 +12,14 @@ import { Divider } from "@/components/common/Divider/Divider";
 import { FormField } from "@/components/common/FormField/FormField";
 import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { ImageInput } from "@/components/common/ImageInput/ImageInput";
+import { Modal } from "@/components/common/Modal/Modal";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
 import {
 	type ArtworkFieldSettings,
 	getArtworkExhibitionStatus,
 } from "../_api/getArtworkExhibitionStatus";
+import { type ExhibitionZone, getExhibitionZones } from "../_api/getExhibitionZones";
 import { submitArtwork } from "../_api/submitArtwork";
 import { ArtworkExhibitionAdditionalInfoSection } from "./sections/ArtworkExhibitionAdditionalInfoSection";
 import { ArtworkExhibitionGroupSection } from "./sections/ArtworkExhibitionGroupSection";
@@ -36,9 +40,21 @@ export const ArtworkExhibitionForm = ({
 	onSubmitted,
 	onCancelled,
 }: ArtworkExhibitionFormProps) => {
+	const router = useRouter();
 	const { notice, showNotice, closeNotice } = useNoticeModal();
 	const visibility = useArtworkVisibility(artwork.artworkId, artwork);
 	const [fieldSettings, setFieldSettings] = useState<ArtworkFieldSettings | null>(null);
+	const [zoneId, setZoneId] = useState<string | undefined>(artwork.zoneId ?? undefined);
+	const [isSavingZone, setIsSavingZone] = useState(false);
+	const [zones, setZones] = useState<ExhibitionZone[]>([]);
+	const relevantExhibitionId = artwork.exhibitionId ?? pendingExhibitionId;
+
+	useEffect(() => {
+		if (!relevantExhibitionId) return;
+		getExhibitionZones(relevantExhibitionId)
+			.then(setZones)
+			.catch(() => {});
+	}, [relevantExhibitionId]);
 
 	useEffect(() => {
 		if (!artwork.exhibitionId) return;
@@ -47,11 +63,31 @@ export const ArtworkExhibitionForm = ({
 			.catch(() => {});
 	}, [artwork.artworkId, artwork.exhibitionId]);
 
+	const handleSaveZone = async () => {
+		if (!zoneId || zoneId === artwork.zoneId) return;
+		setIsSavingZone(true);
+		try {
+			await updateArtworkVisibility(artwork.artworkId, visibility.visibility, zoneId);
+			router.refresh();
+		} catch (error) {
+			showNotice("그룹 저장에 실패했어요", toErrorMessage(error));
+		} finally {
+			setIsSavingZone(false);
+		}
+	};
+
 	if (artwork.exhibitionId && artwork.exhibitionName) {
 		return (
 			<DesktopContainer>
 				<div className="sticky top-0 z-10 bg-bg-normal">
-					<FormHeader title={artwork.title} lastSavedAt="" onBack={onBack} />
+					<FormHeader
+						title={artwork.title}
+						lastSavedAt=""
+						onBack={onBack}
+						onTempSave={handleSaveZone}
+						tempSaveDisabled={isSavingZone}
+						saveDisabled={!zoneId || zoneId === artwork.zoneId}
+					/>
 				</div>
 				<div className="flex flex-col gap-7 py-7">
 					<ArtworkExhibitionLinkSection
@@ -61,6 +97,13 @@ export const ArtworkExhibitionForm = ({
 						hidden={artwork.hidden}
 						onCancelled={onCancelled}
 					/>
+
+					{zones.length > 0 && (
+						<>
+							<Divider thickness="thin" fullBleed={true} spacing="md" />
+							<ArtworkExhibitionGroupSection zones={zones} value={zoneId} onChange={setZoneId} />
+						</>
+					)}
 
 					<Divider thickness="thin" fullBleed={true} spacing="md" />
 
@@ -98,6 +141,7 @@ export const ArtworkExhibitionForm = ({
 		<SubmitForm
 			artwork={artwork}
 			exhibitionId={pendingExhibitionId}
+			zones={zones}
 			onBack={onBack}
 			onSubmitted={onSubmitted}
 			showNotice={showNotice}
@@ -110,6 +154,7 @@ export const ArtworkExhibitionForm = ({
 const SubmitForm = ({
 	artwork,
 	exhibitionId,
+	zones,
 	onBack,
 	onSubmitted,
 	notice,
@@ -118,6 +163,7 @@ const SubmitForm = ({
 }: {
 	artwork: MyArtworkDetail;
 	exhibitionId: string | null;
+	zones: ExhibitionZone[];
 	onBack: () => void;
 	onSubmitted: () => void;
 } & ReturnType<typeof useNoticeModal>) => {
@@ -125,6 +171,7 @@ const SubmitForm = ({
 	const [locationMapPreview, setLocationMapPreview] = useState<string | null>(null);
 	const [locationMapFile, setLocationMapFile] = useState<File | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
 	if (!exhibitionId) {
 		return (
@@ -134,8 +181,7 @@ const SubmitForm = ({
 		);
 	}
 
-	const handleSubmit = async () => {
-		if (!zoneId) return;
+	const submit = async () => {
 		setIsSubmitting(true);
 		try {
 			await submitArtwork(artwork.artworkId, { exhibitionId, zoneId, locationMapFile });
@@ -145,6 +191,19 @@ const SubmitForm = ({
 		} finally {
 			setIsSubmitting(false);
 		}
+	};
+
+	const handleSubmit = () => {
+		if (zones.length > 0 && !zoneId) {
+			setIsConfirmOpen(true);
+			return;
+		}
+		submit();
+	};
+
+	const handleConfirmSave = () => {
+		setIsConfirmOpen(false);
+		submit();
 	};
 
 	return (
@@ -157,18 +216,16 @@ const SubmitForm = ({
 					saveLabel="출품하기"
 					onTempSave={handleSubmit}
 					tempSaveDisabled={isSubmitting}
-					saveDisabled={!zoneId}
 				/>
 			</div>
 
 			<div className="flex flex-col gap-7 py-7">
-				<ArtworkExhibitionGroupSection
-					exhibitionId={exhibitionId}
-					value={zoneId}
-					onChange={setZoneId}
-				/>
-
-				<Divider thickness="thin" fullBleed={true} spacing="md" />
+				{zones.length > 0 && (
+					<>
+						<ArtworkExhibitionGroupSection zones={zones} value={zoneId} onChange={setZoneId} />
+						<Divider thickness="thin" fullBleed={true} spacing="md" />
+					</>
+				)}
 
 				<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
 					<div className="min-w-0 min-[721px]:w-100">
@@ -199,6 +256,22 @@ const SubmitForm = ({
 			</div>
 
 			<NoticeModal notice={notice} onClose={closeNotice} />
+			<Modal
+				open={isConfirmOpen}
+				onOpenChange={setIsConfirmOpen}
+				title="저장하시겠어요?"
+				description="아직 필수 정보가 모두 입력되지 않았어요. 작성한 내용은 임시 저장되며, 공개되지 않아요"
+				showCloseButton
+				actions={[
+					{ text: "취소", variant: "assistive", onClick: () => setIsConfirmOpen(false) },
+					{
+						text: "임시 저장하기",
+						variant: "primary",
+						onClick: handleConfirmSave,
+						disabled: isSubmitting,
+					},
+				]}
+			/>
 		</DesktopContainer>
 	);
 };
