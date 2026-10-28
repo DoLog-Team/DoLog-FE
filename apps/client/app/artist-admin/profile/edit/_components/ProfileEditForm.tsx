@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { Fragment, useCallback, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import { FormHeader } from "@/components/common/FormHeader/FormHeader";
@@ -138,6 +138,14 @@ export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEdit
 
 	const tabIds = useMemo(() => PROFILE_EDIT_TABS.map((tab) => tab.id), []);
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(tabIds, 120);
+
+	// 다른 화면(작품 등록 폼)에서 ?tab=purchase 로 넘어오면 해당 섹션으로 바로 스크롤한다
+	const searchParams = useSearchParams();
+	// biome-ignore lint/correctness/useExhaustiveDependencies: 처음 진입했을 때 한 번만 스크롤해야 함 — handleTabClick을 의존성에 넣으면 리렌더마다 다시 스크롤됨
+	useEffect(() => {
+		const tab = searchParams.get("tab");
+		if (tab && tabIds.includes(tab)) handleTabClick(tab);
+	}, [searchParams, tabIds]);
 
 	return (
 		<DesktopContainer>

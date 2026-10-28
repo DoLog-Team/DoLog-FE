@@ -7,7 +7,7 @@ import type { ButtonVariantsProps } from "@/components/common/Button/Button.styl
 import { modalStyles } from "./Modal.styles";
 
 interface ModalAction {
-	text: string;
+	text: React.ReactNode;
 	onClick: () => void;
 	variant?: ButtonVariantsProps["variant"];
 	disabled?: boolean;
@@ -55,9 +55,10 @@ export const Modal = ({
 					{children && <div className={modalStyles.body}>{children}</div>}
 
 					<div className={modalStyles.footer}>
-						{actions.map((action) => (
+						{actions.map((action, index) => (
 							<Button
-								key={action.text}
+								// biome-ignore lint/suspicious/noArrayIndexKey: 액션 목록은 모달 열려있는 동안 고정 순서라 재정렬되지 않음
+								key={index}
 								type="button"
 								onClick={action.onClick}
 								disabled={action.disabled}
