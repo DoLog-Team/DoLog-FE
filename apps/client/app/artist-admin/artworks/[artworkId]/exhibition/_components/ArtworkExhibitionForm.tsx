@@ -44,6 +44,7 @@ export const ArtworkExhibitionForm = ({
 	const { notice, showNotice, closeNotice } = useNoticeModal();
 	const visibility = useArtworkVisibility(artwork.artworkId, artwork);
 	const [fieldSettings, setFieldSettings] = useState<ArtworkFieldSettings | null>(null);
+	const [planLimitExceeded, setPlanLimitExceeded] = useState(false);
 	const [zoneId, setZoneId] = useState<string | undefined>(artwork.zoneId ?? undefined);
 	const [isSavingZone, setIsSavingZone] = useState(false);
 	const [zones, setZones] = useState<ExhibitionZone[]>([]);
@@ -59,7 +60,10 @@ export const ArtworkExhibitionForm = ({
 	useEffect(() => {
 		if (!artwork.exhibitionId) return;
 		getArtworkExhibitionStatus(artwork.artworkId)
-			.then((status) => setFieldSettings(status.fieldSettings))
+			.then((status) => {
+				setFieldSettings(status.fieldSettings);
+				setPlanLimitExceeded(status.planLimitExceeded);
+			})
 			.catch(() => {});
 	}, [artwork.artworkId, artwork.exhibitionId]);
 
@@ -95,6 +99,7 @@ export const ArtworkExhibitionForm = ({
 						artworkTitle={artwork.title}
 						exhibitionName={artwork.exhibitionName}
 						hidden={artwork.hidden}
+						planLimitExceeded={planLimitExceeded}
 						onCancelled={onCancelled}
 					/>
 
