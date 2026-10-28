@@ -14,6 +14,7 @@ export interface ArtworkExhibitionLinkSectionProps {
 	artworkTitle: string;
 	exhibitionName: string;
 	hidden: boolean;
+	planLimitExceeded: boolean;
 	onCancelled: () => void;
 }
 
@@ -22,6 +23,7 @@ export const ArtworkExhibitionLinkSection = ({
 	artworkTitle,
 	exhibitionName,
 	hidden,
+	planLimitExceeded,
 	onCancelled,
 }: ArtworkExhibitionLinkSectionProps) => {
 	const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
@@ -70,6 +72,16 @@ export const ArtworkExhibitionLinkSection = ({
 							<span className="text-body1-bold text-error">작품이 숨김처리 됐어요.</span>
 							<p className="whitespace-pre-line text-body3 text-black">
 								전시 관리자가 작품을 숨김으로 처리하여 전시에서 노출되지 않아요.
+							</p>
+						</div>
+					)}
+
+					{planLimitExceeded && (
+						<div className="flex flex-col gap-2 rounded-lg bg-admin2 p-6">
+							<span className="text-body1-bold text-error">작품이 전시에서 미노출되어요.</span>
+							<p className="whitespace-pre-line text-body3 text-black">
+								전시 플랜에 따른 작품 수가 초과되어서 작품이 전시에 미노출되어요. 전시 관리자가 작품
+								수를 조정한 후 다시 노출될 수 있어요.
 							</p>
 						</div>
 					)}

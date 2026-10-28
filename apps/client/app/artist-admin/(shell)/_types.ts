@@ -21,7 +21,13 @@ export interface MyArtwork {
 	title: string;
 	image: string | null;
 	// null 이면 개인 작품
-	exhibition: { exhibitionId: string; name: string; hidden: boolean } | null;
+	exhibition: {
+		exhibitionId: string;
+		name: string;
+		hidden: boolean;
+		// 플랜 한도 초과로 전시에 노출되지 않으면 true (숨김과는 별개 상태)
+		planLimitExceeded: boolean;
+	} | null;
 	viewCount: number;
 	likeCount: number;
 	status: ArtworkStatus;

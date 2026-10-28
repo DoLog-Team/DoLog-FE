@@ -215,7 +215,7 @@ export const ArtworkAdditionalInfoSection = ({
 								<SizeInput
 									value={value.width}
 									onChange={(width) => onChange({ width })}
-									placeholder="11"
+									placeholder="0"
 									error={isSizeOverMax(value.width)}
 								/>
 							</div>
@@ -224,7 +224,7 @@ export const ArtworkAdditionalInfoSection = ({
 								<SizeInput
 									value={value.height}
 									onChange={(height) => onChange({ height })}
-									placeholder="12.5"
+									placeholder="0"
 									error={isSizeOverMax(value.height)}
 								/>
 							</div>
@@ -240,7 +240,7 @@ export const ArtworkAdditionalInfoSection = ({
 						<SizeInput
 							value={value.depth}
 							onChange={(depth) => onChange({ depth })}
-							placeholder="200"
+							placeholder="0"
 							disabled={!value.hasVolume}
 							error={value.hasVolume && isSizeOverMax(value.depth)}
 						/>

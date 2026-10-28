@@ -1,31 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { FormField } from "@/components/common/FormField/FormField";
 import { Select } from "@/components/common/Select/Select";
-import { type ExhibitionZone, getExhibitionZones } from "../../_api/getExhibitionZones";
+import type { ExhibitionZone } from "../../_api/getExhibitionZones";
 
 export interface ArtworkExhibitionGroupSectionProps {
-	exhibitionId: string;
+	zones: ExhibitionZone[];
 	value: string | undefined;
 	onChange: (zoneId: string) => void;
 }
 
 export const ArtworkExhibitionGroupSection = ({
-	exhibitionId,
+	zones,
 	value,
 	onChange,
 }: ArtworkExhibitionGroupSectionProps) => {
-	const [zones, setZones] = useState<ExhibitionZone[]>([]);
-
-	useEffect(() => {
-		getExhibitionZones(exhibitionId)
-			.then(setZones)
-			.catch(() => {});
-	}, [exhibitionId]);
-
-	if (zones.length === 0) return null;
-
 	return (
 		<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
 			<div className="min-w-0 min-[721px]:w-100">

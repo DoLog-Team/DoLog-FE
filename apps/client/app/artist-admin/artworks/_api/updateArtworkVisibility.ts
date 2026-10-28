@@ -18,9 +18,10 @@ export const toArtworkVisibility = ({
 export async function updateArtworkVisibility(
 	artworkId: string,
 	visibility: ArtworkVisibility,
+	zoneId?: string,
 ): Promise<void> {
 	await authApiClient<void>(`/artworks/${artworkId}/exhibition`, {
 		method: "PATCH",
-		body: JSON.stringify({ visibility }),
+		body: JSON.stringify(zoneId ? { visibility, zoneId } : { visibility }),
 	});
 }

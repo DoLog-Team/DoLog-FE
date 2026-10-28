@@ -117,8 +117,7 @@ export function AccountSection({ agreement: initialAgreement }: AccountSectionPr
 
 			<h3 className={cn(SUB_TITLE_CLASS, "mt-10")}>계정 탈퇴</h3>
 			<p className="mt-2.5 px-0.5 text-body1 text-light">
-				계정을 탈퇴하면 프로필, 전시, 작품, 비하인드 등 모든 데이터가 영구적으로 삭제되며 복구할 수
-				없습니다.
+				계정을 탈퇴하면 프로필, 전시, 작품 등 모든 데이터가 영구적으로 삭제되며 복구할 수 없습니다.
 			</p>
 			<button
 				type="button"
