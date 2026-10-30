@@ -29,7 +29,7 @@ export const ArtistList = ({ exhibitionId, artists }: ArtistListProps) => {
 	);
 	const selectedNames = artists
 		.filter((artist) => selection.isSelected(artist.id))
-		.map((artist) => artist.name);
+		.map((artist) => artist.name ?? "");
 
 	const exclude = () => {
 		setIsExcludeModalOpen(false);
