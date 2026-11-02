@@ -256,9 +256,9 @@ export const AdminSelectableList = <T extends { id: Id }, Id extends string | nu
 const CELL_CLASS =
 	"h-12 border-stroke-lightest border-r border-b px-3 text-center align-middle text-body2 text-light last:border-r-0";
 
-export const matchesKeyword = (keyword: string, ...values: string[]) => {
+export const matchesKeyword = (keyword: string, ...values: (string | null)[]) => {
 	const query = keyword.trim().toLowerCase();
-	return values.some((value) => value.toLowerCase().includes(query));
+	return values.some((value) => value?.toLowerCase().includes(query));
 };
 
 // 모달 설명용 — "홍길동 외 2명의 작가" / "홍길동 작가"

@@ -14,7 +14,7 @@ export type ManagedArtistStatus = "PENDING" | "JOINED";
 interface ManagedArtistResponse {
 	artists: {
 		artistId: string;
-		nameKo: string;
+		nameKo: string | null;
 		email: string | null;
 		greeting: string | null;
 		artworkCount: number | null;

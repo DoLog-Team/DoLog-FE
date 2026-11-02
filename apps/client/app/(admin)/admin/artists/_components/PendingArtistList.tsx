@@ -36,7 +36,7 @@ export const PendingArtistList = ({ exhibitionId, artists }: PendingArtistListPr
 	);
 	const selectedNames = artists
 		.filter((artist) => selection.isSelected(artist.id))
-		.map((artist) => artist.name);
+		.map((artist) => artist.name ?? "");
 
 	const confirm = () => {
 		if (!decision) return;
