@@ -6,13 +6,15 @@ import { authApiClient } from "@/lib/api/instance";
  ************************/
 
 export interface MyArtistProfileRequest {
-	// 국문 성명은 빈 값을 받지 않아(minLength 1) 비었을 때는 빼고 보낸다
+	// 빈 문자열이면 이름을 지운다 — 작가 이름을 내려주는 응답(GET artists/{artistId} 등)도 공통 프로필 이름을 쓴다
 	nameKo?: string;
 	nameEn?: string;
 	bio?: string;
-	// 이메일 형식만 받아 비었을 때는 빼고 보낸다
+	// 빈 문자열이면 프로필 이메일을 지운다 (가입 시 인증한 계정 이메일은 유지)
 	email?: string;
 	purchaseContactUrl?: string;
+	// true 면 저장된 프로필 이미지를 지운다
+	deleteProfileImg?: boolean;
 }
 
 export async function updateMyArtistProfile(
@@ -27,24 +29,6 @@ export async function updateMyArtistProfile(
 	await authApiClient("/artist-profiles/me", {
 		method: "PATCH",
 		body: formData,
-	});
-}
-
-/************************
- * 작가 기본 정보(이름) 수정 — PATCH /artists/me
- * 마이페이지·두록 작가 상세는 GET artists/{artistId} 의 이름을 보여줘서 공통 프로필과 함께 맞춘다
- * TODO: 이름이 작가·공통 프로필 두 곳에 있음 — BE 가 한쪽으로 합치면 이 호출 제거
- ************************/
-
-export interface MyArtistNameRequest {
-	nameKo?: string;
-	nameEn?: string;
-}
-
-export async function updateMyArtistName(body: MyArtistNameRequest) {
-	await authApiClient("/artists/me", {
-		method: "PATCH",
-		body: JSON.stringify(body),
 	});
 }
 
