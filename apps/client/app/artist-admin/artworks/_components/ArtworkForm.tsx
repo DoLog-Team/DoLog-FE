@@ -7,12 +7,20 @@ import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopCo
 import { Divider } from "@/components/common/Divider/Divider";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
+import { DotsLoader } from "@/components/common/Spinner/DotsLoader";
 import { useAsyncSave } from "@/lib/hooks/useAsyncSave";
 import { type ArtworkCategoryOption, getArtworkCategories } from "../_api/getArtworkCategories";
 import type { MyArtworkDetail } from "../_api/getMyArtwork";
 import { updateArtworkBasicInfo } from "../_api/updateArtwork";
+import {
+	type ArtworkFieldSettings,
+	getArtworkExhibitionStatus,
+} from "../[artworkId]/exhibition/_api/getArtworkExhibitionStatus";
+import { getExhibitionZones } from "../[artworkId]/exhibition/_api/getExhibitionZones";
 import { ArtworkFormHeader } from "./ArtworkFormHeader";
+import { ArtworkSaveConfirmModal } from "./ArtworkSaveConfirmModal";
 import { ArtworkVisibilitySection } from "./ArtworkVisibilitySection";
+import { isArtworkSatisfied } from "./artworkCompleteness";
 import { ARTWORK_FORM_TABS } from "./artworkFormTabs";
 import { getBasicMissingCount } from "./getBasicMissingCount";
 import {
@@ -48,12 +56,26 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(tabIds, 120);
 	const [basicMissingCount, setBasicMissingCount] = useState(() => getBasicMissingCount(artwork));
 	const [categoryOptions, setCategoryOptions] = useState<ArtworkCategoryOption[]>([]);
+	const [fieldSettings, setFieldSettings] = useState<ArtworkFieldSettings | null>(null);
+	const [hasZonesInExhibition, setHasZonesInExhibition] = useState(false);
+	const [isSaveConfirmOpen, setIsSaveConfirmOpen] = useState(false);
 
 	useEffect(() => {
 		getArtworkCategories()
 			.then(setCategoryOptions)
 			.catch(() => {});
 	}, []);
+
+	// 출품된 작품이면, 저장 시 필수값 판정에 그 전시의 그룹·필수 항목 설정이 필요하다
+	useEffect(() => {
+		if (!artwork.exhibitionId) return;
+		getArtworkExhibitionStatus(artwork.artworkId)
+			.then((status) => setFieldSettings(status.fieldSettings))
+			.catch(() => {});
+		getExhibitionZones(artwork.exhibitionId)
+			.then((zones) => setHasZonesInExhibition(zones.length > 0))
+			.catch(() => {});
+	}, [artwork.artworkId, artwork.exhibitionId]);
 
 	const [basic, setBasic] = useState<ArtworkBasicInfoValue>({
 		shortIntro: artwork.shortIntro ?? "",
@@ -81,7 +103,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 	const [purchase, setPurchase] = useState<ArtworkPurchaseInfoValue>({
 		showPurchaseButton: artwork.showPurchaseButton ?? false,
 	});
-	const { isSaving, error: saveError, lastSavedAt, run } = useAsyncSave();
+	const { isSaving, error: saveError, run } = useAsyncSave();
 	const visibility = useArtworkVisibility(artwork.artworkId, artwork);
 
 	const updateBasic = useCallback(
@@ -136,6 +158,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 		);
 	};
 
+	// "저장 후 상세 정보 작성" — 모달 없이 조용히 임시저장만 하고 다음 탭으로 넘어간다
 	const handleNext = async () => {
 		if (await handleTempSave()) router.push(`${pathname}/detail`);
 	};
@@ -146,6 +169,33 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 			return;
 		}
 		handleTabClick(tabId);
+	};
+
+	const isSatisfied = isArtworkSatisfied({
+		category: basic.category,
+		productionEndYear: basic.endYear,
+		exhibitionId: artwork.exhibitionId,
+		zoneId: artwork.zoneId,
+		hasZonesInExhibition,
+		fieldSettings,
+		mainImagePreview: image.mainImagePreview,
+		width: additional.width,
+		height: additional.height,
+		materials: additional.materials,
+		locationMap: artwork.locationMap,
+	});
+
+	// 헤더의 "저장" 버튼 — 바로 저장하지 않고 확인 모달부터 띄운다
+	const handleSaveClick = () => {
+		if (hasValidationError) return;
+		setIsSaveConfirmOpen(true);
+	};
+
+	const handleConfirmSave = async () => {
+		if (await handleTempSave()) {
+			setIsSaveConfirmOpen(false);
+			router.push(`/artworks/${artwork.artworkId}`);
+		}
 	};
 
 	const tabs = useMemo(
@@ -189,13 +239,21 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 					value={image}
 					onChange={updateImage}
 					onMainImageFileChange={setMainImageFile}
+					mainImageRequired={!!(artwork.exhibitionId && fieldSettings?.required.mainImg)}
 				/>
 			),
 		},
 		{
 			id: "additional",
 			className: "pb-7 pt-7",
-			render: () => <ArtworkAdditionalInfoSection value={additional} onChange={updateAdditional} />,
+			render: () => (
+				<ArtworkAdditionalInfoSection
+					value={additional}
+					onChange={updateAdditional}
+					materialsRequired={!!(artwork.exhibitionId && fieldSettings?.required.materials)}
+					sizeRequired={!!(artwork.exhibitionId && fieldSettings?.required.size)}
+				/>
+			),
 		},
 		{
 			id: "purchase",
@@ -215,12 +273,10 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 			<ArtworkFormHeader
 				artworkId={artwork.artworkId}
 				initialTitle={artwork.title}
-				lastSavedAt={lastSavedAt}
-				onTempSave={handleTempSave}
+				onTempSave={handleSaveClick}
 				isSaving={isSaving}
 				hasValidationError={hasValidationError}
 				saveError={saveError}
-				basicMissingCount={basicMissingCount}
 				tabs={tabs}
 				activeTab={activeTab}
 				onTabClick={handleTopTabClick}
@@ -248,10 +304,17 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 
 			<div className="sticky bottom-0 z-10 flex justify-end border-t border-stroke-lightest bg-bg-normal py-4">
 				<Button type="button" disabled={isSaving || hasValidationError} onClick={handleNext}>
-					다음으로
+					{isSaving ? <DotsLoader /> : "저장 후 상세 정보 작성"}
 				</Button>
 			</div>
 
+			<ArtworkSaveConfirmModal
+				open={isSaveConfirmOpen}
+				onOpenChange={setIsSaveConfirmOpen}
+				isSatisfied={isSatisfied}
+				isSaving={isSaving}
+				onConfirm={handleConfirmSave}
+			/>
 			<NoticeModal notice={visibility.notice} onClose={visibility.closeNotice} />
 		</DesktopContainer>
 	);

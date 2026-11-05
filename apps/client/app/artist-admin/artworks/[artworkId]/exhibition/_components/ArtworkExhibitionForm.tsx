@@ -5,20 +5,22 @@ import { useEffect, useState } from "react";
 import { toErrorMessage } from "@/app/artist-admin/(shell)/_api/actions";
 import type { MyArtworkDetail } from "@/app/artist-admin/artworks/_api/getMyArtwork";
 import { updateArtworkVisibility } from "@/app/artist-admin/artworks/_api/updateArtworkVisibility";
+import { ArtworkSaveConfirmModal } from "@/app/artist-admin/artworks/_components/ArtworkSaveConfirmModal";
 import { ArtworkVisibilitySection } from "@/app/artist-admin/artworks/_components/ArtworkVisibilitySection";
+import { isArtworkSatisfied } from "@/app/artist-admin/artworks/_components/artworkCompleteness";
 import { useArtworkVisibility } from "@/app/artist-admin/artworks/_components/useArtworkVisibility";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import { FormField } from "@/components/common/FormField/FormField";
 import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { ImageInput } from "@/components/common/ImageInput/ImageInput";
-import { Modal } from "@/components/common/Modal/Modal";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
 import {
 	type ArtworkFieldSettings,
 	getArtworkExhibitionStatus,
 } from "../_api/getArtworkExhibitionStatus";
+import { getExhibitionFieldSettings } from "../_api/getExhibitionFieldSettings";
 import { type ExhibitionZone, getExhibitionZones } from "../_api/getExhibitionZones";
 import { submitArtwork } from "../_api/submitArtwork";
 import { ArtworkExhibitionAdditionalInfoSection } from "./sections/ArtworkExhibitionAdditionalInfoSection";
@@ -56,6 +58,11 @@ export const ArtworkExhibitionForm = ({
 			.then(setZones)
 			.catch(() => {});
 	}, [relevantExhibitionId]);
+
+	// 출품 완료 직후엔 artwork가 새로 조회돼도 이 컴포넌트는 그대로 유지돼서 state 초기값이 안 바뀜 — 직접 동기화
+	useEffect(() => {
+		setZoneId(artwork.zoneId ?? undefined);
+	}, [artwork.zoneId]);
 
 	useEffect(() => {
 		if (!artwork.exhibitionId) return;
@@ -177,6 +184,14 @@ const SubmitForm = ({
 	const [locationMapFile, setLocationMapFile] = useState<File | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+	const [fieldSettings, setFieldSettings] = useState<ArtworkFieldSettings | null>(null);
+
+	useEffect(() => {
+		if (!exhibitionId) return;
+		getExhibitionFieldSettings(exhibitionId)
+			.then(setFieldSettings)
+			.catch(() => {});
+	}, [exhibitionId]);
 
 	if (!exhibitionId) {
 		return (
@@ -185,6 +200,20 @@ const SubmitForm = ({
 			</div>
 		);
 	}
+
+	const isSatisfied = isArtworkSatisfied({
+		category: artwork.category ?? undefined,
+		productionEndYear: artwork.productionEndYear ? String(artwork.productionEndYear) : undefined,
+		exhibitionId,
+		zoneId,
+		hasZonesInExhibition: zones.length > 0,
+		fieldSettings,
+		mainImagePreview: artwork.mainImg,
+		width: artwork.width ? String(artwork.width) : "",
+		height: artwork.height ? String(artwork.height) : "",
+		materials: artwork.materials,
+		locationMap: locationMapPreview,
+	});
 
 	const submit = async () => {
 		setIsSubmitting(true);
@@ -199,7 +228,7 @@ const SubmitForm = ({
 	};
 
 	const handleSubmit = () => {
-		if (zones.length > 0 && !zoneId) {
+		if (!isSatisfied) {
 			setIsConfirmOpen(true);
 			return;
 		}
@@ -240,7 +269,7 @@ const SubmitForm = ({
 						</span>
 					</div>
 					<div className="min-w-0 flex-1">
-						<FormField label="위치 이미지">
+						<FormField label="위치 이미지" required={fieldSettings?.required.locationMap}>
 							<ImageInput
 								images={locationMapPreview ? [locationMapPreview] : []}
 								maxCount={1}
@@ -261,21 +290,12 @@ const SubmitForm = ({
 			</div>
 
 			<NoticeModal notice={notice} onClose={closeNotice} />
-			<Modal
+			<ArtworkSaveConfirmModal
 				open={isConfirmOpen}
 				onOpenChange={setIsConfirmOpen}
-				title="저장하시겠어요?"
-				description="아직 필수 정보가 모두 입력되지 않았어요. 작성한 내용은 임시 저장되며, 공개되지 않아요"
-				showCloseButton
-				actions={[
-					{ text: "취소", variant: "assistive", onClick: () => setIsConfirmOpen(false) },
-					{
-						text: "임시 저장하기",
-						variant: "primary",
-						onClick: handleConfirmSave,
-						disabled: isSubmitting,
-					},
-				]}
+				isSatisfied={false}
+				isSaving={isSubmitting}
+				onConfirm={handleConfirmSave}
 			/>
 		</DesktopContainer>
 	);

@@ -96,6 +96,8 @@ export interface ArtworkAdditionalInfoSectionProps {
 	onChange: (patch: Partial<ArtworkAdditionalInfoValue>) => void;
 	showMaterials?: boolean;
 	showSize?: boolean;
+	materialsRequired?: boolean;
+	sizeRequired?: boolean;
 }
 
 export const ArtworkAdditionalInfoSection = ({
@@ -103,6 +105,8 @@ export const ArtworkAdditionalInfoSection = ({
 	onChange,
 	showMaterials = true,
 	showSize = true,
+	materialsRequired,
+	sizeRequired,
 }: ArtworkAdditionalInfoSectionProps) => {
 	const [materialQuery, setMaterialQuery] = useState("");
 	const [isMaterialFocused, setIsMaterialFocused] = useState(false);
@@ -134,7 +138,7 @@ export const ArtworkAdditionalInfoSection = ({
 			</div>
 			<div className="flex min-w-0 flex-1 flex-col gap-9">
 				{showMaterials && (
-					<FormField label="재료 및 기법">
+					<FormField label="재료 및 기법" required={materialsRequired}>
 						<div className="flex flex-wrap gap-2 empty:hidden">
 							{value.materials.map((material) => (
 								<span
@@ -208,7 +212,7 @@ export const ArtworkAdditionalInfoSection = ({
 				)}
 
 				{showSize && (
-					<FormField label="작품 사이즈">
+					<FormField label="작품 사이즈" required={sizeRequired}>
 						<div className="flex gap-2">
 							<div className="flex min-w-0 flex-1 flex-col gap-1">
 								<span className="text-body3 text-light">가로</span>
