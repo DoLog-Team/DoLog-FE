@@ -206,7 +206,7 @@ export const ArtworkExhibitionForm = ({
 					onBack={handleBack}
 					onTempSave={handleSaveClick}
 					tempSaveDisabled={isSaving}
-					saveDisabled={hasAdditionalInfoError(additional)}
+					saveDisabled={hasAdditionalInfoError(additional) || (isSubmitted && !isDirty)}
 					saveLabel={isSubmitted ? "저장" : "출품하기"}
 				/>
 			</div>

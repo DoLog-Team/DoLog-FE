@@ -291,7 +291,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				initialTitle={artwork.title}
 				onTempSave={handleSaveClick}
 				isSaving={isSaving}
-				hasValidationError={hasValidationError}
+				saveDisabled={hasValidationError || !isDirty}
 				saveError={saveError}
 				tabs={tabs}
 				activeTab={activeTab}

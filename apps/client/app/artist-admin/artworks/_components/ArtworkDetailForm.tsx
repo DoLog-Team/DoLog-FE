@@ -158,6 +158,7 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 				initialTitle={artwork.title}
 				onTempSave={handleSaveClick}
 				isSaving={isSaving}
+				saveDisabled={!isDirty}
 				saveError={saveError}
 				tabs={tabs}
 				activeTab="detail"
