@@ -92,7 +92,7 @@ export const ArtworkBasicInfoSection = ({
 
 				<FormField label="카테고리" required>
 					<Select
-						options={[{ label: "없음", value: "" }, ...categoryOptions]}
+						options={[{ label: "-", value: "" }, ...categoryOptions]}
 						value={value.category}
 						onChange={(category) => onChange({ category })}
 						placeholder="작품의 카테고리를 선택해주세요."

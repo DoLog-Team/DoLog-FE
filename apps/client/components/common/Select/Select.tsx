@@ -45,8 +45,9 @@ export const Select = ({
 	const [query, setQuery] = useState("");
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	const selectedLabel =
-		options.find((option) => option.value === value)?.label ?? (creatable ? value : "") ?? "";
+	const selectedLabel = value
+		? (options.find((option) => option.value === value)?.label ?? (creatable ? value : ""))
+		: "";
 	const filteredOptions = query
 		? options.filter((option) => option.label.toLowerCase().includes(query.toLowerCase()))
 		: options;
