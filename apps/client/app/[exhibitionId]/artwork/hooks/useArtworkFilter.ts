@@ -5,7 +5,6 @@ import { matchesQuery } from "@/lib/utils/koreanSearch";
 export function useArtworkFilter(zones: ZoneGroup[], searchQuery: string = "") {
 	const [selected, setSelected] = useState("전체");
 
-	// const currentArtworks = artworks && artworks.length > 0 ? artworks : MOCK_ARTWORK_LIST.artworks; // TODO : 현재 백 데이터가 비어있어서 임시 처리
 	const categories = [
 		"전체",
 		...new Set(zones.flatMap((z) => z.categories.map((c) => c.categoryName))),

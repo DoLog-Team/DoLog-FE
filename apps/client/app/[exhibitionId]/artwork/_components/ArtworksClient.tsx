@@ -11,10 +11,10 @@ import { GuideSection } from "./GuideSection";
 interface ArtworksClientProps {
 	maps: ExhibitionMap[];
 	zones: ZoneGroup[];
-	hideFilter?: boolean;
+	showFilter?: boolean;
 }
 
-export function ArtworksClient({ maps, zones, hideFilter }: ArtworksClientProps) {
+export function ArtworksClient({ maps, zones, showFilter }: ArtworksClientProps) {
 	const hasGuide = maps.length > 0;
 
 	const [searchQuery, setSearchQuery] = useState("");
@@ -59,7 +59,7 @@ export function ArtworksClient({ maps, zones, hideFilter }: ArtworksClientProps)
 				categories={categories}
 				selected={selected}
 				onSelect={setSelected}
-				hideFilter={hideFilter}
+				showFilter={showFilter}
 			/>
 			<ScrollTabBar
 				tabs={TABS}

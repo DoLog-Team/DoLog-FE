@@ -22,7 +22,7 @@ export const FormHeader = ({
 	title,
 	editableTitle,
 	onTitleEditClick,
-	lastSavedAt = "2026.05.12 19:22",
+	lastSavedAt,
 	onTempSave,
 	tempSaveDisabled,
 	saveLabel = "임시 저장",

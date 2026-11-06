@@ -40,9 +40,9 @@ export const isNameKoTypingInvalid = (nameKo: string) => !NAME_KO_TYPING_PATTERN
 export const isNameKoInvalid = (nameKo: string) => !NAME_KO_PATTERN.test(nameKo);
 export const isNameEnInvalid = (nameEn: string) => !NAME_EN_PATTERN.test(nameEn);
 
-// 비어 있으면 프로필 이메일을 지우므로 형식 오류가 아니다
+// 앞부분이 비어 있으면 프로필 이메일을 지우므로 형식 오류가 아니다 — 도메인은 선택 후 비울 수 없어 조건에서 뺀다
 export const isEmailInvalid = (local: string, domain: string) => {
-	if (!local && !domain) return false;
+	if (!local) return false;
 	return !EMAIL_LOCAL_PATTERN.test(local) || !EMAIL_DOMAIN_PATTERN.test(domain);
 };
 

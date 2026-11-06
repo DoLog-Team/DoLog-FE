@@ -31,7 +31,7 @@ interface ArtworkListSectionProps {
 	categories: string[];
 	selected: string;
 	onSelect: (value: string) => void;
-	hideFilter?: boolean;
+	showFilter?: boolean;
 }
 
 const toCardItem = (artwork: ArtworkListItem): CardItem => ({
@@ -78,7 +78,7 @@ export function ArtworkListSection({
 	categories,
 	selected,
 	onSelect,
-	hideFilter,
+	showFilter,
 }: ArtworkListSectionProps) {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
@@ -92,7 +92,6 @@ export function ArtworkListSection({
 	}, []);
 
 	const { ref: titleRef, isVisible: isTitleVisible } = useIntersectionObserver();
-	const isMultiZone = zones.length > 1;
 
 	return (
 		<section className="flex flex-col">
@@ -117,7 +116,7 @@ export function ArtworkListSection({
 						onChange={onSearchChange}
 					/>
 					<div className="flex items-center">
-						{!hideFilter && (
+						{showFilter && (
 							<Filter
 								categories={categories}
 								selected={selected}
@@ -141,7 +140,7 @@ export function ArtworkListSection({
 					{zones.length === 0 ? (
 						<EmptyState
 							searchQuery={searchQuery || undefined}
-							message={"선택한 카테고리에 해당되는\n작품이 없어요"}
+							message={showFilter ? "선택한 카테고리에 해당되는\n작품이 없어요" : undefined}
 							className="w-full pb-16 pt-10 px-2.5"
 						/>
 					) : (
@@ -157,7 +156,6 @@ export function ArtworkListSection({
 							return (
 								<div
 									key={zone.zoneName}
-									className={!isMultiZone ? "pt-4" : ""}
 									ref={(el) => {
 										if (sectionRefs[zone.zoneName]) {
 											(
@@ -166,8 +164,8 @@ export function ArtworkListSection({
 										}
 									}}
 								>
-									{isMultiZone && <Title title={zone.zoneName} />}
-									{isMultiZone && zone.description && (
+									<Title title={zone.zoneName} />
+									{zone.description && (
 										<p className="text-body2 text-light mb-4 whitespace-pre-wrap">
 											{zone.description}
 										</p>
