@@ -5,52 +5,102 @@ import { Engagement } from "@/components/common/Engagement/Engagement";
 import { EmptyArtistIcon } from "@/components/common/icons/EmptyArtistIcon";
 import RowList from "@/components/common/RowList/RowList";
 import { Title } from "@/components/common/Title/Title";
+import { hasArtistProfileInfo } from "@/lib/utils/artistProfile";
 import { cn } from "@/lib/utils/cn";
+import { resolveSnsHref } from "@/lib/utils/sns";
 import type { ArtistAdminProfile } from "../../_types";
 import { SECTION_TITLE_CLASS } from "../SectionHeader";
 
 const PROFILE_EDIT_PATH = "/artist-admin/profile/edit";
+const CONTACT_LINK_CLASS = "text-light underline";
 
 interface ProfileSectionProps {
 	profile: ArtistAdminProfile;
 }
 
 export function ProfileSection({ profile }: ProfileSectionProps) {
+	// 이메일은 작가가 입력하지 않아도 계정 이메일이 들어올 수 있어 등록 여부 판단에서 뺀다
+	const hasRegisteredProfile = hasArtistProfileInfo({
+		nameKo: profile.nameKo,
+		nameEn: profile.nameEn,
+		bio: profile.bio,
+		profileImage: profile.profileImage,
+		snsCount: profile.sns.length,
+	});
+
 	const actions = [
 		{ label: "프로필 수정", icon: "/icons/edit.svg", href: PROFILE_EDIT_PATH },
-		// 두록 작가 상세
-		{ label: "작가 프로필 보기", icon: "/icons/check.svg", href: `/artists/${profile.artistId}` },
+		// 두록 작가 상세 — 프로필을 하나도 등록하지 않았으면 보여줄 내용이 없어 숨긴다
+		...(hasRegisteredProfile
+			? [
+					{
+						label: "작가 프로필 보기",
+						icon: "/icons/check.svg",
+						href: `/artists/${profile.artistId}`,
+					},
+				]
+			: []),
 	];
 
 	const rows = [
-		...(profile.email ? [{ label: "이메일", value: profile.email }] : []),
-		...profile.sns.map((sns) => ({ label: sns.label, value: sns.url })),
-	].map((row) => ({
-		...row,
-		value: <span className="text-light">{row.value}</span>,
-	}));
+		...(profile.email
+			? [
+					{
+						label: "이메일",
+						value: (
+							<a href={`mailto:${profile.email}`} className={CONTACT_LINK_CLASS}>
+								{profile.email}
+							</a>
+						),
+					},
+				]
+			: []),
+		...profile.sns.map((sns) => {
+			const href = resolveSnsHref(sns.label, sns.url);
+			return {
+				label: sns.label,
+				value: href ? (
+					<a href={href} target="_blank" rel="noopener noreferrer" className={CONTACT_LINK_CLASS}>
+						{sns.url}
+					</a>
+				) : (
+					<span className="text-light">{sns.url}</span>
+				),
+			};
+		}),
+	];
 
 	return (
-		<section className="grid grid-cols-8 gap-x-2 pb-6 min-[721px]:grid-cols-4 min-[721px]:gap-x-5 min-[721px]:pt-4 min-[721px]:pb-7">
-			{/* 프로필 이미지 */}
-			<div className="col-span-3 pt-4 min-[721px]:col-span-1 min-[721px]:row-span-2">
-				{profile.profileImage ? (
-					<Image
-						src={profile.profileImage}
-						alt={profile.nameKo || profile.nameEn || ""}
-						width={254}
-						height={359}
-						className="aspect-[1/1.414] w-full object-cover"
-					/>
-				) : (
-					<div className="flex aspect-[1/1.414] w-full items-center justify-center bg-fg-lighter">
-						<EmptyArtistIcon color="var(--color-text-lightest)" />
-					</div>
-				)}
-			</div>
+		// 프로필 이미지가 두 행을 차지해 남는 높이가 이름 행까지 벌어지지 않도록 둘째 행에만 몰아준다
+		<section className="grid grid-cols-8 gap-x-2 pb-6 min-[721px]:grid-cols-4 min-[721px]:grid-rows-[auto_1fr] min-[721px]:gap-x-5 min-[721px]:pt-4 min-[721px]:pb-7">
+			{/* 프로필 이미지 — 프로필 미등록이면 자리까지 없앤다 (Figma 10.20 추가 사항) */}
+			{hasRegisteredProfile && (
+				<div className="col-span-3 pt-4 min-[721px]:col-span-1 min-[721px]:row-span-2">
+					{profile.profileImage ? (
+						<Image
+							src={profile.profileImage}
+							alt={profile.nameKo || profile.nameEn || ""}
+							width={254}
+							height={359}
+							className="aspect-[1/1.414] w-full object-cover"
+						/>
+					) : (
+						<div className="flex aspect-[1/1.414] w-full items-center justify-center bg-fg-lighter">
+							<EmptyArtistIcon color="var(--color-text-lightest)" />
+						</div>
+					)}
+				</div>
+			)}
 
-			<div className="col-span-5 self-end min-[721px]:col-span-3 min-[721px]:self-start min-[721px]:pt-4 min-[721px]:pb-5">
-				<div className="flex items-center gap-1">
+			<div
+				className={cn(
+					"min-[721px]:self-start min-[721px]:pt-4 min-[721px]:pb-5",
+					hasRegisteredProfile
+						? "col-span-5 self-end min-[721px]:col-span-3"
+						: "col-span-8 pt-4 min-[721px]:col-span-4",
+				)}
+			>
+				<div className={cn("flex items-center gap-1", !hasRegisteredProfile && "justify-between")}>
 					<Title
 						// 국문 성명 미등록이면 입력 안내 (Figma 10.20 추가 사항)
 						title={profile.nameKo || "작가명을 입력해주세요."}
@@ -68,7 +118,12 @@ export function ProfileSection({ profile }: ProfileSectionProps) {
 			</div>
 
 			{/* 소개·SNS·조회수 */}
-			<div className="col-span-8 pt-5 min-[721px]:col-span-3 min-[721px]:pt-0">
+			<div
+				className={cn(
+					"col-span-8 pt-5 min-[721px]:pt-0",
+					hasRegisteredProfile ? "min-[721px]:col-span-3" : "min-[721px]:col-span-4",
+				)}
+			>
 				{profile.bio && (
 					<p className="mb-6 px-0.5 text-body1 text-light whitespace-pre-wrap">{profile.bio}</p>
 				)}
