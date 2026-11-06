@@ -102,6 +102,15 @@ const TEMPLATES: Partial<
 		description: `${p.exhibitionName} 전시가 삭제되어 ${p.artworkTitle} 작품이 비공개 처리되었어요.`,
 		href: p.artworkId ? `/artist-admin/artworks/${p.artworkId}/edit` : undefined,
 	}),
+	// "전시에만 공개"로 설정한 작품의 작가에게만
+	EXHIBITION_UNPUBLISHED: (p) => ({
+		title: "소속 전시 비공개로 작품 미노출",
+		description: `${p.exhibitionName} 전시가 비공개로 전환되어 작품이 노출되지 않게 되었어요.`,
+	}),
+	EXHIBITION_REPUBLISHED: (p) => ({
+		title: "소속 전시 재공개로 작품 노출",
+		description: `${p.exhibitionName} 전시가 다시 공개되어 작품이 다시 노출돼요.`,
+	}),
 };
 
 const FALLBACK: NotificationContent = {
