@@ -4,10 +4,16 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toErrorMessage } from "@/app/artist-admin/(shell)/_api/actions";
 import type { MyArtworkDetail } from "@/app/artist-admin/artworks/_api/getMyArtwork";
+import { updateArtworkAdditionalInfo } from "@/app/artist-admin/artworks/_api/updateArtwork";
 import { updateArtworkVisibility } from "@/app/artist-admin/artworks/_api/updateArtworkVisibility";
 import { ArtworkSaveConfirmModal } from "@/app/artist-admin/artworks/_components/ArtworkSaveConfirmModal";
 import { ArtworkVisibilitySection } from "@/app/artist-admin/artworks/_components/ArtworkVisibilitySection";
 import { isArtworkSatisfied } from "@/app/artist-admin/artworks/_components/artworkCompleteness";
+import {
+	ArtworkAdditionalInfoSection,
+	type ArtworkAdditionalInfoValue,
+	hasAdditionalInfoError,
+} from "@/app/artist-admin/artworks/_components/sections/ArtworkAdditionalInfoSection";
 import { useArtworkVisibility } from "@/app/artist-admin/artworks/_components/useArtworkVisibility";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
@@ -16,14 +22,11 @@ import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { ImageInput } from "@/components/common/ImageInput/ImageInput";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
-import {
-	type ArtworkFieldSettings,
-	getArtworkExhibitionStatus,
-} from "../_api/getArtworkExhibitionStatus";
+import { compressImageFile } from "@/lib/utils/image";
+import { getArtworkExhibitionStatus } from "../_api/getArtworkExhibitionStatus";
 import { getExhibitionFieldSettings } from "../_api/getExhibitionFieldSettings";
 import { type ExhibitionZone, getExhibitionZones } from "../_api/getExhibitionZones";
 import { submitArtwork } from "../_api/submitArtwork";
-import { ArtworkExhibitionAdditionalInfoSection } from "./sections/ArtworkExhibitionAdditionalInfoSection";
 import { ArtworkExhibitionGroupSection } from "./sections/ArtworkExhibitionGroupSection";
 import { ArtworkExhibitionLinkSection } from "./sections/ArtworkExhibitionLinkSection";
 
@@ -45,12 +48,36 @@ export const ArtworkExhibitionForm = ({
 	const router = useRouter();
 	const { notice, showNotice, closeNotice } = useNoticeModal();
 	const visibility = useArtworkVisibility(artwork.artworkId, artwork);
-	const [fieldSettings, setFieldSettings] = useState<ArtworkFieldSettings | null>(null);
-	const [planLimitExceeded, setPlanLimitExceeded] = useState(false);
-	const [zoneId, setZoneId] = useState<string | undefined>(artwork.zoneId ?? undefined);
-	const [isSavingZone, setIsSavingZone] = useState(false);
-	const [zones, setZones] = useState<ExhibitionZone[]>([]);
 	const relevantExhibitionId = artwork.exhibitionId ?? pendingExhibitionId;
+	const isSubmitted = !!artwork.exhibitionId;
+
+	const [fieldSettings, setFieldSettings] = useState<Awaited<
+		ReturnType<typeof getExhibitionFieldSettings>
+	> | null>(null);
+	const [planLimitExceeded, setPlanLimitExceeded] = useState(false);
+	const [zones, setZones] = useState<ExhibitionZone[]>([]);
+	const [zoneId, setZoneId] = useState<string | undefined>(artwork.zoneId ?? undefined);
+	const [isSaving, setIsSaving] = useState(false);
+	const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+	const [mainImageFile, setMainImageFile] = useState<File | null>(null);
+	const [mainImagePreview, setMainImagePreview] = useState<string | null>(artwork.mainImg);
+	const [additional, setAdditional] = useState<ArtworkAdditionalInfoValue>({
+		materials: artwork.materials,
+		width: artwork.width != null ? String(artwork.width) : "",
+		height: artwork.height != null ? String(artwork.height) : "",
+		hasVolume: artwork.depth != null,
+		depth: artwork.depth != null ? String(artwork.depth) : "",
+	});
+	const updateAdditional = (patch: Partial<ArtworkAdditionalInfoValue>) =>
+		setAdditional((prev) => ({ ...prev, ...patch }));
+	const [locationMapFile, setLocationMapFile] = useState<File | null>(null);
+	const [locationMapPreview, setLocationMapPreview] = useState<string | null>(artwork.locationMap);
+
+	// 출품 완료 직후엔 artwork가 새로 조회돼도 이 컴포넌트는 그대로 유지돼서 state 초기값이 안 바뀜 — 직접 동기화
+	useEffect(() => {
+		setZoneId(artwork.zoneId ?? undefined);
+	}, [artwork.zoneId]);
 
 	useEffect(() => {
 		if (!relevantExhibitionId) return;
@@ -59,141 +86,21 @@ export const ArtworkExhibitionForm = ({
 			.catch(() => {});
 	}, [relevantExhibitionId]);
 
-	// 출품 완료 직후엔 artwork가 새로 조회돼도 이 컴포넌트는 그대로 유지돼서 state 초기값이 안 바뀜 — 직접 동기화
 	useEffect(() => {
-		setZoneId(artwork.zoneId ?? undefined);
-	}, [artwork.zoneId]);
+		if (!relevantExhibitionId) return;
+		getExhibitionFieldSettings(relevantExhibitionId)
+			.then(setFieldSettings)
+			.catch(() => {});
+	}, [relevantExhibitionId]);
 
 	useEffect(() => {
 		if (!artwork.exhibitionId) return;
 		getArtworkExhibitionStatus(artwork.artworkId)
-			.then((status) => {
-				setFieldSettings(status.fieldSettings);
-				setPlanLimitExceeded(status.planLimitExceeded);
-			})
+			.then((status) => setPlanLimitExceeded(status.planLimitExceeded))
 			.catch(() => {});
 	}, [artwork.artworkId, artwork.exhibitionId]);
 
-	const handleSaveZone = async () => {
-		if (!zoneId || zoneId === artwork.zoneId) return;
-		setIsSavingZone(true);
-		try {
-			await updateArtworkVisibility(artwork.artworkId, visibility.visibility, zoneId);
-			router.refresh();
-		} catch (error) {
-			showNotice("그룹 저장에 실패했어요", toErrorMessage(error));
-		} finally {
-			setIsSavingZone(false);
-		}
-	};
-
-	if (artwork.exhibitionId && artwork.exhibitionName) {
-		return (
-			<DesktopContainer>
-				<div className="sticky top-0 z-10 bg-bg-normal">
-					<FormHeader
-						title={artwork.title}
-						lastSavedAt=""
-						onBack={onBack}
-						onTempSave={handleSaveZone}
-						tempSaveDisabled={isSavingZone}
-						saveDisabled={!zoneId || zoneId === artwork.zoneId}
-					/>
-				</div>
-				<div className="flex flex-col gap-7 py-7">
-					<ArtworkExhibitionLinkSection
-						artworkId={artwork.artworkId}
-						artworkTitle={artwork.title}
-						exhibitionName={artwork.exhibitionName}
-						hidden={artwork.hidden}
-						planLimitExceeded={planLimitExceeded}
-						onCancelled={onCancelled}
-					/>
-
-					{zones.length > 0 && (
-						<>
-							<Divider thickness="thin" fullBleed={true} spacing="md" />
-							<ArtworkExhibitionGroupSection zones={zones} value={zoneId} onChange={setZoneId} />
-						</>
-					)}
-
-					<Divider thickness="thin" fullBleed={true} spacing="md" />
-
-					<ArtworkVisibilitySection
-						value={visibility.visibility}
-						onChange={visibility.handleChange}
-						disabled={visibility.isSaving}
-						hasExhibition
-					/>
-
-					{fieldSettings && (
-						<>
-							<Divider thickness="thin" fullBleed={true} spacing="md" />
-							<ArtworkExhibitionAdditionalInfoSection
-								artworkId={artwork.artworkId}
-								required={fieldSettings.required}
-								initial={{
-									materials: artwork.materials,
-									width: artwork.width,
-									height: artwork.height,
-									depth: artwork.depth,
-									locationMap: artwork.locationMap,
-								}}
-							/>
-						</>
-					)}
-				</div>
-
-				<NoticeModal notice={visibility.notice} onClose={visibility.closeNotice} />
-			</DesktopContainer>
-		);
-	}
-
-	return (
-		<SubmitForm
-			artwork={artwork}
-			exhibitionId={pendingExhibitionId}
-			zones={zones}
-			onBack={onBack}
-			onSubmitted={onSubmitted}
-			showNotice={showNotice}
-			notice={notice}
-			closeNotice={closeNotice}
-		/>
-	);
-};
-
-const SubmitForm = ({
-	artwork,
-	exhibitionId,
-	zones,
-	onBack,
-	onSubmitted,
-	notice,
-	showNotice,
-	closeNotice,
-}: {
-	artwork: MyArtworkDetail;
-	exhibitionId: string | null;
-	zones: ExhibitionZone[];
-	onBack: () => void;
-	onSubmitted: () => void;
-} & ReturnType<typeof useNoticeModal>) => {
-	const [zoneId, setZoneId] = useState<string | undefined>(undefined);
-	const [locationMapPreview, setLocationMapPreview] = useState<string | null>(null);
-	const [locationMapFile, setLocationMapFile] = useState<File | null>(null);
-	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-	const [fieldSettings, setFieldSettings] = useState<ArtworkFieldSettings | null>(null);
-
-	useEffect(() => {
-		if (!exhibitionId) return;
-		getExhibitionFieldSettings(exhibitionId)
-			.then(setFieldSettings)
-			.catch(() => {});
-	}, [exhibitionId]);
-
-	if (!exhibitionId) {
+	if (!relevantExhibitionId) {
 		return (
 			<div className="p-8 text-body1 text-lighter">
 				출품할 전시를 찾을 수 없어요. 작품 카드의 "작품 출품하기"로 다시 시도해주세요.
@@ -201,43 +108,76 @@ const SubmitForm = ({
 		);
 	}
 
+	const required = fieldSettings?.required;
+
 	const isSatisfied = isArtworkSatisfied({
 		category: artwork.category ?? undefined,
 		productionEndYear: artwork.productionEndYear ? String(artwork.productionEndYear) : undefined,
-		exhibitionId,
+		exhibitionId: relevantExhibitionId,
 		zoneId,
 		hasZonesInExhibition: zones.length > 0,
 		fieldSettings,
-		mainImagePreview: artwork.mainImg,
-		width: artwork.width ? String(artwork.width) : "",
-		height: artwork.height ? String(artwork.height) : "",
-		materials: artwork.materials,
+		mainImagePreview,
+		width: additional.width,
+		height: additional.height,
+		materials: additional.materials,
 		locationMap: locationMapPreview,
 	});
 
-	const submit = async () => {
-		setIsSubmitting(true);
+	const save = async () => {
+		setIsSaving(true);
 		try {
-			await submitArtwork(artwork.artworkId, { exhibitionId, zoneId, locationMapFile });
-			onSubmitted();
+			if (!isSubmitted) {
+				await Promise.all([
+					submitArtwork(artwork.artworkId, {
+						exhibitionId: relevantExhibitionId,
+						zoneId,
+						locationMapFile,
+					}),
+					updateArtworkAdditionalInfo(artwork.artworkId, {
+						materials: additional.materials,
+						width: additional.width,
+						height: additional.height,
+						depth: additional.hasVolume ? additional.depth : undefined,
+						mainImageFile,
+					}),
+				]);
+				onSubmitted();
+			} else {
+				const tasks: Promise<unknown>[] = [
+					updateArtworkAdditionalInfo(artwork.artworkId, {
+						materials: additional.materials,
+						width: additional.width,
+						height: additional.height,
+						depth: additional.hasVolume ? additional.depth : undefined,
+						locationMapFile,
+						mainImageFile,
+					}),
+				];
+				if (zoneId && zoneId !== artwork.zoneId) {
+					tasks.push(updateArtworkVisibility(artwork.artworkId, visibility.visibility, zoneId));
+				}
+				await Promise.all(tasks);
+				router.refresh();
+			}
 		} catch (error) {
-			showNotice("출품에 실패했어요", toErrorMessage(error));
+			showNotice(isSubmitted ? "저장에 실패했어요" : "출품에 실패했어요", toErrorMessage(error));
 		} finally {
-			setIsSubmitting(false);
+			setIsSaving(false);
 		}
 	};
 
-	const handleSubmit = () => {
+	const handleSaveClick = () => {
 		if (!isSatisfied) {
 			setIsConfirmOpen(true);
 			return;
 		}
-		submit();
+		save();
 	};
 
-	const handleConfirmSave = () => {
+	const handleConfirmSave = async () => {
 		setIsConfirmOpen(false);
-		submit();
+		await save();
 	};
 
 	return (
@@ -247,16 +187,97 @@ const SubmitForm = ({
 					title={artwork.title}
 					lastSavedAt=""
 					onBack={onBack}
-					saveLabel="출품하기"
-					onTempSave={handleSubmit}
-					tempSaveDisabled={isSubmitting}
+					onTempSave={handleSaveClick}
+					tempSaveDisabled={isSaving}
+					saveDisabled={hasAdditionalInfoError(additional)}
+					saveLabel={isSubmitted ? "저장" : "출품하기"}
 				/>
 			</div>
 
 			<div className="flex flex-col gap-7 py-7">
+				{isSubmitted && artwork.exhibitionName && (
+					<>
+						<ArtworkExhibitionLinkSection
+							artworkId={artwork.artworkId}
+							artworkTitle={artwork.title}
+							exhibitionName={artwork.exhibitionName}
+							hidden={artwork.hidden}
+							planLimitExceeded={planLimitExceeded}
+							onCancelled={onCancelled}
+						/>
+						<Divider thickness="thin" fullBleed={true} spacing="md" />
+					</>
+				)}
+
 				{zones.length > 0 && (
 					<>
 						<ArtworkExhibitionGroupSection zones={zones} value={zoneId} onChange={setZoneId} />
+						<Divider thickness="thin" fullBleed={true} spacing="md" />
+					</>
+				)}
+
+				{isSubmitted && (
+					<>
+						<ArtworkVisibilitySection
+							value={visibility.visibility}
+							onChange={visibility.handleChange}
+							disabled={visibility.isSaving}
+							hasExhibition
+						/>
+						<Divider thickness="thin" fullBleed={true} spacing="md" />
+					</>
+				)}
+
+				{required?.mainImg && (
+					<>
+						<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
+							<div className="min-w-0 min-[721px]:w-100">
+								<h2 className="text-head3 text-strong">작품 대표 이미지</h2>
+							</div>
+							<div className="min-w-0 flex-1">
+								<FormField label="대표 이미지" required>
+									<ImageInput
+										className="w-full"
+										accept="image/jpeg,image/png,image/webp"
+										images={mainImagePreview ? [mainImagePreview] : []}
+										maxCount={1}
+										onAdd={(files) => {
+											const file = files[0];
+											if (!file) return;
+											compressImageFile(file)
+												.then((compressed) => {
+													setMainImageFile(compressed);
+													setMainImagePreview(URL.createObjectURL(compressed));
+												})
+												.catch(() =>
+													showNotice(
+														"이미지를 불러오지 못했어요",
+														"jpg, png, webp 형식의 이미지만 업로드할 수 있어요.\n다른 파일로 다시 시도해주세요.",
+													),
+												);
+										}}
+										onRemove={() => {
+											setMainImageFile(null);
+											setMainImagePreview(null);
+										}}
+									/>
+								</FormField>
+							</div>
+						</div>
+						<Divider thickness="thin" fullBleed={true} spacing="md" />
+					</>
+				)}
+
+				{(required?.materials || required?.size) && (
+					<>
+						<ArtworkAdditionalInfoSection
+							value={additional}
+							onChange={updateAdditional}
+							showMaterials={!!required?.materials}
+							showSize={!!required?.size}
+							materialsRequired={required?.materials}
+							sizeRequired={required?.size}
+						/>
 						<Divider thickness="thin" fullBleed={true} spacing="md" />
 					</>
 				)}
@@ -269,7 +290,7 @@ const SubmitForm = ({
 						</span>
 					</div>
 					<div className="min-w-0 flex-1">
-						<FormField label="위치 이미지" required={fieldSettings?.required.locationMap}>
+						<FormField label="위치 이미지" required={required?.locationMap}>
 							<ImageInput
 								images={locationMapPreview ? [locationMapPreview] : []}
 								maxCount={1}
@@ -290,11 +311,12 @@ const SubmitForm = ({
 			</div>
 
 			<NoticeModal notice={notice} onClose={closeNotice} />
+			<NoticeModal notice={visibility.notice} onClose={visibility.closeNotice} />
 			<ArtworkSaveConfirmModal
 				open={isConfirmOpen}
 				onOpenChange={setIsConfirmOpen}
 				isSatisfied={false}
-				isSaving={isSubmitting}
+				isSaving={isSaving}
 				onConfirm={handleConfirmSave}
 			/>
 		</DesktopContainer>
