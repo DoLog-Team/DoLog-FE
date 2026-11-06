@@ -11,6 +11,7 @@ import { track } from "@/lib/amplitude";
 import type { ArtworkListItem } from "@/lib/api/artwork";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import { AlbumIcon } from "./AlbumIcon";
+import Filter from "./Filter";
 import { ListIcon } from "./ListIcon";
 
 interface FilteredZone {
@@ -27,6 +28,10 @@ interface ArtworkListSectionProps {
 	zones: FilteredZone[];
 	searchQuery: string;
 	onSearchChange: (value: string) => void;
+	categories: string[];
+	selected: string;
+	onSelect: (value: string) => void;
+	showFilter?: boolean;
 }
 
 const toCardItem = (artwork: ArtworkListItem): CardItem => ({
@@ -70,6 +75,10 @@ export function ArtworkListSection({
 	zones,
 	searchQuery,
 	onSearchChange,
+	categories,
+	selected,
+	onSelect,
+	showFilter,
 }: ArtworkListSectionProps) {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
@@ -106,11 +115,23 @@ export function ArtworkListSection({
 						value={searchQuery}
 						onChange={onSearchChange}
 					/>
-					{!isTitleVisible && (
-						<div className="flex justify-end min-[721px]:hidden">
-							<ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
-						</div>
-					)}
+					<div className="flex items-center">
+						{showFilter && (
+							<Filter
+								categories={categories}
+								selected={selected}
+								onSelect={(val) => {
+									onSelect(val);
+									track("Category Filter Selected", { category: val, page: "artwork_list" });
+								}}
+							/>
+						)}
+						{!isTitleVisible && (
+							<div className="ml-auto min-[721px]:hidden">
+								<ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+							</div>
+						)}
+					</div>
 				</DesktopContainer>
 			</div>
 
@@ -119,6 +140,7 @@ export function ArtworkListSection({
 					{zones.length === 0 ? (
 						<EmptyState
 							searchQuery={searchQuery || undefined}
+							message={showFilter ? "선택한 카테고리에 해당되는\n작품이 없어요" : undefined}
 							className="w-full pb-16 pt-10 px-2.5"
 						/>
 					) : (

@@ -35,10 +35,14 @@ export default async function ArtworkListPage({ params }: ArtworkListPageProps) 
 		);
 	}
 
+	// 특정 전시에서만 카테고리 필터 표시 [국민대 건축대학]
+	const SHOW_FILTER_EXHIBITION_IDS = new Set(["d5db3a9d-0df7-464d-aeba-0c883dc6e2d2"]);
+	const showFilter = SHOW_FILTER_EXHIBITION_IDS.has(uuid);
+
 	return (
 		<main>
 			<Header variant="sub" title="전체 전시물" />
-			<ArtworksClient maps={artworkData.maps} zones={artworkData.zones} />
+			<ArtworksClient maps={artworkData.maps} zones={artworkData.zones} showFilter={showFilter} />
 		</main>
 	);
 }
