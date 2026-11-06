@@ -49,7 +49,6 @@ export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEdit
 	// 형식 오류는 저장을 시도한 뒤부터 보여준다 (입력 도중에는 형식이 맞지 않으므로)
 	const [showErrors, setShowErrors] = useState(false);
 
-	const [lastSavedAt, setLastSavedAt] = useState("");
 	const [isSaving, setIsSaving] = useState(false);
 	const [isSaveFailed, setIsSaveFailed] = useState(false);
 
@@ -72,7 +71,6 @@ export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEdit
 			setForm(nextForm);
 			setSavedForm(nextForm);
 			setShowErrors(false);
-			setLastSavedAt(formatSavedAt(new Date()));
 			router.refresh();
 			return true;
 		} catch {
@@ -135,7 +133,7 @@ export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEdit
 			<div className="sticky top-0 z-10 bg-bg-normal">
 				<FormHeader
 					title="프로필 정보 수정"
-					lastSavedAt={lastSavedAt}
+					lastSavedAt=""
 					saveLabel="저장"
 					saveDisabled={!isDirty || isSaving}
 					tempSaveDisabled={isSaving}
@@ -180,12 +178,6 @@ export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEdit
 			/>
 		</DesktopContainer>
 	);
-};
-
-// 마지막 저장 시각
-const formatSavedAt = (date: Date) => {
-	const pad = (value: number) => String(value).padStart(2, "0");
-	return `${date.getFullYear()}.${pad(date.getMonth() + 1)}.${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
 };
 
 // 변경 여부 비교용 — 화면용 행 key 와 파일 객체는 빼고 비교한다 (새 파일은 미리보기 주소가 바뀌어 잡힌다)
