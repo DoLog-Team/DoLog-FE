@@ -25,9 +25,9 @@ export interface MyArtwork {
 		exhibitionId: string;
 		name: string;
 		hidden: boolean;
-		// 플랜 한도 초과로 전시에 노출되지 않으면 true (숨김과는 별개 상태)
 		planLimitExceeded: boolean;
 	} | null;
+	visibleNow: boolean;
 	viewCount: number;
 	likeCount: number;
 	status: ArtworkStatus;

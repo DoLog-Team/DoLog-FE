@@ -51,6 +51,15 @@ export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardP
 	];
 
 	const previewable = artwork.completionRate === 100;
+	const isExhibitionPrivate =
+		artwork.status === "public" &&
+		!artwork.visibleNow &&
+		!artwork.exhibition?.hidden &&
+		!artwork.exhibition?.planLimitExceeded;
+	const isActuallyHidden =
+		artwork.exhibition?.hidden || artwork.exhibition?.planLimitExceeded || isExhibitionPrivate;
+	const displayStatus =
+		artwork.status === "public" && isActuallyHidden ? "private" : artwork.status;
 
 	return (
 		<article className="relative flex gap-4 min-[721px]:flex-col min-[721px]:gap-3">
@@ -107,7 +116,7 @@ export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardP
 				</div>
 
 				<div className="mt-3 flex gap-1.5">
-					<ArtworkStatusBadge status={artwork.status} />
+					<ArtworkStatusBadge status={displayStatus} />
 					{artwork.status === "draft" && artwork.completionRate !== null && (
 						<StatusBadge label={`${artwork.completionRate}% 작성`} />
 					)}
