@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { Spinner } from "@/components/common/Spinner/Spinner";
-import { rememberSignupName } from "@/components/common/WelcomeModal/WelcomeModal";
 import { loginArtistSocial, type SocialLoginFailure } from "@/lib/api/auth";
 import { notifyAuthChange } from "@/lib/auth/useAuthRole";
 import {
@@ -57,7 +56,6 @@ export const SocialLoginCallback = ({ provider }: SocialLoginCallbackProps) => {
 
 			// 첫 로그인(회원가입): 약관 동의 → 두록 홈 + 환영 모달 / 이후: 로그인을 시작한 화면
 			if (result.data.needsTermsAgreement) {
-				rememberSignupName(result.data.profile.name);
 				return router.replace("/artist-admin/terms");
 			}
 			router.replace(pending.redirect ?? DEFAULT_LOGIN_REDIRECT);
