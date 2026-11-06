@@ -70,9 +70,9 @@ export function PostNavigationSection({
 	getHref = (artwork) => `../artwork/${artwork.id}`,
 }: PostNavigationProps) {
 	return (
-		<section className="flex flex-col pb-6 w-full">
+		<section className="flex flex-col pt-7 pb-6 w-full">
 			<DesktopContainer>
-				<span className="text-body1-bold text-lighter pt-7 pb-2.5">{title}</span>
+				<span className="text-body1-bold text-lighter pb-2.5">{title}</span>
 				<hr className="border border-stroke-lighter" />
 				{prevArtwork && (
 					<ArtworkNavItem artwork={prevArtwork} direction="prev" href={getHref(prevArtwork)} />

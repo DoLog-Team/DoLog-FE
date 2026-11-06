@@ -8,12 +8,10 @@ import { RenameArtworkModal } from "./RenameArtworkModal";
 export interface ArtworkFormHeaderProps {
 	artworkId: string;
 	initialTitle: string;
-	lastSavedAt?: string;
 	onTempSave: () => void;
 	isSaving: boolean;
 	hasValidationError?: boolean;
 	saveError?: string;
-	basicMissingCount: number;
 	tabs: Tab[];
 	activeTab: string;
 	onTabClick: (tabId: string) => void;
@@ -23,12 +21,10 @@ export interface ArtworkFormHeaderProps {
 export const ArtworkFormHeader = ({
 	artworkId,
 	initialTitle,
-	lastSavedAt,
 	onTempSave,
 	isSaving,
 	hasValidationError,
 	saveError,
-	basicMissingCount,
 	tabs,
 	activeTab,
 	onTabClick,
@@ -44,11 +40,11 @@ export const ArtworkFormHeader = ({
 					title={artworkTitle}
 					editableTitle
 					onTitleEditClick={() => setIsRenameModalOpen(true)}
-					lastSavedAt={lastSavedAt}
+					lastSavedAt=""
 					onTempSave={onTempSave}
 					tempSaveDisabled={isSaving}
 					saveDisabled={hasValidationError}
-					saveLabel={basicMissingCount === 0 ? "저장" : "임시 저장"}
+					saveLabel="저장"
 					onBack={onBack}
 				/>
 				<TabBar tabs={tabs} activeTab={activeTab} onTabClick={onTabClick} />

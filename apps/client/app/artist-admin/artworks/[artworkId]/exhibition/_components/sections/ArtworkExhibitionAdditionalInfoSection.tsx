@@ -70,6 +70,8 @@ export const ArtworkExhibitionAdditionalInfoSection = ({
 				onChange={updateValue}
 				showMaterials={required.materials}
 				showSize={required.size}
+				materialsRequired={required.materials}
+				sizeRequired={required.size}
 			/>
 
 			{required.locationMap && (
@@ -81,7 +83,7 @@ export const ArtworkExhibitionAdditionalInfoSection = ({
 						</span>
 					</div>
 					<div className="min-w-0 flex-1">
-						<FormField label="위치 이미지">
+						<FormField label="위치 이미지" required>
 							<ImageInput
 								images={locationMapPreview ? [locationMapPreview] : []}
 								maxCount={1}

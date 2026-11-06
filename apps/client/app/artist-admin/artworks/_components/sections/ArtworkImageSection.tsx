@@ -18,12 +18,14 @@ export interface ArtworkImageSectionProps {
 	value: ArtworkImageValue;
 	onChange: (patch: Partial<ArtworkImageValue>) => void;
 	onMainImageFileChange: (file: File | null) => void;
+	mainImageRequired?: boolean;
 }
 
 export const ArtworkImageSection = ({
 	value,
 	onChange,
 	onMainImageFileChange,
+	mainImageRequired,
 }: ArtworkImageSectionProps) => {
 	const { videoUrl, linkStatus, videoTitle, thumbnailUrl, handleVideoUrlChange, handleLink } =
 		useYoutubeLink(value.youtubeUrl, (youtubeUrl) => onChange({ youtubeUrl }));
@@ -40,6 +42,7 @@ export const ArtworkImageSection = ({
 			<div className="flex min-w-0 flex-1 flex-col gap-9">
 				<FormField
 					label="작품 대표 이미지"
+					required={mainImageRequired}
 					description={
 						"대표 이미지 1장을 선택해주세요.\n추가적 이미지는 작품 상세 정보에 첨부해주세요."
 					}

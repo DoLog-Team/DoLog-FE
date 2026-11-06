@@ -3,8 +3,8 @@
 import "@toast-ui/editor/dist/toastui-editor.css";
 import type { EditorProps, Editor as ToastEditor } from "@toast-ui/react-editor";
 import dynamic from "next/dynamic";
-import { usePathname, useRouter } from "next/navigation";
-import { useMemo, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { useAsyncSave } from "@/lib/hooks/useAsyncSave";
@@ -12,7 +12,14 @@ import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
 import { compressImageFile } from "@/lib/utils/image";
 import type { MyArtworkDetail } from "../_api/getMyArtwork";
 import { updateArtworkDescription, uploadContentImage } from "../_api/updateArtworkDetail";
+import {
+	type ArtworkFieldSettings,
+	getArtworkExhibitionStatus,
+} from "../[artworkId]/exhibition/_api/getArtworkExhibitionStatus";
+import { getExhibitionZones } from "../[artworkId]/exhibition/_api/getExhibitionZones";
 import { ArtworkFormHeader } from "./ArtworkFormHeader";
+import { ArtworkSaveConfirmModal } from "./ArtworkSaveConfirmModal";
+import { isArtworkSatisfied } from "./artworkCompleteness";
 import { ARTWORK_FORM_TABS } from "./artworkFormTabs";
 import { getBasicMissingCount } from "./getBasicMissingCount";
 import { imageResizePlugin } from "./imageResizePlugin";
@@ -55,12 +62,14 @@ export interface ArtworkDetailFormProps {
 
 export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) => {
 	const router = useRouter();
-	const pathname = usePathname();
 	const editorRef = useRef<ToastEditor>(null);
 	// 붙여넣었지만 아직 저장 안 한 이미지: 미리보기용 data URL -> 원본 Blob (임시저장 시점에만 실제 업로드)
 	const pendingUploadsRef = useRef<Map<string, Blob>>(new Map());
 	const { notice, showNotice, closeNotice } = useNoticeModal();
-	const { isSaving, error: saveError, lastSavedAt, run } = useAsyncSave();
+	const { isSaving, error: saveError, run } = useAsyncSave();
+	const [fieldSettings, setFieldSettings] = useState<ArtworkFieldSettings | null>(null);
+	const [hasZonesInExhibition, setHasZonesInExhibition] = useState(false);
+	const [isSaveConfirmOpen, setIsSaveConfirmOpen] = useState(false);
 
 	const basicMissingCount = useMemo(() => getBasicMissingCount(artwork), [artwork]);
 	const tabs = useMemo(
@@ -71,9 +80,42 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 		[basicMissingCount],
 	);
 
+	useEffect(() => {
+		if (!artwork.exhibitionId) return;
+		getArtworkExhibitionStatus(artwork.artworkId)
+			.then((status) => setFieldSettings(status.fieldSettings))
+			.catch(() => {});
+		getExhibitionZones(artwork.exhibitionId)
+			.then((zones) => setHasZonesInExhibition(zones.length > 0))
+			.catch(() => {});
+	}, [artwork.artworkId, artwork.exhibitionId]);
+
+	const isSatisfied = isArtworkSatisfied({
+		category: artwork.category ?? undefined,
+		productionEndYear: artwork.productionEndYear ? String(artwork.productionEndYear) : undefined,
+		exhibitionId: artwork.exhibitionId,
+		zoneId: artwork.zoneId,
+		hasZonesInExhibition,
+		fieldSettings,
+		mainImagePreview: artwork.mainImg,
+		width: artwork.width ? String(artwork.width) : "",
+		height: artwork.height ? String(artwork.height) : "",
+		materials: artwork.materials,
+		locationMap: artwork.locationMap,
+	});
+
 	const handleTabClick = async (tabId: string) => {
 		if (tabId === "detail") return;
-		if (await handleTempSave()) router.push(pathname.replace(/\/detail$/, ""));
+		if (await handleTempSave()) onBack();
+	};
+
+	const handleSaveClick = () => setIsSaveConfirmOpen(true);
+
+	const handleConfirmSave = async () => {
+		if (await handleTempSave()) {
+			setIsSaveConfirmOpen(false);
+			router.push(isSatisfied ? `/artworks/${artwork.artworkId}` : "/artist-admin");
+		}
 	};
 
 	const handleTempSave = () =>
@@ -105,11 +147,9 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 			<ArtworkFormHeader
 				artworkId={artwork.artworkId}
 				initialTitle={artwork.title}
-				lastSavedAt={lastSavedAt}
-				onTempSave={handleTempSave}
+				onTempSave={handleSaveClick}
 				isSaving={isSaving}
 				saveError={saveError}
-				basicMissingCount={basicMissingCount}
 				tabs={tabs}
 				activeTab="detail"
 				onTabClick={handleTabClick}
@@ -173,6 +213,13 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 				/>
 			</div>
 
+			<ArtworkSaveConfirmModal
+				open={isSaveConfirmOpen}
+				onOpenChange={setIsSaveConfirmOpen}
+				isSatisfied={isSatisfied}
+				isSaving={isSaving}
+				onConfirm={handleConfirmSave}
+			/>
 			<NoticeModal notice={notice} onClose={closeNotice} />
 		</DesktopContainer>
 	);

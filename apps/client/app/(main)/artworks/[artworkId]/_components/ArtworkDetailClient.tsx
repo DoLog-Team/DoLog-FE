@@ -84,12 +84,10 @@ export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProp
 	// TODO: purchaseUrl / purchaseChatUrl 중 어느 쪽으로 보낼지 BE 확인 — 우선 채팅 링크 우선
 	const purchaseUrl = data.showPurchaseButton ? (data.purchaseChatUrl ?? data.purchaseUrl) : null;
 
-	// 추천 작품 (sameCategoryArtworks: 같은 작가 기준으로 필터링, 출품 안 한 작품은 빈 배열)
-	const [firstOther, secondOther] = data.sameCategoryArtworks;
+	const [firstOther, secondOther] = data.sameCategoryArtworks.filter((a) => a.type === "artist");
 
 	return (
 		<div className="flex flex-col">
-			{/* 대표 이미지 — 16:9 꽉 채움, 최대 높이 600px (Figma) */}
 			{data.mainImage ? (
 				<>
 					<button

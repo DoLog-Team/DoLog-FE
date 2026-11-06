@@ -100,9 +100,7 @@ export interface RelatedArtwork {
 	category: string;
 	artistName: string;
 	mainImage: string;
-	// alphabeticalArtworks 는 "prev" | "next"
-	// sameCategoryArtworks 는 추천 작품(같은 작가 기준, 최대 2개) — dev 에서 같은 작가는 "artist" 로 옴
-	type?: "prev" | "next" | "artist";
+	type?: "prev" | "next" | "artist" | "random";
 }
 
 // 작품 상세 전체 응답 (전시 작품 상세 · 두록 작품 상세 공통)

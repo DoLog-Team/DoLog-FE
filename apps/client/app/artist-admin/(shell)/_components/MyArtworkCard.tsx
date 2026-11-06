@@ -50,6 +50,8 @@ export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardP
 		},
 	];
 
+	const previewable = artwork.completionRate === 100;
+
 	return (
 		<article className="relative flex gap-4 min-[721px]:flex-col min-[721px]:gap-3">
 			<div className="relative h-32.5 w-23 shrink-0 bg-normal min-[721px]:aspect-[254/359] min-[721px]:h-auto min-[721px]:w-full">
@@ -70,13 +72,18 @@ export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardP
 				<div className="flex items-start gap-2">
 					<div className="flex min-w-0 flex-1 flex-col gap-0.5 min-[721px]:gap-2.5">
 						<h3 className="order-2 truncate px-0.5 text-body1-bold text-strong min-[721px]:order-1 min-[721px]:text-head3">
-							{/* 카드 전체를 두록 작품 상세 링크로 덮는다 — 더보기 메뉴는 DOM 순서상 위에 그려져 따로 눌린다 */}
-							<Link
-								href={`/artworks/${artwork.artworkId}`}
-								className="after:absolute after:inset-0 after:content-['']"
-							>
-								{artwork.title}
-							</Link>
+							{previewable ? (
+								// 카드 전체를 두록 작품 상세 링크로 덮는다 — 더보기 메뉴는 DOM 순서상 위에 그려져 따로 눌린다
+								// 임시저장(완료율 미달) 작품은 상세 페이지가 없어 링크를 걸지 않는다
+								<Link
+									href={`/artworks/${artwork.artworkId}`}
+									className="after:absolute after:inset-0 after:content-['']"
+								>
+									{artwork.title}
+								</Link>
+							) : (
+								artwork.title
+							)}
 						</h3>
 						<p className="order-1 flex gap-2.5 px-0.5 text-body2-bold min-[721px]:order-2">
 							<span className="text-light">{artwork.exhibition?.name ?? "개인 작품"}</span>
