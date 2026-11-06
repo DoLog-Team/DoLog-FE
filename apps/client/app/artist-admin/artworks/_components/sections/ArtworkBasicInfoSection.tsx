@@ -2,24 +2,10 @@
 
 import { useEffect } from "react";
 import { Checkbox } from "@/components/common/Checkbox/Checkbox";
-import { DateSelectField } from "@/components/common/DateSelectField/DateSelectField";
+import { YearMonthDaySelect } from "@/components/common/DatePicker/YearMonthDaySelect";
 import { FormField } from "@/components/common/FormField/FormField";
 import { Select } from "@/components/common/Select/Select";
 import { Textarea } from "@/components/common/Textarea/Textarea";
-
-const CURRENT_YEAR = new Date().getFullYear();
-const YEAR_OPTIONS = Array.from({ length: CURRENT_YEAR - 2000 + 1 }, (_, i) => {
-	const year = String(CURRENT_YEAR - i);
-	return { label: year, value: year };
-});
-const MONTH_OPTIONS = Array.from({ length: 12 }, (_, i) => {
-	const month = String(i + 1);
-	return { label: month, value: month };
-});
-const DAY_OPTIONS = Array.from({ length: 31 }, (_, i) => {
-	const day = String(i + 1);
-	return { label: day, value: day };
-});
 
 export interface ArtworkBasicInfoValue {
 	shortIntro: string;
@@ -33,14 +19,11 @@ export interface ArtworkBasicInfoValue {
 	endDay: string | undefined;
 }
 
-// 시작 날짜 입력하기를 체크했으면 년/월/일을 다 채우거나 다 비워야 하고, 일부만 채운 상태는 허용하지 않는다
 export const hasStartDatePartialError = (value: ArtworkBasicInfoValue) => {
 	if (!value.hasStartDate) return false;
-	const filledCount = [value.startYear, value.startMonth, value.startDay].filter(Boolean).length;
-	return filledCount > 0 && filledCount < 3;
+	return !value.startYear;
 };
 
-// 시작/종료 날짜가 둘 다 완성됐을 때만 비교 — 시작이 종료보다 늦으면 에러
 export const hasStartAfterEndError = (value: ArtworkBasicInfoValue) => {
 	if (!value.hasStartDate) return false;
 	const { startYear, startMonth, startDay, endYear, endMonth, endDay } = value;
@@ -63,9 +46,8 @@ export const ArtworkBasicInfoSection = ({
 	onMissingCountChange,
 	categoryOptions = [],
 }: ArtworkBasicInfoSectionProps) => {
-	const isStartDateComplete =
-		!value.hasStartDate || Boolean(value.startYear && value.startMonth && value.startDay);
-	const isEndDateComplete = Boolean(value.endYear && value.endMonth && value.endDay);
+	const isStartDateComplete = !value.hasStartDate || Boolean(value.startYear);
+	const isEndDateComplete = Boolean(value.endYear);
 	const isPeriodComplete = isStartDateComplete && isEndDateComplete;
 	const isStartDatePartial = hasStartDatePartialError(value);
 	const isStartAfterEnd = hasStartAfterEndError(value);
@@ -109,69 +91,33 @@ export const ArtworkBasicInfoSection = ({
 
 					<div className="flex flex-col gap-6">
 						<div className="flex flex-col gap-1">
-							<div className="flex gap-2">
-								<DateSelectField
-									label="시작 년도"
-									placeholder="2000"
-									options={YEAR_OPTIONS}
-									value={value.startYear}
-									onChange={(startYear) => onChange({ startYear })}
-									disabled={!value.hasStartDate}
-									error={isStartDatePartial && !value.startYear}
-								/>
-								<DateSelectField
-									label="월"
-									placeholder="-"
-									options={MONTH_OPTIONS}
-									value={value.startMonth}
-									onChange={(startMonth) => onChange({ startMonth })}
-									disabled={!value.hasStartDate}
-									error={isStartDatePartial && !value.startMonth}
-								/>
-								<DateSelectField
-									label="일"
-									placeholder="-"
-									options={DAY_OPTIONS}
-									value={value.startDay}
-									onChange={(startDay) => onChange({ startDay })}
-									disabled={!value.hasStartDate}
-									error={isStartDatePartial && !value.startDay}
-								/>
-							</div>
+							<YearMonthDaySelect
+								yearLabel="시작 년도"
+								value={{ year: value.startYear, month: value.startMonth, day: value.startDay }}
+								onChange={(next) =>
+									onChange({
+										startYear: next.year,
+										startMonth: next.month,
+										startDay: next.day,
+									})
+								}
+								disabled={!value.hasStartDate}
+								error={isStartDatePartial}
+							/>
 							{isStartDatePartial && (
-								<span className="pl-0.5 text-body3 text-error">
-									시작 날짜는 년, 월, 일을 모두 입력해주세요.
-								</span>
+								<span className="pl-0.5 text-body3 text-error">시작 날짜를 입력해주세요.</span>
 							)}
 						</div>
 
 						<div className="flex flex-col gap-1">
-							<div className="flex gap-2">
-								<DateSelectField
-									label="종료 년도"
-									placeholder="2000"
-									options={YEAR_OPTIONS}
-									value={value.endYear}
-									onChange={(endYear) => onChange({ endYear })}
-									error={isStartAfterEnd}
-								/>
-								<DateSelectField
-									label="월"
-									placeholder="-"
-									options={MONTH_OPTIONS}
-									value={value.endMonth}
-									onChange={(endMonth) => onChange({ endMonth })}
-									error={isStartAfterEnd}
-								/>
-								<DateSelectField
-									label="일"
-									placeholder="-"
-									options={DAY_OPTIONS}
-									value={value.endDay}
-									onChange={(endDay) => onChange({ endDay })}
-									error={isStartAfterEnd}
-								/>
-							</div>
+							<YearMonthDaySelect
+								yearLabel="종료 년도"
+								value={{ year: value.endYear, month: value.endMonth, day: value.endDay }}
+								onChange={(next) =>
+									onChange({ endYear: next.year, endMonth: next.month, endDay: next.day })
+								}
+								error={isStartAfterEnd}
+							/>
 							{isStartAfterEnd && (
 								<span className="pl-0.5 text-body3 text-error">
 									시작 날짜는 종료 날짜보다 늦을 수 없어요.
