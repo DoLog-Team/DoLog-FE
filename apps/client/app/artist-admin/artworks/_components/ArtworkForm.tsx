@@ -194,7 +194,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 	const handleConfirmSave = async () => {
 		if (await handleTempSave()) {
 			setIsSaveConfirmOpen(false);
-			router.push(`/artworks/${artwork.artworkId}`);
+			router.push(isSatisfied ? `/artworks/${artwork.artworkId}` : "/artist-admin");
 		}
 	};
 

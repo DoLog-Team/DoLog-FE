@@ -4,6 +4,7 @@ import MainFooter from "@/components/common/Footer/MainFooter";
 import { getDologArtworkDetail } from "@/lib/api/artwork";
 import { VISITOR_COOKIE } from "@/lib/visitor";
 import { Header } from "../../_components/Header";
+import { getArtworkPreview } from "./_api/getArtworkPreview";
 import { ArtworkDetailClient } from "./_components/ArtworkDetailClient";
 
 // 두록 작품 상세 (전시에 종속되지 않음)
@@ -34,9 +35,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function DologArtworkPage({ params }: Props) {
 	const { artworkId } = await params;
-	// 방문자 ID 를 같이 보내야 내가 누른 좋아요(liked)가 처음부터 맞게 보인다
 	const visitorId = (await cookies()).get(VISITOR_COOKIE)?.value;
-	const data = await getDologArtworkDetail(artworkId, visitorId);
+	const data =
+		(await getDologArtworkDetail(artworkId, visitorId)) ?? (await getArtworkPreview(artworkId));
 
 	return (
 		// 하단 고정 탭바에 푸터가 가리지 않게

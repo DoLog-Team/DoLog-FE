@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import type { ReactNode } from "react";
 import { useState } from "react";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { Engagement } from "@/components/common/Engagement/Engagement";
@@ -15,6 +17,25 @@ interface MyArtworkCardProps {
 	// 출품할 전시 선택지 — 나의 전시 목록
 	exhibitions: MyExhibition[];
 	onDelete: (artworkId: string) => void;
+}
+
+function ArtworkPreviewLink({
+	artworkId,
+	previewable,
+	className,
+	children,
+}: {
+	artworkId: string;
+	previewable: boolean;
+	className: string;
+	children: ReactNode;
+}) {
+	if (!previewable) return <div className={className}>{children}</div>;
+	return (
+		<Link href={`/artworks/${artworkId}`} className={className}>
+			{children}
+		</Link>
+	);
 }
 
 /**
@@ -49,9 +70,15 @@ export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardP
 		},
 	];
 
+	const previewable = artwork.completionRate === 100;
+
 	return (
 		<article className="flex gap-4 min-[721px]:flex-col min-[721px]:gap-3">
-			<div className="relative h-32.5 w-23 shrink-0 bg-normal min-[721px]:aspect-[254/359] min-[721px]:h-auto min-[721px]:w-full">
+			<ArtworkPreviewLink
+				artworkId={artwork.artworkId}
+				previewable={previewable}
+				className="relative h-32.5 w-23 shrink-0 bg-normal min-[721px]:aspect-[254/359] min-[721px]:h-auto min-[721px]:w-full"
+			>
 				{artwork.image ? (
 					<Image
 						src={artwork.image}
@@ -63,11 +90,15 @@ export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardP
 				) : (
 					<EmptyImageFallback className="size-full" />
 				)}
-			</div>
+			</ArtworkPreviewLink>
 
 			<div className="flex min-w-0 flex-1 flex-col">
 				<div className="flex items-start gap-2">
-					<div className="flex min-w-0 flex-1 flex-col gap-0.5 min-[721px]:gap-2.5">
+					<ArtworkPreviewLink
+						artworkId={artwork.artworkId}
+						previewable={previewable}
+						className="flex min-w-0 flex-1 flex-col gap-0.5 min-[721px]:gap-2.5"
+					>
 						<h3 className="order-2 truncate px-0.5 text-body1-bold text-strong min-[721px]:order-1 min-[721px]:text-head3">
 							{artwork.title}
 						</h3>
@@ -78,7 +109,7 @@ export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardP
 								<span className="text-error">전시 내 미노출</span>
 							)}
 						</p>
-					</div>
+					</ArtworkPreviewLink>
 					<OverflowMenu label={`${artwork.title} 더보기`} items={menuItems} />
 				</div>
 
