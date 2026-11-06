@@ -6,9 +6,11 @@ import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
+import { UnsavedChangesModal } from "@/components/common/Modal/UnsavedChangesModal";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { DotsLoader } from "@/components/common/Spinner/DotsLoader";
 import { useAsyncSave } from "@/lib/hooks/useAsyncSave";
+import { useLeaveConfirm } from "@/lib/hooks/useLeaveConfirm";
 import { type ArtworkCategoryOption, getArtworkCategories } from "../_api/getArtworkCategories";
 import type { MyArtworkDetail } from "../_api/getMyArtwork";
 import { updateArtworkBasicInfo } from "../_api/updateArtwork";
@@ -106,6 +108,10 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 	const { isSaving, error: saveError, run } = useAsyncSave();
 	const visibility = useArtworkVisibility(artwork.artworkId, artwork);
 
+	const buildSnapshot = () => JSON.stringify({ basic, additional, image, purchase });
+	const [savedSnapshot, setSavedSnapshot] = useState(buildSnapshot);
+	const isDirty = buildSnapshot() !== savedSnapshot;
+
 	const updateBasic = useCallback(
 		(patch: Partial<ArtworkBasicInfoValue>) => setBasic((prev) => ({ ...prev, ...patch })),
 		[],
@@ -133,10 +139,9 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 		hasStartDatePartialError(basic) ||
 		hasStartAfterEndError(basic);
 
-	// 성공하면 true — "다음으로" 이동 전에 저장부터 시키는 데도 재사용
-	const handleTempSave = () => {
-		if (hasValidationError) return Promise.resolve(false);
-		return run(() =>
+	const handleTempSave = async () => {
+		if (hasValidationError) return false;
+		const saved = await run(() =>
 			updateArtworkBasicInfo(artwork.artworkId, {
 				category: basic.category,
 				shortIntro: basic.shortIntro,
@@ -156,7 +161,18 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				mainImageFile,
 			}),
 		);
+		if (saved) {
+			setMainImageFile(null);
+			setSavedSnapshot(buildSnapshot());
+		}
+		return saved;
 	};
+
+	const { isLeaveModalOpen, setIsLeaveModalOpen, handleBack, handleLeaveAndSave } = useLeaveConfirm(
+		isDirty,
+		handleTempSave,
+		onBack,
+	);
 
 	// "저장 후 상세 정보 작성" — 모달 없이 조용히 임시저장만 하고 다음 탭으로 넘어간다
 	const handleNext = async () => {
@@ -280,7 +296,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				tabs={tabs}
 				activeTab={activeTab}
 				onTabClick={handleTopTabClick}
-				onBack={onBack}
+				onBack={handleBack}
 			/>
 
 			<div className="py-7">
@@ -316,6 +332,13 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				onConfirm={handleConfirmSave}
 			/>
 			<NoticeModal notice={visibility.notice} onClose={visibility.closeNotice} />
+			<UnsavedChangesModal
+				open={isLeaveModalOpen}
+				onOpenChange={setIsLeaveModalOpen}
+				onDiscard={onBack}
+				onSave={handleLeaveAndSave}
+				isSaving={isSaving}
+			/>
 		</DesktopContainer>
 	);
 };

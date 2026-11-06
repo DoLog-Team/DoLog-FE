@@ -21,9 +21,14 @@ import { FormField } from "@/components/common/FormField/FormField";
 import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { ImageInput } from "@/components/common/ImageInput/ImageInput";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
+import { UnsavedChangesModal } from "@/components/common/Modal/UnsavedChangesModal";
+import { useLeaveConfirm } from "@/lib/hooks/useLeaveConfirm";
 import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
 import { compressImageFile } from "@/lib/utils/image";
-import { getArtworkExhibitionStatus } from "../_api/getArtworkExhibitionStatus";
+import {
+	type ArtworkFieldSettings,
+	getArtworkExhibitionStatus,
+} from "../_api/getArtworkExhibitionStatus";
 import { getExhibitionFieldSettings } from "../_api/getExhibitionFieldSettings";
 import { type ExhibitionZone, getExhibitionZones } from "../_api/getExhibitionZones";
 import { submitArtwork } from "../_api/submitArtwork";
@@ -51,9 +56,7 @@ export const ArtworkExhibitionForm = ({
 	const relevantExhibitionId = artwork.exhibitionId ?? pendingExhibitionId;
 	const isSubmitted = !!artwork.exhibitionId;
 
-	const [fieldSettings, setFieldSettings] = useState<Awaited<
-		ReturnType<typeof getExhibitionFieldSettings>
-	> | null>(null);
+	const [fieldSettings, setFieldSettings] = useState<ArtworkFieldSettings | null>(null);
 	const [planLimitExceeded, setPlanLimitExceeded] = useState(false);
 	const [zones, setZones] = useState<ExhibitionZone[]>([]);
 	const [zoneId, setZoneId] = useState<string | undefined>(artwork.zoneId ?? undefined);
@@ -74,7 +77,11 @@ export const ArtworkExhibitionForm = ({
 	const [locationMapFile, setLocationMapFile] = useState<File | null>(null);
 	const [locationMapPreview, setLocationMapPreview] = useState<string | null>(artwork.locationMap);
 
-	// 출품 완료 직후엔 artwork가 새로 조회돼도 이 컴포넌트는 그대로 유지돼서 state 초기값이 안 바뀜 — 직접 동기화
+	const buildSnapshot = () =>
+		JSON.stringify({ zoneId, mainImagePreview, additional, locationMapPreview });
+	const [savedSnapshot, setSavedSnapshot] = useState(buildSnapshot);
+	const isDirty = buildSnapshot() !== savedSnapshot;
+
 	useEffect(() => {
 		setZoneId(artwork.zoneId ?? undefined);
 	}, [artwork.zoneId]);
@@ -100,14 +107,6 @@ export const ArtworkExhibitionForm = ({
 			.catch(() => {});
 	}, [artwork.artworkId, artwork.exhibitionId]);
 
-	if (!relevantExhibitionId) {
-		return (
-			<div className="p-8 text-body1 text-lighter">
-				출품할 전시를 찾을 수 없어요. 작품 카드의 "작품 출품하기"로 다시 시도해주세요.
-			</div>
-		);
-	}
-
 	const required = fieldSettings?.required;
 
 	const isSatisfied = isArtworkSatisfied({
@@ -124,7 +123,8 @@ export const ArtworkExhibitionForm = ({
 		locationMap: locationMapPreview,
 	});
 
-	const save = async () => {
+	const save = async (): Promise<boolean> => {
+		if (!relevantExhibitionId) return false;
 		setIsSaving(true);
 		try {
 			if (!isSubmitted) {
@@ -160,8 +160,11 @@ export const ArtworkExhibitionForm = ({
 				await Promise.all(tasks);
 				router.refresh();
 			}
+			setSavedSnapshot(buildSnapshot());
+			return true;
 		} catch (error) {
 			showNotice(isSubmitted ? "저장에 실패했어요" : "출품에 실패했어요", toErrorMessage(error));
+			return false;
 		} finally {
 			setIsSaving(false);
 		}
@@ -180,13 +183,27 @@ export const ArtworkExhibitionForm = ({
 		await save();
 	};
 
+	const { isLeaveModalOpen, setIsLeaveModalOpen, handleBack, handleLeaveAndSave } = useLeaveConfirm(
+		isDirty,
+		save,
+		onBack,
+	);
+
+	if (!relevantExhibitionId) {
+		return (
+			<div className="p-8 text-body1 text-lighter">
+				출품할 전시를 찾을 수 없어요. 작품 카드의 "작품 출품하기"로 다시 시도해주세요.
+			</div>
+		);
+	}
+
 	return (
 		<DesktopContainer>
 			<div className="sticky top-0 z-10 bg-bg-normal">
 				<FormHeader
 					title={artwork.title}
 					lastSavedAt=""
-					onBack={onBack}
+					onBack={handleBack}
 					onTempSave={handleSaveClick}
 					tempSaveDisabled={isSaving}
 					saveDisabled={hasAdditionalInfoError(additional)}
@@ -318,6 +335,13 @@ export const ArtworkExhibitionForm = ({
 				isSatisfied={false}
 				isSaving={isSaving}
 				onConfirm={handleConfirmSave}
+			/>
+			<UnsavedChangesModal
+				open={isLeaveModalOpen}
+				onOpenChange={setIsLeaveModalOpen}
+				onDiscard={onBack}
+				onSave={handleLeaveAndSave}
+				isSaving={isSaving}
 			/>
 		</DesktopContainer>
 	);
