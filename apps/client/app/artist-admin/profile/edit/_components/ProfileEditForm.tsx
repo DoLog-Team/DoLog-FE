@@ -6,8 +6,10 @@ import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopCo
 import { Divider } from "@/components/common/Divider/Divider";
 import { FormHeader } from "@/components/common/FormHeader/FormHeader";
 import { Modal } from "@/components/common/Modal/Modal";
+import { UnsavedChangesModal } from "@/components/common/Modal/UnsavedChangesModal";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { TabBar } from "@/components/common/TabBar/TabBar";
+import { useLeaveConfirm } from "@/lib/hooks/useLeaveConfirm";
 import {
 	createArtistSns,
 	deleteArtistSns,
@@ -51,8 +53,6 @@ export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEdit
 	const [lastSavedAt, setLastSavedAt] = useState("");
 	const [isSaving, setIsSaving] = useState(false);
 	const [isSaveFailed, setIsSaveFailed] = useState(false);
-	// MODAL 25 변경 내용 확인
-	const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
 
 	const goBack = onBack ?? (() => router.back());
 
@@ -74,7 +74,6 @@ export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEdit
 			setSavedForm(nextForm);
 			setShowErrors(false);
 			setLastSavedAt(formatSavedAt(new Date()));
-			// 마이페이지 프로필 카드에 새 정보가 보이도록 서버 데이터를 다시 불러온다
 			router.refresh();
 			return true;
 		} catch {
@@ -91,21 +90,11 @@ export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEdit
 		if (saved) router.replace(MY_PAGE_PATH);
 	};
 
-	// 변경 내용이 있으면 바로 나가지 않고 확인 모달을 띄운다 (Figma NAV-07 · MODAL 25)
-	const handleBack = () => {
-		if (isDirty) {
-			setIsLeaveModalOpen(true);
-			return;
-		}
-		goBack();
-	};
-
-	const handleSaveAndLeave = async () => {
-		const saved = await save();
-		// 형식 오류로 저장하지 못했으면 모달을 닫아 오류 표시를 보여준다
-		setIsLeaveModalOpen(false);
-		if (saved) goBack();
-	};
+	const { isLeaveModalOpen, setIsLeaveModalOpen, handleBack, handleLeaveAndSave } = useLeaveConfirm(
+		isDirty,
+		save,
+		goBack,
+	);
 
 	const formSections = [
 		{
@@ -188,23 +177,12 @@ export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEdit
 				showCloseButton
 				actions={[{ text: "확인", variant: "assistive", onClick: () => setIsSaveFailed(false) }]}
 			/>
-			{/* 변경내용 안내 모달 */}
-			<Modal
+			<UnsavedChangesModal
 				open={isLeaveModalOpen}
 				onOpenChange={setIsLeaveModalOpen}
-				title="변경 내용이 있어요"
-				description={
-					<>
-						아직 저장되지 않은 변경 내용이 있어요.
-						<br />
-						내용 유실을 막기 위해서는 변경 내용을 저장해주세요.
-					</>
-				}
-				showCloseButton
-				actions={[
-					{ text: "저장 없이 나가기", variant: "assistive", onClick: goBack },
-					{ text: "저장하기", variant: "primary", onClick: handleSaveAndLeave, disabled: isSaving },
-				]}
+				onDiscard={goBack}
+				onSave={handleLeaveAndSave}
+				isSaving={isSaving}
 			/>
 		</DesktopContainer>
 	);

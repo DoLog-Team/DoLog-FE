@@ -7,7 +7,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
+import { UnsavedChangesModal } from "@/components/common/Modal/UnsavedChangesModal";
 import { useAsyncSave } from "@/lib/hooks/useAsyncSave";
+import { useLeaveConfirm } from "@/lib/hooks/useLeaveConfirm";
 import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
 import { compressImageFile } from "@/lib/utils/image";
 import type { MyArtworkDetail } from "../_api/getMyArtwork";
@@ -36,9 +38,6 @@ const MARKDOWN_IMAGE_URL_REGEX = /!\[[^\]]*\]\(([^)]+)\)/g;
 const extractImageUrls = (markdown: string) =>
 	[...markdown.matchAll(MARKDOWN_IMAGE_URL_REGEX)].map((match) => match[1]);
 
-// Toast UI 마크다운 Preview의 sanitizer(DOMPurify)가 blob: URL은 막고 data: URL은 허용해서,
-// 저장 전 임시 미리보기는 data URL로 만든다. 본문(Write 탭 원문)에 그대로 박히는 문자열이라
-// 작게 압축해 길이를 줄이고, 실제 업로드는 별도로 고화질 압축본을 쓴다.
 const PREVIEW_MAX_DIMENSION = 480;
 const PREVIEW_QUALITY = 0.5;
 
@@ -70,6 +69,7 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 	const [fieldSettings, setFieldSettings] = useState<ArtworkFieldSettings | null>(null);
 	const [hasZonesInExhibition, setHasZonesInExhibition] = useState(false);
 	const [isSaveConfirmOpen, setIsSaveConfirmOpen] = useState(false);
+	const [isDirty, setIsDirty] = useState(false);
 
 	const basicMissingCount = useMemo(() => getBasicMissingCount(artwork), [artwork]);
 	const tabs = useMemo(
@@ -118,8 +118,8 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 		}
 	};
 
-	const handleTempSave = () =>
-		run(async () => {
+	const handleTempSave = async () => {
+		const saved = await run(async () => {
 			let markdown = editorRef.current?.getInstance().getMarkdown() ?? "";
 
 			// 저장 전까지 붙여넣기만 해뒀던(미리보기 data URL) 이미지를 지금 실제로 업로드하고, 본문의 임시 URL을 진짜 URL로 치환
@@ -141,6 +141,15 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 
 			await updateArtworkDescription(artwork.artworkId, markdown);
 		});
+		if (saved) setIsDirty(false);
+		return saved;
+	};
+
+	const { isLeaveModalOpen, setIsLeaveModalOpen, handleBack, handleLeaveAndSave } = useLeaveConfirm(
+		isDirty,
+		handleTempSave,
+		onBack,
+	);
 
 	return (
 		<DesktopContainer>
@@ -149,11 +158,12 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 				initialTitle={artwork.title}
 				onTempSave={handleSaveClick}
 				isSaving={isSaving}
+				saveDisabled={!isDirty}
 				saveError={saveError}
 				tabs={tabs}
 				activeTab="detail"
 				onTabClick={handleTabClick}
-				onBack={onBack}
+				onBack={handleBack}
 			/>
 
 			<div className="artwork-detail-editor flex flex-col gap-4 py-7">
@@ -167,6 +177,7 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 					useCommandShortcut
 					placeholder="작품에 대한 상세한 설명을 작성해주세요."
 					plugins={[imageResizePlugin]}
+					onChange={() => setIsDirty(true)}
 					hooks={{
 						// 저장 전까지는 네트워크를 안 타고 data URL로만 미리보기 — 실제 업로드는 "임시저장" 시점에
 						addImageBlobHook: (
@@ -192,7 +203,6 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 								quality: CONTENT_IMAGE_QUALITY,
 							})
 								.then(async (uploadFile) => {
-									// 실제 업로드본과 별개로, 본문에 박히는 미리보기는 작게 압축해 길이를 줄인다
 									const previewFile = await compressImageFile(file, {
 										maxDimension: PREVIEW_MAX_DIMENSION,
 										quality: PREVIEW_QUALITY,
@@ -221,6 +231,13 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 				onConfirm={handleConfirmSave}
 			/>
 			<NoticeModal notice={notice} onClose={closeNotice} />
+			<UnsavedChangesModal
+				open={isLeaveModalOpen}
+				onOpenChange={setIsLeaveModalOpen}
+				onDiscard={onBack}
+				onSave={handleLeaveAndSave}
+				isSaving={isSaving}
+			/>
 		</DesktopContainer>
 	);
 };

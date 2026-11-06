@@ -22,7 +22,8 @@ export type NotificationType =
 	| "ARTWORK_PLAN_LIMIT_EXCEEDED"
 	| "ARTWORK_PLAN_LIMIT_CLEARED"
 	| "ARTWORK_PLAN_DOWNGRADED"
-	| "ARTWORK_PLAN_UPGRADED";
+	| "ARTWORK_PLAN_UPGRADED"
+	| "ARTWORK_EXHIBITION_DELETED";
 
 export interface NotificationResponse {
 	id: string;

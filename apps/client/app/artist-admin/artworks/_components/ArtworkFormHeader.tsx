@@ -10,7 +10,7 @@ export interface ArtworkFormHeaderProps {
 	initialTitle: string;
 	onTempSave: () => void;
 	isSaving: boolean;
-	hasValidationError?: boolean;
+	saveDisabled?: boolean;
 	saveError?: string;
 	tabs: Tab[];
 	activeTab: string;
@@ -23,7 +23,7 @@ export const ArtworkFormHeader = ({
 	initialTitle,
 	onTempSave,
 	isSaving,
-	hasValidationError,
+	saveDisabled,
 	saveError,
 	tabs,
 	activeTab,
@@ -43,7 +43,7 @@ export const ArtworkFormHeader = ({
 					lastSavedAt=""
 					onTempSave={onTempSave}
 					tempSaveDisabled={isSaving}
-					saveDisabled={hasValidationError}
+					saveDisabled={saveDisabled}
 					saveLabel="저장"
 					onBack={onBack}
 				/>

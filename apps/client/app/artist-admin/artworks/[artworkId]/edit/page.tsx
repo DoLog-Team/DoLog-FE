@@ -22,5 +22,5 @@ export default function EditArtworkPage() {
 	if (isLoading) return <LoadingScreen />;
 	if (!artwork) return <div className="p-8 text-body1 text-lighter">작품을 찾을 수 없어요.</div>;
 
-	return <ArtworkForm artwork={artwork} onBack={() => router.back()} />;
+	return <ArtworkForm artwork={artwork} onBack={() => router.push("/artist-admin")} />;
 }

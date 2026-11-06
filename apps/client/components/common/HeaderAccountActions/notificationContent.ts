@@ -8,8 +8,6 @@ export interface NotificationContent {
 
 const ARTWORK_EXHIBITION_HREF = (artworkId: string) =>
 	`/artist-admin/artworks/${artworkId}/exhibition`;
-
-// ZONE_HIDDEN, ZONE_SHOWN: 디자인/기획 확인되면 추가 — 그 전까지는 FALLBACK
 const TEMPLATES: Partial<
 	Record<NotificationType, (payload: Record<string, string>) => NotificationContent>
 > = {
@@ -98,6 +96,11 @@ const TEMPLATES: Partial<
 	ARTWORK_PLAN_UPGRADED: (p) => ({
 		title: "플랜 변경 작품 공개",
 		description: `플랜이 변경되어 미노출 상태였던 작품 '${p.artworkTitle}'이 ${p.exhibitionName} 전시에 공개되었어요.`,
+	}),
+	ARTWORK_EXHIBITION_DELETED: (p) => ({
+		title: "소속 전시 삭제로 작품 비공개",
+		description: `${p.exhibitionName} 전시가 삭제되어 ${p.artworkTitle} 작품이 비공개 처리되었어요.`,
+		href: p.artworkId ? `/artist-admin/artworks/${p.artworkId}/edit` : undefined,
 	}),
 };
 

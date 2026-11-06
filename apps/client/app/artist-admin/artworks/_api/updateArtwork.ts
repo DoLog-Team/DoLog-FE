@@ -1,6 +1,5 @@
 import { authApiClient } from "@/lib/api/instance";
 
-// 작품 기본 정보 부분 수정 (보낸 필드만 반영)
 export async function renameArtwork(artworkId: string, title: string): Promise<void> {
 	const formData = new FormData();
 	formData.append("title", title);
@@ -42,7 +41,7 @@ export async function updateArtworkBasicInfo(
 		if (value) formData.append(key, value);
 	};
 
-	appendIfPresent("category", input.category);
+	if (input.category !== undefined) formData.append("category", input.category);
 	appendIfPresent("shortIntro", input.shortIntro);
 	appendIfPresent("width", input.width);
 	appendIfPresent("height", input.height);
@@ -78,9 +77,10 @@ export interface UpdateArtworkAdditionalInfoInput {
 	height?: string;
 	depth?: string;
 	locationMapFile?: File | null;
+	mainImageFile?: File | null;
 }
 
-// 작품 부가 정보(재료·사이즈·위치 이미지)만 부분 수정 — 출품 화면의 "부가 정보" 탭에서 쓴다
+// 작품 부가 정보(대표 이미지·재료·사이즈·위치 이미지)만 부분 수정 — 출품 화면에서 쓴다
 export async function updateArtworkAdditionalInfo(
 	artworkId: string,
 	input: UpdateArtworkAdditionalInfoInput,
@@ -91,6 +91,7 @@ export async function updateArtworkAdditionalInfo(
 	if (input.height) formData.append("height", input.height);
 	if (input.depth) formData.append("depth", input.depth);
 	if (input.locationMapFile) formData.append("locationMapFile", input.locationMapFile);
+	if (input.mainImageFile) formData.append("mainImageFile", input.mainImageFile);
 
 	if (input.materials.length > 0) {
 		for (const material of input.materials) formData.append("materials", material);

@@ -36,6 +36,7 @@ export const Radio = ({ checked, onChange, label, disabled, name, className, id 
 						"size-5 appearance-none rounded-full border-[1.5px] border-stroke-lighter bg-bg-normal",
 						"checked:border-[5px] checked:border-fg-inverse",
 						"disabled:border-stroke-lightest disabled:bg-fg-light disabled:checked:border-disable",
+						disabled ? "cursor-not-allowed" : "cursor-pointer",
 					)}
 				/>
 			</span>
