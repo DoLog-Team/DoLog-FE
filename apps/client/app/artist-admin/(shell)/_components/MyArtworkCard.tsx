@@ -85,13 +85,19 @@ export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardP
 								artwork.title
 							)}
 						</h3>
-						<p className="order-1 flex gap-2.5 px-0.5 text-body2-bold min-[721px]:order-2">
+						<div className="order-1 flex flex-col gap-0.5 px-0.5 text-body2-bold min-[721px]:order-2">
 							<span className="text-light">{artwork.exhibition?.name ?? "개인 작품"}</span>
-							{artwork.exhibition?.hidden && <span className="text-error">전시 내 숨김 처리</span>}
-							{artwork.exhibition?.planLimitExceeded && (
-								<span className="text-error">전시 내 미노출</span>
+							{(artwork.exhibition?.hidden || artwork.exhibition?.planLimitExceeded) && (
+								<span className="flex gap-2.5">
+									{artwork.exhibition?.hidden && (
+										<span className="text-error">전시 내 숨김 처리</span>
+									)}
+									{artwork.exhibition?.planLimitExceeded && (
+										<span className="text-error">전시 내 미노출</span>
+									)}
+								</span>
 							)}
-						</p>
+						</div>
 					</div>
 					<OverflowMenu label={`${artwork.title} 더보기`} items={menuItems} />
 				</div>
