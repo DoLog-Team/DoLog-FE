@@ -11,14 +11,13 @@ import { GuideSection } from "./GuideSection";
 interface ArtworksClientProps {
 	maps: ExhibitionMap[];
 	zones: ZoneGroup[];
-	hideFilter?: boolean;
 }
 
-export function ArtworksClient({ maps, zones, hideFilter }: ArtworksClientProps) {
+export function ArtworksClient({ maps, zones }: ArtworksClientProps) {
 	const hasGuide = maps.length > 0;
 
 	const [searchQuery, setSearchQuery] = useState("");
-	const { selected, setSelected, categories, filteredZones } = useArtworkFilter(zones, searchQuery);
+	const filteredZones = useArtworkFilter(zones, searchQuery);
 
 	// ScrollTabBar 탭 [관람 안내(선택값), zone(고유값)]
 	const TABS = useMemo(
@@ -56,10 +55,6 @@ export function ArtworksClient({ maps, zones, hideFilter }: ArtworksClientProps)
 				stickyRef={stickyRef}
 				searchQuery={searchQuery}
 				onSearchChange={setSearchQuery}
-				categories={categories}
-				selected={selected}
-				onSelect={setSelected}
-				hideFilter={hideFilter}
 			/>
 			<ScrollTabBar
 				tabs={TABS}

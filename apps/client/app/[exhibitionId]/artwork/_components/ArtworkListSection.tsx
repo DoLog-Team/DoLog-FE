@@ -11,7 +11,6 @@ import { track } from "@/lib/amplitude";
 import type { ArtworkListItem } from "@/lib/api/artwork";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import { AlbumIcon } from "./AlbumIcon";
-import Filter from "./Filter";
 import { ListIcon } from "./ListIcon";
 
 interface FilteredZone {
@@ -28,10 +27,6 @@ interface ArtworkListSectionProps {
 	zones: FilteredZone[];
 	searchQuery: string;
 	onSearchChange: (value: string) => void;
-	categories: string[];
-	selected: string;
-	onSelect: (value: string) => void;
-	hideFilter?: boolean;
 }
 
 const toCardItem = (artwork: ArtworkListItem): CardItem => ({
@@ -75,10 +70,6 @@ export function ArtworkListSection({
 	zones,
 	searchQuery,
 	onSearchChange,
-	categories,
-	selected,
-	onSelect,
-	hideFilter,
 }: ArtworkListSectionProps) {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
@@ -92,7 +83,6 @@ export function ArtworkListSection({
 	}, []);
 
 	const { ref: titleRef, isVisible: isTitleVisible } = useIntersectionObserver();
-	const isMultiZone = zones.length > 1;
 
 	return (
 		<section className="flex flex-col">
@@ -116,23 +106,11 @@ export function ArtworkListSection({
 						value={searchQuery}
 						onChange={onSearchChange}
 					/>
-					<div className="flex items-center">
-						{!hideFilter && (
-							<Filter
-								categories={categories}
-								selected={selected}
-								onSelect={(val) => {
-									onSelect(val);
-									track("Category Filter Selected", { category: val, page: "artwork_list" });
-								}}
-							/>
-						)}
-						{!isTitleVisible && (
-							<div className="ml-auto min-[721px]:hidden">
-								<ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
-							</div>
-						)}
-					</div>
+					{!isTitleVisible && (
+						<div className="flex justify-end min-[721px]:hidden">
+							<ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+						</div>
+					)}
 				</DesktopContainer>
 			</div>
 
@@ -141,7 +119,6 @@ export function ArtworkListSection({
 					{zones.length === 0 ? (
 						<EmptyState
 							searchQuery={searchQuery || undefined}
-							message={"선택한 카테고리에 해당되는\n작품이 없어요"}
 							className="w-full pb-16 pt-10 px-2.5"
 						/>
 					) : (
@@ -157,7 +134,6 @@ export function ArtworkListSection({
 							return (
 								<div
 									key={zone.zoneName}
-									className={!isMultiZone ? "pt-4" : ""}
 									ref={(el) => {
 										if (sectionRefs[zone.zoneName]) {
 											(
@@ -166,8 +142,8 @@ export function ArtworkListSection({
 										}
 									}}
 								>
-									{isMultiZone && <Title title={zone.zoneName} />}
-									{isMultiZone && zone.description && (
+									<Title title={zone.zoneName} />
+									{zone.description && (
 										<p className="text-body2 text-light mb-4 whitespace-pre-wrap">
 											{zone.description}
 										</p>
