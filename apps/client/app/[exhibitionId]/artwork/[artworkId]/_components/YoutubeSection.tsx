@@ -23,7 +23,7 @@ export function YoutubeSection({ youtubeUrl }: YoutubeSectionProps) {
 	if (!embedUrl) return null;
 
 	return (
-		<section className="flex flex-col pb-1 bg-white">
+		<section className="flex flex-col pb-1">
 			<DesktopContainer>
 				<div className="relative w-full aspect-video overflow-hidden shadow-sm">
 					<iframe

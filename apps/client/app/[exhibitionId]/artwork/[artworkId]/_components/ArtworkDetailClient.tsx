@@ -125,6 +125,7 @@ export function ArtworkDetailClient({
 				/>
 			)}
 			<InfoSection data={data} hideArtistRole={hideArtistRole} groupName={data.zoneName} />
+			<Divider />
 			<LocationSection locationImageUrl={data.locationMap} />
 			<section
 				data-section="detail"
@@ -132,7 +133,11 @@ export function ArtworkDetailClient({
 					sectionRefs.detail.current = el;
 				}}
 			>
-				<DescriptionSection content={data.description} />
+				<DescriptionSection
+					content={data.description}
+					shortIntro={data.shortIntro}
+					title="작품 설명"
+				/>
 			</section>
 			<YoutubeSection youtubeUrl={data.youtubeUrl} />
 			<PhotoSection data={{ ...data, purchaseUrl }} />

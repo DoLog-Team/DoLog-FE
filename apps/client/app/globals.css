@@ -299,6 +299,19 @@
   }
 }
 
+/* Toast UI 뷰어 글자색·코드 배경은 밝은 배경 기준으로 고정돼 있어 다크 모드에서 안 보이는 문제 수정 */
+.dark
+  .toastui-editor-contents
+  :is(p, h1, h2, h3, h4, h5, h6, ul, menu, ol, dir, table, pre, blockquote, blockquote p, blockquote ul, blockquote ol, del) {
+  color: var(--color-text-strong);
+}
+.dark .toastui-editor-contents :is(pre, code) {
+  background-color: var(--color-fg-lighter);
+}
+.dark .toastui-editor-contents pre code {
+  background-color: transparent;
+}
+
 /* 저장 버튼 등에 쓰는 점 3개 로딩 인디케이터 — 순서대로 출렁이는 애니메이션 */
 @keyframes dot-wave {
   0%,

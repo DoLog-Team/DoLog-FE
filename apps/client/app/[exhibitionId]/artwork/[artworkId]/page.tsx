@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 // import { MOCK_ARTWORK_DETAIL } from "@/app/[exhibitionId]/artwork/_mocks/artworkDetail";
 import { getArtworkDetail } from "@/lib/api/artwork";
+import { getArtworkInfoLines, shouldHideArtistRole } from "@/lib/utils/artworkInfo";
 import { VISITOR_COOKIE } from "@/lib/visitor";
 import { resolveExhibitionId } from "../../_api/resolveExhibitionId";
 import { Header } from "../../_components/Header";
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: ArtworkDetailPageProps): Prom
 
 	const artistName = data?.participants.map((p) => p.nameKo).join(", ");
 	const title = [artistName, data?.title].filter(Boolean).join(" | ") || undefined;
-	const description = [data?.material, data?.size].filter(Boolean).join(" | ") || undefined;
+	const description = data ? getArtworkInfoLines(data).join(" | ") || undefined : undefined;
 
 	return {
 		title,
@@ -58,9 +59,11 @@ export default async function ArtworkDetailPage({ params }: ArtworkDetailPagePro
 		);
 	}
 
-	// 특정 전시에서만 작가 역할 영역 숨김 처리 [동국대 서양화과]
-	const HIDE_ARTIST_ROLE_EXHIBITION_IDS = new Set(["5918413e-3bb4-4237-ae4d-c55d8f025f34"]);
-	const hideArtistRole = HIDE_ARTIST_ROLE_EXHIBITION_IDS.has(uuid);
-
-	return <ArtworkDetailClient artworkId={artworkId} data={data} hideArtistRole={hideArtistRole} />;
+	return (
+		<ArtworkDetailClient
+			artworkId={artworkId}
+			data={data}
+			hideArtistRole={shouldHideArtistRole(uuid)}
+		/>
+	);
 }
