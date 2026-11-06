@@ -19,12 +19,12 @@ interface ProfileSectionProps {
 }
 
 export function ProfileSection({ profile }: ProfileSectionProps) {
-	// 이메일은 작가가 입력하지 않아도 계정 이메일이 들어올 수 있어 등록 여부 판단에서 뺀다
 	const hasRegisteredProfile = hasArtistProfileInfo({
 		nameKo: profile.nameKo,
 		nameEn: profile.nameEn,
 		bio: profile.bio,
 		profileImage: profile.profileImage,
+		email: profile.email,
 		snsCount: profile.sns.length,
 	});
 
