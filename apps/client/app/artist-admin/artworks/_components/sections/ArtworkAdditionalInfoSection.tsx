@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Checkbox } from "@/components/common/Checkbox/Checkbox";
 import { FormField } from "@/components/common/FormField/FormField";
 import { Input } from "@/components/common/Input/Input";
 import { cn } from "@/lib/utils/cn";
+import { getMaterialOptions } from "../../_api/getMaterialOptions";
 
 const MAX_MATERIAL_COUNT = 20;
 const MAX_MATERIAL_LENGTH = 20;
@@ -28,23 +29,6 @@ const sanitizeSizeInput = (raw: string) => {
 		digitsAndDot.slice(firstDotIndex + 1).replace(/\./g, "")
 	);
 };
-
-const MATERIAL_OPTIONS = [
-	"캔버스에 아크릴릭",
-	"캔버스에 유화",
-	"모델링 페이스트",
-	"쉬폰",
-	"비즈",
-	"스테인리스 스틸",
-	"혼합재료",
-	"콜라주",
-	"목재",
-	"석고",
-	"종이에 수채",
-	"디지털 프린트",
-	"실크스크린",
-	"레진",
-];
 
 const SizeInput = ({
 	value,
@@ -113,7 +97,12 @@ export const ArtworkAdditionalInfoSection = ({
 
 	const isMaterialLimitReached = value.materials.length >= MAX_MATERIAL_COUNT;
 
-	const filteredMaterialOptions = MATERIAL_OPTIONS.filter(
+	const [mateiralOptions, setMaterialOptions] = useState<string[]>([]);
+	useEffect(() => {
+		getMaterialOptions().then(setMaterialOptions);
+	}, []);
+
+	const filteredMaterialOptions = mateiralOptions.filter(
 		(option) =>
 			!value.materials.includes(option) &&
 			option.toLowerCase().includes(materialQuery.trim().toLowerCase()),
