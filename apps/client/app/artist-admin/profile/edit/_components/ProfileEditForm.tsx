@@ -13,7 +13,6 @@ import {
 	deleteArtistSns,
 	type MyArtistProfileRequest,
 	updateArtistSns,
-	updateMyArtistName,
 	updateMyArtistProfile,
 } from "../_api/actions";
 import type { ArtistProfileForm, ArtistSnsLink } from "../_types";
@@ -67,11 +66,7 @@ export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEdit
 
 		setIsSaving(true);
 		try {
-			const request = toProfileRequest(form);
-			await updateMyArtistProfile(request, form.profileImageFile);
-			if (form.nameKo !== savedForm.nameKo || form.nameEn !== savedForm.nameEn) {
-				await updateMyArtistName({ nameKo: request.nameKo, nameEn: request.nameEn });
-			}
+			await updateMyArtistProfile(toProfileRequest(form, savedForm), form.profileImageFile);
 			const sns = await saveSnsChanges(profileId, savedForm.sns, form.sns);
 
 			const nextForm = { ...form, profileImageFile: null, sns };
@@ -225,19 +220,19 @@ const formatSavedAt = (date: Date) => {
 const toComparable = ({ profileImageFile: _file, sns, ...rest }: ArtistProfileForm) =>
 	JSON.stringify({ ...rest, sns: sns.map(({ snsId, label, url }) => ({ snsId, label, url })) });
 
-// 보내지 않은 필드는 서버가 기존 값을 유지한다
-// TODO: 국문 성명·이메일·프로필 이미지는 비워서 저장할 수 없음 (빈 값을 받지 않고 삭제 API 도 없음) — BE 문의 필요
-const toProfileRequest = (form: ArtistProfileForm): MyArtistProfileRequest => {
-	const nameKo = form.nameKo.trim();
-	const email = form.emailLocal && form.emailDomain ? `${form.emailLocal}@${form.emailDomain}` : "";
-	return {
-		nameKo: nameKo || undefined,
-		nameEn: form.nameEn.trim(),
-		bio: form.bio,
-		email: email || undefined,
-		purchaseContactUrl: normalizeUrl(form.purchaseUrl),
-	};
-};
+// 국문 성명·이메일은 빈 문자열로 보내면 지워진다
+// 이미지는 새 파일 없이 저장된 이미지를 뺐을 때만 삭제 플래그를 보낸다
+const toProfileRequest = (
+	form: ArtistProfileForm,
+	savedForm: ArtistProfileForm,
+): MyArtistProfileRequest => ({
+	nameKo: form.nameKo.trim(),
+	nameEn: form.nameEn.trim(),
+	bio: form.bio,
+	email: form.emailLocal && form.emailDomain ? `${form.emailLocal}@${form.emailDomain}` : "",
+	purchaseContactUrl: normalizeUrl(form.purchaseUrl),
+	deleteProfileImg: Boolean(savedForm.profileImage) && !form.profileImage,
+});
 
 // SNS 는 행 단위 API 라 저장된 목록과 비교해 삭제·수정·추가를 보낸다 — 빈 행은 버리고, 새 행에는 받은 snsId 를 붙여 돌려준다
 const saveSnsChanges = async (

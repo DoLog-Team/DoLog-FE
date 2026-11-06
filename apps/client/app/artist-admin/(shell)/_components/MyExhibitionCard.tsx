@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { OverflowMenu } from "@/components/common/OverflowMenu/OverflowMenu";
 import { cn } from "@/lib/utils/cn";
@@ -14,7 +15,7 @@ export function MyExhibitionCard({ exhibition, onLeave }: MyExhibitionCardProps)
 	const isPending = exhibition.acceptedAt === null;
 
 	return (
-		<article className="flex gap-4 min-[721px]:flex-col min-[721px]:gap-3">
+		<article className="relative flex gap-4 min-[721px]:flex-col min-[721px]:gap-3">
 			<div className="relative h-32.5 w-23 shrink-0 min-[721px]:aspect-[254/359] min-[721px]:h-auto min-[721px]:w-full">
 				{exhibition.image ? (
 					<Image
@@ -31,7 +32,15 @@ export function MyExhibitionCard({ exhibition, onLeave }: MyExhibitionCardProps)
 
 			<div className="flex min-w-0 flex-1 items-start gap-2.5">
 				<div className="flex min-w-0 flex-1 flex-col px-0.5">
-					<h3 className="truncate text-head3 text-strong">{exhibition.name}</h3>
+					<h3 className="truncate text-head3 text-strong">
+						{/* 카드 전체를 두록 전시 상세 링크로 덮는다 — 더보기 메뉴는 DOM 순서상 위에 그려져 따로 눌린다 */}
+						<Link
+							href={`/${exhibition.exhibitionId}`}
+							className="after:absolute after:inset-0 after:content-['']"
+						>
+							{exhibition.name}
+						</Link>
+					</h3>
 					{exhibition.startDate && exhibition.endDate && (
 						<p className="text-body1 text-lighter">
 							{exhibition.startDate} ~ {exhibition.endDate}
