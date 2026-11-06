@@ -45,7 +45,6 @@ export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEdit
 	}, []);
 
 	// 네비게이션 : 변경 내용이 있을 때만 활성
-	// 버튼 문구는 Figma 대로 데스크탑 "임시 저장"(마지막 저장 시각과 함께), 모바일 "저장"
 	const isDirty = toComparable(form) !== toComparable(savedForm);
 	// 형식 오류는 저장을 시도한 뒤부터 보여준다 (입력 도중에는 형식이 맞지 않으므로)
 	const [showErrors, setShowErrors] = useState(false);
@@ -137,12 +136,7 @@ export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEdit
 				<FormHeader
 					title="프로필 정보 수정"
 					lastSavedAt={lastSavedAt}
-					saveLabel={
-						<>
-							<span className="min-[721px]:hidden">저장</span>
-							<span className="hidden min-[721px]:inline">임시 저장</span>
-						</>
-					}
+					saveLabel="저장"
 					saveDisabled={!isDirty || isSaving}
 					tempSaveDisabled={isSaving}
 					onTempSave={handleSave}
