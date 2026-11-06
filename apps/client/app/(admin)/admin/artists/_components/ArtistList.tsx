@@ -64,12 +64,13 @@ export const ArtistList = ({ exhibitionId, artists }: ArtistListProps) => {
 			<Modal
 				open={isExcludeModalOpen}
 				onOpenChange={setIsExcludeModalOpen}
-				title="전시에서 내보내기"
-				description={`${summarizeArtists(selectedNames)}를 전시에서 내보내요.\n작가가 올린 작품도 함께 사라져요.`}
+				title="전시에서 제외하기"
+				titleTone="danger"
+				description={`${summarizeArtists(selectedNames)}를 전시에서 제외해요.\n작가가 올린 작품도 함께 사라져요.`}
 				showCloseButton
 				actions={[
 					{ text: "취소", variant: "assistive", onClick: () => setIsExcludeModalOpen(false) },
-					{ text: "내보내기", variant: "primary", onClick: exclude },
+					{ text: "제외하기", variant: "danger", onClick: exclude },
 				]}
 			/>
 		</>
