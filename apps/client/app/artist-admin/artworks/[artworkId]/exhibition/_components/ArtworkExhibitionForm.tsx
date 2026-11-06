@@ -5,7 +5,10 @@ import { useEffect, useState } from "react";
 import { toErrorMessage } from "@/app/artist-admin/(shell)/_api/actions";
 import type { MyArtworkDetail } from "@/app/artist-admin/artworks/_api/getMyArtwork";
 import { updateArtworkAdditionalInfo } from "@/app/artist-admin/artworks/_api/updateArtwork";
-import { updateArtworkVisibility } from "@/app/artist-admin/artworks/_api/updateArtworkVisibility";
+import {
+	toArtworkVisibility,
+	updateArtworkVisibility,
+} from "@/app/artist-admin/artworks/_api/updateArtworkVisibility";
 import { ArtworkSaveConfirmModal } from "@/app/artist-admin/artworks/_components/ArtworkSaveConfirmModal";
 import { ArtworkVisibilitySection } from "@/app/artist-admin/artworks/_components/ArtworkVisibilitySection";
 import { isArtworkSatisfied } from "@/app/artist-admin/artworks/_components/artworkCompleteness";
@@ -52,7 +55,7 @@ export const ArtworkExhibitionForm = ({
 }: ArtworkExhibitionFormProps) => {
 	const router = useRouter();
 	const { notice, showNotice, closeNotice } = useNoticeModal();
-	const visibility = useArtworkVisibility(artwork.artworkId, artwork);
+	const visibility = useArtworkVisibility(artwork);
 	const relevantExhibitionId = artwork.exhibitionId ?? pendingExhibitionId;
 	const isSubmitted = !!artwork.exhibitionId;
 
@@ -78,7 +81,13 @@ export const ArtworkExhibitionForm = ({
 	const [locationMapPreview, setLocationMapPreview] = useState<string | null>(artwork.locationMap);
 
 	const buildSnapshot = () =>
-		JSON.stringify({ zoneId, mainImagePreview, additional, locationMapPreview });
+		JSON.stringify({
+			zoneId,
+			mainImagePreview,
+			additional,
+			locationMapPreview,
+			visibility: visibility.visibility,
+		});
 	const [savedSnapshot, setSavedSnapshot] = useState(buildSnapshot);
 	const isDirty = buildSnapshot() !== savedSnapshot;
 
@@ -154,7 +163,9 @@ export const ArtworkExhibitionForm = ({
 						mainImageFile,
 					}),
 				];
-				if (zoneId && zoneId !== artwork.zoneId) {
+				const zoneChanged = zoneId != null && zoneId !== artwork.zoneId;
+				const visibilityChanged = visibility.visibility !== toArtworkVisibility(artwork);
+				if (zoneChanged || visibilityChanged) {
 					tasks.push(updateArtworkVisibility(artwork.artworkId, visibility.visibility, zoneId));
 				}
 				await Promise.all(tasks);
@@ -238,7 +249,7 @@ export const ArtworkExhibitionForm = ({
 						<ArtworkVisibilitySection
 							value={visibility.visibility}
 							onChange={visibility.handleChange}
-							disabled={visibility.isSaving}
+							disabled={isSaving}
 							hasExhibition
 						/>
 						<Divider thickness="thin" fullBleed={true} spacing="md" />
@@ -328,7 +339,6 @@ export const ArtworkExhibitionForm = ({
 			</div>
 
 			<NoticeModal notice={notice} onClose={closeNotice} />
-			<NoticeModal notice={visibility.notice} onClose={visibility.closeNotice} />
 			<ArtworkSaveConfirmModal
 				open={isConfirmOpen}
 				onOpenChange={setIsConfirmOpen}

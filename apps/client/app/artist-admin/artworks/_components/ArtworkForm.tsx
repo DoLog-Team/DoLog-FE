@@ -5,7 +5,6 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
-import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { UnsavedChangesModal } from "@/components/common/Modal/UnsavedChangesModal";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { DotsLoader } from "@/components/common/Spinner/DotsLoader";
@@ -14,6 +13,7 @@ import { useLeaveConfirm } from "@/lib/hooks/useLeaveConfirm";
 import { type ArtworkCategoryOption, getArtworkCategories } from "../_api/getArtworkCategories";
 import type { MyArtworkDetail } from "../_api/getMyArtwork";
 import { updateArtworkBasicInfo } from "../_api/updateArtwork";
+import { toArtworkVisibility, updateArtworkVisibility } from "../_api/updateArtworkVisibility";
 import {
 	type ArtworkFieldSettings,
 	getArtworkExhibitionStatus,
@@ -106,9 +106,10 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 		showPurchaseButton: artwork.showPurchaseButton ?? false,
 	});
 	const { isSaving, error: saveError, run } = useAsyncSave();
-	const visibility = useArtworkVisibility(artwork.artworkId, artwork);
+	const visibility = useArtworkVisibility(artwork);
 
-	const buildSnapshot = () => JSON.stringify({ basic, additional, image, purchase });
+	const buildSnapshot = () =>
+		JSON.stringify({ basic, additional, image, purchase, visibility: visibility.visibility });
 	const [savedSnapshot, setSavedSnapshot] = useState(buildSnapshot);
 	const isDirty = buildSnapshot() !== savedSnapshot;
 
@@ -141,8 +142,8 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 
 	const handleTempSave = async () => {
 		if (hasValidationError) return false;
-		const saved = await run(() =>
-			updateArtworkBasicInfo(artwork.artworkId, {
+		const saved = await run(async () => {
+			await updateArtworkBasicInfo(artwork.artworkId, {
 				category: basic.category,
 				shortIntro: basic.shortIntro,
 				materials: additional.materials,
@@ -159,8 +160,11 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				youtubeUrl: image.youtubeUrl,
 				showPurchaseButton: purchase.showPurchaseButton,
 				mainImageFile,
-			}),
-		);
+			});
+			if (visibility.visibility !== toArtworkVisibility(artwork)) {
+				await updateArtworkVisibility(artwork.artworkId, visibility.visibility);
+			}
+		});
 		if (saved) {
 			setMainImageFile(null);
 			setSavedSnapshot(buildSnapshot());
@@ -230,7 +234,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				<ArtworkVisibilitySection
 					value={visibility.visibility}
 					onChange={visibility.handleChange}
-					disabled={visibility.isSaving}
+					disabled={isSaving}
 					hasExhibition={artwork.exhibitionId != null}
 				/>
 			),
@@ -331,7 +335,6 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				isSaving={isSaving}
 				onConfirm={handleConfirmSave}
 			/>
-			<NoticeModal notice={visibility.notice} onClose={visibility.closeNotice} />
 			<UnsavedChangesModal
 				open={isLeaveModalOpen}
 				onOpenChange={setIsLeaveModalOpen}
