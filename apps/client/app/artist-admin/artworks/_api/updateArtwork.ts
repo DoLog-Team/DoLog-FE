@@ -41,7 +41,7 @@ export async function updateArtworkBasicInfo(
 		if (value) formData.append(key, value);
 	};
 
-	appendIfPresent("category", input.category);
+	if (input.category !== undefined) formData.append("category", input.category);
 	appendIfPresent("shortIntro", input.shortIntro);
 	appendIfPresent("width", input.width);
 	appendIfPresent("height", input.height);
