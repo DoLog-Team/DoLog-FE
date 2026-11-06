@@ -62,13 +62,16 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 		image: exhibitionData.exhibitionImg,
 		eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
 		eventStatus: "https://schema.org/EventScheduled",
-		location: {
-			"@type": "Place",
-			address: {
-				"@type": "PostalAddress",
-				streetAddress: exhibitionData.location.address,
+
+		...(exhibitionData.location && {
+			location: {
+				"@type": "Place",
+				address: {
+					"@type": "PostalAddress",
+					streetAddress: exhibitionData.location.address,
+				},
 			},
-		},
+		}),
 		organizer: {
 			"@type": "Organization",
 			name: `${exhibitionData.univName} ${exhibitionData.deptName}`,
@@ -135,8 +138,9 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 			</DesktopContainer>
 			<Divider />
 			<DesktopContainer>
-				{/* 장소 */}
-				<ExhibitionLocationSection location={exhibitionData.location} />
+				{exhibitionData.location && (
+					<ExhibitionLocationSection location={exhibitionData.location} />
+				)}
 				{/* 주최 기관 */}
 				{hostData && <ExhibitionHostSection hostInfo={hostData} sns={snsData} />}
 			</DesktopContainer>

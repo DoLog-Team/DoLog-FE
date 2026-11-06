@@ -60,6 +60,6 @@ export interface ExhibitionDetail {
 	endDate: string;
 	dateInfo: string;
 	description: string;
-	location: ExhibitionLocation;
+	location: ExhibitionLocation | null;
 	isPublic: boolean;
 }
