@@ -12,5 +12,11 @@ export default async function AdminArtistsPage() {
 	const exhibitionId = await getMyExhibitionId();
 	const artists = await getAdminArtists(exhibitionId, "JOINED");
 
-	return <ArtistList exhibitionId={exhibitionId} artists={artists} />;
+	return (
+		<ArtistList
+			exhibitionId={exhibitionId}
+			artists={artists ?? []}
+			isLoadError={artists === null}
+		/>
+	);
 }

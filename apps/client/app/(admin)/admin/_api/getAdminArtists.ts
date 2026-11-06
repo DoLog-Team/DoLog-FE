@@ -29,31 +29,27 @@ const PAGE_SIZE = 100;
 export async function getAdminArtists(
 	exhibitionId: string,
 	status: ManagedArtistStatus,
-): Promise<AdminArtist[]> {
-	const artists: AdminArtist[] = [];
-	for (let page = 0; ; page++) {
-		const data = await getPage(exhibitionId, status, page);
-		artists.push(
-			...data.artists.map((artist) => ({
-				id: artist.artistId,
-				name: artist.nameKo,
-				email: artist.email,
-				greeting: artist.greeting,
-				artworkCount: artist.artworkCount ?? 0,
-			})),
-		);
-		if (page + 1 >= data.totalPages) return artists;
-	}
-}
-
-async function getPage(exhibitionId: string, status: ManagedArtistStatus, page: number) {
+): Promise<AdminArtist[] | null> {
 	try {
-		return await serverApiClient<ManagedArtistResponse>(
-			`/exhibitions/${exhibitionId}/artists/manage?status=${status}&page=${page}&size=${PAGE_SIZE}`,
-			{ cache: "no-store" },
-		);
+		const artists: AdminArtist[] = [];
+		for (let page = 0; ; page++) {
+			const data = await serverApiClient<ManagedArtistResponse>(
+				`/exhibitions/${exhibitionId}/artists/manage?status=${status}&page=${page}&size=${PAGE_SIZE}`,
+				{ cache: "no-store" },
+			);
+			artists.push(
+				...data.artists.map((artist) => ({
+					id: artist.artistId,
+					name: artist.nameKo,
+					email: artist.email,
+					greeting: artist.greeting,
+					artworkCount: artist.artworkCount ?? 0,
+				})),
+			);
+			if (page + 1 >= data.totalPages) return artists;
+		}
 	} catch (error) {
 		if (isApiError(error, 401)) redirect(ADMIN_LOGIN_HREF);
-		throw error;
+		return null;
 	}
 }

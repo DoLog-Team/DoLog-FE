@@ -49,6 +49,7 @@ interface ArtworkListProps {
 	groups: AdminArtworkGroup[];
 	// 전시 전체의 플랜 한도 초과 작품 수
 	exceededCount: number;
+	isLoadError?: boolean;
 }
 
 export const ArtworkList = ({
@@ -57,6 +58,7 @@ export const ArtworkList = ({
 	artworks,
 	groups,
 	exceededCount,
+	isLoadError,
 }: ArtworkListProps) => {
 	const [keyword, setKeyword] = useState("");
 	const [visibility, setVisibility] = useState<string | null>(null);
@@ -134,6 +136,7 @@ export const ArtworkList = ({
 				}
 				unit="개"
 				items={items}
+				isLoadError={isLoadError}
 				selection={selection}
 				columns={columns}
 				renderCard={(artwork) => <ArtworkCard artwork={artwork} />}

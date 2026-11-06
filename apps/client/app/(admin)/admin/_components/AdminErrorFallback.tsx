@@ -5,7 +5,7 @@ import { startTransition } from "react";
 import { Button } from "@/components/common/Button/Button";
 
 interface AdminErrorFallbackProps {
-	reset: () => void;
+	reset?: () => void;
 }
 
 export const AdminErrorFallback = ({ reset }: AdminErrorFallbackProps) => {
@@ -15,7 +15,7 @@ export const AdminErrorFallback = ({ reset }: AdminErrorFallbackProps) => {
 	const retry = () =>
 		startTransition(() => {
 			router.refresh();
-			reset();
+			reset?.();
 		});
 
 	return (

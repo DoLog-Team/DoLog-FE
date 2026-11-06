@@ -10,15 +10,16 @@ export const metadata: Metadata = {
 
 export default async function AdminHiddenArtworksPage() {
 	const exhibitionId = await getMyExhibitionId();
-	const { artworks, groups, exceededCount } = await getAdminArtworks(exhibitionId, true);
+	const data = await getAdminArtworks(exhibitionId, true);
 
 	return (
 		<ArtworkList
 			mode="hidden"
 			exhibitionId={exhibitionId}
-			artworks={artworks}
-			groups={groups}
-			exceededCount={exceededCount}
+			artworks={data?.artworks ?? []}
+			groups={data?.groups ?? []}
+			exceededCount={data?.exceededCount ?? 0}
+			isLoadError={data === null}
 		/>
 	);
 }

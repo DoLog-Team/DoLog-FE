@@ -12,5 +12,11 @@ export default async function AdminPendingArtistsPage() {
 	const exhibitionId = await getMyExhibitionId();
 	const artists = await getAdminArtists(exhibitionId, "PENDING");
 
-	return <PendingArtistList exhibitionId={exhibitionId} artists={artists} />;
+	return (
+		<PendingArtistList
+			exhibitionId={exhibitionId}
+			artists={artists ?? []}
+			isLoadError={artists === null}
+		/>
+	);
 }

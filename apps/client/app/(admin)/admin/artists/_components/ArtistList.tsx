@@ -16,9 +16,10 @@ import { ArtistCard } from "./ArtistCard";
 interface ArtistListProps {
 	exhibitionId: string;
 	artists: AdminArtist[];
+	isLoadError?: boolean;
 }
 
-export const ArtistList = ({ exhibitionId, artists }: ArtistListProps) => {
+export const ArtistList = ({ exhibitionId, artists, isLoadError }: ArtistListProps) => {
 	const [keyword, setKeyword] = useState("");
 	const [isExcludeModalOpen, setIsExcludeModalOpen] = useState(false);
 	const selection = useRowSelection<string>();
@@ -45,6 +46,7 @@ export const ArtistList = ({ exhibitionId, artists }: ArtistListProps) => {
 				onSearchChange={setKeyword}
 				unit="명"
 				items={items}
+				isLoadError={isLoadError}
 				selection={selection}
 				columns={[
 					{ header: "작가명", width: "20%", cell: (artist) => artist.name },
