@@ -156,8 +156,7 @@ export const ArtworkList = ({
 						},
 					},
 				]}
-				// 전시 내 작품 상세 경로는 전시 사이트 연결 후 확정
-				getRowHref={() => "#"}
+				getRowHref={(artwork) => getArtworkHref(artwork, mode, exhibitionId)}
 				isProcessing={isProcessing}
 			/>
 
@@ -204,6 +203,12 @@ export const ArtworkList = ({
 			</Modal>
 		</>
 	);
+};
+
+const getArtworkHref = (artwork: AdminArtwork, mode: Mode, exhibitionId: string) => {
+	if (artwork.visibility !== "공개") return null;
+	if (mode === "all" && artwork.isExposed) return `/${exhibitionId}/artwork/${artwork.id}`;
+	return `/artworks/${artwork.id}`;
 };
 
 const ExceededNotice = ({ count }: { count: number }) => (

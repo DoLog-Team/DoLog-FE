@@ -47,7 +47,7 @@ interface AdminSelectableListProps<T extends { id: Id }, Id extends string | num
 	cardClassName?: (item: T) => string | undefined;
 	actions: SelectableListAction[];
 	isProcessing?: boolean;
-	getRowHref?: (item: T) => string;
+	getRowHref?: (item: T) => string | null;
 }
 
 export const AdminSelectableList = <T extends { id: Id }, Id extends string | number = T["id"]>({
@@ -182,9 +182,7 @@ export const AdminSelectableList = <T extends { id: Id }, Id extends string | nu
 									))}
 									{getRowHref && (
 										<td className={CELL_CLASS}>
-											<Link href={getRowHref(item)} aria-label="상세 보기" className="inline-flex">
-												<ChevronIcon direction="right" className="text-icon-light" />
-											</Link>
+											<RowLink href={getRowHref(item)} />
 										</td>
 									)}
 								</tr>
@@ -255,6 +253,13 @@ export const AdminSelectableList = <T extends { id: Id }, Id extends string | nu
 		</section>
 	);
 };
+
+const RowLink = ({ href }: { href: string | null }) =>
+	href && (
+		<Link href={href} aria-label="상세 보기" className="inline-flex">
+			<ChevronIcon direction="right" className="text-icon-light" />
+		</Link>
+	);
 
 const CELL_CLASS =
 	"h-12 border-stroke-lightest border-r border-b px-3 text-center align-middle text-body2 text-light last:border-r-0";
