@@ -49,6 +49,7 @@ interface ArtworkListProps {
 	groups: AdminArtworkGroup[];
 	// 전시 전체의 플랜 한도 초과 작품 수
 	exceededCount: number;
+	isLoadError?: boolean;
 }
 
 export const ArtworkList = ({
@@ -57,6 +58,7 @@ export const ArtworkList = ({
 	artworks,
 	groups,
 	exceededCount,
+	isLoadError,
 }: ArtworkListProps) => {
 	const [keyword, setKeyword] = useState("");
 	const [visibility, setVisibility] = useState<string | null>(null);
@@ -134,6 +136,7 @@ export const ArtworkList = ({
 				}
 				unit="개"
 				items={items}
+				isLoadError={isLoadError}
 				selection={selection}
 				columns={columns}
 				renderCard={(artwork) => <ArtworkCard artwork={artwork} />}
@@ -153,8 +156,7 @@ export const ArtworkList = ({
 						},
 					},
 				]}
-				// 전시 내 작품 상세 경로는 전시 사이트 연결 후 확정
-				getRowHref={() => "#"}
+				getRowHref={(artwork) => getArtworkHref(artwork, mode, exhibitionId)}
 				isProcessing={isProcessing}
 			/>
 
@@ -201,6 +203,12 @@ export const ArtworkList = ({
 			</Modal>
 		</>
 	);
+};
+
+const getArtworkHref = (artwork: AdminArtwork, mode: Mode, exhibitionId: string) => {
+	if (artwork.visibility !== "공개") return null;
+	if (mode === "all" && artwork.isExposed) return `/${exhibitionId}/artwork/${artwork.id}`;
+	return `/artworks/${artwork.id}`;
 };
 
 const ExceededNotice = ({ count }: { count: number }) => (

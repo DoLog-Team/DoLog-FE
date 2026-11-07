@@ -4,7 +4,7 @@ import { ThemeProvider } from "@/providers/theme-providers";
 export default function AdminAuthLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<ThemeProvider attribute="class" forcedTheme="light" enableColorScheme={true}>
-			<div className="flex min-h-dvh w-full flex-col bg-normal">
+			<div className="flex min-h-dvh w-full flex-col self-start bg-normal">
 				<AdminAuthHeader />
 
 				<div className="grid flex-1 grid-rows-[2fr_auto_3fr]">

@@ -10,6 +10,7 @@ import { ChevronIcon } from "@/components/common/icons/ChevronIcon";
 import { Pagination } from "@/components/common/Pagination/Pagination";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
 import { cn } from "@/lib/utils/cn";
+import { AdminErrorFallback } from "./AdminErrorFallback";
 import type { RowSelection } from "./useRowSelection";
 
 const PAGE_SIZE = 10;
@@ -39,14 +40,14 @@ interface AdminSelectableListProps<T extends { id: Id }, Id extends string | num
 	unit: "명" | "개";
 	// 검색·필터가 적용된 전체 목록
 	items: T[];
-	isCountError?: boolean;
+	isLoadError?: boolean;
 	selection: RowSelection<Id>;
 	columns: SelectableListColumn<T>[];
 	renderCard: (item: T) => React.ReactNode;
 	cardClassName?: (item: T) => string | undefined;
 	actions: SelectableListAction[];
 	isProcessing?: boolean;
-	getRowHref?: (item: T) => string;
+	getRowHref?: (item: T) => string | null;
 }
 
 export const AdminSelectableList = <T extends { id: Id }, Id extends string | number = T["id"]>({
@@ -58,7 +59,7 @@ export const AdminSelectableList = <T extends { id: Id }, Id extends string | nu
 	filters,
 	unit,
 	items,
-	isCountError,
+	isLoadError,
 	selection,
 	columns,
 	renderCard,
@@ -76,7 +77,7 @@ export const AdminSelectableList = <T extends { id: Id }, Id extends string | nu
 
 	const allIds = items.map((item) => item.id);
 	const pageIds = pageItems.map((item) => item.id);
-	const countLabel = isCountError ? "-" : `${items.length}${unit}`;
+	const countLabel = isLoadError ? "-" : `${items.length}${unit}`;
 	const isActionDisabled = selection.count === 0 || isProcessing;
 
 	// 페이지를 넘기면 선택을 모두 해제
@@ -128,7 +129,9 @@ export const AdminSelectableList = <T extends { id: Id }, Id extends string | nu
 				</div>
 			</div>
 
-			{items.length === 0 ? (
+			{isLoadError ? (
+				<AdminErrorFallback />
+			) : items.length === 0 ? (
 				<EmptyState message="검색 결과가 없습니다." />
 			) : (
 				<>
@@ -179,9 +182,7 @@ export const AdminSelectableList = <T extends { id: Id }, Id extends string | nu
 									))}
 									{getRowHref && (
 										<td className={CELL_CLASS}>
-											<Link href={getRowHref(item)} aria-label="상세 보기" className="inline-flex">
-												<ChevronIcon direction="right" className="text-icon-light" />
-											</Link>
+											<RowLink href={getRowHref(item)} />
 										</td>
 									)}
 								</tr>
@@ -252,6 +253,13 @@ export const AdminSelectableList = <T extends { id: Id }, Id extends string | nu
 		</section>
 	);
 };
+
+const RowLink = ({ href }: { href: string | null }) =>
+	href && (
+		<Link href={href} aria-label="상세 보기" className="inline-flex">
+			<ChevronIcon direction="right" className="text-icon-light" />
+		</Link>
+	);
 
 const CELL_CLASS =
 	"h-12 border-stroke-lightest border-r border-b px-3 text-center align-middle text-body2 text-light last:border-r-0";

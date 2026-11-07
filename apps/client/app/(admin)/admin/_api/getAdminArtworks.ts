@@ -71,7 +71,7 @@ export async function getAdminArtworks(exhibitionId: string, hidden: boolean) {
 		return { artworks, groups, exceededCount: pages[0].planLimitExceededCount };
 	} catch (error) {
 		if (isApiError(error, 401)) redirect(ADMIN_LOGIN_HREF);
-		throw error;
+		return null;
 	}
 }
 

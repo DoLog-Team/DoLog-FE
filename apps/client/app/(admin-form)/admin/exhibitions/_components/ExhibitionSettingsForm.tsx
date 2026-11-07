@@ -183,6 +183,8 @@ export const ExhibitionSettingsForm = ({
 					lastSavedAt={lastSavedAt}
 					saveLabel="저장"
 					onTempSave={handleSave}
+					tempSaveDisabled={isSaving}
+					saveDisabled={!isDirty}
 					onBack={handleBack}
 				/>
 				<TabBar tabs={TABS} activeTab={activeTab} onTabClick={handleTabClick} />

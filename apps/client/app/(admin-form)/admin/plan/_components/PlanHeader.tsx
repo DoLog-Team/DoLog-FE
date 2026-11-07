@@ -9,8 +9,8 @@ export const PlanHeader = () => (
 		<div className={cn(PLAN_CONTAINER_CLASS, "flex h-11 items-center min-[721px]:h-17")}>
 			<Link href="/admin" aria-label="전시 어드민 홈으로" className="flex items-center">
 				<Image src="/icons/backBtn.svg" alt="" width={24} height={24} />
-				<span className="px-0.5 text-body1-bold text-strong">사용 중인 플랜</span>
 			</Link>
+			<span className="px-0.5 text-body1-bold text-strong">사용 중인 플랜</span>
 		</div>
 	</header>
 );

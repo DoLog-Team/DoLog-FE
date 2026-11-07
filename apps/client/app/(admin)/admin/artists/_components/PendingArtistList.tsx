@@ -23,9 +23,14 @@ const MODAL = {
 interface PendingArtistListProps {
 	exhibitionId: string;
 	artists: AdminArtist[];
+	isLoadError?: boolean;
 }
 
-export const PendingArtistList = ({ exhibitionId, artists }: PendingArtistListProps) => {
+export const PendingArtistList = ({
+	exhibitionId,
+	artists,
+	isLoadError,
+}: PendingArtistListProps) => {
 	const [keyword, setKeyword] = useState("");
 	const [decision, setDecision] = useState<Decision | null>(null);
 	const selection = useRowSelection<string>();
@@ -54,6 +59,7 @@ export const PendingArtistList = ({ exhibitionId, artists }: PendingArtistListPr
 				onSearchChange={setKeyword}
 				unit="명"
 				items={items}
+				isLoadError={isLoadError}
 				selection={selection}
 				columns={[
 					{ header: "작가명", width: "20%", cell: (artist) => artist.name },
