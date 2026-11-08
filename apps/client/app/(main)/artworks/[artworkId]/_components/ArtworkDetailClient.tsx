@@ -66,18 +66,36 @@ export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProp
 		<div className="flex flex-col">
 			{data.mainImage ? (
 				<>
+					{/* 전시 작품 상세와 같게 자르지 않고 원본 비율 그대로 — 모바일은 가로 꽉 채움, 데스크탑은 높이 400px까지 가운데 */}
 					<button
 						type="button"
 						onClick={() => setIsMainImageViewerOpen(true)}
-						className="relative block aspect-video max-h-150 w-full cursor-pointer overflow-hidden"
+						className="relative block w-full cursor-pointer overflow-hidden min-[721px]:hidden"
 						aria-label="작품 대표 이미지 전체보기"
 					>
 						<Image
 							src={data.mainImage}
 							alt={data.title}
-							fill
+							width={0}
+							height={0}
 							sizes="100vw"
-							className="object-cover"
+							style={{ width: "100%", height: "auto" }}
+							priority
+						/>
+					</button>
+					<button
+						type="button"
+						onClick={() => setIsMainImageViewerOpen(true)}
+						className="relative hidden w-full cursor-pointer overflow-hidden min-[721px]:flex min-[721px]:items-center min-[721px]:justify-center"
+						aria-label="작품 대표 이미지 전체보기"
+					>
+						<Image
+							src={data.mainImage}
+							alt={data.title}
+							width={0}
+							height={0}
+							sizes="100vw"
+							style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: "400px" }}
 							priority
 						/>
 					</button>
