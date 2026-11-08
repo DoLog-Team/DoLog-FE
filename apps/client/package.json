@@ -26,6 +26,7 @@
     "qrcode": "^1.5.4",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-easy-crop": "^6.2.4",
     "react-markdown": "^10.1.0",
     "react-zoom-pan-pinch": "^4.0.3",
     "remark-breaks": "^4.0.0",

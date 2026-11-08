@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { FormField } from "@/components/common/FormField/FormField";
 import { ImageInput } from "@/components/common/ImageInput/ImageInput";
 import { Input } from "@/components/common/Input/Input";
 import { Textarea } from "@/components/common/Textarea/Textarea";
 import type { ArtistProfileForm } from "../../_types";
+import { ProfileImageCropModal } from "../ProfileImageCropModal";
 import {
 	INVALID_MESSAGE,
 	isNameEnInvalid,
@@ -28,6 +30,14 @@ export const ProfileBasicInfoSection = ({
 		? isNameKoInvalid(value.nameKo)
 		: isNameKoTypingInvalid(value.nameKo);
 	const nameEnError = isNameEnInvalid(value.nameEn);
+
+	// 고른 파일은 크롭을 마쳐야 폼에 반영한다 — 크롭 화면을 닫으면 기존 이미지를 유지한다
+	const [cropTarget, setCropTarget] = useState<{ file: File; src: string } | null>(null);
+
+	const closeCrop = () => {
+		if (cropTarget) URL.revokeObjectURL(cropTarget.src);
+		setCropTarget(null);
+	};
 
 	return (
 		<div className="flex flex-col gap-4 min-[721px]:flex-row min-[721px]:gap-10">
@@ -69,7 +79,6 @@ export const ProfileBasicInfoSection = ({
 				</FormField>
 
 				<FormField label="프로필 이미지">
-					{/* TODO: 파일 선택 후 프로필 이미지 크롭 페이지로 이동 (#170 크롭 작업) */}
 					<ImageInput
 						className="w-full"
 						images={value.profileImage ? [value.profileImage] : []}
@@ -78,11 +87,22 @@ export const ProfileBasicInfoSection = ({
 						guideText="JPG, JPEG, PNG / 용량 5MB 이하"
 						accept="image/jpeg,image/png"
 						onAdd={([file]) => {
-							if (file)
-								onChange({ profileImage: URL.createObjectURL(file), profileImageFile: file });
+							if (file) setCropTarget({ file, src: URL.createObjectURL(file) });
 						}}
 						onRemove={() => onChange({ profileImage: null, profileImageFile: null })}
 					/>
+					{cropTarget && (
+						<ProfileImageCropModal
+							key={cropTarget.src}
+							file={cropTarget.file}
+							src={cropTarget.src}
+							onClose={closeCrop}
+							onComplete={(file) => {
+								onChange({ profileImage: URL.createObjectURL(file), profileImageFile: file });
+								closeCrop();
+							}}
+						/>
+					)}
 				</FormField>
 			</div>
 		</div>
