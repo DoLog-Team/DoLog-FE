@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import { Header } from "@/app/(main)/_components/Header";
 import {
 	ArtistSection,
 	getVisibleAuthors,
@@ -85,7 +86,13 @@ export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProp
 						onOpenChange={setIsMainImageViewerOpen}
 						src={data.mainImage}
 						alt={data.title}
-						title={data.title}
+						header={
+							<Header
+								variant="detail"
+								title={data.title}
+								onBackClick={() => setIsMainImageViewerOpen(false)}
+							/>
+						}
 					/>
 				</>
 			) : (
@@ -106,7 +113,12 @@ export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProp
 					title="작품 설명"
 				/>
 				<YoutubeSection youtubeUrl={data.youtubeUrl} />
-				<PhotoSection data={{ detailImages: data.detailImages, purchaseUrl, title: data.title }} />
+				<PhotoSection
+					data={{ detailImages: data.detailImages, purchaseUrl, title: data.title }}
+					renderViewerHeader={(close) => (
+						<Header variant="detail" title={data.title} onBackClick={close} />
+					)}
+				/>
 			</section>
 
 			{hasArtist && (

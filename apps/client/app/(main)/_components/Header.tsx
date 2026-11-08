@@ -17,10 +17,18 @@ interface HeaderProps {
 	title?: string;
 	// detail 전용 — 제목을 보일지 (스크롤해서 큰 제목이 접혔을 때만 보이게 할 때 사용)
 	showTitle?: boolean;
+	// detail 전용 — 넘기면 두록 홈으로 가는 대신 이 동작을 함 (이미지 확대 모달 닫기 등)
+	onBackClick?: () => void;
 	className?: string;
 }
 
-export const Header = ({ variant = "home", title, showTitle = true, className }: HeaderProps) => {
+export const Header = ({
+	variant = "home",
+	title,
+	showTitle = true,
+	onBackClick,
+	className,
+}: HeaderProps) => {
 	const role = useAuthRole();
 
 	return (
@@ -33,9 +41,20 @@ export const Header = ({ variant = "home", title, showTitle = true, className }:
 					</Link>
 				) : (
 					<div className="flex min-w-0 items-center gap-2">
-						<Link href="/" aria-label="뒤로가기" className="shrink-0">
-							<Image src="/icons/backBtn.svg" alt="" width={24} height={24} />
-						</Link>
+						{onBackClick ? (
+							<button
+								type="button"
+								onClick={onBackClick}
+								aria-label="뒤로가기"
+								className="shrink-0 cursor-pointer"
+							>
+								<Image src="/icons/backBtn.svg" alt="" width={24} height={24} />
+							</button>
+						) : (
+							<Link href="/" aria-label="뒤로가기" className="shrink-0">
+								<Image src="/icons/backBtn.svg" alt="" width={24} height={24} />
+							</Link>
+						)}
 						<span
 							className={cn(
 								"truncate text-body1-bold text-strong transition-opacity duration-200",
