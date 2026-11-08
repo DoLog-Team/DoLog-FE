@@ -121,7 +121,14 @@ export function ArtworkDetailClient({
 					onOpenChange={setIsMainImageViewerOpen}
 					src={data.mainImage}
 					alt={data.title}
-					title={data.title}
+					header={
+						<Header
+							variant="back"
+							title={data.title}
+							onBackClick={() => setIsMainImageViewerOpen(false)}
+							showHamburger={false}
+						/>
+					}
 				/>
 			)}
 			<InfoSection data={data} hideArtistRole={hideArtistRole} groupName={data.zoneName} />
@@ -140,7 +147,12 @@ export function ArtworkDetailClient({
 				/>
 			</section>
 			<YoutubeSection youtubeUrl={data.youtubeUrl} />
-			<PhotoSection data={{ ...data, purchaseUrl }} />
+			<PhotoSection
+				data={{ ...data, purchaseUrl }}
+				renderViewerHeader={(close) => (
+					<Header variant="back" title={data.title} onBackClick={close} showHamburger={false} />
+				)}
+			/>
 			{hasArtist && (
 				<section
 					data-section="artist"

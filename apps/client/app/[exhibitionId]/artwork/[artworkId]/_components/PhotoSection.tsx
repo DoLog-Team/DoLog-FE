@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { ImageViewerModal } from "@/components/common/ImageViewerModal/ImageViewerModal";
@@ -15,9 +15,11 @@ import { resolveContactHref } from "@/lib/utils/sns";
 
 interface PhotoSectionProps {
 	data: Pick<ArtworkDetail, "detailImages" | "purchaseUrl" | "title">;
+	// 이미지 확대 모달의 모바일 헤더 — 전시·두록 화면 양쪽에서 쓰여서 부르는 쪽이 자기 헤더를 넘김
+	renderViewerHeader: (close: () => void) => ReactNode;
 }
 
-export const PhotoSection = ({ data }: PhotoSectionProps) => {
+export const PhotoSection = ({ data, renderViewerHeader }: PhotoSectionProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [viewerImage, setViewerImage] = useState<{ src: string; alt: string } | null>(null);
 
@@ -67,7 +69,7 @@ export const PhotoSection = ({ data }: PhotoSectionProps) => {
 						onOpenChange={(open) => !open && setViewerImage(null)}
 						src={viewerImage.src}
 						alt={viewerImage.alt}
-						title={data.title}
+						header={renderViewerHeader(() => setViewerImage(null))}
 					/>
 				)}
 				{/* 구매링크 - 선택값 */}

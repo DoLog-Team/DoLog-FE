@@ -2,9 +2,8 @@
 
 import * as Dialog from "@radix-ui/react-dialog";
 import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
+import { type ReactNode, useCallback, useRef, useState } from "react";
 import { TransformComponent, TransformWrapper, useControls } from "react-zoom-pan-pinch";
-import { Header } from "@/app/[exhibitionId]/_components/Header";
 import { imageViewerModalStyles as s } from "./ImageViewerModal.styles";
 
 interface ImageViewerModalProps {
@@ -12,7 +11,8 @@ interface ImageViewerModalProps {
 	onOpenChange: (open: boolean) => void;
 	src: string;
 	alt: string;
-	title: string;
+	// 모바일 상단 헤더 (닫기는 헤더의 뒤로가기에서 onOpenChange(false)를 부르도록 넘김)
+	header?: ReactNode;
 }
 
 function ZoomControls() {
@@ -35,7 +35,7 @@ export const ImageViewerModal = ({
 	onOpenChange,
 	src,
 	alt,
-	title,
+	header,
 }: ImageViewerModalProps) => {
 	const imgRef = useRef<HTMLImageElement>(null);
 	const [closePos, setClosePos] = useState({ top: 20, right: 20 });
@@ -62,15 +62,8 @@ export const ImageViewerModal = ({
 				<Dialog.Content className={s.content} onOpenAutoFocus={(e) => e.preventDefault()}>
 					<Dialog.Title className="sr-only">{alt}</Dialog.Title>
 
-					{/* 모바일: 상단 뒤로가기 헤더 */}
-					<div className="min-[721px]:hidden">
-						<Header
-							variant="back"
-							title={title}
-							onBackClick={() => onOpenChange(false)}
-							showHamburger={false}
-						/>
-					</div>
+					{/* 모바일: 상단 헤더 — 전시·두록 화면마다 헤더 틀이 달라서 부르는 쪽이 넘겨줌 */}
+					{header && <div className="min-[721px]:hidden">{header}</div>}
 
 					{/* 데스크탑: 이미지 우상단 닫기 버튼 */}
 					<button
