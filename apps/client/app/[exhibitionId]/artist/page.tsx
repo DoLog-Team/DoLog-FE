@@ -1,6 +1,6 @@
-import { resolveExhibitionSlug } from "@/lib/api/exhibition";
 import { getArtistProfiles } from "../../../lib/api/artists/artist";
 import { getPartners } from "../../../lib/api/partner";
+import { resolveExhibitionId } from "../_api/resolveExhibitionId";
 import { ArtistPageClient } from "./_components/ArtistPageClient";
 
 interface ArtistPageProps {
@@ -12,13 +12,10 @@ interface ArtistPageProps {
 export default async function ArtistPage({ params }: ArtistPageProps) {
 	const { exhibitionId } = await params;
 
-	const resolved = await resolveExhibitionSlug(exhibitionId);
-	if (!resolved) return null;
+	const uuid = await resolveExhibitionId(exhibitionId);
+	if (!uuid) return null;
 
-	const [partners, artists] = await Promise.all([
-		getPartners(resolved.uuid),
-		getArtistProfiles(resolved.uuid),
-	]);
+	const [partners, artists] = await Promise.all([getPartners(uuid), getArtistProfiles(uuid)]);
 
 	return <ArtistPageClient exhibitionId={exhibitionId} partners={partners} artists={artists} />;
 }

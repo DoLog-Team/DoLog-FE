@@ -4,7 +4,6 @@ import { getDologArtist } from "@/app/(main)/artists/[artistId]/_api/getArtist";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { Divider } from "@/components/common/Divider/Divider";
 import { SectionTimeTracker } from "@/components/common/SectionTimeTracker";
-import { resolveExhibitionSlug } from "@/lib/api/exhibition";
 import { hasArtistProfileInfo } from "@/lib/utils/artistProfile";
 import { VISITOR_COOKIE } from "@/lib/visitor";
 import { getArtistDetail } from "../../../../lib/api/artists/artist-detail";
@@ -52,8 +51,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ArtistDetailPage({ params }: Props) {
 	const { exhibitionId, artistId } = await params;
 
-	const resolved = await resolveExhibitionSlug(exhibitionId);
-	if (!resolved) {
+	const uuid = await resolveExhibitionId(exhibitionId);
+	if (!uuid) {
 		return (
 			<main className="flex flex-1 flex-col">
 				<Header variant="back" title="작가 상세" />
@@ -64,7 +63,7 @@ export default async function ArtistDetailPage({ params }: Props) {
 
 	// 방문자 ID 를 같이 보내야 내가 누른 좋아요(liked)가 처음부터 맞게 보인다
 	const visitorId = (await cookies()).get(VISITOR_COOKIE)?.value;
-	const artist = await getArtistDetail(artistId, resolved.uuid, visitorId);
+	const artist = await getArtistDetail(artistId, uuid, visitorId);
 	if (!artist) {
 		return (
 			<main className="flex flex-1 flex-col">
