@@ -3,8 +3,6 @@ import { getExhibitions } from "@/lib/api/exhibition";
 // import { CATEGORIES, MOCK_ARTWORKS } from "../_mocks/artwork";
 import ArtworksClient from "./_components/ArtworksClient";
 
-export const dynamic = "force-dynamic";
-
 export default async function ArtworksPage() {
 	const [artworks, exhibitions] = await Promise.all([getArtworks(), getExhibitions()]);
 
