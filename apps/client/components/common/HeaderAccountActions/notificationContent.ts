@@ -88,6 +88,7 @@ const TEMPLATES: Partial<
 	ARTWORK_PLAN_LIMIT_CLEARED: (p) => ({
 		title: "자리 확보로 작품 공개",
 		description: `${p.exhibitionName} 전시에 공개 가능한 자리가 생겨 '${p.artworkTitle}' 작품이 전시에 공개되었어요.`,
+		href: p.artworkId ? ARTWORK_EXHIBITION_HREF(p.artworkId) : undefined,
 	}),
 	ARTWORK_PLAN_DOWNGRADED: (p) => ({
 		title: "플랜 다운그레이드 미노출",
