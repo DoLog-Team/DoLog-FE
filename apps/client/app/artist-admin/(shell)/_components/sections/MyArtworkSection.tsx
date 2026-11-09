@@ -117,6 +117,8 @@ export function MyArtworkSection({
 					value={titleValue}
 					onChange={(e) => setTitleValue(e.target.value)}
 					placeholder="작품 이름을 입력해주세요"
+					maxLength={100}
+					showCount={false}
 					error={Boolean(addError)}
 					errorMessage={addError || undefined}
 				/>
