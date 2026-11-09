@@ -1,5 +1,14 @@
 import { authApiClient } from "@/lib/api/instance";
 
+const appendSize = (
+	formData: FormData,
+	key: "width" | "height" | "depth",
+	value: string | undefined,
+) => {
+	if (value) formData.append(key, value);
+	else formData.append(`clear${key[0].toUpperCase()}${key.slice(1)}`, "true");
+};
+
 export async function renameArtwork(artworkId: string, title: string): Promise<void> {
 	const formData = new FormData();
 	formData.append("title", title);
@@ -43,9 +52,9 @@ export async function updateArtworkBasicInfo(
 
 	if (input.category !== undefined) formData.append("category", input.category);
 	appendIfPresent("shortIntro", input.shortIntro);
-	appendIfPresent("width", input.width);
-	appendIfPresent("height", input.height);
-	appendIfPresent("depth", input.depth);
+	appendSize(formData, "width", input.width);
+	appendSize(formData, "height", input.height);
+	appendSize(formData, "depth", input.depth);
 	appendIfPresent("productionStartYear", input.productionStartYear);
 	appendIfPresent("productionStartMonth", input.productionStartMonth);
 	appendIfPresent("productionStartDay", input.productionStartDay);
@@ -87,9 +96,9 @@ export async function updateArtworkAdditionalInfo(
 ): Promise<void> {
 	const formData = new FormData();
 
-	if (input.width) formData.append("width", input.width);
-	if (input.height) formData.append("height", input.height);
-	if (input.depth) formData.append("depth", input.depth);
+	appendSize(formData, "width", input.width);
+	appendSize(formData, "height", input.height);
+	appendSize(formData, "depth", input.depth);
 	if (input.locationMapFile) formData.append("locationMapFile", input.locationMapFile);
 	if (input.mainImageFile) formData.append("mainImageFile", input.mainImageFile);
 
