@@ -136,39 +136,28 @@ export const ArtworkExhibitionForm = ({
 		if (!relevantExhibitionId) return false;
 		setIsSaving(true);
 		try {
+			await updateArtworkAdditionalInfo(artwork.artworkId, {
+				materials: additional.materials,
+				width: additional.width,
+				height: additional.height,
+				depth: additional.hasVolume ? additional.depth : undefined,
+				locationMapFile: isSubmitted ? locationMapFile : undefined,
+				mainImageFile,
+			});
+
 			if (!isSubmitted) {
-				await Promise.all([
-					submitArtwork(artwork.artworkId, {
-						exhibitionId: relevantExhibitionId,
-						zoneId,
-						locationMapFile,
-					}),
-					updateArtworkAdditionalInfo(artwork.artworkId, {
-						materials: additional.materials,
-						width: additional.width,
-						height: additional.height,
-						depth: additional.hasVolume ? additional.depth : undefined,
-						mainImageFile,
-					}),
-				]);
+				await submitArtwork(artwork.artworkId, {
+					exhibitionId: relevantExhibitionId,
+					zoneId,
+					locationMapFile,
+				});
 				onSubmitted();
 			} else {
-				const tasks: Promise<unknown>[] = [
-					updateArtworkAdditionalInfo(artwork.artworkId, {
-						materials: additional.materials,
-						width: additional.width,
-						height: additional.height,
-						depth: additional.hasVolume ? additional.depth : undefined,
-						locationMapFile,
-						mainImageFile,
-					}),
-				];
 				const zoneChanged = zoneId != null && zoneId !== artwork.zoneId;
 				const visibilityChanged = visibility.visibility !== toArtworkVisibility(artwork);
 				if (zoneChanged || visibilityChanged) {
-					tasks.push(updateArtworkVisibility(artwork.artworkId, visibility.visibility, zoneId));
+					await updateArtworkVisibility(artwork.artworkId, visibility.visibility, zoneId);
 				}
-				await Promise.all(tasks);
 				router.refresh();
 			}
 			setSavedSnapshot(buildSnapshot());
