@@ -67,6 +67,8 @@ export const RenameArtworkModal = ({
 				value={renameValue}
 				onChange={(e) => setRenameValue(e.target.value)}
 				placeholder={currentTitle}
+				maxLength={100}
+				showCount={false}
 				error={Boolean(renameError)}
 				errorMessage={renameError || undefined}
 			/>
