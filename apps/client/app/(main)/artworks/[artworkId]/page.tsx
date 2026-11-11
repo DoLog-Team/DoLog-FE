@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import MainFooter from "@/components/common/Footer/MainFooter";
 import { getDologArtworkDetail } from "@/lib/api/artwork";
 import { VISITOR_COOKIE } from "@/lib/visitor";
-import { Header } from "../../_components/Header";
+import { DetailHeader } from "../../_components/DetailHeader";
 import { getArtworkPreview } from "./_api/getArtworkPreview";
 import { ArtworkDetailClient } from "./_components/ArtworkDetailClient";
 
@@ -42,7 +42,7 @@ export default async function DologArtworkPage({ params }: Props) {
 	return (
 		// 하단 고정 탭바에 푸터가 가리지 않게
 		<div className="flex flex-col pb-12">
-			<Header variant="detail" title="작품 상세" />
+			<DetailHeader title="작품 상세" />
 			{data ? (
 				<ArtworkDetailClient artworkId={artworkId} data={data} />
 			) : (
