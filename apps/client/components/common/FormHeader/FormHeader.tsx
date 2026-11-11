@@ -8,11 +8,10 @@ export interface FormHeaderProps {
 	editableTitle?: boolean;
 	onTitleEditClick?: () => void;
 	lastSavedAt?: string;
+	completionRate?: number;
 	onTempSave?: () => void;
 	tempSaveDisabled?: boolean;
-	// 화면 크기별로 문구를 바꿀 때는 노드로 넘긴다
 	saveLabel?: React.ReactNode;
-	// 변경 내용이 없을 때 저장 버튼 비활성
 	saveDisabled?: boolean;
 	onBack: () => void;
 	className?: string;
@@ -23,6 +22,7 @@ export const FormHeader = ({
 	editableTitle,
 	onTitleEditClick,
 	lastSavedAt,
+	completionRate,
 	onTempSave,
 	tempSaveDisabled,
 	saveLabel = "임시 저장",
@@ -51,11 +51,14 @@ export const FormHeader = ({
 				</div>
 
 				<div className="flex items-center gap-3">
-					{lastSavedAt && (
-						// 저장 시간은 데스크탑에서만 표시
-						<span className="hidden text-body3 text-lighter min-[721px]:inline">
-							{lastSavedAt} 마지막 저장
-						</span>
+					{completionRate != null ? (
+						<span className="text-body3 text-lighter">{completionRate}% 작성 완료</span>
+					) : (
+						lastSavedAt && (
+							<span className="hidden text-body3 text-lighter min-[721px]:inline">
+								{lastSavedAt} 마지막 저장
+							</span>
+						)
 					)}
 					<Button
 						type="button"

@@ -21,7 +21,7 @@ import {
 import { getExhibitionZones } from "../[artworkId]/exhibition/_api/getExhibitionZones";
 import { ArtworkFormHeader } from "./ArtworkFormHeader";
 import { ArtworkSaveConfirmModal } from "./ArtworkSaveConfirmModal";
-import { isArtworkSatisfied } from "./artworkCompleteness";
+import { calculateCompletionRate, isArtworkSatisfied } from "./artworkCompleteness";
 import { ARTWORK_FORM_TABS } from "./artworkFormTabs";
 import { getBasicMissingCount } from "./getBasicMissingCount";
 import { imageResizePlugin } from "./imageResizePlugin";
@@ -90,7 +90,7 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 			.catch(() => {});
 	}, [artwork.artworkId, artwork.exhibitionId]);
 
-	const isSatisfied = isArtworkSatisfied({
+	const completenessInput = {
 		category: artwork.category ?? undefined,
 		productionEndYear: artwork.productionEndYear ? String(artwork.productionEndYear) : undefined,
 		exhibitionId: artwork.exhibitionId,
@@ -102,6 +102,11 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 		height: artwork.height ? String(artwork.height) : "",
 		materials: artwork.materials,
 		locationMap: artwork.locationMap,
+	};
+	const isSatisfied = isArtworkSatisfied(completenessInput);
+	const completionRate = calculateCompletionRate({
+		...completenessInput,
+		sizeType: artwork.sizeType,
 	});
 
 	const handleTabClick = async (tabId: string) => {
@@ -156,6 +161,7 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 			<ArtworkFormHeader
 				artworkId={artwork.artworkId}
 				initialTitle={artwork.title}
+				completionRate={completionRate}
 				onTempSave={handleSaveClick}
 				isSaving={isSaving}
 				saveDisabled={!isDirty}

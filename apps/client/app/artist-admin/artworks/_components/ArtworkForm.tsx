@@ -22,7 +22,7 @@ import { getExhibitionZones } from "../[artworkId]/exhibition/_api/getExhibition
 import { ArtworkFormHeader } from "./ArtworkFormHeader";
 import { ArtworkSaveConfirmModal } from "./ArtworkSaveConfirmModal";
 import { ArtworkVisibilitySection } from "./ArtworkVisibilitySection";
-import { isArtworkSatisfied } from "./artworkCompleteness";
+import { calculateCompletionRate, isArtworkSatisfied } from "./artworkCompleteness";
 import { ARTWORK_FORM_TABS } from "./artworkFormTabs";
 import { getBasicMissingCount } from "./getBasicMissingCount";
 import {
@@ -161,9 +161,13 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				showPurchaseButton: purchase.showPurchaseButton,
 				mainImageFile,
 			});
-			if (visibility.visibility !== toArtworkVisibility(artwork)) {
-				await updateArtworkVisibility(artwork.artworkId, visibility.visibility);
+
+			const targetVisibility =
+				!isSatisfied && visibility.visibility === "PUBLIC" ? "PRIVATE" : visibility.visibility;
+			if (targetVisibility !== toArtworkVisibility(artwork)) {
+				await updateArtworkVisibility(artwork.artworkId, targetVisibility);
 			}
+			if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
 		});
 		if (saved) {
 			setMainImageFile(null);
@@ -191,7 +195,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 		handleTabClick(tabId);
 	};
 
-	const isSatisfied = isArtworkSatisfied({
+	const completenessInput = {
 		category: basic.category,
 		productionEndYear: basic.endYear,
 		exhibitionId: artwork.exhibitionId,
@@ -203,6 +207,11 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 		height: additional.height,
 		materials: additional.materials,
 		locationMap: artwork.locationMap,
+	};
+	const isSatisfied = isArtworkSatisfied(completenessInput);
+	const completionRate = calculateCompletionRate({
+		...completenessInput,
+		sizeType: artwork.sizeType,
 	});
 
 	// 헤더의 "저장" 버튼 — 바로 저장하지 않고 확인 모달부터 띄운다
@@ -293,6 +302,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 			<ArtworkFormHeader
 				artworkId={artwork.artworkId}
 				initialTitle={artwork.title}
+				completionRate={completionRate}
 				onTempSave={handleSaveClick}
 				isSaving={isSaving}
 				saveDisabled={hasValidationError || !isDirty}

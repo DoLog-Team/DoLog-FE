@@ -11,7 +11,10 @@ import {
 } from "@/app/artist-admin/artworks/_api/updateArtworkVisibility";
 import { ArtworkSaveConfirmModal } from "@/app/artist-admin/artworks/_components/ArtworkSaveConfirmModal";
 import { ArtworkVisibilitySection } from "@/app/artist-admin/artworks/_components/ArtworkVisibilitySection";
-import { isArtworkSatisfied } from "@/app/artist-admin/artworks/_components/artworkCompleteness";
+import {
+	calculateCompletionRate,
+	isArtworkSatisfied,
+} from "@/app/artist-admin/artworks/_components/artworkCompleteness";
 import {
 	ArtworkAdditionalInfoSection,
 	type ArtworkAdditionalInfoValue,
@@ -118,7 +121,7 @@ export const ArtworkExhibitionForm = ({
 
 	const required = fieldSettings?.required;
 
-	const isSatisfied = isArtworkSatisfied({
+	const completenessInput = {
 		category: artwork.category ?? undefined,
 		productionEndYear: artwork.productionEndYear ? String(artwork.productionEndYear) : undefined,
 		exhibitionId: relevantExhibitionId,
@@ -130,6 +133,11 @@ export const ArtworkExhibitionForm = ({
 		height: additional.height,
 		materials: additional.materials,
 		locationMap: locationMapPreview,
+	};
+	const isSatisfied = isArtworkSatisfied(completenessInput);
+	const completionRate = calculateCompletionRate({
+		...completenessInput,
+		sizeType: artwork.sizeType,
 	});
 
 	const save = async (): Promise<boolean> => {
@@ -153,11 +161,15 @@ export const ArtworkExhibitionForm = ({
 				});
 				onSubmitted();
 			} else {
+				// 필수값이 다 안 채워졌으면 "공개"로 저장할 수 없다 — 모달 안내("공개되지 않아요")대로 비공개로 저장한다
+				const targetVisibility =
+					!isSatisfied && visibility.visibility === "PUBLIC" ? "PRIVATE" : visibility.visibility;
 				const zoneChanged = zoneId != null && zoneId !== artwork.zoneId;
-				const visibilityChanged = visibility.visibility !== toArtworkVisibility(artwork);
+				const visibilityChanged = targetVisibility !== toArtworkVisibility(artwork);
 				if (zoneChanged || visibilityChanged) {
-					await updateArtworkVisibility(artwork.artworkId, visibility.visibility, zoneId);
+					await updateArtworkVisibility(artwork.artworkId, targetVisibility, zoneId);
 				}
+				if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
 				router.refresh();
 			}
 			setSavedSnapshot(buildSnapshot());
@@ -203,6 +215,7 @@ export const ArtworkExhibitionForm = ({
 				<FormHeader
 					title={artwork.title}
 					lastSavedAt=""
+					completionRate={completionRate}
 					onBack={handleBack}
 					onTempSave={handleSaveClick}
 					tempSaveDisabled={isSaving}

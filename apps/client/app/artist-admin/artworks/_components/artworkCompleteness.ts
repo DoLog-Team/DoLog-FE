@@ -5,7 +5,6 @@ export interface ArtworkCompletenessInput {
 	productionEndYear: string | undefined;
 	exhibitionId: string | null;
 	zoneId: string | undefined | null;
-	// 그 전시에 그룹이 하나도 없으면 그룹 미지정이어도 통과시킨다 (ArtworkFieldRequirement.isSatisfied와 동일 기준)
 	hasZonesInExhibition: boolean;
 	fieldSettings: ArtworkFieldSettings | null;
 	mainImagePreview: string | null;
@@ -15,8 +14,6 @@ export interface ArtworkCompletenessInput {
 	locationMap: string | null;
 }
 
-// 백엔드 ArtworkFieldRequirement.isSatisfied() / ExhibitionFieldSettings.isSatisfiedBy()와 동일한 기준.
-// 저장 버튼을 누른 "그 순간의 아직 저장 안 한 입력값"으로 판정해야 해서, 서버에 물어보는 대신 프론트에서 그대로 복제한다.
 export const isArtworkSatisfied = ({
 	category,
 	productionEndYear,
@@ -41,4 +38,63 @@ export const isArtworkSatisfied = ({
 	if (required.materials && materials.length === 0) return false;
 	if (required.locationMap && !locationMap) return false;
 	return true;
+};
+
+export interface CompletionRateInput extends ArtworkCompletenessInput {
+	sizeType?: "DIMENSIONS" | "ROUND" | "VARIABLE" | null;
+}
+
+const isSizeSatisfied = (
+	sizeType: CompletionRateInput["sizeType"],
+	width: string,
+	height: string,
+) => {
+	if (sizeType === "VARIABLE") return true;
+	if (sizeType === "ROUND") return !!width;
+	return !!width && !!height;
+};
+
+export const calculateCompletionRate = ({
+	category,
+	productionEndYear,
+	exhibitionId,
+	zoneId,
+	hasZonesInExhibition,
+	fieldSettings,
+	mainImagePreview,
+	width,
+	height,
+	sizeType,
+	materials,
+	locationMap,
+}: CompletionRateInput): number => {
+	let total = 2; // category, productionEndYear는 항상 분모에 포함
+	let satisfied = (category ? 1 : 0) + (productionEndYear ? 1 : 0);
+
+	if (!exhibitionId) return Math.round((satisfied / total) * 100);
+
+	const required = fieldSettings?.required;
+
+	if (hasZonesInExhibition) {
+		total += 1;
+		if (zoneId) satisfied += 1;
+	}
+	if (required?.mainImg) {
+		total += 1;
+		if (mainImagePreview) satisfied += 1;
+	}
+	if (required?.size) {
+		total += 1;
+		if (isSizeSatisfied(sizeType, width, height)) satisfied += 1;
+	}
+	if (required?.materials) {
+		total += 1;
+		if (materials.length > 0) satisfied += 1;
+	}
+	if (required?.locationMap) {
+		total += 1;
+		if (locationMap) satisfied += 1;
+	}
+
+	return Math.round((satisfied / total) * 100);
 };
