@@ -82,7 +82,7 @@ export const ArtworkImageSection = ({
 							value={videoUrl}
 							onChange={(e) => handleVideoUrlChange(e.target.value)}
 							error={linkStatus === "error"}
-							errorMessage={linkStatus === "error" ? "없는 주소입니다." : undefined}
+							errorMessage={linkStatus === "error" ? "유효한 링크가 아니에요." : undefined}
 						/>
 						<Button
 							type="button"
