@@ -27,7 +27,7 @@ export const RelatedSection = ({ artworks, artworkTitle }: RelatedSectionProps) 
 				<CardGrid
 					items={items}
 					getHref={(item) => `${item.id}`}
-					limit={2}
+					limit={4}
 					onItemClick={(item) =>
 						track("Related Artwork Clicked", {
 							clicked_artwork_id: item.id,
