@@ -20,6 +20,7 @@ import {
 } from "../[artworkId]/exhibition/_api/getArtworkExhibitionStatus";
 import { getExhibitionZones } from "../[artworkId]/exhibition/_api/getExhibitionZones";
 import { ArtworkFormHeader } from "./ArtworkFormHeader";
+import { ArtworkPublishSettingsModal } from "./ArtworkPublishSettingsModal";
 import { ArtworkSaveConfirmModal } from "./ArtworkSaveConfirmModal";
 import { ArtworkVisibilitySection } from "./ArtworkVisibilitySection";
 import { calculateCompletionRate, isArtworkSatisfied } from "./artworkCompleteness";
@@ -61,6 +62,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 	const [fieldSettings, setFieldSettings] = useState<ArtworkFieldSettings | null>(null);
 	const [hasZonesInExhibition, setHasZonesInExhibition] = useState(false);
 	const [isSaveConfirmOpen, setIsSaveConfirmOpen] = useState(false);
+	const [isPublishSettingsOpen, setIsPublishSettingsOpen] = useState(false);
 
 	useEffect(() => {
 		getArtworkCategories()
@@ -214,15 +216,37 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 		sizeType: artwork.sizeType,
 	});
 
+	// 마지막 저장 시점(= 진입 시점) 기준 충족 여부 — "이번에 처음 100% 됐는지" 판단용
+	const wasSatisfied = isArtworkSatisfied({
+		category: artwork.category ?? undefined,
+		productionEndYear: artwork.productionEndYear ? String(artwork.productionEndYear) : undefined,
+		exhibitionId: artwork.exhibitionId,
+		zoneId: artwork.zoneId,
+		hasZonesInExhibition,
+		fieldSettings,
+		mainImagePreview: artwork.mainImg,
+		width: artwork.width ? String(artwork.width) : "",
+		height: artwork.height ? String(artwork.height) : "",
+		materials: artwork.materials,
+		locationMap: artwork.locationMap,
+	});
+
 	// 헤더의 "저장" 버튼 — 바로 저장하지 않고 확인 모달부터 띄운다
+	// 임시저장이었던 작품이 이번에 처음 100%가 됐으면, 저장 확인 대신 공개 설정 모달을 띄운다
 	const handleSaveClick = () => {
 		if (hasValidationError) return;
+		if (!wasSatisfied && isSatisfied) {
+			if (visibility.visibility !== "PUBLIC") visibility.handleChange("PUBLIC");
+			setIsPublishSettingsOpen(true);
+			return;
+		}
 		setIsSaveConfirmOpen(true);
 	};
 
 	const handleConfirmSave = async () => {
 		if (await handleTempSave()) {
 			setIsSaveConfirmOpen(false);
+			setIsPublishSettingsOpen(false);
 			router.push(isSatisfied ? `/artworks/${artwork.artworkId}` : "/artist-admin");
 		}
 	};
@@ -342,6 +366,15 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				open={isSaveConfirmOpen}
 				onOpenChange={setIsSaveConfirmOpen}
 				isSatisfied={isSatisfied}
+				isSaving={isSaving}
+				onConfirm={handleConfirmSave}
+			/>
+			<ArtworkPublishSettingsModal
+				open={isPublishSettingsOpen}
+				onOpenChange={setIsPublishSettingsOpen}
+				value={visibility.visibility}
+				onChange={visibility.handleChange}
+				hasExhibition={artwork.exhibitionId != null}
 				isSaving={isSaving}
 				onConfirm={handleConfirmSave}
 			/>
