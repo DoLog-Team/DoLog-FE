@@ -59,10 +59,10 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 	);
 
 	return (
-		<div className="flex flex-col min-[721px]:flex-row min-[721px]:gap-8">
-			{/* 이미지 + 모바일 이름 (같은 행) */}
-			<div className="flex gap-4 shrink-0 min-[721px]:block">
-				<div className="relative shrink-0 w-32 aspect-[1/1.414] min-[721px]:w-[180px]">
+		<div className="flex flex-col">
+			{/* 이미지 + 이름 (같은 행) */}
+			<div className="flex gap-4 shrink-0">
+				<div className="relative shrink-0 w-32 aspect-[1/1.414]">
 					{author.profileImg ? (
 						<Image
 							src={author.profileImg}
@@ -79,22 +79,17 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 						</div>
 					)}
 				</div>
-				{/* 이름: 모바일에서만 이미지 옆에 표시 */}
-				<div className="flex flex-col justify-end min-[721px]:hidden">{nameSection}</div>
+				<div className="flex flex-col justify-end">{nameSection}</div>
 			</div>
 
-			{/* 우측 컬럼 (데스크탑) / 하단 컨텐츠 (모바일) */}
+			{/* 하단 컨텐츠 */}
 			<div className="flex flex-col flex-1">
-				{/* 이름: 데스크탑에서만 우측 컬럼 상단에 표시 */}
-				<div className="hidden min-[721px]:flex flex-col">{nameSection}</div>
-
 				{/* 소개글 */}
 				{author.bio && <p className="text-body1 pt-4">{author.bio}</p>}
 
 				{snsSection}
 
-				{/* 모바일: 버튼 */}
-				<Link href={profileHref} className="min-[721px]:hidden pt-5">
+				<Link href={profileHref} className="pt-5">
 					<Button
 						variant="outline"
 						size="sm"
@@ -109,20 +104,6 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 					>
 						프로필 더보기
 					</Button>
-				</Link>
-				{/* 데스크탑: 텍스트 링크 */}
-				<Link
-					href={profileHref}
-					className="hidden min-[721px]:inline mt-auto text-body1 text-lightest underline underline-offset-2 w-fit"
-					onClick={() =>
-						track("Profile More Clicked", {
-							artist_id: author.profileId,
-							artist_name: author.nameKo,
-							page: "artwork_detail",
-						})
-					}
-				>
-					프로필 더보기 →
 				</Link>
 			</div>
 		</div>

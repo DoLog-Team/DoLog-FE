@@ -23,7 +23,7 @@ export const RelatedSection = ({ artworks, artworkTitle }: RelatedSectionProps) 
 	return (
 		<section className="flex flex-col pb-6">
 			<DesktopContainer>
-				<Title title="동일한 카테고리 작품" margin="compact" />
+				<Title title="동일한 그룹 작품" margin="compact" />
 				<CardGrid
 					items={items}
 					getHref={(item) => `${item.id}`}

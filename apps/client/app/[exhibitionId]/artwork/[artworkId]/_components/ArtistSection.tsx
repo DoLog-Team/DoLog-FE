@@ -24,7 +24,7 @@ interface ArtistSectionProps {
 	title?: string;
 }
 
-export function ArtistSection({ authors, getProfileHref, title = "참여자" }: ArtistSectionProps) {
+export function ArtistSection({ authors, getProfileHref, title = "작가" }: ArtistSectionProps) {
 	return (
 		<section className="flex flex-col pb-6 gap-4">
 			<DesktopContainer>

@@ -10,6 +10,8 @@ export interface MyArtworkDetail {
 	width: number | null;
 	height: number | null;
 	depth: number | null;
+	sizeType?: "DIMENSIONS" | "ROUND" | "VARIABLE" | null;
+	completionRate: number;
 	productionStartYear: number | null;
 	productionStartMonth: number | null;
 	productionStartDay: number | null;
