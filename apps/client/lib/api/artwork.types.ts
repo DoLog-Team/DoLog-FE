@@ -92,7 +92,7 @@ export interface ArtworkBts {
 	author: string;
 }
 
-// 관련 작품 (sameCategoryArtworks, alphabeticalArtworks 공통)
+// 관련 작품 (sameZoneArtworks, alphabeticalArtworks 공통)
 export interface RelatedArtwork {
 	id: string;
 	title: string;
@@ -139,6 +139,6 @@ export interface ArtworkDetail {
 	youtubeUrl?: string | null;
 	participants: ArtworkParticipant[];
 	relatedBts?: ArtworkBts[];
-	sameCategoryArtworks: RelatedArtwork[];
+	sameZoneArtworks: RelatedArtwork[];
 	alphabeticalArtworks: RelatedArtwork[];
 }

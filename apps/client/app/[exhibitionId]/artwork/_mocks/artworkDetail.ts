@@ -56,7 +56,7 @@ export const MOCK_ARTWORK_DETAIL: ArtworkDetail = {
 			mainImg: "/images/artwork/bts3.png",
 		},
 	],
-	sameCategoryArtworks: [
+	sameZoneArtworks: [
 		{
 			id: "4",
 			title: "깨진 다음의 모양",

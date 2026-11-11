@@ -7,13 +7,23 @@ export function resolveContactHref(value: string): string | null {
 	if (!trimmed) return null;
 
 	if (EMAIL_PATTERN.test(trimmed)) return `mailto:${trimmed}`;
-	// 이메일도 아니면서 "@"만 섞인 값은 스킴을 붙였을 때 URL의 계정 정보로 읽혀(https://a@b.com)
-	// 이상한 링크로 새어나갈 수 있어 막는다
-	if (trimmed.includes("@")) return null;
 
 	// 저장값에 스킴이 없을 수 있다(BE가 형식을 강제하지 않음) — 그래도 링크는 항상 동작해야 하니 여기서 보정한다
-	if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) return trimmed;
-	return `https://${trimmed}`;
+	const withScheme =
+		trimmed.startsWith("http://") || trimmed.startsWith("https://")
+			? trimmed
+			: `https://${trimmed}`;
+
+	// "@"가 host 앞(authority의 계정 정보 자리)에 있으면 실제 목적지를 속일 수 있어(https://a@b.com) 막는다.
+	// 경로·쿼리에 "@"가 있는 건(카카오톡 오픈채팅 등) 안전하니 URL로 직접 파싱해 좁혀서 체크한다
+	try {
+		const url = new URL(withScheme);
+		if (url.username || url.password) return null;
+	} catch {
+		return null;
+	}
+
+	return withScheme;
 }
 
 export function resolveSnsHref(platformName: string, url: string): string | null {

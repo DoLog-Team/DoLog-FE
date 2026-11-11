@@ -60,7 +60,7 @@ export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProp
 	// TODO: purchaseUrl / purchaseChatUrl 중 어느 쪽으로 보낼지 BE 확인 — 우선 채팅 링크 우선
 	const purchaseUrl = data.showPurchaseButton ? (data.purchaseChatUrl ?? data.purchaseUrl) : null;
 
-	const [firstOther, secondOther] = data.sameCategoryArtworks.filter((a) => a.type === "artist");
+	const [firstOther, secondOther] = data.sameZoneArtworks.filter((a) => a.type === "artist");
 
 	return (
 		<div className="flex flex-col">
