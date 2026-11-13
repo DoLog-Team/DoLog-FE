@@ -33,6 +33,7 @@ export interface UpdateArtworkBasicInfoInput {
 	productionEndYear?: string;
 	productionEndMonth?: string;
 	productionEndDay?: string;
+	clearProductionEndDate?: boolean;
 	youtubeUrl?: string;
 	showPurchaseButton: boolean;
 	mainImageFile: File | null;
@@ -51,7 +52,8 @@ export async function updateArtworkBasicInfo(
 	};
 
 	if (input.category !== undefined) formData.append("category", input.category);
-	appendIfPresent("shortIntro", input.shortIntro);
+	// "" 를 보내면 지워진다 — category 와 같은 패턴 (TextUtils.blankToNull)
+	if (input.shortIntro !== undefined) formData.append("shortIntro", input.shortIntro);
 	appendSize(formData, "width", input.width);
 	appendSize(formData, "height", input.height);
 	appendSize(formData, "depth", input.depth);
@@ -62,6 +64,7 @@ export async function updateArtworkBasicInfo(
 	appendIfPresent("productionEndYear", input.productionEndYear);
 	appendIfPresent("productionEndMonth", input.productionEndMonth);
 	appendIfPresent("productionEndDay", input.productionEndDay);
+	if (input.clearProductionEndDate) formData.append("clearProductionEndDate", "true");
 	// "" 를 보내면 지워진다 — category 와 같은 패턴 (TextUtils.blankToNull)
 	if (input.youtubeUrl !== undefined) formData.append("youtubeUrl", input.youtubeUrl);
 	formData.append("showPurchaseButton", String(input.showPurchaseButton));
