@@ -1,3 +1,5 @@
+import { convertHeicToJpeg } from "./heic";
+
 const MAX_IMAGE_DIMENSION = 1600;
 const JPEG_QUALITY = 0.9;
 const WEBP_QUALITY = 0.92;
@@ -12,7 +14,12 @@ export interface CompressImageOptions {
 
 // 선택한 이미지를 캔버스에 한 번 그려서 (1) 디코딩 가능한 이미지인지 검증하고
 // (2) 가로/세로가 너무 크면 줄여서 새 File 로 반환한다. 디코딩 실패 시 reject.
-export function compressImageFile(file: File, options?: CompressImageOptions): Promise<File> {
+// HEIC(아이폰 사진)는 브라우저가 그리지 못하므로 먼저 JPEG 로 바꾼다
+export async function compressImageFile(
+	original: File,
+	options?: CompressImageOptions,
+): Promise<File> {
+	const file = await convertHeicToJpeg(original);
 	const maxDimension = options?.maxDimension ?? MAX_IMAGE_DIMENSION;
 
 	return new Promise((resolve, reject) => {
