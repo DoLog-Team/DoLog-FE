@@ -3,12 +3,15 @@
 import { useRouter } from "next/navigation";
 import { TermsAgreementForm } from "@/components/common/TermsAgreementForm/TermsAgreementForm";
 import { queueWelcomeModal } from "@/components/common/WelcomeModal/WelcomeModal";
+import { fillPendingSocialName } from "../../login/_lib/fillSocialName";
 
 export const ArtistTermsForm = () => {
 	const router = useRouter();
 
 	// 회원가입 완료 — 두록 홈으로 이동해 환영 모달을 띄운다
-	const handleSaved = () => {
+	const handleSaved = async () => {
+		// 소셜 로그인 때 저장하지 못한 이름이 있으면 국문 성명에 넣는다 (비어 있을 때만)
+		await fillPendingSocialName();
 		queueWelcomeModal();
 		router.replace("/");
 	};
