@@ -161,6 +161,17 @@ export const ArtworkExhibitionForm = ({
 		if (!relevantExhibitionId) return false;
 		setIsSaving(true);
 		try {
+			if (isSubmitted) {
+				const targetVisibility =
+					!isSatisfied && visibility.visibility === "PUBLIC" ? "PRIVATE" : visibility.visibility;
+				const zoneChanged = zoneId != null && zoneId !== artwork.zoneId;
+				const visibilityChanged = targetVisibility !== toArtworkVisibility(artwork);
+				if (zoneChanged || visibilityChanged) {
+					await updateArtworkVisibility(artwork.artworkId, targetVisibility, zoneId);
+				}
+				if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
+			}
+
 			await updateArtworkAdditionalInfo(artwork.artworkId, {
 				materials: additional.materials,
 				width: additional.width,
@@ -178,15 +189,6 @@ export const ArtworkExhibitionForm = ({
 				});
 				onSubmitted();
 			} else {
-				// 필수값이 다 안 채워졌으면 "공개"로 저장할 수 없다 — 모달 안내("공개되지 않아요")대로 비공개로 저장한다
-				const targetVisibility =
-					!isSatisfied && visibility.visibility === "PUBLIC" ? "PRIVATE" : visibility.visibility;
-				const zoneChanged = zoneId != null && zoneId !== artwork.zoneId;
-				const visibilityChanged = targetVisibility !== toArtworkVisibility(artwork);
-				if (zoneChanged || visibilityChanged) {
-					await updateArtworkVisibility(artwork.artworkId, targetVisibility, zoneId);
-				}
-				if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
 				router.refresh();
 			}
 			setSavedSnapshot(buildSnapshot());

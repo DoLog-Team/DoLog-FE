@@ -145,6 +145,13 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 	const handleTempSave = async () => {
 		if (hasValidationError) return false;
 		const saved = await run(async () => {
+			const targetVisibility =
+				!isSatisfied && visibility.visibility === "PUBLIC" ? "PRIVATE" : visibility.visibility;
+			if (targetVisibility !== toArtworkVisibility(artwork)) {
+				await updateArtworkVisibility(artwork.artworkId, targetVisibility);
+			}
+			if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
+
 			await updateArtworkBasicInfo(artwork.artworkId, {
 				category: basic.category,
 				shortIntro: basic.shortIntro,
@@ -163,13 +170,6 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				showPurchaseButton: purchase.showPurchaseButton,
 				mainImageFile,
 			});
-
-			const targetVisibility =
-				!isSatisfied && visibility.visibility === "PUBLIC" ? "PRIVATE" : visibility.visibility;
-			if (targetVisibility !== toArtworkVisibility(artwork)) {
-				await updateArtworkVisibility(artwork.artworkId, targetVisibility);
-			}
-			if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
 		});
 		if (saved) {
 			setMainImageFile(null);
