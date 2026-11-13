@@ -51,15 +51,16 @@ export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardP
 	];
 
 	const previewable = artwork.completionRate === 100;
+	// 공개·전시에만 공개 모두 실제로 숨겨져 있으면 비공개로 보여 준다
+	const isPublished = artwork.status === "public" || artwork.status === "exhibitionOnly";
 	const isExhibitionPrivate =
-		artwork.status === "public" &&
+		isPublished &&
 		!artwork.visibleNow &&
 		!artwork.exhibition?.hidden &&
 		!artwork.exhibition?.planLimitExceeded;
 	const isActuallyHidden =
 		artwork.exhibition?.hidden || artwork.exhibition?.planLimitExceeded || isExhibitionPrivate;
-	const displayStatus =
-		artwork.status === "public" && isActuallyHidden ? "private" : artwork.status;
+	const displayStatus = isPublished && isActuallyHidden ? "private" : artwork.status;
 
 	return (
 		<article className="relative flex gap-4 min-[721px]:flex-col min-[721px]:gap-3">

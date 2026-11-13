@@ -13,8 +13,8 @@ export interface ArtistAdminProfile {
 	likeCount: number;
 }
 
-// draft: 작성 중 / private: 비공개 / public: 공개
-export type ArtworkStatus = "draft" | "public" | "private";
+// draft: 작성 중 / private: 비공개 / public: 공개 / exhibitionOnly: 전시에만 공개
+export type ArtworkStatus = "draft" | "public" | "private" | "exhibitionOnly";
 
 export interface MyArtwork {
 	artworkId: string;

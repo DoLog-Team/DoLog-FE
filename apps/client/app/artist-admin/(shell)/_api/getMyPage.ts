@@ -70,6 +70,8 @@ interface MyArtworkResponse {
 	hidden: boolean;
 	planLimitExceeded?: boolean;
 	visibleNow?: boolean;
+	// PUBLISHED 중 "전시에만 공개"로 설정한 작품
+	exhibitionOnly?: boolean;
 	exhibitionId: string | null;
 	exhibitionName: string | null;
 	viewCount: number;
@@ -85,8 +87,12 @@ interface MyArtworksResponse {
 }
 
 // BE 는 DRAFT/PUBLISHED 2단계 — 명세 가이드대로 DRAFT 중 작성률 100%(또는 미출품)는 비공개, 그 외는 작성 중
-const toArtworkStatus = ({ status, completionRate }: MyArtworkResponse): ArtworkStatus => {
-	if (status === "PUBLISHED") return "public";
+const toArtworkStatus = ({
+	status,
+	completionRate,
+	exhibitionOnly,
+}: MyArtworkResponse): ArtworkStatus => {
+	if (status === "PUBLISHED") return exhibitionOnly ? "exhibitionOnly" : "public";
 	return completionRate === null || completionRate === 100 ? "private" : "draft";
 };
 

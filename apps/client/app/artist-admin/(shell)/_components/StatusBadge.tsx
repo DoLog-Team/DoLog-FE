@@ -16,6 +16,7 @@ const ARTWORK_STATUS: Record<ArtworkStatus, { label: string; tone: StatusTone }>
 	draft: { label: "임시저장", tone: "coral" },
 	public: { label: "공개", tone: "light" },
 	private: { label: "비공개", tone: "light" },
+	exhibitionOnly: { label: "전시에만 공개", tone: "light" },
 };
 
 interface StatusBadgeProps {
