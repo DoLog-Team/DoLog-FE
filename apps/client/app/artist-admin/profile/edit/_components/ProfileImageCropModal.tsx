@@ -7,14 +7,14 @@ import Cropper, { type Area, type MediaSize } from "react-easy-crop";
 import { Modal } from "@/components/common/Modal/Modal";
 import { cropImage } from "./cropImage";
 
-// 크롭 비율 — QA TC·Figma 기준 7:9 (Figma 크롭 틀 350 × 450)
+// 크롭 비율 — 7:9
 const CROP_ASPECT = 7 / 9;
 const CROP_MAX_WIDTH = 350;
 // 화면이 작을 때 크롭 틀이 넘치지 않도록 남기는 여백 (좌우 합, 상단 헤더 + 하단 버튼 영역)
 const HORIZONTAL_GUTTER = 25;
 const VERTICAL_GUTTER = 264;
 
-// 명세상 확대 1.1배 · 축소 0.9배 · 왼쪽 30도 ("구현 후 추가 조정 필요")
+// 명세상 확대 1.1배 · 축소 0.9배 · 왼쪽 30도 회전
 const ZOOM_IN_RATE = 1.1;
 const ZOOM_OUT_RATE = 0.9;
 const ROTATE_STEP = -30;
