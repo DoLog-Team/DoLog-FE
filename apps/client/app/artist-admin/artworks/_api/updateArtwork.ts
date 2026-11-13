@@ -62,7 +62,8 @@ export async function updateArtworkBasicInfo(
 	appendIfPresent("productionEndYear", input.productionEndYear);
 	appendIfPresent("productionEndMonth", input.productionEndMonth);
 	appendIfPresent("productionEndDay", input.productionEndDay);
-	appendIfPresent("youtubeUrl", input.youtubeUrl);
+	// "" 를 보내면 지워진다 — category 와 같은 패턴 (TextUtils.blankToNull)
+	if (input.youtubeUrl !== undefined) formData.append("youtubeUrl", input.youtubeUrl);
 	formData.append("showPurchaseButton", String(input.showPurchaseButton));
 
 	// 보내면 전체 교체, 빈 값 하나만 보내면 전부 삭제(백엔드 스펙)

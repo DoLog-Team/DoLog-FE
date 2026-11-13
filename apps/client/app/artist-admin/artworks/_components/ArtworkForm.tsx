@@ -37,7 +37,11 @@ import {
 	hasStartAfterEndError,
 	hasStartDatePartialError,
 } from "./sections/ArtworkBasicInfoSection";
-import { ArtworkImageSection, type ArtworkImageValue } from "./sections/ArtworkImageSection";
+import {
+	ArtworkImageSection,
+	type ArtworkImageValue,
+	hasYoutubeUrlError,
+} from "./sections/ArtworkImageSection";
 import {
 	ArtworkPurchaseInfoSection,
 	type ArtworkPurchaseInfoValue,
@@ -166,7 +170,8 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				productionEndYear: basic.endYear,
 				productionEndMonth: basic.endMonth,
 				productionEndDay: basic.endDay,
-				youtubeUrl: image.youtubeUrl,
+				// 유효하지 않은 유튜브 링크는 저장을 막는 대신, 보내지 않고(= 지우고) 저장한다
+				youtubeUrl: hasYoutubeUrlError(image.youtubeUrl) ? "" : image.youtubeUrl,
 				showPurchaseButton: purchase.showPurchaseButton,
 				mainImageFile,
 				clearMainImage: !mainImageFile && !image.mainImagePreview,
