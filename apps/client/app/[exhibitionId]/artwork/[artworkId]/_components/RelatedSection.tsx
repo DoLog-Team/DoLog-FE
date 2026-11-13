@@ -23,11 +23,11 @@ export const RelatedSection = ({ artworks, artworkTitle }: RelatedSectionProps) 
 	return (
 		<section className="flex flex-col pb-6">
 			<DesktopContainer>
-				<Title title="동일한 카테고리 작품" margin="compact" />
+				<Title title="동일한 그룹 작품" margin="compact" />
 				<CardGrid
 					items={items}
 					getHref={(item) => `${item.id}`}
-					limit={2}
+					limit={4}
 					onItemClick={(item) =>
 						track("Related Artwork Clicked", {
 							clicked_artwork_id: item.id,

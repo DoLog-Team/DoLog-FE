@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import MainFooter from "@/components/common/Footer/MainFooter";
 import { VISITOR_COOKIE } from "@/lib/visitor";
-import { Header } from "../../_components/Header";
+import { DetailHeader } from "../../_components/DetailHeader";
 import { getDologArtist } from "./_api/getArtist";
 import { ArtistDetailClient } from "./_components/ArtistDetailClient";
 
@@ -38,7 +38,7 @@ export default async function DologArtistPage({ params }: Props) {
 	return (
 		// 하단 고정 탭바에 푸터가 가리지 않게
 		<div className="flex flex-col pb-12">
-			<Header variant="detail" title="작가 상세" />
+			<DetailHeader title="작가 상세" />
 			{artist ? (
 				<ArtistDetailClient artist={artist} />
 			) : (

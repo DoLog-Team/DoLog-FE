@@ -14,6 +14,7 @@ export type ManagedArtistStatus = "PENDING" | "JOINED";
 interface ManagedArtistResponse {
 	artists: {
 		artistId: string;
+		profileId: string | null;
 		nameKo: string | null;
 		email: string | null;
 		greeting: string | null;
@@ -40,6 +41,7 @@ export async function getAdminArtists(
 			artists.push(
 				...data.artists.map((artist) => ({
 					id: artist.artistId,
+					profileId: artist.profileId,
 					name: artist.nameKo,
 					email: artist.email,
 					greeting: artist.greeting,

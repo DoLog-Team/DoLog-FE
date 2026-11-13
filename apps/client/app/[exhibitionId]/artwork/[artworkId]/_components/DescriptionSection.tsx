@@ -22,14 +22,18 @@ export const DescriptionSection = ({
 	// 작품 한줄 소개 — 상세 설명 위에 표시한다
 	shortIntro?: string | null;
 	title?: string;
-}) => (
-	<section className="flex flex-col pb-6">
-		<DesktopContainer>
-			<Title title={title} margin="compact" />
-			{shortIntro && <p className="mb-4 text-body1 whitespace-pre-line">{shortIntro}</p>}
-			<div className="text-body1 leading-relaxed">
-				<Viewer initialValue={content ?? ""} customHTMLRenderer={artworkImageHTMLRenderer} />
-			</div>
-		</DesktopContainer>
-	</section>
-);
+}) => {
+	if (!content && !shortIntro) return null;
+
+	return (
+		<section className="flex flex-col pb-6">
+			<DesktopContainer>
+				<Title title={title} margin="compact" />
+				{shortIntro && <p className="mb-4 text-body1 whitespace-pre-line">{shortIntro}</p>}
+				<div className="text-body1 leading-relaxed">
+					<Viewer initialValue={content ?? ""} customHTMLRenderer={artworkImageHTMLRenderer} />
+				</div>
+			</DesktopContainer>
+		</section>
+	);
+};

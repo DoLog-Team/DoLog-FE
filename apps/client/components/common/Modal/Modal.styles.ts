@@ -22,6 +22,6 @@ export const modalStyles = {
 		"shrink-0 mt-[4px] p-[2px] rounded-[4px] opacity-60 transition-opacity hover:opacity-100 cursor-pointer",
 	description: "text-body1 text-lighter mt-[2px] leading-relaxed break-keep whitespace-pre-wrap",
 
-	body: "mt-[16px]",
+	body: "mt-[20px] mb-[20px]",
 	footer: "flex gap-[8px] mt-[12px]",
 };

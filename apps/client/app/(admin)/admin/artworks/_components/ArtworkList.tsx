@@ -97,7 +97,7 @@ export const ArtworkList = ({
 					{
 						header: "노출 여부",
 						width: "14%",
-						cell: (artwork: AdminArtwork) => (artwork.isExposed ? "O" : "X"),
+						cell: (artwork: AdminArtwork) => (artwork.isExposed ? "O" : <ExceededBadge />),
 						cellClassName: (artwork: AdminArtwork) =>
 							artwork.isExposed ? undefined : "bg-admin2 text-admin1",
 					},
@@ -229,6 +229,12 @@ const ExceededNotice = ({ count }: { count: number }) => (
 	</div>
 );
 
+const ExceededBadge = () => (
+	<span className="w-fit rounded-sm bg-admin1 px-1.5 py-1 text-[12px] text-white leading-3.5">
+		플랜 한도 초과
+	</span>
+);
+
 const ArtworkCard = ({ artwork }: { artwork: AdminArtwork }) => (
 	<>
 		{artwork.imageUrl ? (
@@ -244,9 +250,7 @@ const ArtworkCard = ({ artwork }: { artwork: AdminArtwork }) => (
 		)}
 		<div className="flex min-w-0 flex-1 flex-col gap-3 p-4">
 			<div className="flex flex-col gap-0.5">
-				{!artwork.isExposed && (
-					<p className="text-[12px] text-admin1 leading-3.5">작품이 표시되지 않아요.</p>
-				)}
+				{!artwork.isExposed && <ExceededBadge />}
 				<p className="text-body1-bold text-strong">{artwork.title}</p>
 			</div>
 			<div className="flex flex-col gap-1 text-light">

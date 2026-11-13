@@ -9,9 +9,13 @@ import {
 	toArtworkVisibility,
 	updateArtworkVisibility,
 } from "@/app/artist-admin/artworks/_api/updateArtworkVisibility";
+import { ArtworkPublishSettingsModal } from "@/app/artist-admin/artworks/_components/ArtworkPublishSettingsModal";
 import { ArtworkSaveConfirmModal } from "@/app/artist-admin/artworks/_components/ArtworkSaveConfirmModal";
 import { ArtworkVisibilitySection } from "@/app/artist-admin/artworks/_components/ArtworkVisibilitySection";
-import { isArtworkSatisfied } from "@/app/artist-admin/artworks/_components/artworkCompleteness";
+import {
+	calculateCompletionRate,
+	isArtworkSatisfied,
+} from "@/app/artist-admin/artworks/_components/artworkCompleteness";
 import {
 	ArtworkAdditionalInfoSection,
 	type ArtworkAdditionalInfoValue,
@@ -65,6 +69,7 @@ export const ArtworkExhibitionForm = ({
 	const [zoneId, setZoneId] = useState<string | undefined>(artwork.zoneId ?? undefined);
 	const [isSaving, setIsSaving] = useState(false);
 	const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+	const [isPublishSettingsOpen, setIsPublishSettingsOpen] = useState(false);
 
 	const [mainImageFile, setMainImageFile] = useState<File | null>(null);
 	const [mainImagePreview, setMainImagePreview] = useState<string | null>(artwork.mainImg);
@@ -118,7 +123,7 @@ export const ArtworkExhibitionForm = ({
 
 	const required = fieldSettings?.required;
 
-	const isSatisfied = isArtworkSatisfied({
+	const completenessInput = {
 		category: artwork.category ?? undefined,
 		productionEndYear: artwork.productionEndYear ? String(artwork.productionEndYear) : undefined,
 		exhibitionId: relevantExhibitionId,
@@ -130,45 +135,66 @@ export const ArtworkExhibitionForm = ({
 		height: additional.height,
 		materials: additional.materials,
 		locationMap: locationMapPreview,
+	};
+	const isSatisfied = isArtworkSatisfied(completenessInput);
+	const completionRate = calculateCompletionRate({
+		...completenessInput,
+		sizeType: artwork.sizeType,
+	});
+
+	// 마지막 저장 시점(= 진입 시점) 기준 충족 여부 — "이번에 처음 100% 됐는지" 판단용
+	const wasSatisfied = isArtworkSatisfied({
+		category: artwork.category ?? undefined,
+		productionEndYear: artwork.productionEndYear ? String(artwork.productionEndYear) : undefined,
+		exhibitionId: relevantExhibitionId,
+		zoneId: artwork.zoneId,
+		hasZonesInExhibition: zones.length > 0,
+		fieldSettings,
+		mainImagePreview: artwork.mainImg,
+		width: artwork.width != null ? String(artwork.width) : "",
+		height: artwork.height != null ? String(artwork.height) : "",
+		materials: artwork.materials,
+		locationMap: artwork.locationMap,
 	});
 
 	const save = async (): Promise<boolean> => {
 		if (!relevantExhibitionId) return false;
 		setIsSaving(true);
 		try {
+			const currentVisibility = toArtworkVisibility(artwork);
+			const targetVisibility =
+				!isSatisfied && visibility.visibility !== "PRIVATE" ? "PRIVATE" : visibility.visibility;
+			const zoneChanged = zoneId != null && zoneId !== artwork.zoneId;
+			const visibilityChanged = targetVisibility !== currentVisibility;
+			const isDowngrading = targetVisibility === "PRIVATE" && currentVisibility !== "PRIVATE";
+
+			if (isSubmitted && isDowngrading && (zoneChanged || visibilityChanged)) {
+				await updateArtworkVisibility(artwork.artworkId, targetVisibility, zoneId);
+			}
+
+			await updateArtworkAdditionalInfo(artwork.artworkId, {
+				materials: additional.materials,
+				width: additional.width,
+				height: additional.height,
+				depth: additional.hasVolume ? additional.depth : undefined,
+				locationMapFile: isSubmitted ? locationMapFile : undefined,
+				clearLocationMap: isSubmitted && !locationMapFile && !locationMapPreview,
+				mainImageFile,
+				clearMainImage: !mainImageFile && !mainImagePreview,
+			});
+
 			if (!isSubmitted) {
-				await Promise.all([
-					submitArtwork(artwork.artworkId, {
-						exhibitionId: relevantExhibitionId,
-						zoneId,
-						locationMapFile,
-					}),
-					updateArtworkAdditionalInfo(artwork.artworkId, {
-						materials: additional.materials,
-						width: additional.width,
-						height: additional.height,
-						depth: additional.hasVolume ? additional.depth : undefined,
-						mainImageFile,
-					}),
-				]);
+				await submitArtwork(artwork.artworkId, {
+					exhibitionId: relevantExhibitionId,
+					zoneId,
+					locationMapFile,
+				});
 				onSubmitted();
 			} else {
-				const tasks: Promise<unknown>[] = [
-					updateArtworkAdditionalInfo(artwork.artworkId, {
-						materials: additional.materials,
-						width: additional.width,
-						height: additional.height,
-						depth: additional.hasVolume ? additional.depth : undefined,
-						locationMapFile,
-						mainImageFile,
-					}),
-				];
-				const zoneChanged = zoneId != null && zoneId !== artwork.zoneId;
-				const visibilityChanged = visibility.visibility !== toArtworkVisibility(artwork);
-				if (zoneChanged || visibilityChanged) {
-					tasks.push(updateArtworkVisibility(artwork.artworkId, visibility.visibility, zoneId));
+				if (!isDowngrading && (zoneChanged || visibilityChanged)) {
+					await updateArtworkVisibility(artwork.artworkId, targetVisibility, zoneId);
 				}
-				await Promise.all(tasks);
+				if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
 				router.refresh();
 			}
 			setSavedSnapshot(buildSnapshot());
@@ -186,11 +212,18 @@ export const ArtworkExhibitionForm = ({
 			setIsConfirmOpen(true);
 			return;
 		}
+		// 임시저장이었던 작품이 이번에 처음 100%가 됐으면, 바로 저장하는 대신 공개 설정 모달을 띄운다
+		if (isSubmitted && !wasSatisfied) {
+			if (visibility.visibility !== "PUBLIC") visibility.handleChange("PUBLIC");
+			setIsPublishSettingsOpen(true);
+			return;
+		}
 		save();
 	};
 
 	const handleConfirmSave = async () => {
 		setIsConfirmOpen(false);
+		setIsPublishSettingsOpen(false);
 		await save();
 	};
 
@@ -214,6 +247,7 @@ export const ArtworkExhibitionForm = ({
 				<FormHeader
 					title={artwork.title}
 					lastSavedAt=""
+					completionRate={completionRate}
 					onBack={handleBack}
 					onTempSave={handleSaveClick}
 					tempSaveDisabled={isSaving}
@@ -343,6 +377,15 @@ export const ArtworkExhibitionForm = ({
 				open={isConfirmOpen}
 				onOpenChange={setIsConfirmOpen}
 				isSatisfied={false}
+				isSaving={isSaving}
+				onConfirm={handleConfirmSave}
+			/>
+			<ArtworkPublishSettingsModal
+				open={isPublishSettingsOpen}
+				onOpenChange={setIsPublishSettingsOpen}
+				value={visibility.visibility}
+				onChange={visibility.handleChange}
+				hasExhibition
 				isSaving={isSaving}
 				onConfirm={handleConfirmSave}
 			/>

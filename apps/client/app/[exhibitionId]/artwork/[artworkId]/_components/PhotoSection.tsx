@@ -6,6 +6,7 @@ import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopCo
 import { ImageViewerModal } from "@/components/common/ImageViewerModal/ImageViewerModal";
 import { Modal } from "@/components/common/Modal/Modal";
 import type { ArtworkDetail } from "@/lib/api/artwork";
+import { cn } from "@/lib/utils/cn";
 import { resolveContactHref } from "@/lib/utils/sns";
 
 /**
@@ -77,7 +78,7 @@ export const PhotoSection = ({ data, renderViewerHeader }: PhotoSectionProps) =>
 					<>
 						<Button
 							variant="main"
-							className={hasDetailImages ? "mt-7" : undefined}
+							className={cn("w-full", hasDetailImages && "mt-7")}
 							onClick={() => setIsOpen(true)}
 						>
 							작품 구매하기

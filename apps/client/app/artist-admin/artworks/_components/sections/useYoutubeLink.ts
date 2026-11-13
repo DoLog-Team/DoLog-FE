@@ -5,7 +5,7 @@ import { useState } from "react";
 const YOUTUBE_ID_REGEX =
 	/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
 
-const extractYoutubeVideoId = (url: string): string | null => {
+export const extractYoutubeVideoId = (url: string): string | null => {
 	const match = url.match(YOUTUBE_ID_REGEX);
 	return match?.[1] ?? null;
 };

@@ -58,8 +58,9 @@ export const ArtistList = ({ exhibitionId, artists, isLoadError }: ArtistListPro
 				actions={[
 					{ label: "제외하기", variant: "assistive", onClick: () => setIsExcludeModalOpen(true) },
 				]}
-				// 전시 내 작가 프로필 경로는 전시 사이트 연결 후 확정
-				getRowHref={() => "#"}
+				getRowHref={(artist) =>
+					artist.profileId ? `/${exhibitionId}/artist/${artist.profileId}` : null
+				}
 				isProcessing={isProcessing}
 			/>
 

@@ -8,6 +8,7 @@ import { RenameArtworkModal } from "./RenameArtworkModal";
 export interface ArtworkFormHeaderProps {
 	artworkId: string;
 	initialTitle: string;
+	completionRate: number;
 	onTempSave: () => void;
 	isSaving: boolean;
 	saveDisabled?: boolean;
@@ -21,6 +22,7 @@ export interface ArtworkFormHeaderProps {
 export const ArtworkFormHeader = ({
 	artworkId,
 	initialTitle,
+	completionRate,
 	onTempSave,
 	isSaving,
 	saveDisabled,
@@ -41,6 +43,7 @@ export const ArtworkFormHeader = ({
 					editableTitle
 					onTitleEditClick={() => setIsRenameModalOpen(true)}
 					lastSavedAt=""
+					completionRate={completionRate}
 					onTempSave={onTempSave}
 					tempSaveDisabled={isSaving}
 					saveDisabled={saveDisabled}

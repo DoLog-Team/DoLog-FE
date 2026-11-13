@@ -69,7 +69,6 @@ export interface ArtistSns {
 export interface ArtworkParticipant {
 	artistId: string;
 	profileId: string;
-	// 국문 성명은 필수값이 아니라 없을 수 있음 (Figma 10.20 추가 사항)
 	nameKo: string | null;
 	nameEn: string | null;
 	profileImg: string | null;
@@ -93,7 +92,7 @@ export interface ArtworkBts {
 	author: string;
 }
 
-// 관련 작품 (sameCategoryArtworks, alphabeticalArtworks 공통)
+// 관련 작품 (sameZoneArtworks, alphabeticalArtworks 공통)
 export interface RelatedArtwork {
 	id: string;
 	title: string;
@@ -116,6 +115,10 @@ export interface ArtworkDetail {
 	width?: number | null;
 	height?: number | null;
 	depth?: number | null;
+	// DIMENSIONS: 가로/세로/높이(기존), ROUND: width=지름, height=null, VARIABLE: 셋 다 null("가변크기") · null: 사이즈 미입력(숨김)
+	sizeType?: "DIMENSIONS" | "ROUND" | "VARIABLE" | null;
+	// 영상 길이(초)
+	durationSeconds?: number | null;
 	productionStartYear?: number | null;
 	productionEndYear?: number | null;
 	purchaseChatUrl?: string | null;
@@ -136,6 +139,6 @@ export interface ArtworkDetail {
 	youtubeUrl?: string | null;
 	participants: ArtworkParticipant[];
 	relatedBts?: ArtworkBts[];
-	sameCategoryArtworks: RelatedArtwork[];
+	sameZoneArtworks: RelatedArtwork[];
 	alphabeticalArtworks: RelatedArtwork[];
 }

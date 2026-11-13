@@ -50,13 +50,17 @@ export function MyExhibitionCard({ exhibition, onLeave }: MyExhibitionCardProps)
 						<p className={cn("text-body1-bold", STATUS_TONE.coral.text)}>수락 대기중</p>
 					)}
 				</div>
-				{/* 수락 대기 전시는 관리 메뉴(overflow menu)를 표시하지 않는다 */}
-				{!isPending && (
-					<OverflowMenu
-						label={`${exhibition.name} 더보기`}
-						items={[{ label: "나가기", icon: "/icons/exit.svg", danger: true, onClick: onLeave }]}
-					/>
-				)}
+				<OverflowMenu
+					label={`${exhibition.name} 더보기`}
+					items={[
+						{
+							label: isPending ? "취소하기" : "나가기",
+							icon: "/icons/exit.svg",
+							danger: true,
+							onClick: onLeave,
+						},
+					]}
+				/>
 			</div>
 		</article>
 	);

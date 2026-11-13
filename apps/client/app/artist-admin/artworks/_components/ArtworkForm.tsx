@@ -20,9 +20,10 @@ import {
 } from "../[artworkId]/exhibition/_api/getArtworkExhibitionStatus";
 import { getExhibitionZones } from "../[artworkId]/exhibition/_api/getExhibitionZones";
 import { ArtworkFormHeader } from "./ArtworkFormHeader";
+import { ArtworkPublishSettingsModal } from "./ArtworkPublishSettingsModal";
 import { ArtworkSaveConfirmModal } from "./ArtworkSaveConfirmModal";
 import { ArtworkVisibilitySection } from "./ArtworkVisibilitySection";
-import { isArtworkSatisfied } from "./artworkCompleteness";
+import { calculateCompletionRate, isArtworkSatisfied } from "./artworkCompleteness";
 import { ARTWORK_FORM_TABS } from "./artworkFormTabs";
 import { getBasicMissingCount } from "./getBasicMissingCount";
 import {
@@ -36,7 +37,11 @@ import {
 	hasStartAfterEndError,
 	hasStartDatePartialError,
 } from "./sections/ArtworkBasicInfoSection";
-import { ArtworkImageSection, type ArtworkImageValue } from "./sections/ArtworkImageSection";
+import {
+	ArtworkImageSection,
+	type ArtworkImageValue,
+	hasYoutubeUrlError,
+} from "./sections/ArtworkImageSection";
 import {
 	ArtworkPurchaseInfoSection,
 	type ArtworkPurchaseInfoValue,
@@ -61,6 +66,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 	const [fieldSettings, setFieldSettings] = useState<ArtworkFieldSettings | null>(null);
 	const [hasZonesInExhibition, setHasZonesInExhibition] = useState(false);
 	const [isSaveConfirmOpen, setIsSaveConfirmOpen] = useState(false);
+	const [isPublishSettingsOpen, setIsPublishSettingsOpen] = useState(false);
 
 	useEffect(() => {
 		getArtworkCategories()
@@ -143,6 +149,16 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 	const handleTempSave = async () => {
 		if (hasValidationError) return false;
 		const saved = await run(async () => {
+			const currentVisibility = toArtworkVisibility(artwork);
+			const targetVisibility =
+				!isSatisfied && visibility.visibility !== "PRIVATE" ? "PRIVATE" : visibility.visibility;
+			const visibilityChanged = targetVisibility !== currentVisibility;
+			const isDowngrading = targetVisibility === "PRIVATE" && currentVisibility !== "PRIVATE";
+
+			if (isDowngrading && visibilityChanged) {
+				await updateArtworkVisibility(artwork.artworkId, targetVisibility);
+			}
+
 			await updateArtworkBasicInfo(artwork.artworkId, {
 				category: basic.category,
 				shortIntro: basic.shortIntro,
@@ -157,13 +173,18 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				productionEndYear: basic.endYear,
 				productionEndMonth: basic.endMonth,
 				productionEndDay: basic.endDay,
-				youtubeUrl: image.youtubeUrl,
+				clearProductionEndDate: !basic.endYear,
+				// 유효하지 않은 유튜브 링크는 저장을 막는 대신, 보내지 않고(= 지우고) 저장한다
+				youtubeUrl: hasYoutubeUrlError(image.youtubeUrl) ? "" : image.youtubeUrl,
 				showPurchaseButton: purchase.showPurchaseButton,
 				mainImageFile,
+				clearMainImage: !mainImageFile && !image.mainImagePreview,
 			});
-			if (visibility.visibility !== toArtworkVisibility(artwork)) {
-				await updateArtworkVisibility(artwork.artworkId, visibility.visibility);
+
+			if (!isDowngrading && visibilityChanged) {
+				await updateArtworkVisibility(artwork.artworkId, targetVisibility);
 			}
+			if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
 		});
 		if (saved) {
 			setMainImageFile(null);
@@ -191,7 +212,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 		handleTabClick(tabId);
 	};
 
-	const isSatisfied = isArtworkSatisfied({
+	const completenessInput = {
 		category: basic.category,
 		productionEndYear: basic.endYear,
 		exhibitionId: artwork.exhibitionId,
@@ -203,17 +224,44 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 		height: additional.height,
 		materials: additional.materials,
 		locationMap: artwork.locationMap,
+	};
+	const isSatisfied = isArtworkSatisfied(completenessInput);
+	const completionRate = calculateCompletionRate({
+		...completenessInput,
+		sizeType: artwork.sizeType,
+	});
+
+	// 마지막 저장 시점(= 진입 시점) 기준 충족 여부 — "이번에 처음 100% 됐는지" 판단용
+	const wasSatisfied = isArtworkSatisfied({
+		category: artwork.category ?? undefined,
+		productionEndYear: artwork.productionEndYear ? String(artwork.productionEndYear) : undefined,
+		exhibitionId: artwork.exhibitionId,
+		zoneId: artwork.zoneId,
+		hasZonesInExhibition,
+		fieldSettings,
+		mainImagePreview: artwork.mainImg,
+		width: artwork.width ? String(artwork.width) : "",
+		height: artwork.height ? String(artwork.height) : "",
+		materials: artwork.materials,
+		locationMap: artwork.locationMap,
 	});
 
 	// 헤더의 "저장" 버튼 — 바로 저장하지 않고 확인 모달부터 띄운다
+	// 임시저장이었던 작품이 이번에 처음 100%가 됐으면, 저장 확인 대신 공개 설정 모달을 띄운다
 	const handleSaveClick = () => {
 		if (hasValidationError) return;
+		if (!wasSatisfied && isSatisfied) {
+			if (visibility.visibility !== "PUBLIC") visibility.handleChange("PUBLIC");
+			setIsPublishSettingsOpen(true);
+			return;
+		}
 		setIsSaveConfirmOpen(true);
 	};
 
 	const handleConfirmSave = async () => {
 		if (await handleTempSave()) {
 			setIsSaveConfirmOpen(false);
+			setIsPublishSettingsOpen(false);
 			router.push(isSatisfied ? `/artworks/${artwork.artworkId}` : "/artist-admin");
 		}
 	};
@@ -293,6 +341,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 			<ArtworkFormHeader
 				artworkId={artwork.artworkId}
 				initialTitle={artwork.title}
+				completionRate={completionRate}
 				onTempSave={handleSaveClick}
 				isSaving={isSaving}
 				saveDisabled={hasValidationError || !isDirty}
@@ -332,6 +381,15 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				open={isSaveConfirmOpen}
 				onOpenChange={setIsSaveConfirmOpen}
 				isSatisfied={isSatisfied}
+				isSaving={isSaving}
+				onConfirm={handleConfirmSave}
+			/>
+			<ArtworkPublishSettingsModal
+				open={isPublishSettingsOpen}
+				onOpenChange={setIsPublishSettingsOpen}
+				value={visibility.visibility}
+				onChange={visibility.handleChange}
+				hasExhibition={artwork.exhibitionId != null}
 				isSaving={isSaving}
 				onConfirm={handleConfirmSave}
 			/>

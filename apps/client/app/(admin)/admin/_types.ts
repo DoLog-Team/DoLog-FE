@@ -34,6 +34,7 @@ export interface AdminExhibitionCounts {
 
 export interface AdminArtist {
 	id: string;
+	profileId: string | null;
 	name: string | null;
 	email: string | null;
 	greeting: string | null;

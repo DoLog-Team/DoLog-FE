@@ -167,6 +167,8 @@ export function ArtworkDetailClient({
 				</section>
 			)}
 
+			<Divider />
+
 			{data.relatedBts && data.relatedBts.length > 0 && (
 				<>
 					<Divider />
@@ -180,8 +182,8 @@ export function ArtworkDetailClient({
 					</section>
 				</>
 			)}
-			{data.sameCategoryArtworks && data.sameCategoryArtworks.length > 0 && (
-				<RelatedSection artworks={data.sameCategoryArtworks} artworkTitle={data.title} />
+			{data.sameZoneArtworks && data.sameZoneArtworks.length > 0 && (
+				<RelatedSection artworks={data.sameZoneArtworks} artworkTitle={data.title} />
 			)}
 			{(prevArtwork || nextArtwork) && (
 				<PostNavigationSection prevArtwork={prevArtwork} nextArtwork={nextArtwork} />

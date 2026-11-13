@@ -7,12 +7,16 @@ import { Input } from "@/components/common/Input/Input";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
 import { compressImageFile } from "@/lib/utils/image";
-import { useYoutubeLink } from "./useYoutubeLink";
+import { extractYoutubeVideoId, useYoutubeLink } from "./useYoutubeLink";
 
 export interface ArtworkImageValue {
 	mainImagePreview: string | null;
 	youtubeUrl: string;
 }
+
+// 저장 시점에도 형식을 검증한다 — "연동하기"를 안 눌러도 유효하지 않은 링크는 저장을 막는다
+export const hasYoutubeUrlError = (youtubeUrl: string) =>
+	!!youtubeUrl.trim() && !extractYoutubeVideoId(youtubeUrl);
 
 export interface ArtworkImageSectionProps {
 	value: ArtworkImageValue;
@@ -81,8 +85,12 @@ export const ArtworkImageSection = ({
 							placeholder="https://example.com/example"
 							value={videoUrl}
 							onChange={(e) => handleVideoUrlChange(e.target.value)}
-							error={linkStatus === "error"}
-							errorMessage={linkStatus === "error" ? "없는 주소입니다." : undefined}
+							error={linkStatus === "error" || hasYoutubeUrlError(videoUrl)}
+							errorMessage={
+								linkStatus === "error" || hasYoutubeUrlError(videoUrl)
+									? "유효한 링크가 아니에요."
+									: undefined
+							}
 						/>
 						<Button
 							type="button"
