@@ -1,5 +1,6 @@
 "use client";
 
+import { DotsLoader } from "../Spinner/DotsLoader";
 import { Modal } from "./Modal";
 
 export interface UnsavedChangesModalProps {
@@ -32,7 +33,13 @@ export const UnsavedChangesModal = ({
 		showCloseButton
 		actions={[
 			{ text: "저장 없이 나가기", variant: "assistive", onClick: onDiscard },
-			{ text: "저장하기", variant: "primary", onClick: onSave, disabled: isSaving },
+			{
+				// 저장 중에는 누른 버튼 자리에 점 로딩을 보여준다 (Figma 버튼 로딩 상태)
+				text: isSaving ? <DotsLoader /> : "저장하기",
+				variant: "primary",
+				onClick: onSave,
+				disabled: isSaving,
+			},
 		]}
 	/>
 );

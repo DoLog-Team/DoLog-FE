@@ -1,6 +1,7 @@
 "use client";
 
 import { Modal } from "@/components/common/Modal/Modal";
+import { DotsLoader } from "@/components/common/Spinner/DotsLoader";
 
 export interface ArtworkSaveConfirmModalProps {
 	open: boolean;
@@ -35,7 +36,8 @@ export const ArtworkSaveConfirmModal = ({
 				disabled: isSaving,
 			},
 			{
-				text: isSatisfied ? "저장하기" : "임시 저장하기",
+				// 저장 중에는 누른 버튼 자리에 점 로딩을 보여준다 (Figma 버튼 로딩 상태)
+				text: isSaving ? <DotsLoader /> : isSatisfied ? "저장하기" : "임시 저장하기",
 				variant: "primary",
 				onClick: onConfirm,
 				disabled: isSaving,
