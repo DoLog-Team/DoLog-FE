@@ -11,7 +11,8 @@ import { cn } from "@/lib/utils/cn";
 import { withLoginRedirect } from "@/lib/utils/loginHref";
 import type { DologHeaderVariant } from "./Header";
 
-const INQUIRY_URL = "https://www.instagram.com/dolog.archive/";
+// 두록 링크트리 (플랜 문의와 같은 주소)
+const INQUIRY_URL = "https://linktr.ee/dologarchive";
 const ARTIST_LOGIN_HREF = "/artist-admin/login";
 
 interface DologHeaderActionsProps {
