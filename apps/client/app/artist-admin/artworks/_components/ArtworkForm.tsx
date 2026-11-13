@@ -37,7 +37,11 @@ import {
 	hasStartAfterEndError,
 	hasStartDatePartialError,
 } from "./sections/ArtworkBasicInfoSection";
-import { ArtworkImageSection, type ArtworkImageValue } from "./sections/ArtworkImageSection";
+import {
+	ArtworkImageSection,
+	type ArtworkImageValue,
+	hasYoutubeUrlError,
+} from "./sections/ArtworkImageSection";
 import {
 	ArtworkPurchaseInfoSection,
 	type ArtworkPurchaseInfoValue,
@@ -145,12 +149,15 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 	const handleTempSave = async () => {
 		if (hasValidationError) return false;
 		const saved = await run(async () => {
+			const currentVisibility = toArtworkVisibility(artwork);
 			const targetVisibility =
-				!isSatisfied && visibility.visibility === "PUBLIC" ? "PRIVATE" : visibility.visibility;
-			if (targetVisibility !== toArtworkVisibility(artwork)) {
+				!isSatisfied && visibility.visibility !== "PRIVATE" ? "PRIVATE" : visibility.visibility;
+			const visibilityChanged = targetVisibility !== currentVisibility;
+			const isDowngrading = targetVisibility === "PRIVATE" && currentVisibility !== "PRIVATE";
+
+			if (isDowngrading && visibilityChanged) {
 				await updateArtworkVisibility(artwork.artworkId, targetVisibility);
 			}
-			if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
 
 			await updateArtworkBasicInfo(artwork.artworkId, {
 				category: basic.category,
@@ -166,10 +173,18 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				productionEndYear: basic.endYear,
 				productionEndMonth: basic.endMonth,
 				productionEndDay: basic.endDay,
-				youtubeUrl: image.youtubeUrl,
+				clearProductionEndDate: !basic.endYear,
+				// 유효하지 않은 유튜브 링크는 저장을 막는 대신, 보내지 않고(= 지우고) 저장한다
+				youtubeUrl: hasYoutubeUrlError(image.youtubeUrl) ? "" : image.youtubeUrl,
 				showPurchaseButton: purchase.showPurchaseButton,
 				mainImageFile,
+				clearMainImage: !mainImageFile && !image.mainImagePreview,
 			});
+
+			if (!isDowngrading && visibilityChanged) {
+				await updateArtworkVisibility(artwork.artworkId, targetVisibility);
+			}
+			if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
 		});
 		if (saved) {
 			setMainImageFile(null);
