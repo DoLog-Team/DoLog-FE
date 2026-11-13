@@ -9,6 +9,7 @@ import { CheckIcon } from "@/components/common/icons/CheckIcon";
 import { ChevronIcon } from "@/components/common/icons/ChevronIcon";
 import { Pagination } from "@/components/common/Pagination/Pagination";
 import { SearchBar } from "@/components/common/SearchBar/SearchBar";
+import { LoadingOverlay } from "@/components/common/Spinner/LoadingOverlay";
 import { cn } from "@/lib/utils/cn";
 import { AdminErrorFallback } from "./AdminErrorFallback";
 import type { RowSelection } from "./useRowSelection";
@@ -250,6 +251,7 @@ export const AdminSelectableList = <T extends { id: Id }, Id extends string | nu
 					))}
 				</div>
 			</div>
+			<LoadingOverlay open={Boolean(isProcessing)} />
 		</section>
 	);
 };

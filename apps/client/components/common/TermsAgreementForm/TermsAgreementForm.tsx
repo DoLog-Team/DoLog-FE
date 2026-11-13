@@ -6,6 +6,7 @@ import { Button, buttonVariants } from "@/components/common/Button/Button";
 import { Checkbox } from "@/components/common/Checkbox/Checkbox";
 import { Divider } from "@/components/common/Divider/Divider";
 import { Modal } from "@/components/common/Modal/Modal";
+import { LoadingOverlay } from "@/components/common/Spinner/LoadingOverlay";
 import { TermsDocument } from "@/components/common/TermsDocument/TermsDocument";
 import { saveTermsAgreement } from "@/lib/api/terms";
 import { PRIVACY_POLICY_HREF, SERVICE_TERMS_HREF } from "@/lib/constants/terms";
@@ -240,6 +241,7 @@ export const TermsAgreementForm = ({ promotion, onSaved }: TermsAgreementFormPro
 				showCloseButton
 				actions={[{ text: "확인", variant: "assistive", onClick: () => setIsFailed(false) }]}
 			/>
+			<LoadingOverlay open={isSubmitting} />
 		</>
 	);
 };
