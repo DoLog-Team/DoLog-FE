@@ -169,6 +169,7 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				youtubeUrl: image.youtubeUrl,
 				showPurchaseButton: purchase.showPurchaseButton,
 				mainImageFile,
+				clearMainImage: !mainImageFile && !image.mainImagePreview,
 			});
 		});
 		if (saved) {

@@ -178,7 +178,9 @@ export const ArtworkExhibitionForm = ({
 				height: additional.height,
 				depth: additional.hasVolume ? additional.depth : undefined,
 				locationMapFile: isSubmitted ? locationMapFile : undefined,
+				clearLocationMap: isSubmitted && !locationMapFile && !locationMapPreview,
 				mainImageFile,
+				clearMainImage: !mainImageFile && !mainImagePreview,
 			});
 
 			if (!isSubmitted) {

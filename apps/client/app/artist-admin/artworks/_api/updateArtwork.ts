@@ -29,7 +29,6 @@ export interface UpdateArtworkBasicInfoInput {
 	productionStartYear?: string;
 	productionStartMonth?: string;
 	productionStartDay?: string;
-	// true면 시작 날짜 세 필드를 전부 지운다 (안 보내는 것만으로는 기존 값이 유지됨)
 	clearProductionStartDate?: boolean;
 	productionEndYear?: string;
 	productionEndMonth?: string;
@@ -37,6 +36,7 @@ export interface UpdateArtworkBasicInfoInput {
 	youtubeUrl?: string;
 	showPurchaseButton: boolean;
 	mainImageFile: File | null;
+	clearMainImage?: boolean;
 }
 
 // 작품 기본/부가/이미지/구매 정보 임시저장 (필수값 무관, 보낸 필드만 반영)
@@ -73,6 +73,7 @@ export async function updateArtworkBasicInfo(
 	}
 
 	if (input.mainImageFile) formData.append("mainImageFile", input.mainImageFile);
+	else if (input.clearMainImage) formData.append("clearMainImage", "true");
 
 	await authApiClient<void>(`/artworks/${artworkId}`, {
 		method: "PATCH",
@@ -87,6 +88,8 @@ export interface UpdateArtworkAdditionalInfoInput {
 	depth?: string;
 	locationMapFile?: File | null;
 	mainImageFile?: File | null;
+	clearLocationMap?: boolean;
+	clearMainImage?: boolean;
 }
 
 // 작품 부가 정보(대표 이미지·재료·사이즈·위치 이미지)만 부분 수정 — 출품 화면에서 쓴다
@@ -100,7 +103,9 @@ export async function updateArtworkAdditionalInfo(
 	appendSize(formData, "height", input.height);
 	appendSize(formData, "depth", input.depth);
 	if (input.locationMapFile) formData.append("locationMapFile", input.locationMapFile);
+	else if (input.clearLocationMap) formData.append("clearLocationMap", "true");
 	if (input.mainImageFile) formData.append("mainImageFile", input.mainImageFile);
+	else if (input.clearMainImage) formData.append("clearMainImage", "true");
 
 	if (input.materials.length > 0) {
 		for (const material of input.materials) formData.append("materials", material);
