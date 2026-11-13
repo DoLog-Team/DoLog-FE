@@ -24,9 +24,9 @@ import { ProfileBasicInfoSection } from "./sections/ProfileBasicInfoSection";
 import { ProfilePurchaseLinkSection } from "./sections/ProfilePurchaseLinkSection";
 import { ProfileSnsInfoSection } from "./sections/ProfileSnsInfoSection";
 
-const MY_PAGE_PATH = "/artist-admin";
-
 export interface ProfileEditFormProps {
+	// 저장 후 이동할 두록 작가 상세에 사용
+	artistId: string;
 	// SNS 추가에 사용
 	profileId: string;
 	initialValue: ArtistProfileForm;
@@ -34,7 +34,12 @@ export interface ProfileEditFormProps {
 	onBack?: () => void;
 }
 
-export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEditFormProps) => {
+export const ProfileEditForm = ({
+	artistId,
+	profileId,
+	initialValue,
+	onBack,
+}: ProfileEditFormProps) => {
 	const router = useRouter();
 
 	// 현재 입력값과 마지막으로 저장된 값 — 비교해서 변경 여부를 판단한다
@@ -81,10 +86,11 @@ export const ProfileEditForm = ({ profileId, initialValue, onBack }: ProfileEdit
 		}
 	};
 
-	// 저장 후 마이페이지(프로필)로 돌아간다 — 뒤로가기로 수정 화면에 다시 오지 않도록 replace
+	// 저장 후 저장한 내용과 관련된 두록 작가 상세로 이동한다 (Figma 공통 저장 버튼 명세: 나의 프로필 → 두록 작가 상세)
+	// 뒤로가기로 수정 화면에 다시 오지 않도록 replace
 	const handleSave = async () => {
 		const saved = await save();
-		if (saved) router.replace(MY_PAGE_PATH);
+		if (saved) router.replace(`/artists/${artistId}`);
 	};
 
 	const { isLeaveModalOpen, setIsLeaveModalOpen, handleBack, handleLeaveAndSave } = useLeaveConfirm(
