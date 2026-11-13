@@ -84,7 +84,7 @@ export function AccountSection({ agreement: initialAgreement }: AccountSectionPr
 					onView={() => setOpenedDocument("marketing")}
 				/>
 				{/* 광고성 정보 수신은 마케팅 동의를 따라가며 직접 조작할 수 없음 */}
-				{/* TODO: 광고성 정보 수신 동의 전문(모달 33번)은 노션 원문이 없어 아직 연결 못 함 */}
+				{/* 기획 요청으로 보기 버튼 없음 (QA 110100-0408-01) */}
 				<ConsentRow
 					label="(선택) 광고성 정보 수신 동의"
 					subText="이메일, 카카오톡, 문자로 수신합니다."
@@ -138,7 +138,7 @@ interface ConsentRowProps {
 	checked: boolean;
 	// 없으면 비활성 체크박스
 	onChange?: (checked: boolean) => void;
-	// 동의 전문 보기 — 없으면 보기 버튼이 동작하지 않음
+	// 동의 전문 보기 — 없으면 보기 버튼을 표시하지 않음
 	onView?: () => void;
 	nested?: boolean;
 }
@@ -172,9 +172,11 @@ function ConsentRow({ label, subText, checked, onChange, onView, nested }: Conse
 					</span>
 				}
 			/>
-			<button type="button" className={TEXT_LINK_CLASS} onClick={onView}>
-				보기
-			</button>
+			{onView && (
+				<button type="button" className={TEXT_LINK_CLASS} onClick={onView}>
+					보기
+				</button>
+			)}
 		</div>
 	);
 }
