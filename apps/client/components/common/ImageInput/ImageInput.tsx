@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useId, useRef, useState } from "react";
 import { cn } from "@/lib/utils/cn";
+import { convertHeicToJpeg, HEIC_ACCEPT } from "@/lib/utils/heic";
 import { Button } from "../Button/Button";
 import { imageInputBoxVariants } from "./ImageInput.styles";
 
@@ -40,10 +41,15 @@ export const ImageInput = ({
 	const isSingle = maxCount === 1;
 	const [isDragOver, setIsDragOver] = useState(false);
 
-	const handleFiles = (fileList: FileList | null) => {
+	const handleFiles = async (fileList: FileList | null) => {
 		if (!fileList || fileList.length === 0) return;
-		onAdd(Array.from(fileList).slice(0, isSingle ? 1 : remaining));
+		const files = Array.from(fileList).slice(0, isSingle ? 1 : remaining);
 		if (inputRef.current) inputRef.current.value = "";
+		// HEIC(아이폰 사진)는 JPEG 로 바꿔서 넘긴다 — 변환에 실패하면 원본을 넘겨 각 화면의 형식 오류 안내를 따른다
+		const converted = await Promise.all(
+			files.map((file) => convertHeicToJpeg(file).catch(() => file)),
+		);
+		onAdd(converted);
 	};
 
 	const uploadButton = (
@@ -80,7 +86,8 @@ export const ImageInput = ({
 				id={inputId}
 				name={name ?? inputId}
 				type="file"
-				accept={accept}
+				// HEIC 는 고른 뒤 JPEG 로 바꾸므로 모든 업로드에서 받는다
+				accept={`${accept},${HEIC_ACCEPT}`}
 				onChange={(e) => handleFiles(e.target.files)}
 				className="hidden"
 			/>

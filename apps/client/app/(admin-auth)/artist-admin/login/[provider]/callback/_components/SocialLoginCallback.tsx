@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { Spinner } from "@/components/common/Spinner/Spinner";
 import { loginArtistSocial, type SocialLoginFailure } from "@/lib/api/auth";
 import { notifyAuthChange } from "@/lib/auth/useAuthRole";
+import { fillProfileNameFromSocial, keepSocialNameForTerms } from "../../../_lib/fillSocialName";
 import {
 	consumePendingSocialLogin,
 	DEFAULT_LOGIN_REDIRECT,
@@ -50,9 +51,15 @@ export const SocialLoginCallback = ({ provider }: SocialLoginCallbackProps) => {
 			provider: provider === "kakao" ? "KAKAO" : "GOOGLE",
 			authorizationCode: code,
 			redirectUri: pending.redirectUri,
-		}).then((result) => {
+		}).then(async (result) => {
 			if (!result.ok) return fail(result.reason);
 			notifyAuthChange();
+
+			// 첫 가입이면 구글에서 받아온 이름을 국문 성명에 넣어 둔다 (비어 있을 때만)
+			if (provider === "google" && (result.data.isFirstLogin || result.data.needsTermsAgreement)) {
+				await fillProfileNameFromSocial(result.data.profile.name);
+				if (result.data.needsTermsAgreement) keepSocialNameForTerms(result.data.profile.name);
+			}
 
 			// 첫 로그인(회원가입): 약관 동의 → 두록 홈 + 환영 모달 / 이후: 로그인을 시작한 화면
 			if (result.data.needsTermsAgreement) {

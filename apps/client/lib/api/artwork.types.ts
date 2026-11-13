@@ -120,7 +120,11 @@ export interface ArtworkDetail {
 	// 영상 길이(초)
 	durationSeconds?: number | null;
 	productionStartYear?: number | null;
+	productionStartMonth?: number | null;
+	productionStartDay?: number | null;
 	productionEndYear?: number | null;
+	productionEndMonth?: number | null;
+	productionEndDay?: number | null;
 	purchaseChatUrl?: string | null;
 	showPurchaseButton?: boolean | null;
 	// TODO: 출품 전시 — 두록 작품 상세 응답에 추가 BE 문의 중 (작품 목록 응답과 같은 이름으로 요청). 단독 작품이면 null

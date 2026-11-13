@@ -92,7 +92,10 @@ export default async function MainPage() {
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
 			/>
 			<PageTracker pageName="main" />
-			<Header />
+			{/* 스크롤해도 헤더를 상단에 고정 */}
+			<div className="sticky top-0 z-10 bg-normal">
+				<Header />
+			</div>
 			{/* <Banner banners={displayBanners} /> */}
 
 			<DesktopContainer>

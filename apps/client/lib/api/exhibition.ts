@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api/instance";
+import { apiClient, isApiError } from "@/lib/api/instance";
 import type {
 	BannerItem,
 	ExhibitionDetail,
@@ -52,10 +52,24 @@ export async function resolveExhibitionSlug(slug: string): Promise<{ uuid: strin
  ************************/
 
 export async function getExhibitionDetail(exhibitionId: string): Promise<ExhibitionDetail | null> {
+	return (await getExhibitionDetailResult(exhibitionId)).exhibition;
+}
+
+// 비공개 전시는 상세 조회가 403(EXHIBITION_403_1)으로 막힌다
+const PRIVATE_EXHIBITION_CODE = "EXHIBITION_403_1";
+
+// 조회 실패 시 비공개 전시 때문인지 함께 알려준다 — 화면 안내 문구를 나누는 데 쓴다
+export async function getExhibitionDetailResult(
+	exhibitionId: string,
+): Promise<{ exhibition: ExhibitionDetail | null; isPrivate: boolean }> {
 	try {
-		return await apiClient<ExhibitionDetail>(`/exhibitions/${exhibitionId}/details`);
-	} catch {
-		return null;
+		const exhibition = await apiClient<ExhibitionDetail>(`/exhibitions/${exhibitionId}/details`);
+		return { exhibition, isPrivate: false };
+	} catch (error) {
+		return {
+			exhibition: null,
+			isPrivate: isApiError(error, 403) && error.code === PRIVATE_EXHIBITION_CODE,
+		};
 	}
 }
 

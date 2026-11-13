@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { ArtworkManageFab } from "@/app/(main)/artworks/[artworkId]/_components/ArtworkManageFab";
 import { useMyArtwork } from "@/app/(main)/artworks/[artworkId]/_components/useMyArtwork";
+import { useRecordArtworkView } from "@/app/(main)/artworks/[artworkId]/_components/useRecordArtworkView";
 import { useExhibition } from "@/app/[exhibitionId]/_context/ExhibitionContext";
 import { Divider } from "@/components/common/Divider/Divider";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
@@ -35,6 +36,9 @@ export function ArtworkDetailClient({
 	data: ArtworkDetail;
 	hideArtistRole?: boolean;
 }) {
+	// 조회수 기록 — 두록 작품 상세와 같은 방식 (전시 작품 상세 GET 만으로는 조회수가 올라가지 않음)
+	useRecordArtworkView(artworkId);
+
 	const authors = getVisibleAuthors(data.participants);
 	const hasArtist = authors.length > 0;
 	// 구매 버튼 표시 체크 여부와 무관하게 purchaseUrl만 보고 버튼을 띄우던 버그 수정 — 두록 단독 작품 상세와 동일하게 처리

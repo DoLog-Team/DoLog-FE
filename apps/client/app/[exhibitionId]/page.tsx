@@ -5,7 +5,7 @@ import { Divider } from "@/components/common/Divider/Divider";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { SectionTimeTracker } from "@/components/common/SectionTimeTracker";
 import { TrackedLink } from "@/components/common/TrackedLink";
-import { getExhibitionDetail, getExhibitionHost, getHostSns } from "@/lib/api/exhibition";
+import { getExhibitionDetailResult, getExhibitionHost, getHostSns } from "@/lib/api/exhibition";
 import { resolveExhibitionId } from "./_api/resolveExhibitionId";
 import { ExhibitionDetailSection } from "./_components/ExhibitionDetailSection";
 import { ExhibitionHostSection } from "./_components/ExhibitionHostSection";
@@ -33,8 +33,8 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 		);
 	}
 
-	const [exhibition, host, sns] = await Promise.all([
-		getExhibitionDetail(uuid),
+	const [{ exhibition, isPrivate }, host, sns] = await Promise.all([
+		getExhibitionDetailResult(uuid),
 		getExhibitionHost(uuid),
 		getHostSns(uuid),
 	]);
@@ -43,7 +43,7 @@ export default async function ExhibitionDetailPage({ params }: ExhibitionDetailP
 		return (
 			<main className="flex flex-1 flex-col">
 				<Header variant="back" />
-				<NotFound message="전시를 찾을 수 없습니다." />
+				<NotFound message={isPrivate ? "비공개 전시회입니다." : "전시를 찾을 수 없습니다."} />
 			</main>
 		);
 	}
