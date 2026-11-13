@@ -44,7 +44,8 @@ export default function ExhibitionsClient({ exhibitions }: ExhibitionsClientProp
 	});
 
 	return (
-		<div className="flex flex-col min-h-screen">
+		// shrink-0: 부모 flex 안에서 화면 높이로 줄어들면 sticky 헤더·필터가 스크롤과 함께 밀려 올라간다
+		<div className="flex flex-col min-h-screen shrink-0">
 			<PageTracker pageName="exhibitions_list" />
 			<CollapsingHeader
 				title="전체 전시"
