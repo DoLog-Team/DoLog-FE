@@ -149,12 +149,15 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 	const handleTempSave = async () => {
 		if (hasValidationError) return false;
 		const saved = await run(async () => {
+			const currentVisibility = toArtworkVisibility(artwork);
 			const targetVisibility =
-				!isSatisfied && visibility.visibility === "PUBLIC" ? "PRIVATE" : visibility.visibility;
-			if (targetVisibility !== toArtworkVisibility(artwork)) {
+				!isSatisfied && visibility.visibility !== "PRIVATE" ? "PRIVATE" : visibility.visibility;
+			const visibilityChanged = targetVisibility !== currentVisibility;
+			const isDowngrading = targetVisibility === "PRIVATE" && currentVisibility !== "PRIVATE";
+
+			if (isDowngrading && visibilityChanged) {
 				await updateArtworkVisibility(artwork.artworkId, targetVisibility);
 			}
-			if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
 
 			await updateArtworkBasicInfo(artwork.artworkId, {
 				category: basic.category,
@@ -176,6 +179,11 @@ export const ArtworkForm = ({ artwork, onBack }: ArtworkFormProps) => {
 				mainImageFile,
 				clearMainImage: !mainImageFile && !image.mainImagePreview,
 			});
+
+			if (!isDowngrading && visibilityChanged) {
+				await updateArtworkVisibility(artwork.artworkId, targetVisibility);
+			}
+			if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
 		});
 		if (saved) {
 			setMainImageFile(null);

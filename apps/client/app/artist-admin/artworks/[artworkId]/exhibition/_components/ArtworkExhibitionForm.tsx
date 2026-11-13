@@ -161,15 +161,15 @@ export const ArtworkExhibitionForm = ({
 		if (!relevantExhibitionId) return false;
 		setIsSaving(true);
 		try {
-			if (isSubmitted) {
-				const targetVisibility =
-					!isSatisfied && visibility.visibility === "PUBLIC" ? "PRIVATE" : visibility.visibility;
-				const zoneChanged = zoneId != null && zoneId !== artwork.zoneId;
-				const visibilityChanged = targetVisibility !== toArtworkVisibility(artwork);
-				if (zoneChanged || visibilityChanged) {
-					await updateArtworkVisibility(artwork.artworkId, targetVisibility, zoneId);
-				}
-				if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
+			const currentVisibility = toArtworkVisibility(artwork);
+			const targetVisibility =
+				!isSatisfied && visibility.visibility !== "PRIVATE" ? "PRIVATE" : visibility.visibility;
+			const zoneChanged = zoneId != null && zoneId !== artwork.zoneId;
+			const visibilityChanged = targetVisibility !== currentVisibility;
+			const isDowngrading = targetVisibility === "PRIVATE" && currentVisibility !== "PRIVATE";
+
+			if (isSubmitted && isDowngrading && (zoneChanged || visibilityChanged)) {
+				await updateArtworkVisibility(artwork.artworkId, targetVisibility, zoneId);
 			}
 
 			await updateArtworkAdditionalInfo(artwork.artworkId, {
@@ -191,6 +191,10 @@ export const ArtworkExhibitionForm = ({
 				});
 				onSubmitted();
 			} else {
+				if (!isDowngrading && (zoneChanged || visibilityChanged)) {
+					await updateArtworkVisibility(artwork.artworkId, targetVisibility, zoneId);
+				}
+				if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
 				router.refresh();
 			}
 			setSavedSnapshot(buildSnapshot());
