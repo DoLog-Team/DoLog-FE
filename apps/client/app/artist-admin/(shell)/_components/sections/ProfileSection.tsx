@@ -11,7 +11,8 @@ import { resolveSnsHref } from "@/lib/utils/sns";
 import type { ArtistAdminProfile } from "../../_types";
 import { SECTION_TITLE_CLASS } from "../SectionHeader";
 
-const PROFILE_EDIT_PATH = "/artist-admin/profile/edit";
+// 마이페이지에서 들어갔다는 표시 — 저장 후 마이페이지로 돌아오게 한다
+const PROFILE_EDIT_PATH = "/artist-admin/profile/edit?from=mypage";
 const CONTACT_LINK_CLASS = "text-light underline";
 
 interface ProfileSectionProps {

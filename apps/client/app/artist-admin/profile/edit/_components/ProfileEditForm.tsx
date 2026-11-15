@@ -87,10 +87,13 @@ export const ProfileEditForm = ({
 	};
 
 	// 저장 후 저장한 내용과 관련된 두록 작가 상세로 이동한다 (Figma 공통 저장 버튼 명세: 나의 프로필 → 두록 작가 상세)
+	// 단 마이페이지에서 들어왔으면(?from=mypage) 마이페이지로 돌아간다 — 마이페이지는 no-store 조회라 바뀐 내용이 바로 보인다
 	// 뒤로가기로 수정 화면에 다시 오지 않도록 replace
+	const searchParams = useSearchParams();
+	const isFromMyPage = searchParams.get("from") === "mypage";
 	const handleSave = async () => {
 		const saved = await save();
-		if (saved) router.replace(`/artists/${artistId}`);
+		if (saved) router.replace(isFromMyPage ? "/artist-admin" : `/artists/${artistId}`);
 	};
 
 	const { isLeaveModalOpen, setIsLeaveModalOpen, handleBack, handleLeaveAndSave } = useLeaveConfirm(
@@ -127,7 +130,6 @@ export const ProfileEditForm = ({
 	const { activeTab, handleTabClick, sectionRefs } = useScrollSpy(tabIds, 120);
 
 	// 다른 화면(작품 등록 폼)에서 ?tab=purchase 로 넘어오면 해당 섹션으로 바로 스크롤한다
-	const searchParams = useSearchParams();
 	// biome-ignore lint/correctness/useExhaustiveDependencies: 처음 진입했을 때 한 번만 스크롤해야 함 — handleTabClick을 의존성에 넣으면 리렌더마다 다시 스크롤됨
 	useEffect(() => {
 		const tab = searchParams.get("tab");
