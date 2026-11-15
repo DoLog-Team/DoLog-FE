@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Input } from "@/components/common/Input/Input";
 import { Modal } from "@/components/common/Modal/Modal";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
+import { LoadingOverlay } from "@/components/common/Spinner/LoadingOverlay";
 import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
 import { createArtwork } from "../../../artworks/_api/createArtwork";
 import { deleteArtwork, toErrorMessage } from "../../_api/actions";
@@ -59,12 +60,16 @@ export function MyArtworkSection({
 
 	const { notice, showNotice, closeNotice } = useNoticeModal();
 
+	const [isDeleting, setIsDeleting] = useState(false);
 	const handleDelete = async (artworkId: string) => {
+		setIsDeleting(true);
 		try {
 			await deleteArtwork(artworkId);
 			setArtworks((prev) => prev.filter((artwork) => artwork.artworkId !== artworkId));
 		} catch (error) {
 			showNotice("삭제에 실패했어요.", toErrorMessage(error));
+		} finally {
+			setIsDeleting(false);
 		}
 	};
 
@@ -125,6 +130,7 @@ export function MyArtworkSection({
 			</Modal>
 			{/* TODO: 삭제/전환 실패 안내 UI 는 피그마에 없음 — 임시 모달 */}
 			<NoticeModal notice={notice} onClose={closeNotice} />
+			<LoadingOverlay open={isAdding || isDeleting} />
 		</section>
 	);
 }

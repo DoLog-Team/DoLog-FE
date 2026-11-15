@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Cropper, { type Area, type MediaSize } from "react-easy-crop";
 import { Modal } from "@/components/common/Modal/Modal";
+import { LoadingOverlay } from "@/components/common/Spinner/LoadingOverlay";
 import { cropImage } from "./cropImage";
 
 // 크롭 비율 — 7:9
@@ -172,6 +173,7 @@ export const ProfileImageCropModal = ({
 					/>
 				</Dialog.Content>
 			</Dialog.Portal>
+			<LoadingOverlay open={isSaving} />
 		</Dialog.Root>
 	);
 };

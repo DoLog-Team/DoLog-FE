@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Input } from "@/components/common/Input/Input";
 import { Modal } from "@/components/common/Modal/Modal";
+import { LoadingOverlay } from "@/components/common/Spinner/LoadingOverlay";
 import { validateJoinCode } from "../../_api/actions";
 import type { JoinableExhibition } from "../../_types";
 
@@ -51,40 +52,43 @@ export function ExhibitionJoinModal({
 	};
 
 	return (
-		<Modal
-			open={open}
-			onOpenChange={handleOpenChange}
-			title="전시 참여하기"
-			description="참여하려는 전시의 입장 코드를 입력해주세요."
-			showCloseButton
-			actions={[
-				{ text: "취소", variant: "assistive", onClick: () => handleOpenChange(false) },
-				{
-					text: "입장하기",
-					variant: "primary",
-					onClick: handleSubmit,
-					disabled: isSubmitDisabled,
-				},
-			]}
-		>
-			{/* form으로 감싸서 엔터키로도 제출할 수 있도록 함 */}
-			<form
-				onSubmit={(e) => {
-					e.preventDefault();
-					handleSubmit();
-				}}
+		<>
+			<LoadingOverlay open={isSubmitting} />
+			<Modal
+				open={open}
+				onOpenChange={handleOpenChange}
+				title="전시 참여하기"
+				description="참여하려는 전시의 입장 코드를 입력해주세요."
+				showCloseButton
+				actions={[
+					{ text: "취소", variant: "assistive", onClick: () => handleOpenChange(false) },
+					{
+						text: "입장하기",
+						variant: "primary",
+						onClick: handleSubmit,
+						disabled: isSubmitDisabled,
+					},
+				]}
 			>
-				<Input
-					placeholder="코드를 입력해주세요."
-					value={code}
-					onChange={(e) => {
-						setCode(e.target.value);
-						setErrorMessage("");
+				{/* form으로 감싸서 엔터키로도 제출할 수 있도록 함 */}
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						handleSubmit();
 					}}
-					error={Boolean(errorMessage)}
-					errorMessage={errorMessage || undefined}
-				/>
-			</form>
-		</Modal>
+				>
+					<Input
+						placeholder="코드를 입력해주세요."
+						value={code}
+						onChange={(e) => {
+							setCode(e.target.value);
+							setErrorMessage("");
+						}}
+						error={Boolean(errorMessage)}
+						errorMessage={errorMessage || undefined}
+					/>
+				</form>
+			</Modal>
+		</>
 	);
 }

@@ -8,6 +8,7 @@ import { Button } from "@/components/common/Button/Button";
 import { EmptyImageFallback } from "@/components/common/EmptyImageFallback/EmptyImageFallback";
 import { CopyIcon } from "@/components/common/icons/CopyIcon";
 import { Modal } from "@/components/common/Modal/Modal";
+import { LoadingOverlay } from "@/components/common/Spinner/LoadingOverlay";
 import type { MySubscription } from "@/lib/api/plan.types";
 import { ADMIN_LOGIN_HREF, ADMIN_PLAN_HREF } from "@/lib/constants/admin";
 import { toDotDate } from "@/lib/utils/date";
@@ -121,6 +122,7 @@ export const ExhibitionSiteSection = ({
 					{ text: "게시하기", variant: "primary", onClick: handlePublish },
 				]}
 			/>
+			<LoadingOverlay open={isPublishing} />
 		</section>
 	);
 };

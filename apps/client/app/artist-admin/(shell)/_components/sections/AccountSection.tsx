@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { Checkbox } from "@/components/common/Checkbox/Checkbox";
 import { Modal } from "@/components/common/Modal/Modal";
+import { LoadingOverlay } from "@/components/common/Spinner/LoadingOverlay";
 import { TermsDocument } from "@/components/common/TermsDocument/TermsDocument";
 import { Title } from "@/components/common/Title/Title";
 import { updateOptionalTerms } from "@/lib/api/terms";
@@ -128,6 +129,7 @@ export function AccountSection({ agreement: initialAgreement }: AccountSectionPr
 			</button>
 
 			<AccountWithdrawModal open={isWithdrawModalOpen} onOpenChange={setIsWithdrawModalOpen} />
+			<LoadingOverlay open={isSaving} />
 		</section>
 	);
 }

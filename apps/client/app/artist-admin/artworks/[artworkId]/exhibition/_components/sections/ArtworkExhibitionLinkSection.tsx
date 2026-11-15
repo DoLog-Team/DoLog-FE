@@ -6,6 +6,7 @@ import { FormField } from "@/components/common/FormField/FormField";
 import { Modal } from "@/components/common/Modal/Modal";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { Select } from "@/components/common/Select/Select";
+import { LoadingOverlay } from "@/components/common/Spinner/LoadingOverlay";
 import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
 import { cancelArtworkSubmission } from "../../_api/submitArtwork";
 
@@ -106,6 +107,7 @@ export const ArtworkExhibitionLinkSection = ({
 				]}
 			/>
 			<NoticeModal notice={notice} onClose={closeNotice} />
+			<LoadingOverlay open={isCancelling} />
 		</div>
 	);
 };

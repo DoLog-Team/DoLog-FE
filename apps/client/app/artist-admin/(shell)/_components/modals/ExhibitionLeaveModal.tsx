@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Modal } from "@/components/common/Modal/Modal";
+import { LoadingOverlay } from "@/components/common/Spinner/LoadingOverlay";
 import { leaveExhibition, toErrorMessage } from "../../_api/actions";
 import type { MyExhibition } from "../../_types";
 
@@ -41,31 +42,34 @@ export function ExhibitionLeaveModal({ exhibition, onOpenChange }: ExhibitionLea
 	};
 
 	return (
-		<Modal
-			open={exhibition !== null}
-			onOpenChange={handleOpenChange}
-			title={isPending ? "전시 입장 취소" : "전시 나가기"}
-			titleTone="danger"
-			description={
-				exhibition
-					? isPending
-						? `${exhibition.name} 전시 입장을 취소하시겠어요?`
-						: `${exhibition.name}에서 나가시겠어요?\n내 작가 프로필과 작품이 더 이상 표시되지 않아요.`
-					: undefined
-			}
-			showCloseButton
-			actions={[
-				{ text: "취소", variant: "assistive", onClick: () => handleOpenChange(false) },
-				{
-					text: isPending ? "취소하기" : "전시 나가기",
-					variant: "danger",
-					onClick: handleLeave,
-					disabled: isSubmitting,
-				},
-			]}
-		>
-			{/* TODO: 실패 안내 UI 는 피그마에 없음 — 임시로 백엔드 문구 표시 */}
-			{errorMessage && <p className="text-body3 text-error">{errorMessage}</p>}
-		</Modal>
+		<>
+			<LoadingOverlay open={isSubmitting} />
+			<Modal
+				open={exhibition !== null}
+				onOpenChange={handleOpenChange}
+				title={isPending ? "전시 입장 취소" : "전시 나가기"}
+				titleTone="danger"
+				description={
+					exhibition
+						? isPending
+							? `${exhibition.name} 전시 입장을 취소하시겠어요?`
+							: `${exhibition.name}에서 나가시겠어요?\n내 작가 프로필과 작품이 더 이상 표시되지 않아요.`
+						: undefined
+				}
+				showCloseButton
+				actions={[
+					{ text: "취소", variant: "assistive", onClick: () => handleOpenChange(false) },
+					{
+						text: isPending ? "취소하기" : "전시 나가기",
+						variant: "danger",
+						onClick: handleLeave,
+						disabled: isSubmitting,
+					},
+				]}
+			>
+				{/* TODO: 실패 안내 UI 는 피그마에 없음 — 임시로 백엔드 문구 표시 */}
+				{errorMessage && <p className="text-body3 text-error">{errorMessage}</p>}
+			</Modal>
+		</>
 	);
 }
