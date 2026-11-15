@@ -4,13 +4,12 @@ import Link from "next/link";
 import { useState } from "react";
 import { buttonVariants } from "@/components/common/Button/Button";
 import type { MySubscription, Plan } from "@/lib/api/plan.types";
+import { DOLOG_KAKAO_CHANNEL_HREF } from "@/lib/constants/plan";
 import { cn } from "@/lib/utils/cn";
 import { PlanCard } from "./PlanCard";
 import { PlanTierTabs, planTierTabId } from "./PlanTierTabs";
 import { PLAN_CONTAINER_CLASS } from "./planPage.styles";
 
-// 플랜 이용 문의 — 두록 링크트리 (외부 페이지라 새 창)
-const PLAN_INQUIRY_HREF = "https://linktr.ee/dologarchive";
 const PANEL_ID = "plan-tier-panel";
 
 interface PlanPricingProps {
@@ -67,7 +66,7 @@ export const PlanPricing = ({ plans, subscription }: PlanPricingProps) => {
 				</div>
 
 				<Link
-					href={PLAN_INQUIRY_HREF}
+					href={DOLOG_KAKAO_CHANNEL_HREF}
 					target="_blank"
 					rel="noreferrer"
 					className={buttonVariants({ size: "lg", className: "mt-15 w-full max-w-60" })}

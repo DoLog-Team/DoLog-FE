@@ -2,12 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { buttonVariants } from "@/components/common/Button/Button";
 import { ChevronIcon } from "@/components/common/icons/ChevronIcon";
+import { DOLOG_KAKAO_CHANNEL_HREF } from "@/lib/constants/plan";
 import { cn } from "@/lib/utils/cn";
 
 // 두록 자주 묻는 질문 (노션) — 외부 링크는 모두 새 창
 const FAQ_HREF = "https://tangy-parka-0cb.notion.site/3eb89814416f8006bc94c05b8711a79a";
-// 두록 카카오톡 채널
-const KAKAO_CHANNEL_HREF = "https://pf.kakao.com/_pAWJX";
 
 // 피그마 모바일은 오른쪽 화살표 없음
 const HELP_BUTTON_CLASS = "flex-1 gap-1 min-[721px]:max-w-50";
@@ -34,7 +33,7 @@ export const PlanHelp = () => (
 			</Link>
 			{/* 카카오 브랜드 색이라 토큰 대신 고정값 (SocialLoginButton 선례) */}
 			<Link
-				href={KAKAO_CHANNEL_HREF}
+				href={DOLOG_KAKAO_CHANNEL_HREF}
 				target="_blank"
 				rel="noreferrer"
 				className={cn(
