@@ -18,6 +18,8 @@ const MESSAGE = {
 
 type FailureModal = "expired" | "failed" | null;
 
+const MAX_LOGIN_CODE_LENGTH = 500;
+
 export const ExhibitionAdminLoginForm = () => {
 	const router = useRouter();
 
@@ -101,6 +103,8 @@ export const ExhibitionAdminLoginForm = () => {
 				<Input
 					value={code}
 					onChange={(event) => setCode(event.target.value)}
+					maxLength={MAX_LOGIN_CODE_LENGTH}
+					showCount={false}
 					placeholder="로그인 코드를 입력해주세요."
 					disabled={isLocked}
 					error={Boolean(errorMessage)}

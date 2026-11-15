@@ -6,6 +6,7 @@ import type { ArtworkGroup } from "../_types";
 
 export const MAX_GROUP_COUNT = 30;
 const MAX_GROUP_NAME_LENGTH = 30;
+const MAX_GROUP_DESCRIPTION_LENGTH = 1000;
 
 // 저장을 막는 그룹 이름 오류 — 공백 · 중복
 export const getGroupNameErrors = (groups: ArtworkGroup[]) =>
@@ -66,6 +67,8 @@ export const GroupSettings = ({ groups, errors, onChange, onAdd }: GroupSettings
 							<Input
 								id={`${group.id}-description`}
 								value={group.description}
+								maxLength={MAX_GROUP_DESCRIPTION_LENGTH}
+								showCount={false}
 								onChange={(e) => updateGroup(group.id, { description: e.target.value })}
 								placeholder="그룹 설명을 입력해주세요"
 							/>
