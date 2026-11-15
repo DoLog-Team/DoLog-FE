@@ -16,12 +16,15 @@ import { setArtistProfileLike } from "@/lib/api/artists/artist-detail";
 import { hasArtistProfileInfo } from "@/lib/utils/artistProfile";
 import ExhibitionCard from "../../../_components/ExhibitionCard";
 import type { DologArtist } from "../_api/getArtist";
+import { useRecordArtistView } from "./useRecordArtistView";
 
 interface ArtistDetailClientProps {
 	artist: DologArtist;
 }
 
 export function ArtistDetailClient({ artist }: ArtistDetailClientProps) {
+	useRecordArtistView(artist.artistId);
+
 	// 국문 성명이 없으면 영문 성명만, 둘 다 없으면 이름 자리를 비운다
 	const name = artist.nameKo ?? "";
 	const { profileId } = artist;
