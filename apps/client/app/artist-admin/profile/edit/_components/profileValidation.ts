@@ -9,7 +9,8 @@ const NAME_KO_TYPING_PATTERN = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9 ]*$/;
 const NAME_KO_PATTERN = /^[가-힣a-zA-Z0-9 ]*$/;
 const NAME_EN_PATTERN = /^[a-zA-Z ]*$/;
 const EMAIL_LOCAL_PATTERN = /^[^\s@]+$/;
-const EMAIL_DOMAIN_PATTERN = /^[^\s@]+\.[^\s@]+$/;
+// 도메인은 영어와 점만 (기획 110400-0202-04) — 점으로 나뉜 영어 덩어리가 둘 이상이어야 한다
+const EMAIL_DOMAIN_PATTERN = /^[a-zA-Z]+(\.[a-zA-Z]+)+$/;
 const SCHEME_PATTERN = /^https?:\/\//i;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const isEmailFormat = (value: string) => EMAIL_PATTERN.test(value.trim());
@@ -41,10 +42,16 @@ export const isNameKoInvalid = (nameKo: string) => !NAME_KO_PATTERN.test(nameKo)
 export const isNameEnInvalid = (nameEn: string) => !NAME_EN_PATTERN.test(nameEn);
 
 // 앞부분이 비어 있으면 프로필 이메일을 지우므로 형식 오류가 아니다 — 도메인은 선택 후 비울 수 없어 조건에서 뺀다
-export const isEmailInvalid = (local: string, domain: string) => {
-	if (!local) return false;
-	return !EMAIL_LOCAL_PATTERN.test(local) || !EMAIL_DOMAIN_PATTERN.test(domain);
-};
+// 오류 문구를 잘못 적은 칸 밑에 따로 띄우려고 아이디·도메인을 나눠 본다
+export const isEmailLocalInvalid = (local: string) =>
+	Boolean(local) && !EMAIL_LOCAL_PATTERN.test(local);
+export const isEmailDomainInvalid = (local: string, domain: string) =>
+	Boolean(local) && !EMAIL_DOMAIN_PATTERN.test(domain);
+export const isEmailInvalid = (local: string, domain: string) =>
+	isEmailLocalInvalid(local) || isEmailDomainInvalid(local, domain);
+
+// 입력 중에도 바로 보여주는 오류 — 영어·점 외 글자가 섞였는지만 본다 (점 개수 등 형식은 저장할 때)
+export const isEmailDomainTypingInvalid = (domain: string) => /[^a-zA-Z.]/.test(domain);
 
 export const isPurchaseUrlInvalid = (url: string) => Boolean(url.trim()) && isUrlInvalid(url);
 
