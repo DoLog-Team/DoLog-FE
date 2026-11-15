@@ -290,12 +290,30 @@
   direction: ltr;
 }
 
-/* 이미지/링크 등 첨부 팝업이 기본 400px 고정 폭이라 모바일 화면보다 넓어서 밖으로 잘려 보이는 문제 수정 */
 @media (width < 721px) {
   .artwork-detail-editor .toastui-editor-popup {
+    position: fixed !important;
+    left: 16px !important;
+    right: 16px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: auto !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+  }
+
+  .artwork-detail-editor .toastui-editor-dropdown-toolbar {
+    position: fixed !important;
     left: 16px !important;
     right: 16px !important;
     width: auto !important;
+    max-width: none !important;
+  }
+}
+
+@media (width < 721px) {
+  .artwork-detail-editor .toastui-editor-contents {
+    font-size: 16px;
   }
 }
 
