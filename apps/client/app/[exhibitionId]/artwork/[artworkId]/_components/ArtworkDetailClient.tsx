@@ -41,8 +41,8 @@ export function ArtworkDetailClient({
 
 	const authors = getVisibleAuthors(data.participants);
 	const hasArtist = authors.length > 0;
-	// 구매 버튼 표시 체크 여부와 무관하게 purchaseUrl만 보고 버튼을 띄우던 버그 수정 — 두록 단독 작품 상세와 동일하게 처리
-	const purchaseUrl = data.showPurchaseButton ? (data.purchaseChatUrl ?? data.purchaseUrl) : null;
+	// 구매 주소는 BE가 대표 작가 프로필의 소통 주소를 purchaseChatUrl 로 내려준다 — 작품의 예전 purchaseUrl 은 쓰지 않는다
+	const purchaseUrl = data.showPurchaseButton ? (data.purchaseChatUrl ?? null) : null;
 
 	const TABS = useMemo(() => {
 		const base = [{ id: "detail", label: "작품 소개" }];

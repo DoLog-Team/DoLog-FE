@@ -57,8 +57,8 @@ export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProp
 
 	const [isMainImageViewerOpen, setIsMainImageViewerOpen] = useState(false);
 
-	// TODO: purchaseUrl / purchaseChatUrl 중 어느 쪽으로 보낼지 BE 확인 — 우선 채팅 링크 우선
-	const purchaseUrl = data.showPurchaseButton ? (data.purchaseChatUrl ?? data.purchaseUrl) : null;
+	// 구매 주소는 BE가 대표 작가 프로필의 소통 주소를 purchaseChatUrl 로 내려준다 — 작품의 예전 purchaseUrl 은 쓰지 않는다
+	const purchaseUrl = data.showPurchaseButton ? (data.purchaseChatUrl ?? null) : null;
 
 	const [firstOther, secondOther] = data.sameZoneArtworks.filter((a) => a.type === "artist");
 
