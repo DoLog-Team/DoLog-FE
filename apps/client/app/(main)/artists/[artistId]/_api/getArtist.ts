@@ -55,3 +55,26 @@ export async function getDologArtist(
 		return null;
 	}
 }
+
+/************************
+ * 두록 작가 조회수 기록 (비로그인 가능)
+ * POST artists/{artistId}/views
+ * 같은 방문자는 두록 상세에서 작가마다 한 번만 센다 (전시 작가 상세는 GET 할 때 BE 가 셈)
+ ************************/
+
+export interface ArtistViewResponse {
+	artistId: string;
+	viewCount: number;
+	counted: boolean;
+	visitorId: string;
+}
+
+export async function recordArtistView(
+	artistId: string,
+	visitorId: string | null,
+): Promise<ArtistViewResponse> {
+	return apiClient<ArtistViewResponse>(`/artists/${artistId}/views`, {
+		method: "POST",
+		headers: visitorHeaders(visitorId),
+	});
+}
