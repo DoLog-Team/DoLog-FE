@@ -22,5 +22,11 @@ export default function EditArtworkDetailPage() {
 	if (isLoading) return <LoadingScreen />;
 	if (!artwork) return <div className="p-8 text-body1 text-lighter">작품을 찾을 수 없어요.</div>;
 
-	return <ArtworkDetailForm artwork={artwork} onBack={() => router.back()} />;
+	// 기본 정보 탭과는 replace 로 오간다 — 기록에 탭이 쌓이지 않아야 기본 정보의 뒤로가기가 들어온 곳(마이페이지 등)으로 간다
+	return (
+		<ArtworkDetailForm
+			artwork={artwork}
+			onBack={() => router.replace(`/artist-admin/artworks/${artworkId}/edit`)}
+		/>
+	);
 }
