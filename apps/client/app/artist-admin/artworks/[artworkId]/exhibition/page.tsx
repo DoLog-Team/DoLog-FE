@@ -38,7 +38,7 @@ export default function ArtworkExhibitionPage() {
 			onBack={() => router.back()}
 			onSubmitted={reload}
 			onCancelled={() => {
-				router.push("/artist-admin");
+				router.replace("/artist-admin");
 				router.refresh();
 			}}
 		/>

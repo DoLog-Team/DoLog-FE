@@ -119,7 +119,8 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 	const handleConfirmSave = async () => {
 		if (await handleTempSave()) {
 			setIsSaveConfirmOpen(false);
-			router.push(isSatisfied ? `/artworks/${artwork.artworkId}` : "/artist-admin");
+			// replace — 저장한 폼이 기록에 남으면 다음 화면에서 뒤로가기로 폼에 다시 들어온다
+			router.replace(isSatisfied ? `/artworks/${artwork.artworkId}` : "/artist-admin");
 		}
 	};
 
