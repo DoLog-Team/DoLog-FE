@@ -32,7 +32,6 @@ const Editor = dynamic<EditorProps>(
 );
 
 const MAX_IMAGE_COUNT = 5;
-const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 // 마크다운 안의 이미지 태그에서 URL만 뽑아낸다: ![alt](url)
 const MARKDOWN_IMAGE_URL_REGEX = /!\[[^\]]*\]\(([^)]+)\)/g;
 
@@ -165,11 +164,6 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 
 		if (imageCount >= MAX_IMAGE_COUNT) {
 			showNotice("이미지 개수 제한", `이미지는 최대 ${MAX_IMAGE_COUNT}장까지 첨부할 수 있어요.`);
-			return;
-		}
-
-		if (blob.size > MAX_IMAGE_SIZE_BYTES) {
-			showNotice("용량 제한", "이미지는 5MB 이하로 업로드할 수 있어요.");
 			return;
 		}
 

@@ -7,6 +7,8 @@ import { convertHeicToJpeg, HEIC_ACCEPT } from "@/lib/utils/heic";
 import { Button } from "../Button/Button";
 import { imageInputBoxVariants } from "./ImageInput.styles";
 
+const DEFAULT_MAX_SIZE_BYTES = 5 * 1024 * 1024;
+
 export interface ImageInputProps {
 	images: string[];
 	maxCount?: number;
@@ -19,6 +21,8 @@ export interface ImageInputProps {
 	className?: string;
 	id?: string;
 	name?: string;
+	maxSizeBytes?: number;
+	onError?: (message: string) => void;
 }
 
 export const ImageInput = ({
@@ -32,6 +36,8 @@ export const ImageInput = ({
 	className,
 	id,
 	name,
+	maxSizeBytes = DEFAULT_MAX_SIZE_BYTES,
+	onError,
 }: ImageInputProps) => {
 	const generatedId = useId();
 	const inputId = id ?? generatedId;
@@ -45,6 +51,14 @@ export const ImageInput = ({
 		if (!fileList || fileList.length === 0) return;
 		const files = Array.from(fileList).slice(0, isSingle ? 1 : remaining);
 		if (inputRef.current) inputRef.current.value = "";
+
+		if (files.some((file) => file.size > maxSizeBytes)) {
+			onError?.(
+				`이미지는 ${Math.round(maxSizeBytes / (1024 * 1024))}MB 이하로 업로드할 수 있어요.`,
+			);
+			return;
+		}
+
 		// HEIC(아이폰 사진)는 JPEG 로 바꿔서 넘긴다 — 변환에 실패하면 원본을 넘겨 각 화면의 형식 오류 안내를 따른다
 		const converted = await Promise.all(
 			files.map((file) => convertHeicToJpeg(file).catch(() => file)),

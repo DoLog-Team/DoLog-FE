@@ -322,6 +322,7 @@ export const ArtworkExhibitionForm = ({
 											setMainImageFile(null);
 											setMainImagePreview(null);
 										}}
+										onError={(message) => showNotice("용량 제한", message)}
 									/>
 								</FormField>
 							</div>
@@ -366,6 +367,7 @@ export const ArtworkExhibitionForm = ({
 									setLocationMapFile(null);
 									setLocationMapPreview(null);
 								}}
+								onError={(message) => showNotice("용량 제한", message)}
 							/>
 						</FormField>
 					</div>

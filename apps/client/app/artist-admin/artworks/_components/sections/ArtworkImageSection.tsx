@@ -71,6 +71,7 @@ export const ArtworkImageSection = ({
 									),
 								);
 						}}
+						onError={(message) => showNotice("용량 제한", message)}
 						onRemove={() => {
 							onMainImageFileChange(null);
 							onChange({ mainImagePreview: null });
