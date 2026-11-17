@@ -196,14 +196,11 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 		e.target.value = "";
 		if (!file) return;
 		insertImageBlob(file, (imageUrl, altText) => {
-			// Toast UI 타입에 exec가 빠져 있어 캐스팅 — 팝업을 안 쓰고 직접 커서에 이미지를 삽입
 			// biome-ignore lint/suspicious/noExplicitAny: Toast UI Editor 인스턴스의 exec는 타입 선언에 없음
 			(editorRef.current?.getInstance() as any)?.exec("addImage", { imageUrl, altText });
 		});
 	};
 
-	// Toast UI는 toolbarItems를 생성 시점에만 읽고 이후 폭이 바뀌어도 반영하지 않아서,
-	// 모바일/데스크탑 경계를 넘나들 때는 매번 에디터를 다시 만들어야 한다 (key로 강제 리마운트)
 	const [isMobile, setIsMobile] = useState(
 		() => typeof window !== "undefined" && window.innerWidth < 721,
 	);
@@ -245,8 +242,6 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 			<div className="artwork-detail-editor flex flex-col gap-4 py-7">
 				<div className="flex items-center justify-between">
 					<h2 className="text-head3 text-strong">상세 정보</h2>
-					{/* Toast UI 자체 toolbarItems로 넣으면 모바일 반응형(더보기) 로직이 이 버튼을 통째로 삼켜버려서,
-					    에디터 툴바 밖(제목 줄)에 같은 아이콘으로 따로 그린다 */}
 					<button
 						type="button"
 						aria-label="이미지 추가"
