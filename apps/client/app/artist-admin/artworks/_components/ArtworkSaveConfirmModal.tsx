@@ -26,7 +26,7 @@ export const ArtworkSaveConfirmModal = ({
 		description={
 			isSatisfied
 				? "작성한 내용이 작품에 반영되며, 공개 상태에 따라 다른 사용자에게도 표시돼요."
-				: "아직 필수 정보가 모두 입력되지 않았어요. 작성한 내용은 임시 저장되며, 공개되지 않아요"
+				: "아직 필수 정보가 모두 입력되지 않았어요.\n작성한 내용은 임시 저장되며, 공개되지 않아요"
 		}
 		actions={[
 			{

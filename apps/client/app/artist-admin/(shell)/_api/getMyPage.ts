@@ -129,6 +129,7 @@ export async function getMyArtworks(): Promise<MyArtwork[]> {
 
 interface MyExhibitionResponse {
 	exhibitionId: string;
+	slug?: string | null;
 	exhibitionName: string;
 	exhibitionImg: string | null;
 	startDate: string | null;
@@ -146,6 +147,7 @@ export async function getMyExhibitions(): Promise<MyExhibition[]> {
 	});
 	return data.exhibitions.map((exhibition) => ({
 		exhibitionId: exhibition.exhibitionId,
+		slug: exhibition.slug ?? null,
 		name: exhibition.exhibitionName,
 		image: exhibition.exhibitionImg,
 		startDate: toDotDate(exhibition.startDate),

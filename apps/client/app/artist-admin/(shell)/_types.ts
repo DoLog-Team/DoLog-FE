@@ -38,6 +38,7 @@ export interface MyArtwork {
 
 export interface MyExhibition {
 	exhibitionId: string;
+	slug: string | null;
 	name: string;
 	image: string | null;
 	startDate: string | null;

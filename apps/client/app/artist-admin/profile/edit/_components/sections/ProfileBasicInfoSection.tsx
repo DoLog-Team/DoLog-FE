@@ -4,7 +4,9 @@ import { useState } from "react";
 import { FormField } from "@/components/common/FormField/FormField";
 import { ImageInput } from "@/components/common/ImageInput/ImageInput";
 import { Input } from "@/components/common/Input/Input";
+import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { Textarea } from "@/components/common/Textarea/Textarea";
+import { useNoticeModal } from "@/lib/hooks/useNoticeModal";
 import type { ArtistProfileForm } from "../../_types";
 import { ProfileImageCropModal } from "../ProfileImageCropModal";
 import {
@@ -30,6 +32,7 @@ export const ProfileBasicInfoSection = ({
 		? isNameKoInvalid(value.nameKo)
 		: isNameKoTypingInvalid(value.nameKo);
 	const nameEnError = isNameEnInvalid(value.nameEn);
+	const { notice, showNotice, closeNotice } = useNoticeModal();
 
 	// 고른 파일은 크롭을 마쳐야 폼에 반영한다 — 크롭 화면을 닫으면 기존 이미지를 유지한다
 	const [cropTarget, setCropTarget] = useState<{ file: File; src: string } | null>(null);
@@ -89,6 +92,7 @@ export const ProfileBasicInfoSection = ({
 						onAdd={([file]) => {
 							if (file) setCropTarget({ file, src: URL.createObjectURL(file) });
 						}}
+						onError={(message) => showNotice("용량 제한", message)}
 						onRemove={() => onChange({ profileImage: null, profileImageFile: null })}
 					/>
 					{cropTarget && (
@@ -105,6 +109,7 @@ export const ProfileBasicInfoSection = ({
 					)}
 				</FormField>
 			</div>
+			<NoticeModal notice={notice} onClose={closeNotice} />
 		</div>
 	);
 };

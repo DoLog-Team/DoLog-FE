@@ -4,7 +4,7 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import type { EditorProps, Editor as ToastEditor } from "@toast-ui/react-editor";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { DesktopContainer } from "@/components/common/DesktopContainer/DesktopContainer";
 import { NoticeModal } from "@/components/common/Modal/NoticeModal";
 import { UnsavedChangesModal } from "@/components/common/Modal/UnsavedChangesModal";
@@ -62,6 +62,7 @@ export interface ArtworkDetailFormProps {
 export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) => {
 	const router = useRouter();
 	const editorRef = useRef<ToastEditor>(null);
+	const cameraInputRef = useRef<HTMLInputElement>(null);
 	// 붙여넣었지만 아직 저장 안 한 이미지: 미리보기용 data URL -> 원본 Blob (임시저장 시점에만 실제 업로드)
 	const pendingUploadsRef = useRef<Map<string, Blob>>(new Map());
 	const { notice, showNotice, closeNotice } = useNoticeModal();
@@ -156,6 +157,72 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 		onBack,
 	);
 
+	// 저장 전까지는 네트워크를 안 타고 data URL로만 미리보기 — 실제 업로드는 "임시저장" 시점에
+	const insertImageBlob = (blob: Blob | File, callback: (url: string, text?: string) => void) => {
+		const currentMarkdown = editorRef.current?.getInstance().getMarkdown() ?? "";
+		const imageCount = extractImageUrls(currentMarkdown).length;
+
+		if (imageCount >= MAX_IMAGE_COUNT) {
+			showNotice("이미지 개수 제한", `이미지는 최대 ${MAX_IMAGE_COUNT}장까지 첨부할 수 있어요.`);
+			return;
+		}
+
+		const file = blob instanceof File ? blob : new File([blob], "image", { type: blob.type });
+
+		compressImageFile(file, {
+			maxDimension: CONTENT_IMAGE_MAX_DIMENSION,
+			quality: CONTENT_IMAGE_QUALITY,
+		})
+			.then(async (uploadFile) => {
+				const previewFile = await compressImageFile(file, {
+					maxDimension: PREVIEW_MAX_DIMENSION,
+					quality: PREVIEW_QUALITY,
+					outputType: "image/jpeg",
+				});
+				const dataUrl = await fileToDataUrl(previewFile);
+				pendingUploadsRef.current.set(dataUrl, uploadFile);
+				callback(dataUrl, "이미지");
+			})
+			.catch(() => {
+				showNotice(
+					"이미지 업로드 실패",
+					"jpg, png, webp 형식의 이미지만 업로드할 수 있어요.\n다른 파일로 다시 시도해주세요.",
+				);
+			});
+	};
+
+	const handleCameraFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		e.target.value = "";
+		if (!file) return;
+		insertImageBlob(file, (imageUrl, altText) => {
+			// biome-ignore lint/suspicious/noExplicitAny: Toast UI Editor 인스턴스의 exec는 타입 선언에 없음
+			(editorRef.current?.getInstance() as any)?.exec("addImage", { imageUrl, altText });
+		});
+	};
+
+	const [isMobile, setIsMobile] = useState(
+		() => typeof window !== "undefined" && window.innerWidth < 721,
+	);
+	useEffect(() => {
+		const mql = window.matchMedia("(max-width: 720px)");
+		const update = () => setIsMobile(mql.matches);
+		update();
+		mql.addEventListener("change", update);
+		return () => mql.removeEventListener("change", update);
+	}, []);
+
+	const mobileToolbarItems = useMemo(() => {
+		if (!isMobile) return undefined;
+
+		return [
+			["heading", "bold", "italic", "strike"],
+			["hr", "quote"],
+			["ul", "ol", "task", "indent", "outdent"],
+			["code", "codeblock"],
+		];
+	}, [isMobile]);
+
 	return (
 		<DesktopContainer>
 			<ArtworkFormHeader
@@ -173,8 +240,24 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 			/>
 
 			<div className="artwork-detail-editor flex flex-col gap-4 py-7">
-				<h2 className="text-head3 text-strong">상세 정보</h2>
+				<div className="flex items-center justify-between">
+					<h2 className="text-head3 text-strong">상세 정보</h2>
+					<button
+						type="button"
+						aria-label="이미지 추가"
+						onClick={() => cameraInputRef.current?.click()}
+						className="toastui-editor-toolbar-icons image box-border h-8 w-8 cursor-pointer rounded border border-transparent min-[721px]:hidden"
+					/>
+				</div>
+				<input
+					ref={cameraInputRef}
+					type="file"
+					accept="image/*"
+					className="hidden"
+					onChange={handleCameraFileChange}
+				/>
 				<Editor
+					key={isMobile ? "mobile" : "desktop"}
 					ref={editorRef}
 					previewStyle="tab"
 					height="600px"
@@ -183,48 +266,10 @@ export const ArtworkDetailForm = ({ artwork, onBack }: ArtworkDetailFormProps) =
 					useCommandShortcut
 					placeholder="작품에 대한 상세한 설명을 작성해주세요."
 					plugins={[imageResizePlugin]}
+					{...(mobileToolbarItems ? { toolbarItems: mobileToolbarItems } : {})}
 					onChange={() => setIsDirty(true)}
 					hooks={{
-						// 저장 전까지는 네트워크를 안 타고 data URL로만 미리보기 — 실제 업로드는 "임시저장" 시점에
-						addImageBlobHook: (
-							blob: Blob | File,
-							callback: (url: string, text?: string) => void,
-						) => {
-							const currentMarkdown = editorRef.current?.getInstance().getMarkdown() ?? "";
-							const imageCount = extractImageUrls(currentMarkdown).length;
-
-							if (imageCount >= MAX_IMAGE_COUNT) {
-								showNotice(
-									"이미지 개수 제한",
-									`이미지는 최대 ${MAX_IMAGE_COUNT}장까지 첨부할 수 있어요.`,
-								);
-								return;
-							}
-
-							const file =
-								blob instanceof File ? blob : new File([blob], "image", { type: blob.type });
-
-							compressImageFile(file, {
-								maxDimension: CONTENT_IMAGE_MAX_DIMENSION,
-								quality: CONTENT_IMAGE_QUALITY,
-							})
-								.then(async (uploadFile) => {
-									const previewFile = await compressImageFile(file, {
-										maxDimension: PREVIEW_MAX_DIMENSION,
-										quality: PREVIEW_QUALITY,
-										outputType: "image/jpeg",
-									});
-									const dataUrl = await fileToDataUrl(previewFile);
-									pendingUploadsRef.current.set(dataUrl, uploadFile);
-									callback(dataUrl, "이미지");
-								})
-								.catch(() => {
-									showNotice(
-										"이미지 업로드 실패",
-										"jpg, png, webp 형식의 이미지만 업로드할 수 있어요.\n다른 파일로 다시 시도해주세요.",
-									);
-								});
-						},
+						addImageBlobHook: insertImageBlob,
 					}}
 				/>
 			</div>

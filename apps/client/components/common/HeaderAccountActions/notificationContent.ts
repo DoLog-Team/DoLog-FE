@@ -50,7 +50,7 @@ const TEMPLATES: Partial<
 		description: `전시 관리자의 조치로 ${p.requiredFieldNames} 항목이 필수값으로 추가되었어요. 현재 필수값을 모두 입력하지 않아 ${p.artworkTitle} 작품이 자동 임시저장(비공개) 처리되었어요. ${p.artworkTitle} 작품의 출품 정보 관리 페이지로 이동하여 ${p.requiredFieldNames}을 입력해 주세요.`,
 		href: p.artworkId ? ARTWORK_EXHIBITION_HREF(p.artworkId) : undefined,
 	}),
-	// 백엔드가 어떤 항목이 완화됐는지는 안 줘서(null) 항목명 없이 작성함
+
 	ARTWORK_REPUBLISHED: (p) => ({
 		title: "작품 자동 공개 처리",
 		description: `전시 관리자의 조치로 필수 조건이 완화되어 ${p.artworkTitle} 작품이 자동 공개 처리되었어요.`,
@@ -60,7 +60,6 @@ const TEMPLATES: Partial<
 		title: "작품 항목 숨김",
 		description: `전시 관리자의 조치로 ${p.exhibitionName} 전시의 작품 항목 '${p.hiddenFieldNames}'이 숨김 처리되었어요. 전시 내에서 해당 항목이 노출되지 않아요.`,
 	}),
-	// 피그마 원문 확정 전 임시 문구 — 확인되면 교체
 	ARTIST_JOIN_REQUESTED: (p) => ({
 		title: "작가 참여 신청",
 		description: `${p.artistName} 작가가 ${p.exhibitionName} 전시 참여를 신청했어요.`,
@@ -68,6 +67,10 @@ const TEMPLATES: Partial<
 	ARTIST_WITHDRAWN: (p) => ({
 		title: "소속 작가 전시 참여 종료",
 		description: `${p.artistName} 작가가 전시에서 나갔어요. 더 이상 해당 작가의 프로필, 작품이 전시에서 보이지 않아요.`,
+	}),
+	ARTIST_JOIN_CANCELLED: (p) => ({
+		title: "작가 참여 신청 취소",
+		description: `${p.artistName} 작가가 ${p.exhibitionName} 참여를 취소했어요.`,
 	}),
 	ARTWORK_CANCELLED: (p) => ({
 		title: "소속 작가 작품 출품 취소",
