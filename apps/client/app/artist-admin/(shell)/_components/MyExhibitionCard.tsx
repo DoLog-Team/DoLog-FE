@@ -35,7 +35,7 @@ export function MyExhibitionCard({ exhibition, onLeave }: MyExhibitionCardProps)
 					<h3 className="truncate text-head3 text-strong">
 						{/* 카드 전체를 두록 전시 상세 링크로 덮는다 — 더보기 메뉴는 DOM 순서상 위에 그려져 따로 눌린다 */}
 						<Link
-							href={`/${exhibition.exhibitionId}`}
+							href={`/${exhibition.slug || exhibition.exhibitionId}`}
 							className="after:absolute after:inset-0 after:content-['']"
 						>
 							{exhibition.name}
