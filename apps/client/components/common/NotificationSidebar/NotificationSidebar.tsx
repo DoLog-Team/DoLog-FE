@@ -7,6 +7,7 @@ import { Fragment } from "react";
 import { toNotificationContent } from "@/components/common/HeaderAccountActions/notificationContent";
 import type { NotificationResponse } from "@/components/common/HeaderAccountActions/notificationsApi";
 import { cn } from "@/lib/utils/cn";
+import { Divider } from "../Divider/Divider";
 
 interface NotificationSidebarProps {
 	open: boolean;
@@ -38,7 +39,12 @@ export const NotificationSidebar = ({
 				aria-describedby={undefined}
 				className="fixed inset-0 z-modal flex flex-col bg-normal outline-none min-[721px]:inset-y-7 min-[721px]:right-8 min-[721px]:left-auto min-[721px]:w-[38%] min-[721px]:min-w-100 min-[721px]:rounded-3xl min-[721px]:bg-elevate"
 			>
-				<div className="flex h-11 shrink-0 items-center gap-2 border-b border-stroke-lightest px-4 min-[721px]:hidden">
+				<div
+					className={cn(
+						"flex h-11 shrink-0 items-center gap-2 px-4 min-[721px]:hidden",
+						notifications.length > 0 && "border-b border-stroke-lightest",
+					)}
+				>
 					<Dialog.Close aria-label="뒤로가기" className="cursor-pointer">
 						<Image src="/icons/backBtn.svg" alt="" width={24} height={24} />
 					</Dialog.Close>
@@ -53,6 +59,15 @@ export const NotificationSidebar = ({
 				</div>
 
 				<ul className="flex-1 overflow-y-auto px-4 min-[721px]:px-8">
+					{notifications.length === 0 && (
+						<>
+							<Divider thickness="thin" spacing="md" fullBleed={false} />
+							<li className="flex items-center justify-center py-15 text-body1 text-lightest">
+								등록된 알림이 없어요.
+							</li>
+							<Divider thickness="thin" spacing="md" fullBleed={false} />
+						</>
+					)}
 					{notifications.map((notification, index) => {
 						const content = toNotificationContent(notification);
 						const rowClassName = "flex w-full py-4 pl-4 text-left";

@@ -6,3 +6,5 @@ export const TARGET_SIZE_LABEL: Record<TargetSize, string> = {
 	MEDIUM: "중형학과",
 	LARGE: "대형학과",
 };
+
+export const DOLOG_KAKAO_CHANNEL_HREF = "https://pf.kakao.com/_pAWJX";
