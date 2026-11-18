@@ -360,8 +360,17 @@ export const ArtworkExhibitionForm = ({
 								onAdd={(files) => {
 									const file = files[0];
 									if (!file) return;
-									setLocationMapFile(file);
-									setLocationMapPreview(URL.createObjectURL(file));
+									compressImageFile(file)
+										.then((compressed) => {
+											setLocationMapFile(compressed);
+											setLocationMapPreview(URL.createObjectURL(compressed));
+										})
+										.catch(() =>
+											showNotice(
+												"이미지를 불러오지 못했어요",
+												"jpg, png, webp 형식의 이미지만 업로드할 수 있어요.\n다른 파일로 다시 시도해주세요.",
+											),
+										);
 								}}
 								onRemove={() => {
 									setLocationMapFile(null);
