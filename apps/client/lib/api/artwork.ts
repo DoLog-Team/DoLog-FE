@@ -11,7 +11,7 @@ export type * from "./artwork.types";
 
 export async function getArtworks(): Promise<ArtworkItem[]> {
 	try {
-		return await apiClient<ArtworkItem[]>("/artworks");
+		return await apiClient<ArtworkItem[]>("/artworks", { cache: "no-store" });
 	} catch {
 		return [];
 	}
@@ -19,7 +19,9 @@ export async function getArtworks(): Promise<ArtworkItem[]> {
 
 export async function getMainArtworks(): Promise<ArtworkItem[]> {
 	try {
-		const data = await apiClient<ArtworkItem[] | null>("/artworks?main=true");
+		const data = await apiClient<ArtworkItem[] | null>("/artworks?main=true", {
+			cache: "no-store",
+		});
 		return Array.isArray(data) ? data : [];
 	} catch {
 		return [];
