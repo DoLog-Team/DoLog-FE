@@ -32,62 +32,68 @@ export const GroupSettings = ({ groups, errors, onChange, onAdd }: GroupSettings
 		onChange(groups.map((group) => (group.id === id ? { ...group, ...patch } : group)));
 
 	return (
-		<div className="flex flex-col items-start gap-7">
-			{groups.map((group, index) => (
-				<div key={group.id} className="flex w-full gap-2">
-					<button
-						type="button"
-						onClick={() => onChange(groups.filter(({ id }) => id !== group.id))}
-						disabled={groups.length <= 1}
-						aria-label={`${group.name || "그룹"} 삭제`}
-						className="flex w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-fg-lighter disabled:cursor-not-allowed disabled:opacity-40"
-					>
-						<Image src="/icons/close.svg" alt="" width={20} height={20} />
-					</button>
-					<div className="flex min-w-0 flex-1 flex-col gap-2 min-[721px]:flex-row">
-						<div className="flex min-w-0 flex-col gap-1 min-[721px]:flex-1">
-							<label htmlFor={`${group.id}-name`} className="px-0.5 text-body3 text-light">
-								그룹 이름
-							</label>
-							<Input
-								id={`${group.id}-name`}
-								value={group.name}
-								onChange={(e) => updateGroup(group.id, { name: e.target.value })}
-								maxLength={MAX_GROUP_NAME_LENGTH}
-								showCount={false}
-								placeholder="그룹 이름을 입력해주세요"
-								error={Boolean(errors?.[index])}
-								errorMessage={errors?.[index]}
-							/>
-						</div>
-						<div className="flex min-w-0 flex-col gap-1 min-[721px]:flex-1">
-							<label htmlFor={`${group.id}-description`} className="px-0.5 text-body3 text-light">
-								그룹 설명
-							</label>
-							<Input
-								id={`${group.id}-description`}
-								value={group.description}
-								maxLength={MAX_GROUP_DESCRIPTION_LENGTH}
-								showCount={false}
-								onChange={(e) => updateGroup(group.id, { description: e.target.value })}
-								placeholder="그룹 설명을 입력해주세요"
-							/>
+		<div className="flex flex-col gap-2">
+			{groups.length === 1 && (
+				<p className="px-0.5 text-body2 text-error">
+					그룹 개수가 1개예요. 그룹을 1개 더 추가해 주세요.
+				</p>
+			)}
+			<div className="flex flex-col items-start gap-7">
+				{groups.map((group, index) => (
+					<div key={group.id} className="flex w-full gap-2">
+						<button
+							type="button"
+							onClick={() => onChange(groups.filter(({ id }) => id !== group.id))}
+							aria-label={`${group.name || "그룹"} 삭제`}
+							className="flex w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-fg-lighter"
+						>
+							<Image src="/icons/close.svg" alt="" width={20} height={20} />
+						</button>
+						<div className="flex min-w-0 flex-1 flex-col gap-2 min-[721px]:flex-row">
+							<div className="flex min-w-0 flex-col gap-1 min-[721px]:flex-1">
+								<label htmlFor={`${group.id}-name`} className="px-0.5 text-body3 text-light">
+									그룹 이름
+								</label>
+								<Input
+									id={`${group.id}-name`}
+									value={group.name}
+									onChange={(e) => updateGroup(group.id, { name: e.target.value })}
+									maxLength={MAX_GROUP_NAME_LENGTH}
+									showCount={false}
+									placeholder="그룹 이름을 입력해주세요"
+									error={Boolean(errors?.[index])}
+									errorMessage={errors?.[index]}
+								/>
+							</div>
+							<div className="flex min-w-0 flex-col gap-1 min-[721px]:flex-1">
+								<label htmlFor={`${group.id}-description`} className="px-0.5 text-body3 text-light">
+									그룹 설명
+								</label>
+								<Input
+									id={`${group.id}-description`}
+									value={group.description}
+									maxLength={MAX_GROUP_DESCRIPTION_LENGTH}
+									showCount={false}
+									onChange={(e) => updateGroup(group.id, { description: e.target.value })}
+									placeholder="그룹 설명을 입력해주세요"
+								/>
+							</div>
 						</div>
 					</div>
-				</div>
-			))}
+				))}
 
-			<Button
-				type="button"
-				variant="assistive"
-				size="sm"
-				onClick={onAdd}
-				disabled={groups.length >= MAX_GROUP_COUNT}
-				className="gap-1"
-			>
-				<PlusIcon className="text-icon-light" />
-				그룹 추가
-			</Button>
+				<Button
+					type="button"
+					variant="assistive"
+					size="sm"
+					onClick={onAdd}
+					disabled={groups.length >= MAX_GROUP_COUNT}
+					className="gap-1"
+				>
+					<PlusIcon className="text-icon-light" />
+					그룹 추가
+				</Button>
+			</div>
 		</div>
 	);
 };
