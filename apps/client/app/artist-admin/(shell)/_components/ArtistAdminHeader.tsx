@@ -12,7 +12,7 @@ export function ArtistAdminHeader() {
 			<div className="mx-auto flex h-11 w-full max-w-285 items-center justify-between px-4 min-[721px]:h-17 min-[721px]:px-8">
 				<button
 					type="button"
-					onClick={() => router.back()}
+					onClick={() => router.push("/")}
 					className="flex cursor-pointer items-center"
 					aria-label="뒤로가기"
 				>
