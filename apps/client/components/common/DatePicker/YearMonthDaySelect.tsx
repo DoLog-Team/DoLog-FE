@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { type ReactNode, useRef, useState } from "react";
+import { Fragment, type ReactNode, useRef, useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { useDismiss } from "@/lib/hooks/useDismiss";
 import { cn } from "@/lib/utils/cn";
@@ -21,6 +21,7 @@ export interface YearMonthDaySelectProps {
 	value: YearMonthDayValue;
 	onChange: (value: YearMonthDayValue) => void;
 	yearLabel: string;
+	yearRequired?: boolean;
 	disabled?: boolean;
 	error?: boolean;
 }
@@ -36,7 +37,7 @@ const FieldPopover = ({
 	popoverClassName,
 	children,
 }: {
-	label: string;
+	label: ReactNode;
 	displayText: string;
 	placeholder: string;
 	disabled?: boolean;
@@ -121,6 +122,7 @@ export const YearMonthDaySelect = ({
 	value,
 	onChange,
 	yearLabel,
+	yearRequired,
 	disabled,
 	error,
 }: YearMonthDaySelectProps) => {
@@ -165,7 +167,15 @@ export const YearMonthDaySelect = ({
 	return (
 		<div className="flex gap-2">
 			<FieldPopover
-				label={yearLabel}
+				label={
+					yearRequired ? (
+						<Fragment>
+							{yearLabel} <span className="text-error">*</span>
+						</Fragment>
+					) : (
+						yearLabel
+					)
+				}
 				displayText={year ? String(year) : ""}
 				placeholder="2000"
 				disabled={disabled}
