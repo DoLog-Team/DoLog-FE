@@ -51,6 +51,7 @@ export const ArtworkBasicInfoSection = ({
 	const isPeriodComplete = isStartDateComplete && isEndDateComplete;
 	const isStartDatePartial = hasStartDatePartialError(value);
 	const isStartAfterEnd = hasStartAfterEndError(value);
+	const isEndDateMissing = !value.endYear;
 
 	useEffect(() => {
 		const missing = (value.category ? 0 : 1) + (isPeriodComplete ? 0 : 1);
@@ -82,7 +83,7 @@ export const ArtworkBasicInfoSection = ({
 					/>
 				</FormField>
 
-				<FormField label="제작 기간" required className="mt-5">
+				<FormField label="제작 기간" className="mt-5">
 					<Checkbox
 						checked={value.hasStartDate}
 						onChange={(hasStartDate) => onChange({ hasStartDate })}
@@ -112,16 +113,21 @@ export const ArtworkBasicInfoSection = ({
 						<div className="flex flex-col gap-1">
 							<YearMonthDaySelect
 								yearLabel="종료 년도"
+								yearRequired
 								value={{ year: value.endYear, month: value.endMonth, day: value.endDay }}
 								onChange={(next) =>
 									onChange({ endYear: next.year, endMonth: next.month, endDay: next.day })
 								}
-								error={isStartAfterEnd}
+								error={isStartAfterEnd || isEndDateMissing}
 							/>
-							{isStartAfterEnd && (
+							{isStartAfterEnd ? (
 								<span className="pl-0.5 text-body3 text-error">
 									시작 날짜는 종료 날짜보다 늦을 수 없어요.
 								</span>
+							) : (
+								isEndDateMissing && (
+									<span className="pl-0.5 text-body3 text-error">종료 날짜를 입력해주세요.</span>
+								)
 							)}
 						</div>
 					</div>

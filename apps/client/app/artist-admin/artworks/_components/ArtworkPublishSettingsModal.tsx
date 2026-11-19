@@ -32,8 +32,8 @@ export const ArtworkPublishSettingsModal = ({
 	<Modal
 		open={open}
 		onOpenChange={onOpenChange}
-		title="전시 공개 설정"
-		description={"이제 전시에 올릴 수 있어요.\n공개 설정을 변경할까요?"}
+		title="작품 공개 설정"
+		description={"작성률이 100%가 되었어요.\n공개 설정을 변경할까요?"}
 		showCloseButton
 		actions={[
 			{

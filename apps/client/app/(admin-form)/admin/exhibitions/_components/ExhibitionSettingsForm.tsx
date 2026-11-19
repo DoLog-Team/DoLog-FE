@@ -114,11 +114,7 @@ export const ExhibitionSettingsForm = ({
 			description:
 				"전시 공간의 물리적 위치나 담당 교수 등 다양한 기준으로 출품작을 그룹화 할 수 있습니다.\n그룹화된 작품은 화면에서도 기준에 따라 구분되어 표시됩니다.",
 			content: (
-				<FormField
-					label="그룹 목록"
-					description="그룹이 1개이면 화면에 표시되지 않아요."
-					className={FIELD_CLASS}
-				>
+				<FormField label="그룹 목록" className={FIELD_CLASS}>
 					<GroupSettings
 						groups={settings.groups}
 						errors={showErrors ? groupErrors : undefined}
