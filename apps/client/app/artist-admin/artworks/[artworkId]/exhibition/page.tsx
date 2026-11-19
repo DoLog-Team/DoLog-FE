@@ -21,13 +21,6 @@ export default function ArtworkExhibitionPage() {
 			.finally(() => setIsLoading(false));
 	}, [artworkId]);
 
-	const reload = () => {
-		getMyArtwork(artworkId)
-			.then(setArtwork)
-			.catch(() => {});
-		router.refresh();
-	};
-
 	if (isLoading) return <LoadingScreen />;
 	if (!artwork) return <div className="p-8 text-body1 text-lighter">작품을 찾을 수 없어요.</div>;
 
@@ -36,7 +29,10 @@ export default function ArtworkExhibitionPage() {
 			artwork={artwork}
 			pendingExhibitionId={pendingExhibitionId}
 			onBack={() => router.back()}
-			onSubmitted={reload}
+			onSubmitted={() => {
+				router.push("/artist-admin");
+				router.refresh();
+			}}
 			onCancelled={() => {
 				router.replace("/artist-admin");
 				router.refresh();

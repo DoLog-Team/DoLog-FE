@@ -195,6 +195,7 @@ export const ArtworkExhibitionForm = ({
 					await updateArtworkVisibility(artwork.artworkId, targetVisibility, zoneId);
 				}
 				if (targetVisibility !== visibility.visibility) visibility.handleChange(targetVisibility);
+				router.push("/artist-admin");
 				router.refresh();
 			}
 			setSavedSnapshot(buildSnapshot());
