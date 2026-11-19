@@ -87,7 +87,7 @@ export function ProfileSection({ profile }: ProfileSectionProps) {
 						/>
 					) : (
 						<div className="flex aspect-[1/1.414] w-full items-center justify-center bg-fg-lighter">
-							<EmptyArtistIcon color="var(--color-text-lightest)" />
+							<EmptyArtistIcon color="var(--color-icon-lighter);" />
 						</div>
 					)}
 				</div>
