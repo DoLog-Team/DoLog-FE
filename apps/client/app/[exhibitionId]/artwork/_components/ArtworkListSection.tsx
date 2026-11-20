@@ -32,6 +32,7 @@ interface ArtworkListSectionProps {
 	selected: string;
 	onSelect: (value: string) => void;
 	showFilter?: boolean;
+	hideZoneName?: boolean;
 }
 
 const toCardItem = (artwork: ArtworkListItem): CardItem => ({
@@ -79,6 +80,7 @@ export function ArtworkListSection({
 	selected,
 	onSelect,
 	showFilter,
+	hideZoneName,
 }: ArtworkListSectionProps) {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
@@ -164,7 +166,7 @@ export function ArtworkListSection({
 										}
 									}}
 								>
-									<Title title={zone.zoneName} />
+									{!hideZoneName && <Title title={zone.zoneName} />}
 									{zone.description && (
 										<p className="text-body2 text-light mb-4 whitespace-pre-wrap">
 											{zone.description}
