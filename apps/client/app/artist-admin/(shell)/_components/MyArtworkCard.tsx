@@ -50,7 +50,8 @@ export function MyArtworkCard({ artwork, exhibitions, onDelete }: MyArtworkCardP
 		},
 	];
 
-	const previewable = artwork.completionRate === 100;
+	// 작성 중(draft)만 상세가 없다 — 출품 작품은 전시 필수값 때문에 작성률이 100이 아니어도 공개 상태일 수 있다
+	const previewable = artwork.status !== "draft";
 	// 공개·전시에만 공개 모두 실제로 숨겨져 있으면 비공개로 보여 준다
 	const isPublished = artwork.status === "public" || artwork.status === "exhibitionOnly";
 	const isExhibitionPrivate =

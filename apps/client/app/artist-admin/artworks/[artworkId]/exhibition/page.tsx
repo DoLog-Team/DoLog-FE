@@ -34,7 +34,7 @@ export default function ArtworkExhibitionPage() {
 				router.refresh();
 			}}
 			onCancelled={() => {
-				router.push("/artist-admin");
+				router.replace("/artist-admin");
 				router.refresh();
 			}}
 		/>

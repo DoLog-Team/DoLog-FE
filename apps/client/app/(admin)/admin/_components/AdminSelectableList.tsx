@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { Checkbox } from "@/components/common/Checkbox/Checkbox";
 import { EmptyState } from "@/components/common/EmptyState/EmptyState";
@@ -13,6 +13,7 @@ import { LoadingOverlay } from "@/components/common/Spinner/LoadingOverlay";
 import { cn } from "@/lib/utils/cn";
 import { AdminErrorFallback } from "./AdminErrorFallback";
 import type { RowSelection } from "./useRowSelection";
+import { useShowOnScrollUp } from "./useShowOnScrollUp";
 
 const PAGE_SIZE = 10;
 
@@ -70,6 +71,8 @@ export const AdminSelectableList = <T extends { id: Id }, Id extends string | nu
 	getRowHref,
 }: AdminSelectableListProps<T, Id>) => {
 	const [page, setPage] = useState(1);
+	const searchAnchorRef = useRef<HTMLDivElement>(null);
+	const { isPinned, isHidden } = useShowOnScrollUp(searchAnchorRef);
 
 	// 목록 전체를 받아 클라이언트에서 10개씩 자름 — API 가 페이지 단위로 주면 page 를 밖으로 뺄 것
 	const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
@@ -99,8 +102,17 @@ export const AdminSelectableList = <T extends { id: Id }, Id extends string | nu
 			<h1 className="pb-6 text-title1 text-strong">{title}</h1>
 
 			{notice && <div className="mb-6">{notice}</div>}
-			<SearchBar placeholder={searchPlaceholder} value={searchValue} onChange={changeSearch} />
-			{filters && <div className="mt-3 flex gap-2">{filters}</div>}
+			<div ref={searchAnchorRef} />
+			<div
+				className={cn(
+					"sticky top-11 z-10 bg-normal transition-transform duration-200 min-[721px]:top-17",
+					isPinned && "py-3",
+					isHidden && "-translate-y-full",
+				)}
+			>
+				<SearchBar placeholder={searchPlaceholder} value={searchValue} onChange={changeSearch} />
+				{filters && <div className="mt-3 flex gap-2">{filters}</div>}
+			</div>
 
 			<div className="mt-5 flex items-center gap-2.5 min-[721px]:mt-6">
 				<div className="min-[721px]:hidden">

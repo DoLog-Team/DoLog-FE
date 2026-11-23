@@ -64,7 +64,7 @@ export function HeaderAccountActions({
 	const pathname = usePathname();
 	const profileRef = useRef<HTMLDivElement>(null);
 	const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
-	const [isSwitchModalOpen, setIsSwitchModalOpen] = useState(false);
+	const [logoutHref, setLogoutHref] = useState<string | null>(null);
 	const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 	const { notifications, hasUnread, markAllAsRead, markAsRead } = useNotifications();
 
@@ -100,7 +100,11 @@ export function HeaderAccountActions({
 		notifyAuthChange();
 		router.replace(href);
 	};
-	const handleLogout = () => logoutAndGo("/");
+
+	const openLogoutModal = (href: string) => {
+		setMenuOpen(false);
+		setLogoutHref(href);
+	};
 
 	// 열림 상태를 밖에서 관리하지 않을 때만 바깥 클릭으로 닫는다 (관리하는 쪽에서 처리)
 	useEffect(() => {
@@ -152,10 +156,7 @@ export function HeaderAccountActions({
 						)}
 						<button
 							type="button"
-							onClick={() => {
-								setMenuOpen(false);
-								setIsSwitchModalOpen(true);
-							}}
+							onClick={() => openLogoutModal(withLoginRedirect(switchLogin.href, switchRedirect))}
 							className={HEADER_DROPDOWN_ITEM_CLASS}
 						>
 							{switchLogin.label}
@@ -163,10 +164,7 @@ export function HeaderAccountActions({
 						<HeaderDropdownDivider />
 						<button
 							type="button"
-							onClick={() => {
-								setMenuOpen(false);
-								handleLogout();
-							}}
+							onClick={() => openLogoutModal("/")}
 							className={cn(HEADER_DROPDOWN_ITEM_CLASS, "text-error")}
 						>
 							<Image src="/icons/logout.svg" alt="" width={20} height={20} />
@@ -177,15 +175,15 @@ export function HeaderAccountActions({
 			</div>
 
 			<Modal
-				open={isSwitchModalOpen}
-				onOpenChange={setIsSwitchModalOpen}
+				open={logoutHref !== null}
+				onOpenChange={(open) => !open && setLogoutHref(null)}
 				title="로그아웃하시겠습니까?"
 				actions={[
-					{ text: "취소", variant: "assistive", onClick: () => setIsSwitchModalOpen(false) },
+					{ text: "취소", variant: "assistive", onClick: () => setLogoutHref(null) },
 					{
 						text: "로그아웃",
 						variant: "primary",
-						onClick: () => logoutAndGo(withLoginRedirect(switchLogin.href, switchRedirect)),
+						onClick: () => logoutHref && logoutAndGo(logoutHref),
 					},
 				]}
 			/>
