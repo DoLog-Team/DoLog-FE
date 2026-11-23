@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { EmptyArtistIcon } from "../../icons/EmptyArtistIcon";
+import { EmptyAvatarBox } from "../../icons/EmptyAvatarBox";
 import { profileCardStyles as s } from "./ProfileCard.styles";
 import type { ProfileCardProps } from "./ProfileCard.types";
 
@@ -25,12 +25,7 @@ export const ProfileCard = ({ imageUrl, name, engName, bio, bottomSlot }: Profil
 						className={s.image}
 					/>
 				) : (
-					<div
-						className={s.imageEmpty}
-						style={{ backgroundColor: "color-mix(in srgb, var(--btn-text) 10%, transparent)" }}
-					>
-						<EmptyArtistIcon />
-					</div>
+					<EmptyAvatarBox className={s.imageEmpty} />
 				)}
 				{/* 모바일: 이미지 옆 이름 */}
 				<div className={s.mobileText}>{nameContent}</div>

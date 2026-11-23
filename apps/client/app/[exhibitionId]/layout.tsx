@@ -97,6 +97,11 @@ export default async function ExhibitionLayout({
 		}),
 	};
 
+	const avatarIcon = custom?.btn_text ?? undefined;
+	const avatarBg = custom?.btn_text
+		? `color-mix(in srgb, ${custom.btn_text} 10%, transparent)`
+		: undefined;
+
 	const [footer, btsList] = await Promise.all([
 		uuid ? getExhibitionFooter(uuid) : null,
 		uuid ? getBtsList(uuid) : null,
@@ -108,6 +113,8 @@ export default async function ExhibitionLayout({
 		...(config.btnText && { "--btn-text": config.btnText }),
 		...(config.ctaBg && { "--cta-bg": config.ctaBg }),
 		...(config.ctaText && { "--cta-text": config.ctaText }),
+		...(avatarBg && { "--avatar-bg": avatarBg }),
+		...(avatarIcon && { "--avatar-icon": avatarIcon }),
 	} as React.CSSProperties;
 
 	return (
@@ -126,6 +133,8 @@ export default async function ExhibitionLayout({
 						btnText: config.btnText,
 						ctaBg: config.ctaBg,
 						ctaText: config.ctaText,
+						avatarBg,
+						avatarIcon,
 					}}
 				>
 					<div className="bg-normal text-strong min-h-dvh flex flex-col" style={colorVars}>

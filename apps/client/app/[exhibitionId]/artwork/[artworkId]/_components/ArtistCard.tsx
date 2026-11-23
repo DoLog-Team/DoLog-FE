@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/common/Button/Button";
-import { EmptyArtistIcon } from "@/components/common/icons/EmptyArtistIcon";
+import { EmptyAvatarBox } from "@/components/common/icons/EmptyAvatarBox";
 import RowList from "@/components/common/RowList/RowList";
 import { track } from "@/lib/amplitude";
 import type { ArtworkParticipant } from "@/lib/api/artwork";
@@ -71,12 +71,7 @@ export function ArtistCard({ author, profileHref }: ArtistCardProps) {
 							className="object-cover"
 						/>
 					) : (
-						<div
-							className="w-full h-full flex items-center justify-center"
-							style={{ backgroundColor: "color-mix(in srgb, var(--btn-text) 10%, transparent)" }}
-						>
-							<EmptyArtistIcon />
-						</div>
+						<EmptyAvatarBox className="w-full h-full flex items-center justify-center" />
 					)}
 				</div>
 				<div className="flex flex-col justify-end">{nameSection}</div>
