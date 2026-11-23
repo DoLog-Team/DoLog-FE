@@ -13,7 +13,9 @@ export interface ExhibitionCustom {
 
 export async function getExhibitionCustom(exhibitionId: string): Promise<ExhibitionCustom | null> {
 	try {
-		return await apiClient<ExhibitionCustom>(`/exhibitions/${exhibitionId}/custom`);
+		return await apiClient<ExhibitionCustom>(`/exhibitions/${exhibitionId}/custom`, {
+			cache: "no-store",
+		});
 	} catch {
 		return null;
 	}
