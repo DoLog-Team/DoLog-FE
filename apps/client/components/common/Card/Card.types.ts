@@ -5,7 +5,8 @@ export interface CardItem {
 	imageUrl?: string;
 	title: string;
 	category?: string;
-	author: string;
+	// 작가 프로필처럼 한 작가의 작품만 모인 곳에서는 빈 값으로 넘겨 줄을 뺀다
+	author?: string;
 	exhibitionTitle?: string;
 	univName?: string;
 	deptName?: string;

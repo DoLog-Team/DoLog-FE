@@ -66,7 +66,7 @@ export function ArtistDetailClient({ artist }: ArtistDetailClientProps) {
 		id: artwork.artworkId,
 		title: artwork.title,
 		imageUrl: artwork.mainImg ?? undefined,
-		author: name,
+		category: artwork.category ?? undefined,
 	}));
 
 	return (

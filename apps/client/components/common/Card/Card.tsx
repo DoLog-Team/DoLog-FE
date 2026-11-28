@@ -25,7 +25,7 @@ export const Card = ({
 				{imageUrl ? (
 					<Image
 						src={imageUrl}
-						alt={`${title} - ${author}`}
+						alt={author ? `${title} - ${author}` : title}
 						width={0}
 						height={0}
 						sizes="100vw"
@@ -51,7 +51,7 @@ export const Card = ({
 				<h3 className={s.title}>{title}</h3>
 				{/* 카테고리 값이 없으면 줄 자체를 빼서 제목·작가명 간격을 유지한다 */}
 				{category && <p className={s.category}>{category}</p>}
-				<p className={s.author}>{author}</p>
+				{author && <p className={s.author}>{author}</p>}
 			</div>
 		</article>
 	);

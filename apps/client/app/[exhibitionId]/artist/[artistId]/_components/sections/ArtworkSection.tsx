@@ -18,7 +18,7 @@ export function ArtworkSection({
 		id: a.artworkId,
 		title: a.title,
 		imageUrl: a.image,
-		author: artist.nameKo,
+		// 작가 프로필의 작품 카드는 작가명을 빼고, 전시에서는 카테고리도 보이지 않는다
 	}));
 
 	return (
