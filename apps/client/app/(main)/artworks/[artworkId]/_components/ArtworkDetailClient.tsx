@@ -20,7 +20,6 @@ import { ScrollTabBar } from "@/components/common/ScrollTabBar/ScrollTabBar";
 import { useScrollSpy } from "@/components/common/ScrollTabBar/useScrollSpy";
 import { type ArtworkDetail, setArtworkLike } from "@/lib/api/artwork";
 import { useIsOwnArtist } from "@/lib/auth/useIsOwnArtist";
-import { shouldHideArtistRole } from "@/lib/utils/artworkInfo";
 import { ArtworkManageFab } from "./ArtworkManageFab";
 import { RelatedExhibitionCta } from "./RelatedExhibitionCta";
 import { useMyArtwork } from "./useMyArtwork";
@@ -117,7 +116,7 @@ export function ArtworkDetailClient({ artworkId, data }: ArtworkDetailClientProp
 				<EmptyImageFallback className="aspect-video max-h-150 w-full" />
 			)}
 
-			<InfoSection data={data} hideArtistRole={shouldHideArtistRole(data.exhibitionId)} />
+			<InfoSection data={data} />
 			<Divider />
 
 			<section

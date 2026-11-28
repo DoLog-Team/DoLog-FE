@@ -30,11 +30,9 @@ import { YoutubeSection } from "../_components/YoutubeSection";
 export function ArtworkDetailClient({
 	artworkId,
 	data,
-	hideArtistRole,
 }: {
 	artworkId: string;
 	data: ArtworkDetail;
-	hideArtistRole?: boolean;
 }) {
 	// 조회수 기록 — 두록 작품 상세와 같은 방식 (전시 작품 상세 GET 만으로는 조회수가 올라가지 않음)
 	useRecordArtworkView(artworkId);
@@ -135,7 +133,7 @@ export function ArtworkDetailClient({
 					}
 				/>
 			)}
-			<InfoSection data={data} hideArtistRole={hideArtistRole} groupName={data.zoneName} />
+			<InfoSection data={data} groupName={data.zoneName} />
 			<Divider />
 			<LocationSection locationImageUrl={data.locationMap} />
 			<section

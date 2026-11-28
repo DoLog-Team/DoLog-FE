@@ -16,12 +16,6 @@ type ArtworkInfoFields = Pick<
 	| "durationSeconds"
 >;
 
-// 특정 전시에서만 작가 역할 영역 숨김 처리 [동국대 서양화과]
-const HIDE_ARTIST_ROLE_EXHIBITION_IDS = new Set(["5918413e-3bb4-4237-ae4d-c55d8f025f34"]);
-
-export const shouldHideArtistRole = (exhibitionId: string | null | undefined) =>
-	!!exhibitionId && HIDE_ARTIST_ROLE_EXHIBITION_IDS.has(exhibitionId);
-
 const pad = (value: number) => String(value).padStart(2, "0");
 
 // 입력한 자리까지만 보여 준다: "2024" · "2024.04" · "2024.04.10" (연도가 없으면 표시하지 않음)
