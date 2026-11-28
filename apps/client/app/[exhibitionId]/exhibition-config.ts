@@ -51,4 +51,10 @@ export const MOCK_EXHIBITION_CONFIG: Record<string, ExhibitionConfig> = {
 	},
 };
 
-export const DEFAULT_EXHIBITION_CONFIG: ExhibitionConfig = MOCK_EXHIBITION_CONFIG["1"];
+export const DEFAULT_EXHIBITION_CONFIG: ExhibitionConfig = {
+	...MOCK_EXHIBITION_CONFIG["1"],
+	btnBg: "var(--color-fg-lighter)",
+	btnText: "var(--color-text-strong)",
+	ctaBg: "#1b1c1d",
+	ctaText: "#ffffff",
+};

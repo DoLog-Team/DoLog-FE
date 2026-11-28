@@ -33,18 +33,14 @@ export const Card = ({
 						loading="lazy"
 					/>
 				) : (
-					<div
-						className="w-full h-full flex items-center justify-center"
-						style={
-							emptyIcon
-								? { backgroundColor: "color-mix(in srgb, var(--btn-text) 10%, transparent)" }
-								: { backgroundColor: "var(--color-fg-lighter)" }
-						}
-					>
-						{emptyIcon ?? (
+					(emptyIcon ?? (
+						<div
+							className="w-full h-full flex items-center justify-center"
+							style={{ backgroundColor: "var(--color-fg-lighter)" }}
+						>
 							<Image src="/icons/empty-image.svg" alt="이미지 없음" width={32} height={32} />
-						)}
-					</div>
+						</div>
+					))
 				)}
 			</div>
 			<div className={s.info}>

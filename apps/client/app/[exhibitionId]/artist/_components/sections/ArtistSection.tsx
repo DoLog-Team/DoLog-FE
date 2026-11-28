@@ -2,7 +2,7 @@
 
 import type { CardItem } from "@/components/common/Card/Card.types";
 import { CardGrid } from "@/components/common/Card/CardGrid";
-import { EmptyArtistIcon } from "@/components/common/icons/EmptyArtistIcon";
+import { EmptyAvatarBox } from "@/components/common/icons/EmptyAvatarBox";
 import { Title } from "@/components/common/Title/Title";
 import type { ArtistProfile } from "@/lib/api/artists/artist";
 
@@ -21,7 +21,7 @@ export function ArtistSection({ exhibitionId, artists = [], onArtistClick }: Art
 		author: artist.nameEn || "",
 		imageUrl: artist.profileImg,
 		category: "",
-		emptyIcon: <EmptyArtistIcon />,
+		emptyIcon: <EmptyAvatarBox className="w-full h-full flex items-center justify-center" />,
 	}));
 
 	return (

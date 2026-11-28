@@ -9,6 +9,8 @@ interface Props extends ThemeProviderProps {
 		btnText?: string;
 		ctaBg?: string;
 		ctaText?: string;
+		avatarBg?: string;
+		avatarIcon?: string;
 	};
 }
 
@@ -20,12 +22,18 @@ export function ThemeProvider({ children, colors, ...props }: Props) {
 			root.style.removeProperty("--btn-text");
 			root.style.removeProperty("--cta-bg");
 			root.style.removeProperty("--cta-text");
+			root.style.removeProperty("--avatar-bg");
+			root.style.removeProperty("--avatar-icon");
 			return;
 		}
 		if (colors.btnBg) root.style.setProperty("--btn-bg", colors.btnBg);
 		if (colors.btnText) root.style.setProperty("--btn-text", colors.btnText);
 		if (colors.ctaBg) root.style.setProperty("--cta-bg", colors.ctaBg);
 		if (colors.ctaText) root.style.setProperty("--cta-text", colors.ctaText);
+		if (colors.avatarBg) root.style.setProperty("--avatar-bg", colors.avatarBg);
+		else root.style.removeProperty("--avatar-bg");
+		if (colors.avatarIcon) root.style.setProperty("--avatar-icon", colors.avatarIcon);
+		else root.style.removeProperty("--avatar-icon");
 	}, [colors]);
 
 	return (

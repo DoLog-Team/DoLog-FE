@@ -8,6 +8,9 @@ import { useArtworkFilter } from "../hooks/useArtworkFilter";
 import { ArtworkListSection } from "./ArtworkListSection";
 import { GuideSection } from "./GuideSection";
 
+// BE 가 그룹 없는 작품을 묶어 내려주는 이름
+const UNGROUPED_ZONE_NAME = "미지정 구역";
+
 interface ArtworksClientProps {
 	maps: ExhibitionMap[];
 	zones: ZoneGroup[];
@@ -16,6 +19,8 @@ interface ArtworksClientProps {
 
 export function ArtworksClient({ maps, zones, showFilter }: ArtworksClientProps) {
 	const hasGuide = maps.length > 0;
+	// 그룹 0개 전시: 검색, 필터 전 원본이 미지정 묶음 하나뿐이면 구역 이름을 숨김
+	const hideZoneName = zones.length === 1 && zones[0].zoneName === UNGROUPED_ZONE_NAME;
 
 	const [searchQuery, setSearchQuery] = useState("");
 	const { selected, setSelected, categories, filteredZones } = useArtworkFilter(zones, searchQuery);
@@ -24,9 +29,9 @@ export function ArtworksClient({ maps, zones, showFilter }: ArtworksClientProps)
 	const TABS = useMemo(
 		() => [
 			...(hasGuide ? [{ id: "guide", label: "관람 안내" }] : []),
-			...filteredZones.map((z) => ({ id: z.zoneName, label: z.zoneName })),
+			...(hideZoneName ? [] : filteredZones.map((z) => ({ id: z.zoneName, label: z.zoneName }))),
 		],
-		[hasGuide, filteredZones],
+		[hasGuide, hideZoneName, filteredZones],
 	);
 	const tabIds = useMemo(() => TABS.map((t) => t.id), [TABS]);
 	// 검색바·필터 고정 영역은 필터 유무·화면 크기에 따라 높이가 달라서, 고정됐을 때의 아래 끝을 직접 계산함
@@ -60,15 +65,18 @@ export function ArtworksClient({ maps, zones, showFilter }: ArtworksClientProps)
 				selected={selected}
 				onSelect={setSelected}
 				showFilter={showFilter}
+				hideZoneName={hideZoneName}
 			/>
-			<ScrollTabBar
-				tabs={TABS}
-				activeTab={activeTab}
-				onTabClick={(tabId) => {
-					handleTabClick(tabId);
-					track("Zone Tab Clicked", { zone: tabId, page: "artwork_list" });
-				}}
-			/>
+			{TABS.length > 0 && (
+				<ScrollTabBar
+					tabs={TABS}
+					activeTab={activeTab}
+					onTabClick={(tabId) => {
+						handleTabClick(tabId);
+						track("Zone Tab Clicked", { zone: tabId, page: "artwork_list" });
+					}}
+				/>
+			)}
 		</>
 	);
 }

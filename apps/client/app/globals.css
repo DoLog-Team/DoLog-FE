@@ -169,9 +169,11 @@
   --color-icon-inverse: var(--mono-white);
 
   --btn-bg: var(--color-fg-lighter);
-  --btn-text: var(--color-icon-lighter);
-  --cta-bg: var(--color-fg-lighter);
-  --cta-text: var(--color-icon-lighter);
+  --btn-text: var(--color-text-strong);
+  --cta-bg: #1b1c1d;
+  --cta-text: #ffffff;
+  --avatar-bg: var(--color-fg-lighter);
+  --avatar-icon: var(--color-icon-lighter);
 
   --color-success: #22c55e;
   --color-warning: #f59e0b;
