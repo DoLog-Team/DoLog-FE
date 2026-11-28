@@ -40,7 +40,9 @@ export default function ArtworksClient({ artworks }: ArtworksClientProps) {
 		const matchType = !selectedType || typeLabel === selectedType;
 		const q = searchQuery.toLowerCase();
 		const matchSearch =
-			!searchQuery || item.title.toLowerCase().includes(q) || item.author.toLowerCase().includes(q);
+			!searchQuery ||
+			item.title.toLowerCase().includes(q) ||
+			(item.author ?? "").toLowerCase().includes(q);
 		return matchUniv && matchDept && matchType && matchSearch;
 	});
 

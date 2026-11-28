@@ -21,6 +21,7 @@ export interface DologArtistArtwork {
 	artworkId: string;
 	title: string;
 	mainImg: string | null;
+	category?: string | null;
 }
 
 export interface DologArtist {

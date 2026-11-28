@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 // import { MOCK_ARTWORK_DETAIL } from "@/app/[exhibitionId]/artwork/_mocks/artworkDetail";
 import { getArtworkDetail } from "@/lib/api/artwork";
-import { getArtworkInfoLines, shouldHideArtistRole } from "@/lib/utils/artworkInfo";
+import { getArtworkInfoLines } from "@/lib/utils/artworkInfo";
 import { VISITOR_COOKIE } from "@/lib/visitor";
 import { resolveExhibitionId } from "../../_api/resolveExhibitionId";
 import { Header } from "../../_components/Header";
@@ -59,11 +59,5 @@ export default async function ArtworkDetailPage({ params }: ArtworkDetailPagePro
 		);
 	}
 
-	return (
-		<ArtworkDetailClient
-			artworkId={artworkId}
-			data={data}
-			hideArtistRole={shouldHideArtistRole(uuid)}
-		/>
-	);
+	return <ArtworkDetailClient artworkId={artworkId} data={data} />;
 }
